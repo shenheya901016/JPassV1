@@ -17,13 +17,14 @@
               <el-input v-model="ruleForm.name"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
        </el-form-item>
        <el-form-item label="新密码" prop="password">
-              <el-input v-model="ruleForm.password"  @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <el-input type="password" v-model="ruleForm.password"  @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span
+               id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </el-form-item>
         <el-form-item>
                <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false"  style="width:90%;margin-left:3%;"></el-progress>
         </el-form-item>
          <el-form-item label="密码重复" prop="repassword">
-              <el-input v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
+              <el-input type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
          </el-form-item>
          <el-form-item label="" >
               <el-button type="primary"  style="width:90%;"  @click="submitForm('ruleForm')">导入钱包</el-button>
@@ -55,6 +56,20 @@
                 callback();
               }
             };
+        var validateName =  (rule, value, callback)=>{
+            var nameString=localStorage.getItem("name_string");
+            console.log(nameString);
+            if(nameString!=null){
+                var nameArray=nameString.split(",");
+                if(nameArray.indexOf(value)>=0){
+                    callback(new Error('用户名重复，请重新输入'));
+                }else{
+                    callback();
+                }
+            }else{
+                callback();
+            }
+        };
       return {
        //进度条值
         percentage:0,
@@ -71,17 +86,18 @@
           ],
            name: [
                   { required: true, message: '请输入用户名称', trigger: 'blur' },
-                  { min: 3, max:20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+                  { min: 3, max:20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
+                  {validator:  validateName,  trigger: 'blur' }
                   ],
                 password: [
                   { required: true, message: '请输入用户密码', trigger: 'blur' },
                   { min: 4, max:20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
                 ],
                  repassword: [
-                              {required:true, message: '请再次输入用户密码',trigger: 'blur' },
-                              {validator: validateRepassword,  trigger: 'blur' }
+                  {required:true, message: '请再次输入用户密码',trigger: 'blur' },
+                  {validator: validateRepassword,  trigger: 'blur' }
                   ],
-        }
+            }
       };
     },
     methods: {
@@ -105,13 +121,19 @@
                            keystore= value;
                       });
                     this.ruleForm.keystore=keystore;
-                    this.dialogVisible = true;
-                    console.log("新keystore:"+this.$JSON5.stringify(this.ruleForm.keystore));
-                    console.log("用户名称:"+this.ruleForm.name );
+                    // console.log("新keystore:"+this.$JSON5.stringify(this.ruleForm.keystore));
+                    // console.log("用户名称:"+this.ruleForm.name );
                  }catch(e){
-                   this.$message("密钥错误，请重新输入！");
+                   this.$message.error("密钥错误，请重新输入！");
+                    return false;
                 }
-
+                  try{
+                      this.addToLocalStorage(this.ruleForm.name,keystore);
+                      this.dialogVisible = true;
+                  }catch (e){
+                      this.$message.error("本地存储失败！");
+                      return false;
+                  }
             },
             pwdLength(){
                 var pwd= this.ruleForm.password;
@@ -126,6 +148,20 @@
                      var blob = new Blob([keystoreString], {type: "text/plain;charset=utf-8"});
                      saveAs(blob, "keystore");
              },
+            addToLocalStorage(name,keystore){
+                var nameString= localStorage.getItem("name_string");
+                if(nameString!=null){
+                    localStorage.setItem(name,this.$JSON5.stringify(keystore));
+                    nameString=nameString+name+",";
+                    localStorage.removeItem("name_string");
+                    localStorage.setItem("name_string",nameString)
+                }else{
+                    var nameString ="";
+                    nameString=name+",";
+                    localStorage.setItem("name_string",nameString);
+                    localStorage.setItem(name,this.$JSON5.stringify(keystore));
+                }
+            }
          }
       }
 </script>

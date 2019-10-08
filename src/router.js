@@ -12,6 +12,7 @@ import Mnemonicimport from "./views/jpass/mnemonicimport.vue";
 import Keyimport from "./views/jpass/keyimport.vue";
 import HomePage from "./views/jpass/homePage.vue";
 import Index from "./views/Index";
+import Registersuccess from "./views/jpass/registersuccess.vue";
 
 Vue.use(Router);
 
@@ -73,11 +74,18 @@ export default new Router({
             name: "keyimport",
             component: Keyimport
         },
+
         {
             path: "/jpass/homePage",
             name: "homePage",
             component: Index
         },
+        {
+            path: "/jpass/registersuccess",
+            name: "registersuccess",
+            component: Registersuccess
+        },
+
         {
             path: "/about",
             name: "about",

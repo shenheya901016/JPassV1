@@ -12,7 +12,7 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
          <el-form-item label=" keystore文件" prop="">
                <el-upload class="upload-demo"  style="width:90%;margin-left:10px;" action="https://jsonplaceholder.typicode.com/posts/"
-               multiple:limit="1":on-exceed="handleExceed" accept="text/plain"  :on-change="getkeystore">
+               multiple:limit="1" :on-exceed="handleExceed" accept="text/plain"  :on-change="getkeystore">
                <el-button   type="primary" style="width:100%">上传keysore</el-button>
                </el-upload>
          </el-form-item>
@@ -25,13 +25,14 @@
                <el-input  type="text"  v-model="ruleForm.name" placeholder="新用户名将代替旧用户名" oncopy="return false" onpaste="return false"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
           </el-form-item>
           <el-form-item label="新登录密码" prop="newPassword">
-                <el-input  type="text"  v-model="ruleForm.newPassword " @input="pwdLength" placeholder="新密码将代替旧密码" oncopy="return false" onpaste="return false"style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <el-input  type="password"  v-model="ruleForm.newPassword " @input="pwdLength" placeholder="新密码将代替旧密码" oncopy="return false"
+                            onpaste="return false"style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </el-form-item>
            <el-form-item>
                    <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false"  style="width:90%;margin-left:3%;"></el-progress>
             </el-form-item>
            <el-form-item label="密码重复" prop="repassword">
-                   <el-input v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
+                   <el-input type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
            </el-form-item>
           <el-form-item label="" prop="">
                <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">导入钱包</el-button>
@@ -53,7 +54,20 @@
          vueCanvasNest
      },
     data() {
-     var validateRepassword = (rule, value, callback) => {
+        var validateName =  (rule, value, callback)=>{
+            var nameString=localStorage.getItem("name_string");
+            if(nameString!=null){
+                var nameArray=nameString.split(",");
+                if(nameArray.indexOf(value)>=0){
+                    callback(new Error('用户名重复，请重新输入'));
+                }else{
+                    callback();
+                }
+            }else{
+                callback();
+            }
+        };
+       var validateRepassword = (rule, value, callback) => {
                   if (value === '') {
                     callback(new Error('请再次输入密码'));
                   } else if (value !== this.ruleForm.newPassword) {
@@ -77,6 +91,7 @@
         rules: {
           name: [
             { required: true, message: '请输入新用户名', trigger: 'blur' },
+              {validator:  validateName,  trigger: 'blur' }
             ],
           password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
@@ -143,7 +158,7 @@
                            var secret = wallet.getSecretWithAddress(password,address);
                            await secret.then(function (value){
                               secret=value;
-                              console.log(secret);
+                              // console.log(secret);
                             });
                            this.ruleForm.secret=secret;
                            this.generateWallet();
@@ -160,15 +175,19 @@
                                            await  jingchuangWallet.then(function (value) {
                                                   keystore= value;
                                              });
-                                           this.ruleForm.keystore=keystore;
-                                           this.dialogVisible = true;
-                                           console.log("新keystore:"+this.$JSON5.stringify(this.ruleForm.keystore));
-                                           console.log("用户名称:"+this.ruleForm.name );
+                                           //this.ruleForm.keystore=keystore;
                                    }catch (e){
                                            console.log(e);
                                            this.$message.error("新keystore 生成错误！");
                                             return false;
                                    }
+                                  try{
+                                      this.addToLocalStorage(this.ruleForm.name,keystore);
+                                      this.dialogVisible = true;
+                                  }catch (e){
+                                      this.$message.error("本地存储失败！");
+                                      return false;
+                                  }
                                },
                             pwdLength(){
                                 var pwd= this.ruleForm.newPassword;
@@ -183,6 +202,20 @@
                                    var blob = new Blob([keystoreString], {type: "text/plain;charset=utf-8"});
                                    saveAs(blob, "keystore");
                              },
+                        addToLocalStorage(name,keystore){
+                            var nameString= localStorage.getItem("name_string");
+                            if(nameString!=null){
+                                localStorage.setItem(name,this.$JSON5.stringify(keystore));
+                                nameString=nameString+name+",";
+                                localStorage.removeItem("name_string");
+                                localStorage.setItem("name_string",nameString)
+                            }else{
+                                var nameString ="";
+                                nameString=name+",";
+                                localStorage.setItem("name_string",nameString);
+                                localStorage.setItem(name,this.$JSON5.stringify(keystore));
+                            }
+                           }
                          },
                      }
 </script>

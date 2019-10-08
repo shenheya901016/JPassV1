@@ -1,6 +1,5 @@
 <template>
-
- <div style="width:100%;" id="main">
+ <div style="width:100%;" id="main"  @mousemove="jpasslock">
     <div style="margin-left:5px;width:150px;">
         <a href="#">
             <img src="../../img/logo.png" alt="" style="width:150px;">
@@ -15,13 +14,13 @@
         <el-input v-model="ruleForm.name"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </el-form-item>
        <el-form-item label="用户密码" prop="password">
-            <el-input v-model="ruleForm.password" @input="pwdLength" style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <el-input v-model="ruleForm.password"  type="password" @input="pwdLength" style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </el-form-item>
          <el-form-item>
             <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false"  style="width:90%;margin-left:2%;"></el-progress>
          </el-form-item>
          <el-form-item label="密码重复" prop="repassword">
-                   <el-input v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                   <el-input  type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
          </el-form-item>
           <el-form-item label="" prop="password">
                       <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">注册</el-button><span>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -39,7 +38,12 @@
 <script type="es6">
  import vueCanvasNest from 'vue-canvas-nest';
  import password from '../../password.js';
+ import LockJpass from '../../lock.js';
+
  export default {
+     mounted:function(){
+         LockJpass.StartPoint();
+     },
      components:{
          vueCanvasNest
      },
@@ -53,6 +57,20 @@
             callback();
           }
         };
+
+        var validateName =  (rule, value, callback)=>{
+            var nameString=localStorage.getItem("name_string");
+            if(nameString!=null){
+                var nameArray=nameString.split(",");
+                if(nameArray.indexOf(value)>=0){
+                    callback(new Error('用户名重复，请重新输入'));
+                }else{
+                    callback();
+                }
+            }else{
+                callback();
+            }
+        }
       return {
         //进度条值
         percentage:0,
@@ -63,12 +81,12 @@
             secret:'',
             mnemonic:'',
             keystore:'',
-
         },
         rules: {
           name: [
             { required: true, message: '请输入用户名称', trigger: 'blur' },
-            { min: 3, max:20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+            { min: 3, max:20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
+            {validator:  validateName,  trigger: 'blur' }
           ],
           password: [
             { required: true, message: '请输入用户密码', trigger: 'blur' },
@@ -80,10 +98,6 @@
           ],
         }
       };
-
-    },
-    mounted(){
-
     },
     methods: {
       submitForm(formName) {
@@ -103,39 +117,65 @@
         document.getElementById("strong").innerText="无";
       },
        async  register(){
-              //助记词生成钱包
-                var mnemonic =this.$JPassUtil.Mnemonic.createMnemonic(12, this.$i18n.locale)
-                var seed =  this.$JPassUtil.Mnemonic.wordsToEntropy(mnemonic,this.$i18n.locale);
-                var jtWallet = this.$JPassUtil.Wallet.generateWallet(seed);
-                this.ruleForm.secret=jtWallet.secret;
-                this.ruleForm.address=jtWallet.address;
-                this.ruleForm.mnemonic=mnemonic;
-                // console.log(mnemonic);
-                var name = this.ruleForm.name;
-                var password = this.ruleForm.password;
-                var keystore="";
-                //生成井昌钱包
-           var jingchuangWallet = this.$JCCWallet.JingchangWallet.generate(password,jtWallet.secret);
-               await  jingchuangWallet.then(function (value) {
-                   keystore= value;
-               });
-                 this.ruleForm.keystore=keystore;
-                 this.$message("secret:"+jtWallet.secret+"\n"+"secret:"+jtWallet.address);
-                 this.$message("keystore:"+this.$JSON5.stringify(keystore));
-                  console.log(keystore);
-                 //本地存储
-                 //this.$JCCWallet.JingchangWallet.save(keystore);
-                 //var getwallet = this.$JCCWallet.JingchangWallet.get();
-                  localStorage.setItem('a',this.$JSON5.stringify(keystore));
-                  console.log(localStorage.getItem('a'));
+                       //助记词生成钱包
+                       try{
+                           var mnemonic =this.$JPassUtil.Mnemonic.createMnemonic(12, this.$i18n.locale)
+                           var seed =  this.$JPassUtil.Mnemonic.wordsToEntropy(mnemonic,this.$i18n.locale);
+                           var jtWallet = this.$JPassUtil.Wallet.generateWallet(seed);
+                       }catch (e){
+                           this.$message.error("钱包生成失败！");
+                           return false;
+                       }
+                       try{
+                           var keystore="";
+                           //生成井昌钱包
+                           var jingchuangWallet = this.$JCCWallet.JingchangWallet.generate(this.ruleForm.password,jtWallet.secret);
+                           await  jingchuangWallet.then(function (value) {
+                               keystore= value;
+                           });
+                       }catch (e){
+                           this.$message.error("keystore生成失败！");
+                           return false;
+                       }
+                        try{
+                            this.addToLocalStorage(this.ruleForm.name,keystore);
+                            this.addToSessionStorage();
+                            this.$router.push({ name:"registersuccess",  params:{secret:jtWallet.secret,mnemonic:mnemonic,address:jtWallet.address}});
+                        }catch (e){
+                            this.$message.error("本地存储失败！");
+                            return false;
+                        }
                 },
                 pwdLength(){
                     var pwd= this.ruleForm.password;
                     password.pwStrength(pwd);
                     this.percentage=password.percentage;
                 },
+                 addToLocalStorage(name,keystore){
+                     var nameString= localStorage.getItem("name_string");
+                     if(nameString!=null){
+                         localStorage.setItem(name,this.$JSON5.stringify(keystore));
+                         nameString=nameString+name+",";
+                         localStorage.removeItem("name_string");
+                         localStorage.setItem("name_string",nameString)
+                     }else{
+                         var nameString ="";
+                         nameString=name+",";
+                         localStorage.setItem("name_string",nameString);
+                         localStorage.setItem(name,this.$JSON5.stringify(keystore));
+                     }
+                 },
+                   addToSessionStorage(){
+                       let userObj = {
+                           name: this.ruleForm.name,
+                       }
+                       sessionStorage.setItem("userObj", this.$JSON5.stringify(userObj));
+                   },
+                  jpasslock(event){
+                      LockJpass.GetXYPosition(event);
+                  },
              }
-  }
+        }
 </script>
 
 <style>
