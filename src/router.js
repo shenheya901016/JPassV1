@@ -10,14 +10,13 @@ import Login from "./views/jpass/login.vue";
 import Keystoreimport from "./views/jpass/keystoreimport.vue";
 import Mnemonicimport from "./views/jpass/mnemonicimport.vue";
 import Keyimport from "./views/jpass/keyimport.vue";
-import HomePage from "./views/jpass/homePage.vue";
 import Index from "./views/Index";
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
-        { path: '/', redirect: '/jpass/login' }, // 默认就跳转此页面
+        {path: '/', redirect: '/jpass/login'}, // 默认就跳转此页面
         {
             path: "/index",
             name: "index",
@@ -72,11 +71,6 @@ export default new Router({
             path: "/jpass/keyimport",
             name: "keyimport",
             component: Keyimport
-        },
-        {
-            path: "/jpass/homePage",
-            name: "homePage",
-            component: Index
         },
         {
             path: "/about",

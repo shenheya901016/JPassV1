@@ -77,7 +77,7 @@
                 }
             },
             login() {
-                this.$router.push('/jpass/homePage');
+                this.$router.push('/index');
             }
         }
     }

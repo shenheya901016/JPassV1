@@ -176,9 +176,7 @@
         }
     };
     var $ = require("jquery");
-    $(function () {
-        document.getElementsByClassName('body1')[0].style.height = window.innerHeight + 'px';
-        document.getElementsByClassName('body1')[0].style.width = window.innerWidth + 'px';
+
         $(".icon02").mouseover(function () {
             $(".icon02_box")[0].style.display = "block";
         })
@@ -191,7 +189,7 @@
         $(".icon02_box").mouseout(function () {
             $(".icon02_box")[0].style.display = "none";
         })
-    });
+
 
 
 </script>
