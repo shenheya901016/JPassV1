@@ -5,21 +5,22 @@
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:30%;margin:0 auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin-top:5%"
-             id="dd">
+        <div style="width:30%;margin:0 auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin-top:5%">
             <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
                 登录jpass
             </div>
-            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm"
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:75%; margin:10% 20% 5% 10%;">
                 <el-form-item label="用户名称" prop="name">
-                    <el-input v-model="ruleForm.name" style="width:90%;"></el-input>
+                    <el-select placeholder="请选择登录用户" v-model="ruleForm.name" title="请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！" style="width:100%;">
+                        <el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="用户密码" prop="password">
-                    <el-input v-model="ruleForm.password" style="width:90%;"></el-input>
+                <el-form-item label="用户密码" prop="password" style="margin-top:10%">
+                    <el-input type="password" v-model="ruleForm.password" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary" style="width:90%;" @click="login()">登录</el-button>
+                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">登录</el-button>
                 </el-form-item>
             </el-form>
             <div style="margin-bottom:4%;">
@@ -36,9 +37,8 @@
     </div>
 </template>
 
-<script>
+<script type="es6">
     import vueCanvasNest from 'vue-canvas-nest';
-
     export default {
         components: {
             vueCanvasNest
@@ -48,24 +48,48 @@
                 //进度条值
                 percentage: 0,
                 dialogVisible: false,
+                names: [],
                 ruleForm: {
                     name: '',
                     password: '',
                 },
-
+                rules: {
+                    name: [
+                        {required: true, message: '请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！', trigger: 'blur'},
+                    ],
+                    password: [
+                        {required: true, message: '请输入用户密码', trigger: 'blur'},
+                        {min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur'}
+                    ]
+                }
             };
-
         },
-        mounted() {
-
-
+        mounted(){
+            //select 数据生成
+            var names = localStorage.getItem("name_string");
+            if (names != null) {
+                var nameArray = names.split(",");
+                nameArray.pop();//删除最后一项（最后一个项为空）
+                this.names = nameArray.map(item => {
+                    return {value: item, label: item};
+                });
+            }
         },
         methods: {
-            register() {
-                this.$router.push('/jpass/register');
-                // console.log(this.config);
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.login();
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
-            importwallet(type) {
+            register(){
+                this.$router.push('/jpass/register');
+            },
+            importwallet(type){
                 if (type == 0) {
                     this.$router.push('/jpass/keyimport');
                 }
@@ -76,9 +100,43 @@
                     this.$router.push('/jpass/mnemonicimport');
                 }
             },
+<<<<<<< HEAD
             login() {
                 this.$router.push('/index');
             }
+=======
+
+            async  login(){
+                let secret = "";
+                let wallet = new this.$JINGCHUANGWallet();
+                let keyStoreString = localStorage.getItem(this.ruleForm.name);
+                let objKeyStore = this.$JSON5.parse(keyStoreString);
+                let keystring = "";
+                if (keyStoreString != null) {
+                    try {
+                        //钱包生成密钥
+                        wallet.setJingchangWallet(objKeyStore);
+                        var address = objKeyStore.wallets[0].address;
+                        keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
+                        await keystring.then(function (value) {
+                            secret = value;
+                        });
+                    } catch (e) {
+                        this.$message.error("密码有误，请重新输入！");
+                        return false;
+                    }
+                    let userkeyObj = {
+                        secret: secret,
+                        address: objKeyStore.wallets[0].address
+                    }
+                    sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
+                    this.$message.success("用户登录成功！");
+                } else {
+                    this.$message.error("用户不存在，请重新输入");
+                }
+            },
+
+>>>>>>> ad14548da2ae44d5b82e156562dca0fa4d679261
         }
     }
 </script>
@@ -105,5 +163,4 @@
         margin-right: 30px;
         margin-top: 34px;
     }
-
 </style>

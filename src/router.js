@@ -11,6 +11,7 @@ import Keystoreimport from "./views/jpass/keystoreimport.vue";
 import Mnemonicimport from "./views/jpass/mnemonicimport.vue";
 import Keyimport from "./views/jpass/keyimport.vue";
 import Index from "./views/Index";
+import Registersuccess from "./views/jpass/registersuccess.vue";
 
 Vue.use(Router);
 
@@ -72,7 +73,22 @@ export default new Router({
             name: "keyimport",
             component: Keyimport
         },
+
         {
+<<<<<<< HEAD
+=======
+            path: "/jpass/homePage",
+            name: "homePage",
+            component: Index
+        },
+        {
+            path: "/jpass/registersuccess",
+            name: "registersuccess",
+            component: Registersuccess
+        },
+
+        {
+>>>>>>> ad14548da2ae44d5b82e156562dca0fa4d679261
             path: "/about",
             name: "about",
             // route level code-splitting
