@@ -100,12 +100,9 @@
                     this.$router.push('/jpass/mnemonicimport');
                 }
             },
-<<<<<<< HEAD
             login() {
                 this.$router.push('/index');
-            }
-=======
-
+            },
             async  login(){
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
@@ -135,8 +132,6 @@
                     this.$message.error("用户不存在，请重新输入");
                 }
             },
-
->>>>>>> ad14548da2ae44d5b82e156562dca0fa4d679261
         }
     }
 </script>
