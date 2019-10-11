@@ -9,6 +9,9 @@ import ipfs from './ipfs';
 import ElementLocale from 'element-ui/lib/locale';
 //const JPassUtil = require("./JPassUtil");
 import JPassUtil from "jpass-util";
+
+
+
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
 //https://element.eleme.cn/#/zh-CN/component/quickstart

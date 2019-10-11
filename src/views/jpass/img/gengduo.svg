@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>更多</title>
+    <desc>Created with Sketch.</desc>
+    <g id="更多" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <rect id="矩形备份-12" x="0" y="0" width="32" height="32"></rect>
+            <g transform="translate(3.000000, 4.000000)" fill="#999999">
+                <path d="M2,0 L24,0 C25.1045695,0 26,0.8954305 26,2 L26,22 C26,23.1045695 25.1045695,24 24,24 L2,24 C0.8954305,24 0,23.1045695 0,22 L0,2 C0,0.8954305 0.8954305,0 2,0 Z M2,2 L2,22 L24,22 L24,2 L2,2 Z" id="矩形" fill-rule="nonzero"></path>
+                <path d="M12,11 L12,6 C12,5.44771525 12.4477153,5 13,5 C13.5522847,5 14,5.44771525 14,6 L14,11 L19,11 C19.5522847,11 20,11.4477153 20,12 C20,12.5522847 19.5522847,13 19,13 L14,13 L14,18 C14,18.5522847 13.5522847,19 13,19 C12.4477153,19 12,18.5522847 12,18 L12,13 L7,13 C6.44771525,13 6,12.5522847 6,12 C6,11.4477153 6.44771525,11 7,11 L12,11 Z" id="路径"></path>
+            </g>
+        </g>
+    </g>
+</svg>

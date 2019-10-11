@@ -123,11 +123,14 @@
                         return false;
                     }
                     let userkeyObj = {
+                        name:this.ruleForm.name,
                         secret: secret,
-                        address: objKeyStore.wallets[0].address
+                        address: objKeyStore.wallets[0].address,
+                        lock:false
                     }
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    this.$message.success("用户登录成功！");
+                    //this.$message.success("用户登录成功！");
+                    this.$router.push('/jpass/main');
                 } else {
                     this.$message.error("用户不存在，请重新输入");
                 }

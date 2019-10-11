@@ -1,5 +1,5 @@
 <template>
- <div style="width:100%;" id="main"  @mousemove="jpasslock">
+ <div style="width:100%;" id="main" >
     <div style="margin-left:5px;width:150px;">
         <a href="#">
             <img src="../../img/logo.png" alt="" style="width:150px;">
@@ -38,11 +38,9 @@
 <script type="es6">
  import vueCanvasNest from 'vue-canvas-nest';
  import password from '../../password.js';
- import LockJpass from '../../lock.js';
-
  export default {
      mounted:function(){
-         LockJpass.StartPoint();
+
      },
      components:{
          vueCanvasNest
@@ -171,9 +169,6 @@
                        }
                        sessionStorage.setItem("userObj", this.$JSON5.stringify(userObj));
                    },
-                  jpasslock(event){
-                      LockJpass.GetXYPosition(event);
-                  },
              }
         }
 </script>
