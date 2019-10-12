@@ -57,6 +57,7 @@ let IpfsUtil = {
             let jt_tokensOf = jt_tokensOfs(userJID);
             if (jt_tokensOf.status == "success") {
                 let tokenOfHash;
+               //console.log(jt_tokensOf);
                 //tokenOfHashList.result的情况：1.[]内容为空(暂时无这种情况)  2.没有与type相同的symbol  3.有与type相同的symbol
                 for (var i = 0; i < jt_tokensOf.result.list.length; i++) {//找出与type相同的symbol的tokenOfHash
                     if (jt_tokensOf.result.list[i].symbol == type) {
@@ -92,7 +93,7 @@ let IpfsUtil = {
                         }
                         newData += ',' + data;
                     }
-                    console.log(newData);
+                    //console.log(newData);
                     jt_removeTokens(tokenOfHash.token);
                     jt_createTokens(tokenOfHash.info, type, newData);
                 }

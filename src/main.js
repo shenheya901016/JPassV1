@@ -29,6 +29,7 @@ const i18n = new VueI18n({
     }
 });
 
+
 ElementLocale.i18n((key, value) => i18n.t(key, value));
 Vue.prototype.$JPassUtil = JPassUtil;
 Vue.prototype.$JCCWallet = require('jcc_wallet');
@@ -36,6 +37,7 @@ Vue.prototype.$JINGCHUANGWallet = require('jcc_wallet').JingchangWallet;
 Vue.prototype.$JTWallet = require('jcc_wallet').jtWallet;
 Vue.prototype.$JSON5 = require('json5');
 Vue.prototype.$ipfs = ipfs;
+Vue.prototype.$Uuidv1 = require('uuid/v1');
 new Vue({
     i18n,
     router,
