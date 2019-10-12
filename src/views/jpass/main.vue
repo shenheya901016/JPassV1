@@ -8,8 +8,8 @@
             </a>
         </h1>
         <ul class="link">
-            <li><a href="#"><img style="top:-1px;" src="./img/ICON-ZJ.svg" alt="">增加</a></li>
-            <li><a href="#"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除</a></li>
+            <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-ZJ.svg" alt="">增加</a></li>-->
+            <!--<li><a href="#"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除</a></li>-->
             <li><a href="#"><img style="top:-2px;" src="./img/ICON-TB.svg" alt="">同步</a></li>
             <li><a href="#" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">锁定</a></li>
             <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-SCQ.svg" alt="">生成器</a></li>-->
@@ -121,8 +121,8 @@
                 loginObj: this.$JSON5.parse(sessionStorage.getItem("userkeyObj")),
                 //allProject:
                 // this.$JSON5.parse("{datas:[{id:'01',name:'shy',typeId:['01','02','03']},{id:'02',name:'shy1',typeId:['01','06','04']},{id:'03',name:'shy3',typeId:['01','02','04']},{id:'05',name:'shy13',typeId:['01','02','04']},{id:'03',name:'shy5',typeId:['01','02','04']},{id:'03',name:'shy8',typeId:['01','02','06']}]}"),
-                allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","typeId":["01","02","03"]},{"id":"02","name":"shy1","typeId":["01","06","04"]},{"id":"03","name":"shy3","typeId":["01","02","04"]}]}'),
-                models: this.$JSON5.parse("{models:[{id:'01',name:'所有项目',modelsType:'project',imgPaht:''},{id:'02',name:'收藏夹',modelsType:'project',imgPaht:''},{id:'03',name:'密码',modelsType:'project',imgPaht:''},{id:'04',name:'模板',modelsType:'project',imgPaht:''},{id:'05',name:'未标记',modelsType:'project',imgPaht:''},{id:'06',name:'家人账号',modelsType:'directory',imgPaht:''},{id:'07',name:'私人账号',modelsType:'directory',imgPaht:''}]}"),
+                allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","modelsId":["01","02","03"],"type":"project"},{"id":"02","name":"shy1","modelsId":["01","06","04"],"type":"project"},{"id":"03","name":"shy3","modelsId":["01","02","04"],"type":"project"}]}'),
+                models:this.$JSON5.parse("{models:[{id:'01',name:'所有项目',modelsType:'project',type:'model',imgPaht:'',},{id:'02',name:'收藏夹',modelsType:'project',type:'model',imgPaht:''},{id:'03',name:'密码',modelsType:'project',type:'model',imgPaht:''},{id:'04',name:'模板',modelsType:'project',type:'model',imgPaht:''},{id:'05',name:'未标记',modelsType:'project',type:'model',imgPaht:''},{id:'06',name:'家人账号',modelsType:'directory',type:'model',imgPaht:''},{id:'07',name:'私人账号',modelsType:'directory',type:'model',imgPaht:''}]}"),
                 DProject: '',
                 DDirectory: '',
                 ruleForm: {
@@ -215,7 +215,7 @@
                     var count=0
                     for(var projectkey in allProjects.datas){
                         var project = allProjects.datas[projectkey];
-                        var types = project.typeId;
+                        var types = project.modelsId;
                         // console.log(types);
                         // console.log(alldata.models[modelkey].id);
                         if(types.indexOf(alldata.models[modelkey].id)!=-1){
@@ -266,7 +266,7 @@
                let id=this.$Uuidv1();
                let name=this.ruleForm.pName;
                let modelsType = this.ruleForm.modelsType;
-               let newModel = '{"id":"'+id+'" ,"name" :"'+name+'" ,"modelsType": "'+modelsType+'","imgPaht":"","count":"0"}';
+               let newModel = '{"id":"'+id+'" ,"name" :"'+name+'" ,"modelsType": "'+modelsType+'","imgPaht":"",type:"model"}';
                // this.$ipfs.Ipfs.add(newModel,"models");
                this.models.models.push(this.$JSON5.parse(newModel));
                this.dialogVisible2= false,
