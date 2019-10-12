@@ -34,7 +34,7 @@
     <!-- 侧边栏 -->
     <aside class="aside" style="">
         <!-- 导航栏 -->
-        <nav class="nav">
+        <nav class="nav" style="">
             <ul class="dh">
                 <li v-for="project in DProject.project">
                     <span>{{project.name}}</span>
