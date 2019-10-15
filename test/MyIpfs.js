@@ -33,7 +33,7 @@ let MyIpfs = {
             '            }\n' +
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
-        return jt_createToken.status
+        return jt_createToken
     },
     /**
      * 查询钱包余额 是否被激活
