@@ -118,12 +118,12 @@ let MyIpfs = {
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
         return jt_createToken.status
-    },
-    /**
+    }/*,
+    /!**
      * 查询用户所有上传IPFS数据
      * @param {string} params 用户JID
      * @return {返回所有数据}
-     */
+     *!/
     async sel(params) {
         let models;
         let profile;
@@ -146,13 +146,13 @@ let MyIpfs = {
         }
         return {models, profile, project}
     },
-    /**
+    /!**
      * 上传用户数据到IPFS
      * @param {string} data 用户要上传到IPFS的数据
      * @param {string} type 用户要上传到IPFS数据的类型
      * @param {string} params IPFS所需要参数
      * @return {返回所有上传后的信息}
-     */
+     *!/
     async add(data, type, params) {
         let jt_tokensOf = await remote.TokensOf(params)
         let tokenOfHash;
@@ -216,13 +216,13 @@ let MyIpfs = {
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
     },
-    /**
+    /!**
      * 删除用户要删除的数据
      * @param {string} data 用户要删除的数据
      * @param {string} type 用户要删除数据的类型
      * @param {string} params IPFS所需要参数
      * @return {操作后信息}
-     */
+     *!/
     async del(data, type, params) {
         let jt_tokensOf = await remote.TokensOf(params)
         let tokenOfHash;
@@ -285,13 +285,13 @@ let MyIpfs = {
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
     },
-    /**
+    /!**
      * 修改用户的数据
      * @param {string} data 用户要修改的数据
      * @param {string} type 用户要修改数据的类型
      * @param {string} params IPFS所需要参数
      * @return {操作后信息}
-     */
+     *!/
     async upd(data, type, params) {
         let jt_tokensOf = await remote.TokensOf(params)
         let tokenOfHash;
@@ -352,7 +352,7 @@ let MyIpfs = {
             '            }\n' +
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
-    }
+    }*/
 }
 
 export default MyIpfs;
