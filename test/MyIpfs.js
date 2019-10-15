@@ -1,9 +1,113 @@
-
 import {IpfsRemote} from "ipfslib";
 
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
 
 let MyIpfs = {
+    async read(params) {//用户JID
+        let jt_tokensOf = await remote.TokensOf(params)
+        let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
+        return jt_getTokenByHash.result.Items[0].Value
+    },
+    async write(data, params) {//params:包括用户JID，运营商JID,用户JID私钥
+        let jt_tokensOf = await remote.TokensOf(params)
+        let jt_removeToken = await remote.RemoveToken([{
+            from: "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",
+            to: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",
+            secret: "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h",
+            token: jt_tokensOf.result.list[0].token,
+        }])
+        let createToken =
+            '        {\n' +
+            '            "from": "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",\n' +
+            '            "to": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",\n' +
+            '            "secret": "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",\n' +
+            '            "token": {\n' +
+            '                "info": "' + jt_tokensOf.result.list[0].Info + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
+            '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
+            '                "items": [\n' +    //该token的属性
+            '                    {\n' +
+            '                        "name": "data",\n' +   //该属性的名称
+            '                        "value": ' + data + '\n' +    //该属性的值，要符合jt_issueToken中的定义
+            '                    }\n' +
+            '                ]\n' +
+            '            }\n' +
+            '        }';
+        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
+        return jt_createToken.status
+    },
+    /**
+     * 查询钱包余额 是否被激活
+     * @param {string[]} params 用户钱包
+     * @return {返回"success"、"error"}
+     */
+    async bal(params) {
+        let balance = await remote.GetBalance(params)
+        if (balance.status === "success") {
+            if (balance.result.balance > 11000000) {
+                return balance.status
+            }
+            return "error"
+        } else {
+            return balance.status
+        }
+    },
+    /**
+     * 查询某个交易详情信息
+     * @param {string} params 交易hash
+     * @return {操作后信息}即可激活
+     */
+    async tra(transaction) {
+        let getTransaction = await remote.GetTransactionByHash(transaction)
+        if (getTransaction.status === "success") {
+            return getTransaction.status
+        } else {
+            return getTransaction.status
+        }
+    },
+    /**
+     * 初始化用户数据
+     * @param {string} params 用户钱包
+     * @return {操作后信息}
+     */
+    async init(params) {
+        let issueToken =
+            '                {\n' +
+            '                    "from": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",\n' +   //用户JID
+            '                    "to": "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",\n' +     //运营商JID
+            '                    "secret": "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h",\n' +
+            '                    "token_info": {\n' +       //token的定义信息
+            '                        "name": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL:data",\n' +        //类erc721的token的名称
+            '                        "symbol": "data",\n' +      //类erc721的token的简称
+            '                        "total_supply": 100,\n' +      //该token的总供应量
+            '                        "items": [\n' +        //定义该token的属性
+            '                            {\n' +
+            '                                "name": "data",\n' +        //该属性的名称
+            '                                "type": "map",\n' +        //该属性的类型
+            '                                "desc": "the data of the token"\n' +        //该属性描述, 可以为空
+            '                            }\n' +
+            '                        ]\n' +
+            '                    }\n' +
+            '                }';
+        let token = (await remote.IssueToken([JSON.parse(issueToken)])).result[0].hash
+        let createToken =
+            '        {\n' +
+            '            "from": "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",\n' +
+            '            "to": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",\n' +
+            '            "secret": "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",\n' +
+            '            "token": {\n' +
+            '                "info": "' + token + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
+            '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
+            '                "items": [\n' +    //该token的属性
+            '                    {\n' +
+            '                        "name": "data",\n' +   //该属性的名称
+            '                        "value": {}\n' +    //该属性的值，要符合jt_issueToken中的定义
+            '                    }\n' +
+            '                ]\n' +
+            '            }\n' +
+            '        }';
+        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
+        return jt_createToken.status
+    },
     /**
      * 查询用户所有上传IPFS数据
      * @param {string} params 用户JID
@@ -237,62 +341,6 @@ let MyIpfs = {
             '            }\n' +
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
-    },
-    /**
-     * 初始化用户数据
-     * @param {string} params 用户钱包
-     * @return {操作后信息}
-     */
-    async cre(params) {
-        let arr = ["models", "profile", "project"]
-        let models;
-        let profile;
-        let project;
-        for (let i = 0; i < arr.length; i++) {
-            let issueToken =
-                '                {\n' +
-                '                    "from": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",\n' +   //用户JID
-                '                    "to": "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",\n' +     //运营商JID
-                '                    "secret": "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h",\n' +
-                '                    "token_info": {\n' +       //token的定义信息
-                '                        "name": "' + arr[i] + '",\n' +        //类erc721的token的名称
-                '                        "symbol": "' + arr[i] + '",\n' +      //类erc721的token的简称
-                '                        "total_supply": 100,\n' +      //该token的总供应量
-                '                        "items": [\n' +        //定义该token的属性
-                '                            {\n' +
-                '                                "name": "' + arr[i] + '",\n' +        //该属性的名称
-                '                                "type": "map",\n' +        //该属性的类型
-                '                                "desc": "the ' + arr[i] + ' of the token"\n' +        //该属性描述, 可以为空
-                '                            }\n' +
-                '                        ]\n' +
-                '                    }\n' +
-                '                }';
-            let token = (await remote.IssueToken([JSON.parse(issueToken)])).result[0].hash
-            if (arr[i] === "models") {
-                models = token
-            } else if (arr[i] === "profile") {
-                profile = token
-            } else {
-                project = token
-            }
-        }
-        return {models, profile, project}
-    },
-    /**
-     * 查询钱包余额
-     * @param {string} params 用户钱包
-     * @return {操作后信息}
-     */
-    async blc(params) {
-        return await remote.GetBalance(params)
-    },
-    /**
-     * 查询某个交易详情信息
-     * @param {string} params 交易hash
-     * @return {操作后信息}
-     */
-    async tra(params){
-        return await remote.GetTransactionByHash(params)
     }
 }
 

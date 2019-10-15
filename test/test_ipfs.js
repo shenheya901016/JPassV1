@@ -14,8 +14,8 @@ describe("test Ipfs", async function () {
             //await MyIpfs.del('{"id":"id1","name":"name1"}',"models",['j4M4AoSi522XxNpywfyBahmjzQihc4EegL'])//删除
             //await MyIpfs.upd('{"id":"1","name":"name33333"}',"models",['j4M4AoSi522XxNpywfyBahmjzQihc4EegL'])//修改
             //await MyIpfs.cre(['j4M4AoSi522XxNpywfyBahmjzQihc4EegL'])//用户初始化
-            await MyIpfs.blc(['j4M4AoSi522XxNpywfyBahmjzQihc4EegL'])//查询钱包余额 判断是否激活
-            //await MyIpfs.tra(['2BB9DBE78C1196CC15FED1626C1A9CFD1232991D7F2E26409D5A70400A771829'])//查询某个交易详情信息 判断是否完成上次同步
+            //console.log(await MyIpfs.bal(['jd4RCFsNPwguVpE5C9zrUEqod9HPWsQ2B']))//查询钱包余额 判断是否激活
+            //console.log(await MyIpfs.tra(['2BB9DBE78C1196CC15FED1626C1A9CFD1232991D7F2E26409D5A70400A771829']))//查询某个交易详情信息 判断是否完成上次同步
         })
     })
     describe("test get tokens", function () {
