@@ -3,11 +3,22 @@ import {IpfsRemote} from "ipfslib";
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
 
 let MyIpfs = {
-    async read(params) {//用户JID
+    /**
+     * 读取IPFS中的数据
+     * @param params 用户钱包地址
+     * @return {Promise<*>} 读取的数据
+     */
+    async read(params) {
         let jt_tokensOf = await remote.TokensOf(params)
         let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
         return jt_getTokenByHash.result.Items[0].Value
     },
+    /**
+     * 向IPFS中写入数据
+     * @param data 数据
+     * @param params 参数
+     * @return {Promise<void>} 判断是否已同步所需的参数
+     */
     async write(data, params) {//params:包括用户JID，运营商JID,用户JID私钥
         let jt_tokensOf = await remote.TokensOf(params)
         let jt_removeToken = await remote.RemoveToken([{
@@ -33,7 +44,7 @@ let MyIpfs = {
             '            }\n' +
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
-        return jt_createToken
+        return jt_createToken.result.transaction
     },
     /**
      * 查询钱包余额 是否被激活
