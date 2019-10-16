@@ -1,17 +1,22 @@
 import {IpfsRemote} from "ipfslib";
-
+let JPassUtil=require("jpass-util")
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
 
 let MyIpfs = {
     /**
      * 读取IPFS中的数据
      * @param userJID 用户钱包地址
+     * @param userSecret 用户钱包私钥
      * @return {Promise<*>} 读取的数据
      */
-    async read(userJID) {
-        let jt_tokensOf = await remote.TokensOf([userJID])
+    async read(userJID,userSecret) {
+        let jt_tokensOf = await remote.TokensOf([userJID]);
         let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
-        return jt_getTokenByHash.result.Items[0].Value
+        let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+        //使用私钥解密数据
+        let msg = JPassUtil.ECCCrypto.decryptWithPrivateKey(key.privateKey, jt_getTokenByHash.result.Items[0].Value);
+        console.log(msg);
+        return msg
     },
     /**
      * 向IPFS中写入数据
@@ -23,13 +28,17 @@ let MyIpfs = {
      * @return {Promise<void>} 返回判断是否已同步所需的参数
      */
     async write(data, userJID, userSecret, operatorJID, operatorSecret) {//params:包括用户JID，运营商JID,用户JID私钥
-        let jt_tokensOf = await remote.TokensOf([userJID])
+        let jt_tokensOf = await remote.TokensOf([userJID]);
         await remote.RemoveToken([{
             from: userJID,
             to: operatorJID,
             secret: userSecret,
             token: jt_tokensOf.result.list[0].token,
-        }])
+        }]);
+        let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+        //使用公钥加密数据
+        let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, data);
+        console.log(encryptData);
         let createToken =
             '        {\n' +
             '            "from": "' + operatorJID + '",\n' +
@@ -108,9 +117,9 @@ let MyIpfs = {
         let token = (await remote.IssueToken([JSON.parse(issueToken)])).result[0].hash;
         let createToken =
             '        {\n' +
-            '            "from": "'+operatorJID+'",\n' +
-            '            "to": "'+userJID+'",\n' +
-            '            "secret": "'+operatorSecret+'",\n' +
+            '            "from": "' + operatorJID + '",\n' +
+            '            "to": "' + userJID + '",\n' +
+            '            "secret": "' + operatorSecret + '",\n' +
             '            "token": {\n' +
             '                "info": "' + token + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
             '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
