@@ -4,6 +4,10 @@ const expect = chai.expect
 import {IpfsRemote} from "ipfslib";
 
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
+let userJID="j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+let userSecret="sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
+let operatorJID="jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
+let operatorSecret="ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
 import MyIpfs from './MyIpfs';
 
 describe("test Ipfs", async function () {

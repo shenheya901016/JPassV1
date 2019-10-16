@@ -5,10 +5,10 @@ let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
 let MyIpfs = {
     /**
      * 读取IPFS中的数据
-     * @param params 用户钱包地址
+     * @param userJID 用户钱包地址
      * @return {Promise<*>} 读取的数据
      */
-    async read(params) {
+    async read(userJID) {
         let jt_tokensOf = await remote.TokensOf(params)
         let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
         return jt_getTokenByHash.result.Items[0].Value
@@ -16,22 +16,25 @@ let MyIpfs = {
     /**
      * 向IPFS中写入数据
      * @param data 数据
-     * @param params 参数
-     * @return {Promise<void>} 判断是否已同步所需的参数
+     * @param userJID 用户钱包地址
+     * @param userSecret 用户钱包秘钥
+     * @param operatorJID 运营商钱包地址
+     * @param operatorSecret 运营商钱包秘钥
+     * @return {Promise<void>} 返回判断是否已同步所需的参数
      */
-    async write(data, params) {//params:包括用户JID，运营商JID,用户JID私钥
-        let jt_tokensOf = await remote.TokensOf(params)
-        let jt_removeToken = await remote.RemoveToken([{
-            from: "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",
-            to: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",
-            secret: "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h",
+    async write(data, userJID, userSecret, operatorJID, operatorSecret) {//params:包括用户JID，运营商JID,用户JID私钥
+        let jt_tokensOf = await remote.TokensOf(userJID)
+        await remote.RemoveToken([{
+            from: userJID,
+            to: operatorJID,
+            secret: userSecret,
             token: jt_tokensOf.result.list[0].token,
         }])
         let createToken =
             '        {\n' +
-            '            "from": "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",\n' +
-            '            "to": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",\n' +
-            '            "secret": "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",\n' +
+            '            "from": "' + operatorJID + '",\n' +
+            '            "to": "' + userJID + '",\n' +
+            '            "secret": "' + operatorSecret + '",\n' +
             '            "token": {\n' +
             '                "info": "' + jt_tokensOf.result.list[0].Info + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
             '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
@@ -43,16 +46,16 @@ let MyIpfs = {
             '                ]\n' +
             '            }\n' +
             '        }';
-        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
+        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
         return jt_createToken.result.transaction
     },
     /**
      * 查询钱包余额 是否被激活
-     * @param {string[]} params 用户钱包
-     * @return {返回"success"、"error"}
+     * @param {string[]} userJID 用户钱包
+     * @return {返回"success"或"error"}
      */
-    async bal(params) {
-        let balance = await remote.GetBalance(params)
+    async bal(userJID) {
+        let balance = await remote.GetBalance(userJID);
         if (balance.status === "success") {
             if (balance.result.balance > 11000000) {
                 return balance.status
@@ -64,11 +67,11 @@ let MyIpfs = {
     },
     /**
      * 查询某个交易详情信息
-     * @param {string} params 交易hash
-     * @return {操作后信息}即可激活
+     * @param {string} transaction 交易hash
+     * @return {string}即可激活
      */
     async tra(transaction) {
-        let getTransaction = await remote.GetTransactionByHash(transaction)
+        let getTransaction = await remote.GetTransactionByHash(transaction);
         if (getTransaction.status === "success") {
             return getTransaction.status
         } else {
@@ -77,17 +80,20 @@ let MyIpfs = {
     },
     /**
      * 初始化用户数据
-     * @param {string} params 用户钱包
-     * @return {操作后信息}
+     * @param {string} userJID 用户钱包地址
+     * @param userSecret 用户钱包秘钥
+     * @param operatorJID 运营商钱包地址
+     * @param operatorSecret 运营商钱包秘钥
+     * @return {string}
      */
-    async init(params) {
+    async init(userJID, userSecret, operatorJID, operatorSecret) {
         let issueToken =
             '                {\n' +
-            '                    "from": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",\n' +   //用户JID
-            '                    "to": "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",\n' +     //运营商JID
-            '                    "secret": "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h",\n' +
+            '                    "from": "' + userJID + '",\n' +   //用户JID
+            '                    "to": "' + operatorJID + '",\n' +     //运营商JID
+            '                    "secret": "' + userSecret + '",\n' +
             '                    "token_info": {\n' +       //token的定义信息
-            '                        "name": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL:data",\n' +        //类erc721的token的名称
+            '                        "name": "' + userJID + ':data",\n' +        //类erc721的token的名称
             '                        "symbol": "data",\n' +      //类erc721的token的简称
             '                        "total_supply": 100,\n' +      //该token的总供应量
             '                        "items": [\n' +        //定义该token的属性
@@ -99,12 +105,12 @@ let MyIpfs = {
             '                        ]\n' +
             '                    }\n' +
             '                }';
-        let token = (await remote.IssueToken([JSON.parse(issueToken)])).result[0].hash
+        let token = (await remote.IssueToken([JSON.parse(issueToken)])).result[0].hash;
         let createToken =
             '        {\n' +
-            '            "from": "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",\n' +
-            '            "to": "j4M4AoSi522XxNpywfyBahmjzQihc4EegL",\n' +
-            '            "secret": "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",\n' +
+            '            "from": "'+operatorJID+'",\n' +
+            '            "to": "'+userJID+'",\n' +
+            '            "secret": "'+operatorSecret+'",\n' +
             '            "token": {\n' +
             '                "info": "' + token + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
             '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
@@ -116,7 +122,7 @@ let MyIpfs = {
             '                ]\n' +
             '            }\n' +
             '        }';
-        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)])
+        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
         return jt_createToken.status
     }/*,
     /!**
