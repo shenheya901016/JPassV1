@@ -9,7 +9,7 @@ let MyIpfs = {
      * @return {Promise<*>} 读取的数据
      */
     async read(userJID) {
-        let jt_tokensOf = await remote.TokensOf(params)
+        let jt_tokensOf = await remote.TokensOf([userJID])
         let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
         return jt_getTokenByHash.result.Items[0].Value
     },
@@ -23,7 +23,7 @@ let MyIpfs = {
      * @return {Promise<void>} 返回判断是否已同步所需的参数
      */
     async write(data, userJID, userSecret, operatorJID, operatorSecret) {//params:包括用户JID，运营商JID,用户JID私钥
-        let jt_tokensOf = await remote.TokensOf(userJID)
+        let jt_tokensOf = await remote.TokensOf([userJID])
         await remote.RemoveToken([{
             from: userJID,
             to: operatorJID,
@@ -51,11 +51,11 @@ let MyIpfs = {
     },
     /**
      * 查询钱包余额 是否被激活
-     * @param {string[]} userJID 用户钱包
-     * @return {返回"success"或"error"}
+     * @param {string} userJID 用户钱包
+     * @return {string}返回"success"或"error"
      */
     async bal(userJID) {
-        let balance = await remote.GetBalance(userJID);
+        let balance = await remote.GetBalance([userJID]);
         if (balance.status === "success") {
             if (balance.result.balance > 11000000) {
                 return balance.status
@@ -71,7 +71,7 @@ let MyIpfs = {
      * @return {string}即可激活
      */
     async tra(transaction) {
-        let getTransaction = await remote.GetTransactionByHash(transaction);
+        let getTransaction = await remote.GetTransactionByHash([transaction]);
         if (getTransaction.status === "success") {
             return getTransaction.status
         } else {
