@@ -13,13 +13,13 @@ import MyIpfs from './MyIpfs';
 describe("test Ipfs", async function () {
     describe("myIpfs", async function () {
         it("myIpfs: test", async function () {
-            console.log(await MyIpfs.bal(userJID));//查询该钱包地址是否被激活
+            //console.log(await MyIpfs.bal(userJID));//查询该钱包地址是否被激活
             console.log(await MyIpfs.read(userJID));//读取该钱包地址在ipfs中存储的数据
-            console.log(await MyIpfs.write(
-                '{"models":[{"id":"1","name":"模板1"}],"profile":[{"id":"1","name":"个人信息1"}],"project":[{"id":"1","name":"项目1"}]}',
-                userJID,userSecret,operatorJID,operatorSecret));//data是决定传字符串还是object未决定 暂时传字符串  向ipfs中写入数据
-            console.log(await MyIpfs.init(userJID,userSecret,operatorJID,operatorSecret));
-            console.log(await MyIpfs.tra("699710DA3B50D7F13FD8981A098A6427564911E8C3A6B0F60DEB1DD3FC2E748C"));//判断向ipfs写入数据是否完成（同步是否完成）
+            //console.log(await MyIpfs.write(
+                //'{"models":[{"id":"1","name":"模板1"}],"profile":[{"id":"1","name":"个人信息1"}],"project":[{"id":"1","name":"项目1"}]}',
+                //userJID,userSecret,operatorJID,operatorSecret));//data是决定传字符串还是object未决定 暂时传字符串  向ipfs中写入数据
+            //console.log(await MyIpfs.init(userJID,userSecret,operatorJID,operatorSecret));
+            //console.log(await MyIpfs.tra("699710DA3B50D7F13FD8981A098A6427564911E8C3A6B0F60DEB1DD3FC2E748C"));//判断向ipfs写入数据是否完成（同步是否完成）
         })
     })
     describe("test get tokens", function () {
