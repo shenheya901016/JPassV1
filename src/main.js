@@ -9,7 +9,7 @@ import ipfs from './ipfs';
 import ElementLocale from 'element-ui/lib/locale';
 //const JPassUtil = require("./JPassUtil");
 import JPassUtil from "jpass-util";
-
+import myIpfs from './myIpfs';
 
 
 Vue.config.productionTip = false;
@@ -38,6 +38,7 @@ Vue.prototype.$JTWallet = require('jcc_wallet').jtWallet;
 Vue.prototype.$JSON5 = require('json5');
 Vue.prototype.$ipfs = ipfs;
 Vue.prototype.$Uuidv1 = require('uuid/v1');
+Vue.prototype.$myIpfs = myIpfs;
 new Vue({
     i18n,
     router,

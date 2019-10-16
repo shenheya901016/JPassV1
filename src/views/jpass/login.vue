@@ -64,7 +64,7 @@
                 }
             };
         },
-        mounted(){
+        async mounted(){
             //select 数据生成
             var names = localStorage.getItem("name_string");
             if (names != null) {
@@ -74,6 +74,7 @@
                     return {value: item, label: item};
                 });
             }
+            //console.log(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL"))
         },
         methods: {
             submitForm(formName) {
