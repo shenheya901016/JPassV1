@@ -10,7 +10,7 @@ let MyIpfs = {
      */
     async read(userJID) {
         let jt_tokensOf = await remote.TokensOf([userJID])
-        let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[1].token]);
+        let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
         return jt_getTokenByHash.result.Items[0].Value
     },
     /**
