@@ -28,7 +28,7 @@ let MyIpfs = {
      * @return {Promise<void>} 返回判断是否已同步所需的参数
      */
     async write(data, userJID, userSecret, operatorJID, operatorSecret) {//params:包括用户JID，运营商JID,用户JID私钥
-        /*let jt_tokensOf = await remote.TokensOf([userJID]);
+        let jt_tokensOf = await remote.TokensOf([userJID]);
         await remote.RemoveToken([{
             from: userJID,
             to: operatorJID,
@@ -38,7 +38,7 @@ let MyIpfs = {
         let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
         //使用公钥加密数据
         let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, data);
-        console.log(encryptData);*/
+        console.log(encryptData);
         let createToken =
             '        {\n' +
             '            "from": "' + operatorJID + '",\n' +

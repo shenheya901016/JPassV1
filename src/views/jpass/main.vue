@@ -10,7 +10,8 @@
         <ul class="link">
             <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-ZJ.svg" alt="">增加</a></li>-->
             <!--<li><a href="#"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除</a></li>-->
-            <li><a href="#"><img style="top:-2px;" src="./img/ICON-TB.svg" alt="">同步</a></li>
+            <li><a href="#" v-on:click="synchronization"><img style="top:-2px;" src="./img/ICON-TB.svg" alt="">同步</a>
+            </li>
             <li><a href="#" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">锁定</a></li>
             <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-SCQ.svg" alt="">生成器</a></li>-->
         </ul>
@@ -43,7 +44,7 @@
             </ul>
             <h3>文件夹</h3>
             <ul class="dhwjj">
-                <li  v-for="project in DDirectory.directory">
+                <li v-for="project in DDirectory.directory">
                     <span>{{project.name}}</span>
                     <i>{{project.count}}</i>
                 </li>
@@ -51,7 +52,7 @@
             <a href="#" class="jh" @click="addDirectoryOP">+</a>
         </nav>
         <!-- 副导航栏 -->
-        <article class="article" >
+        <article class="article">
             <input class="ss" type="text" placeholder="请输入要搜索的内容...">
             <ul class="list">
                 <li v-for="note in allProject.datas" @click="getNote(note)">
@@ -62,9 +63,10 @@
                     </div>
                 </li>
             </ul>
-            <a href="#"  class="jh1">+</a>
+            <a href="#" class="jh1">+</a>
         </article>
-        <el-dialog title="密码解锁" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+        <el-dialog title="密码解锁" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false"
+                   :close-on-press-escape="false"
                    :show-close="false">
             <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="登录密码" prop="password" style="margin-top:10%">
@@ -75,18 +77,27 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="增加目录" :visible.sync="dialogVisible2" width="28%" :close-on-click-modal="false"  :show-close="false">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;">
+        <el-dialog title="增加目录" :visible.sync="dialogVisible2" width="28%" :close-on-click-modal="false"
+                   :show-close="false">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
+                     style="width: 80%;">
                 <el-form-item label="类型选择" prop="modelsType">
-                    <el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit" >目录</el-radio>
-                    <el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit" >文件夹</el-radio>
+                    <el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit">目录
+                    </el-radio>
+                    <el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit">
+                        文件夹
+                    </el-radio>
                 </el-form-item>
                 <el-form-item label="名称" prop="pName" style="margin-top:10%">
-                    <el-input  v-model="ruleForm.pName" style="width:100%;"></el-input>
+                    <el-input v-model="ruleForm.pName" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:10%">
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="submitForm('ruleForm')">确定</el-button>
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="cancel('ruleForm')">取消</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;"
+                               @click="submitForm('ruleForm')">确定
+                    </el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="cancel('ruleForm')">
+                        取消
+                    </el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -105,8 +116,8 @@
 
             //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
 
-           // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
-             //console.log(all);
+            // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
+            //console.log(all);
             this.getdirectory();
         },
         data() {
@@ -122,12 +133,12 @@
                 //allProject:
                 // this.$JSON5.parse("{datas:[{id:'01',name:'shy',typeId:['01','02','03']},{id:'02',name:'shy1',typeId:['01','06','04']},{id:'03',name:'shy3',typeId:['01','02','04']},{id:'05',name:'shy13',typeId:['01','02','04']},{id:'03',name:'shy5',typeId:['01','02','04']},{id:'03',name:'shy8',typeId:['01','02','06']}]}"),
                 allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","modelsId":["01","02","03"],"type":"project"},{"id":"02","name":"shy1","modelsId":["01","06","04"],"type":"project"},{"id":"03","name":"shy3","modelsId":["01","02","04"],"type":"project"}]}'),
-                models:this.$JSON5.parse("{models:[{id:'01',name:'所有项目',modelsType:'project',type:'model',imgPaht:'',},{id:'02',name:'收藏夹',modelsType:'project',type:'model',imgPaht:''},{id:'03',name:'密码',modelsType:'project',type:'model',imgPaht:''},{id:'04',name:'模板',modelsType:'project',type:'model',imgPaht:''},{id:'05',name:'未标记',modelsType:'project',type:'model',imgPaht:''},{id:'06',name:'家人账号',modelsType:'directory',type:'model',imgPaht:''},{id:'07',name:'私人账号',modelsType:'directory',type:'model',imgPaht:''}]}"),
+                models: this.$JSON5.parse("{models:[{id:'01',name:'所有项目',modelsType:'project',type:'model',imgPaht:'',},{id:'02',name:'收藏夹',modelsType:'project',type:'model',imgPaht:''},{id:'03',name:'密码',modelsType:'project',type:'model',imgPaht:''},{id:'04',name:'模板',modelsType:'project',type:'model',imgPaht:''},{id:'05',name:'未标记',modelsType:'project',type:'model',imgPaht:''},{id:'06',name:'家人账号',modelsType:'directory',type:'model',imgPaht:''},{id:'07',name:'私人账号',modelsType:'directory',type:'model',imgPaht:''}]}"),
                 DProject: '',
                 DDirectory: '',
                 ruleForm: {
-                    modelsType:'',
-                    pName:'',
+                    modelsType: '',
+                    pName: '',
                 },
                 rules: {
                     modelsType: [
@@ -141,14 +152,14 @@
             };
         },
         methods: {
-            GetXYPosition(){
+            GetXYPosition() {
                 var x, y;
                 var e = window.event;
                 x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                 y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
                 this.mouse2 = x + ',' + y;
             },
-            CheckTime(){
+            CheckTime() {
                 let timeout = 300 * 1000;//设定超时时间，单位毫秒
                 if (this.mouse1 == this.mouse2) {
                     this.currentSecond = this.currentSecond + 1000;
@@ -165,7 +176,7 @@
                     this.mouse1 = this.mouse2;
                 }
             },
-            async  unlock(){
+            async unlock() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(this.loginObj.name);
@@ -191,19 +202,19 @@
                 //继续监听
                 this.eventID = setInterval(this.CheckTime, 1000);
             },
-            lock(){
+            lock() {
                 this.loginObj.lock = true;
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = true;
             },
-            getNote(note){
+            getNote(note) {
                 console.log(note)
                 for (var key in note) {
                     console.log(key);
                 }
             },
             //获取目录
-            getdirectory(){
+            getdirectory() {
                 var alldata = this.models;
                 var allProjects = this.allProject;
                 var projectstring = ""
@@ -211,18 +222,18 @@
                 var jsonProjectstring = ""
                 var jsonDirectoryString = ""
                 //设置每一项数量
-                for(var modelkey in alldata.models){
-                    var count=0
-                    for(var projectkey in allProjects.datas){
+                for (var modelkey in alldata.models) {
+                    var count = 0
+                    for (var projectkey in allProjects.datas) {
                         var project = allProjects.datas[projectkey];
                         var types = project.modelsId;
                         // console.log(types);
                         // console.log(alldata.models[modelkey].id);
-                        if(types.indexOf(alldata.models[modelkey].id)!=-1){
+                        if (types.indexOf(alldata.models[modelkey].id) != -1) {
                             count++;
                         }
                     }
-                    alldata.models[modelkey].count=count;
+                    alldata.models[modelkey].count = count;
                 }
                 //分组
                 for (var key in alldata.models) {
@@ -244,8 +255,8 @@
                 this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
             },
 
-            addDirectoryOP(){
-                this.dialogVisible2= true;
+            addDirectoryOP() {
+                this.dialogVisible2 = true;
             },
             //提交添加目录
             submitForm(formName) {
@@ -260,24 +271,47 @@
             },
             cancel(formName) {
                 this.$refs[formName].resetFields();
-                this.dialogVisible2= false;
+                this.dialogVisible2 = false;
             },
-            addDirectory(formName){
-               let id=this.$Uuidv1();
-               let name=this.ruleForm.pName;
-               let modelsType = this.ruleForm.modelsType;
-               let newModel = '{"id":"'+id+'" ,"name" :"'+name+'" ,"modelsType": "'+modelsType+'","imgPaht":"",type:"model"}';
-               // this.$ipfs.Ipfs.add(newModel,"models");
-               this.models.models.push(this.$JSON5.parse(newModel));
-               this.dialogVisible2= false,
-               this.getdirectory();
+            addDirectory(formName) {
+                let id = this.$Uuidv1();
+                let name = this.ruleForm.pName;
+                let modelsType = this.ruleForm.modelsType;
+                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '" ,"modelsType": "' + modelsType + '","imgPaht":"",type:"model"}';
+                // this.$ipfs.Ipfs.add(newModel,"models");
+                this.models.models.push(this.$JSON5.parse(newModel));
+                this.dialogVisible2 = false,
+                    this.getdirectory();
                 this.$refs[formName].resetFields();
-               //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
+                //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
                 //console.log(all);
 
 
+            },
+            async synchronization() {
+                let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+                let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
+                let operatorJID = "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
+                let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
+                let bal = false;//这个值从localStorage中取 默认为false：未被激活
+                let localData="";//本地数据
+                if (!bal) {//未被激活时，判断用户钱包地址是否激活
+                    if (await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success") {//已激活，余额充足
+                        bal = true;//把存在localStorage中的值变为true
+                        await this.$myIpfs.init(userJID, userSecret, operatorJID, operatorSecret);//当该用户首次判断被激活时执行 初始化IPFS中的数据
+                    } else {//提醒激活或者余额不足
+                        return "提醒激活或者余额不足"
+                    }
+                } else {
+                    //读取IPFS中数据
+                    let ipfsData = await this.$myIpfs.read(userJID, userSecret);
+                    if (ipfsData.version > localData.version) {//version越大 内容越新
+                        localData=ipfsData;
+                    }else{
+                        await this.$myIpfs.write(localData,userJID, userSecret, operatorJID, operatorSecret);
+                    }
+                }
             }
-
         }
     }
 
@@ -286,7 +320,8 @@
 <style>
     @import './css/base.css';
     @import './css/sy.css';
-    .el-dialog{
+
+    .el-dialog {
         border-radius: 10px;
     }
 </style>
