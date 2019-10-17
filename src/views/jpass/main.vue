@@ -307,7 +307,7 @@
                     let ipfsData = await this.$myIpfs.read(userJID, userSecret);
                     if (ipfsData.version > localData.version) {//version越大 内容越新
                         localData = ipfsData;
-                    } else {
+                    } else if (ipfsData.version < localData.version){
                         let transaction =await this.$myIpfs.write(localData, userJID, userSecret, operatorJID, operatorSecret);
                         await this.$myIpfs.tra(transaction);//判断同步是否完成
                     }
