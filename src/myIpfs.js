@@ -84,7 +84,7 @@ let myIpfs = {
         if (getTransaction.status === "success") {
             return getTransaction.status
         } else {
-            return getTransaction.status
+            setTimeout(await this.tra(transaction));
         }
     },
     /**
