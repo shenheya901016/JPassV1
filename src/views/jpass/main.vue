@@ -294,7 +294,7 @@
                 let operatorJID = "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
                 let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
                 let bal = false;//这个值从localStorage中取 默认为false：未被激活
-                let localData="";//本地数据
+                let localData = "";//本地数据
                 if (!bal) {//未被激活时，判断用户钱包地址是否激活
                     if (await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success") {//已激活，余额充足
                         bal = true;//把存在localStorage中的值变为true
@@ -306,9 +306,9 @@
                     //读取IPFS中数据
                     let ipfsData = await this.$myIpfs.read(userJID, userSecret);
                     if (ipfsData.version > localData.version) {//version越大 内容越新
-                        localData=ipfsData;
-                    }else{
-                        await this.$myIpfs.write(localData,userJID, userSecret, operatorJID, operatorSecret);
+                        localData = ipfsData;
+                    } else {
+                        await this.$myIpfs.write(localData, userJID, userSecret, operatorJID, operatorSecret);
                     }
                 }
             }
