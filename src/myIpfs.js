@@ -28,7 +28,7 @@ let myIpfs = {
      * @return {Promise<void>} 返回判断是否已同步所需的参数
      */
     async write(data, userJID, userSecret, operatorJID, operatorSecret) {//params:包括用户JID，运营商JID,用户JID私钥
-        let jt_tokensOf = await remote.TokensOf([userJID]);
+        /*let jt_tokensOf = await remote.TokensOf([userJID]);
         await remote.RemoveToken([{
             from: userJID,
             to: operatorJID,
@@ -38,14 +38,14 @@ let myIpfs = {
         let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
         //使用公钥加密数据
         let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, data);
-        console.log(encryptData);
+        console.log(encryptData);*/
         let createToken =
             '        {\n' +
             '            "from": "' + operatorJID + '",\n' +
             '            "to": "' + userJID + '",\n' +
             '            "secret": "' + operatorSecret + '",\n' +
             '            "token": {\n' +
-            '                "info": "' + jt_tokensOf.result.list[0].Info + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
+            '                "info": "175BCBCB9F97C49D1F0AA827580F4DF3CFE7D5A9DC69B9E88914D70AA72C1AAE",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
             '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
             '                "items": [\n' +    //该token的属性
             '                    {\n' +
@@ -56,7 +56,7 @@ let myIpfs = {
             '            }\n' +
             '        }';
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
-        return jt_createToken.result.transaction
+        return jt_createToken.result[0].transaction
     },
     /**
      * 查询钱包余额 是否被激活
@@ -76,7 +76,7 @@ let myIpfs = {
     },
     /**
      * 查询某个交易详情信息
-     * @param {string} transaction 交易hash
+     * @param transaction 交易hash
      * @return {string}即可激活
      */
     async tra(transaction) {
@@ -84,7 +84,7 @@ let myIpfs = {
         if (getTransaction.status === "success") {
             return getTransaction.status
         } else {
-            setTimeout(await this.tra(transaction));
+            return await this.tra(transaction)
         }
     },
     /**
