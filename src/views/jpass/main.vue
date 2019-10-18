@@ -289,7 +289,7 @@
 
             },
             async synchronization() {
-                let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+                let userJID = "j4M4AoSi522XxNpywfyBahmjdddzQihc4EegL";
                 let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
                 let operatorJID = "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
                 let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
