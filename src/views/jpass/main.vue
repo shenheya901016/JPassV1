@@ -291,8 +291,8 @@
             async synchronization() {
                 let userJID = "j4M4AoSi522XxNpywfyBahmjdddzQihc4EegL";
                 let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
-                let operatorJID = "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
-                let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
+                let operatorJID = this.$test.operatorJID;
+                let operatorSecret = this.$test.operatorSecret;
                 let bal = false;//这个值从localStorage中取 默认为false：未被激活
                 let localData = "";//本地数据
                 if (!bal) {//未被激活时，判断用户钱包地址是否激活

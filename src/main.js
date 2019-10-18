@@ -10,6 +10,7 @@ import ElementLocale from 'element-ui/lib/locale';
 //const JPassUtil = require("./JPassUtil");
 import JPassUtil from "jpass-util";
 import myIpfs from './myIpfs';
+let test=require("./assets/test");
 
 
 Vue.config.productionTip = false;
@@ -39,6 +40,7 @@ Vue.prototype.$JSON5 = require('json5');
 Vue.prototype.$ipfs = ipfs;
 Vue.prototype.$Uuidv1 = require('uuid/v1');
 Vue.prototype.$myIpfs = myIpfs;
+Vue.prototype.$test = test;
 new Vue({
     i18n,
     router,
