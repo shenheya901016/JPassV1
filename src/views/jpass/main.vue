@@ -113,9 +113,7 @@
             // } else {
             //     this.eventID = setInterval(this.CheckTime, 1000);
             // }
-
             //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
-
             // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
             //console.log(all);
             this.getdirectory();
@@ -285,8 +283,6 @@
                 this.$refs[formName].resetFields();
                 //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
                 //console.log(all);
-
-
             },
             async synchronization() {
                 let userJID = "j4M4AoSi522XxNpywfyBahmjdddzQihc4EegL";
@@ -301,8 +297,8 @@
                         await this.$myIpfs.init(userJID, userSecret, operatorJID, operatorSecret);//当该用户首次判断被激活时执行 初始化IPFS中的数据
                         let transaction = await this.$myIpfs.write(localData, userJID, userSecret, operatorJID, operatorSecret);
                         return await this.$myIpfs.tra(transaction);//判断同步是否完成
-                    } else {//提醒激活或者余额不足
-                        return error
+                    } else {
+                        //提醒激活或者余额不足
                     }
                 } else {
                     //读取IPFS中数据
@@ -317,8 +313,6 @@
             }
         }
     }
-
-
 </script>
 <style>
     @import './css/base.css';

@@ -67,7 +67,7 @@ let myIpfs = {
     async bal(userJID) {
         let balance = await remote.GetBalance([userJID]);
         if (balance.status === "success") {
-            if (balance.result.balance > 11000000) {
+            if (balance.result.balance >= 11000000) {
                 return balance.status
             }
             return "error"
