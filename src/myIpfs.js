@@ -1,5 +1,6 @@
 import {IpfsRemote} from "ipfslib";
-let JPassUtil=require("jpass-util")
+
+let JPassUtil = require("jpass-util")
 let remote = new IpfsRemote({urls: ["/jsonrpc"]})
 
 let myIpfs = {
@@ -9,7 +10,7 @@ let myIpfs = {
      * @param userSecret 用户钱包私钥
      * @return {Promise<*>} 读取的数据
      */
-    async read(userJID,userSecret) {
+    async read(userJID, userSecret) {
         let jt_tokensOf = await remote.TokensOf([userJID]);
         let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
         let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
@@ -28,7 +29,7 @@ let myIpfs = {
      * @return {Promise<void>} 返回判断是否已同步所需的参数
      */
     async write(data, userJID, userSecret, operatorJID, operatorSecret) {//params:包括用户JID，运营商JID,用户JID私钥
-        /*let jt_tokensOf = await remote.TokensOf([userJID]);
+        let jt_tokensOf = await remote.TokensOf([userJID]);
         await remote.RemoveToken([{
             from: userJID,
             to: operatorJID,
@@ -38,14 +39,14 @@ let myIpfs = {
         let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
         //使用公钥加密数据
         let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, data);
-        console.log(encryptData);*/
+        console.log(encryptData);
         let createToken =
             '        {\n' +
             '            "from": "' + operatorJID + '",\n' +
             '            "to": "' + userJID + '",\n' +
             '            "secret": "' + operatorSecret + '",\n' +
             '            "token": {\n' +
-            '                "info": "175BCBCB9F97C49D1F0AA827580F4DF3CFE7D5A9DC69B9E88914D70AA72C1AAE",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
+            '                "info": "' + jt_tokensOf.result.list[0].info + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
             '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
             '                "items": [\n' +    //该token的属性
             '                    {\n' +
@@ -114,25 +115,27 @@ let myIpfs = {
             '                        ]\n' +
             '                    }\n' +
             '                }';
-        let token = (await remote.IssueToken([JSON.parse(issueToken)])).result[0].hash;
-        let createToken =
-            '        {\n' +
-            '            "from": "' + operatorJID + '",\n' +
-            '            "to": "' + userJID + '",\n' +
-            '            "secret": "' + operatorSecret + '",\n' +
-            '            "token": {\n' +
-            '                "info": "' + token + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
-            '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
-            '                "items": [\n' +    //该token的属性
-            '                    {\n' +
-            '                        "name": "data",\n' +   //该属性的名称
-            '                        "value": {}\n' +    //该属性的值，要符合jt_issueToken中的定义
-            '                    }\n' +
-            '                ]\n' +
-            '            }\n' +
-            '        }';
-        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
-        return jt_createToken.status
+        let result = (await remote.IssueToken([JSON.parse(issueToken)])).result[0];
+        if (this.tra(result.transaction)) {
+            let createToken =
+                '        {\n' +
+                '            "from": "' + operatorJID + '",\n' +
+                '            "to": "' + userJID + '",\n' +
+                '            "secret": "' + operatorSecret + '",\n' +
+                '            "token": {\n' +
+                '                "info": "' + result.token + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
+                '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
+                '                "items": [\n' +    //该token的属性
+                '                    {\n' +
+                '                        "name": "data",\n' +   //该属性的名称
+                '                        "value": {}\n' +    //该属性的值，要符合jt_issueToken中的定义
+                '                    }\n' +
+                '                ]\n' +
+                '            }\n' +
+                '        }';
+            let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
+            return jt_createToken.status
+        }
     }
 }
 export default myIpfs;

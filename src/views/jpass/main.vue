@@ -217,10 +217,10 @@
             getdirectory() {
                 var alldata = this.models;
                 var allProjects = this.allProject;
-                var projectstring = ""
-                var directoryString = ""
-                var jsonProjectstring = ""
-                var jsonDirectoryString = ""
+                var projectstring = "";
+                var directoryString = "";
+                var jsonProjectstring = "";
+                var jsonDirectoryString = "";
                 //设置每一项数量
                 for (var modelkey in alldata.models) {
                     var count = 0
@@ -299,8 +299,10 @@
                     if (await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success") {//已激活，余额充足
                         bal = true;//把存在localStorage中的值变为true
                         await this.$myIpfs.init(userJID, userSecret, operatorJID, operatorSecret);//当该用户首次判断被激活时执行 初始化IPFS中的数据
+                        let transaction = await this.$myIpfs.write(localData, userJID, userSecret, operatorJID, operatorSecret);
+                        return await this.$myIpfs.tra(transaction);//判断同步是否完成
                     } else {//提醒激活或者余额不足
-                        return "提醒激活或者余额不足"
+                        return error
                     }
                 } else {
                     //读取IPFS中数据
@@ -309,7 +311,7 @@
                         localData = ipfsData;
                     } else if (ipfsData.version < localData.version) {
                         let transaction = await this.$myIpfs.write(localData, userJID, userSecret, operatorJID, operatorSecret);
-                        await this.$myIpfs.tra(transaction);//判断同步是否完成
+                        return await this.$myIpfs.tra(transaction);//判断同步是否完成
                     }
                 }
             }
