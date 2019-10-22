@@ -115,26 +115,30 @@ let myIpfs = {
             '                        ]\n' +
             '                    }\n' +
             '                }';
-        let result = (await remote.IssueToken([JSON.parse(issueToken)])).result[0];
-        if (this.tra(result.transaction)) {
-            let createToken =
-                '        {\n' +
-                '            "from": "' + operatorJID + '",\n' +
-                '            "to": "' + userJID + '",\n' +
-                '            "secret": "' + operatorSecret + '",\n' +
-                '            "token": {\n' +
-                '                "info": "' + result.token + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
-                '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
-                '                "items": [\n' +    //该token的属性
-                '                    {\n' +
-                '                        "name": "data",\n' +   //该属性的名称
-                '                        "value": {"version":0}\n' +    //该属性的值，要符合jt_issueToken中的定义
-                '                    }\n' +
-                '                ]\n' +
-                '            }\n' +
-                '        }';
-            let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
-            return jt_createToken.status
+        let jt_issueToken = await remote.IssueToken([JSON.parse(issueToken)]);
+        if (jt_issueToken.status === "success") {
+            if (this.tra(jt_issueToken.result[0].transaction) === "success") {
+                let createToken =
+                    '        {\n' +
+                    '            "from": "' + operatorJID + '",\n' +
+                    '            "to": "' + userJID + '",\n' +
+                    '            "secret": "' + operatorSecret + '",\n' +
+                    '            "token": {\n' +
+                    '                "info": "' + jt_issueToken.result[0].token + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
+                    '                "uri": "http://www.jingtum.com",\n' +  //类erc721的token的uri, erc721标准属性
+                    '                "items": [\n' +    //该token的属性
+                    '                    {\n' +
+                    '                        "name": "data",\n' +   //该属性的名称
+                    '                        "value": {"version":0}\n' +    //该属性的值，要符合jt_issueToken中的定义
+                    '                    }\n' +
+                    '                ]\n' +
+                    '            }\n' +
+                    '        }';
+                let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
+                return jt_createToken.status
+            }
+        } else {
+            return jt_issueToken.status
         }
     }
 }

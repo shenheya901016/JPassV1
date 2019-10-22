@@ -12,8 +12,10 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:75%; margin:10% 20% 5% 10%;">
                 <el-form-item label="用户名称" prop="name">
-                    <el-select placeholder="请选择登录用户" v-model="ruleForm.name" title="请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！" style="width:100%;">
-                        <el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    <el-select placeholder="请选择登录用户" v-model="ruleForm.name" title="请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！"
+                               style="width:100%;">
+                        <el-option v-for="item in names" :key="item.value" :label="item.label"
+                                   :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="用户密码" prop="password" style="margin-top:10%">
@@ -74,7 +76,15 @@
                     return {value: item, label: item};
                 });
             }
+            /* let transaction = await this.$myIpfs.write(   //data是决定传字符串还是object未决定 暂时传字符串  向ipfs中写入数据  会返回一个transaction参数提供给tra()
+                 '{"models":[{"id":"1","name":"模板1"}],"profile":[{"id":"1","name":"个人信息1"}],"project":[{"id":"1","name":"项目1"}]}',
+                 "j4M4AoSi522XxNpywfyBahmjzQihc4EegL", "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h", "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS", "ssxWidEVcs6bCtsVbfd7gMXUoRfMW");
+             console.log(transaction);
+             let result=await this.$myIpfs.tra(transaction)
+             console.log(result);    //判断向ipfs写入数据是否完成（同步是否完成）
+             alert(result)*/
             //console.log(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL"));
+            //console.log(await this.$myIpfs.init("j4M4AoSi522XxNpywfyBahmjzQihc4EegL", "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h", "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS", "ssxWidEVcs6bCtsVbfd7gMXUoRfMW"))
         },
         methods: {
             submitForm(formName) {
