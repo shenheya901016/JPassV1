@@ -81,6 +81,7 @@
             let result=await this.$myIpfs.tra(transaction)
             console.log(result);    //判断向ipfs写入数据是否完成（同步是否完成）
             alert(result)*/
+            console.log(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL"));
         },
         methods: {
             submitForm(formName) {
@@ -116,6 +117,7 @@
                 let keyStoreString = localStorage.getItem(this.ruleForm.name);
                 let objKeyStore = this.$JSON5.parse(keyStoreString);
                 let keystring = "";
+                let bal=""
                 if (keyStoreString != null) {
                     try {
                         //钱包生成密钥
@@ -129,11 +131,18 @@
                         this.$message.error("密码有误，请重新输入！");
                         return false;
                     }
+                    if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
+                   //if(await this.$myIpfs.bal("objKeyStore.wallets[0].address") === "success"){
+                        bal=true;
+                    }else{
+                        bal=false;
+                    }
                     let userkeyObj = {
                         name:this.ruleForm.name,
                         secret: secret,
                         address: objKeyStore.wallets[0].address,
-                        lock:false
+                        lock:false,//是否锁定
+                        bal:bal,
                     }
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     //this.$message.success("用户登录成功！");

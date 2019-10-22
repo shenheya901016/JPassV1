@@ -13,11 +13,11 @@ let myIpfs = {
     async read(userJID, userSecret) {
         let jt_tokensOf = await remote.TokensOf([userJID]);
         let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
-        let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+        return jt_getTokenByHash.result.Items[0].Value;
+        /*let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
         //使用私钥解密数据
         let msg = JPassUtil.ECCCrypto.decryptWithPrivateKey(key.privateKey, jt_getTokenByHash.result.Items[0].Value);
-        console.log(msg);
-        return msg
+        return msg*/
     },
     /**
      * 向IPFS中写入数据
@@ -128,7 +128,7 @@ let myIpfs = {
                 '                "items": [\n' +    //该token的属性
                 '                    {\n' +
                 '                        "name": "data",\n' +   //该属性的名称
-                '                        "value": {}\n' +    //该属性的值，要符合jt_issueToken中的定义
+                '                        "value": {"version":0}\n' +    //该属性的值，要符合jt_issueToken中的定义
                 '                    }\n' +
                 '                ]\n' +
                 '            }\n' +
