@@ -22,7 +22,9 @@
             <li>
                 <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">锁定</el-button>
             </li>
-            <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-SCQ.svg" alt="">生成器</a></li>-->
+            <!--<li>-->
+                <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
+            <!--</li>-->
         </ul>
         <div class="hr">
             <!--<a href="#" class="mr2w">-->
@@ -136,7 +138,7 @@
 
             // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
             //console.log(all);
-           this.initialize();
+            this.initialize();
 
             this.getdirectory();
         },
@@ -168,7 +170,7 @@
                 isDisabled: true,
                 customColor: "",
                 percentage: 100,
-                synStatus: "",
+                synStatus: "exception",
                 db: '',
                 projects: '',
                 operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",//运营商钱包地址
@@ -401,34 +403,23 @@
             //启动加载
             async initialize(){
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
-               // var address = loginObj.address;
-                var address ="j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+                // var address = loginObj.address;
+                var address = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
                 var db_name = "db_" + address;
                 var localdata = localStorage.getItem(db_name);
                 var adapter = new LocalStorage(db_name);
                 this.db = low(adapter);
-                if (localdata != null) {
-                    this.db.defaults(localdata).write();
-                    this.localData = localdata;
-                    console.log(111);
-                    // let transaction = await this.$myIpfs.write(localdata, userJID, userSecret, operatorJID, operatorSecret);
-                    // await this.$myIpfs.tra(transaction);//判断同步是否完成
-                    // this.alldata=this.$JSON5.parse(localStorage.getItem("db_name"));
-                } else {
-                    console.log(222);
+                if (localdata == null) {
                     //初始化新数据
                     var varsion = new Date().valueOf();
                     let profiles = {
                         name: loginObj.name,
                         address: address,
                     }
-                    var newdata = this.$JSON5.parse('{"version":"' + varsion + '","profiles":"'+ this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
+                    var newdata = this.$JSON5.parse('{"version":"' + varsion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
                     console.log(newdata);
                     this.db.defaults(newdata).write();
                     this.localData = newdata;
-                    //console.log(this.localData);
-                    // let transaction = await this.$myIpfs.write(newdata, userJID, userSecret, operatorJID, operatorSecret);
-                    // await this.$myIpfs.tra(transaction);//判断同步是否完成
                 }
                 //先删除
                 //this.db.unset("project").write();
@@ -445,11 +436,11 @@
                 var loginObj = sessionStorage.getItem("userkeyObj");
                 let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
                 //let userSecret = loginObj.secret;
-                let userSecret="sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
+                let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
                 let letoperatorJID = this.operatorJID;//运营商钱包地址
                 let operatorSecret = this.operatorSecret; //运营商密钥
                 // let bal = loginObj.bal;//这个值从sessionStorage中取默认为false：未被激活
-                let bal=true;
+                let bal = true;
                 // let localData = this.localData;//本地数据
                 if (!bal) {//未被激活时，判断用户钱包地址是否激活
                     this.$notify.error({
@@ -459,28 +450,16 @@
                 } else {
                     //读取IPFS中数据
                     let ipfsData = await this.$myIpfs.read(userJID, userSecret);
-                    //console.log(ipfsData);
-                    if (ipfsData != null) {//ipfs 有数据
-                        if (ipfsData.version > this.localData.version) {//version越大 内容越新
-                            localData = ipfsData;
-                        } else if (ipfsData.version < this.localData.version) {
-                            console.log(JSON.stringify(this.localData));
-                            let transaction = await this.$myIpfs.write(JSON.stringify(this.localData), userJID, userSecret, letoperatorJID, operatorSecret);
-                            this.processShow=true;
-                            this.percentage = 50;
-                            if (await this.$myIpfs.tra(transaction) == "success") {
-                               this.percentage = 100;
-                               this.synStatus="success";
-                                // alert("数据同步成功！");
-                            }
-                        }
-                    } else {
-                        //ipfs 没有数据
-                        let transaction = await this.$myIpfs.write(this.localData, userJID, userSecret, operatorJID, operatorSecret);
-                        this.processShow=true;
+                    if (ipfsData.version > this.localData.version) {//version越大 内容越新
+                        localData = ipfsData;
+                    } else if (ipfsData.version < this.localData.version) {
+                        console.log(JSON.stringify(this.localData));
+                        let transaction = await this.$myIpfs.write(JSON.stringify(this.localData), userJID, userSecret, letoperatorJID, operatorSecret);
+                        this.processShow = true;
                         this.percentage = 50;
                         if (await this.$myIpfs.tra(transaction) == "success") {
                             this.percentage = 100;
+                            this.synStatus = "success";
                         }
                     }
                 }

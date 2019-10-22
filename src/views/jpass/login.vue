@@ -74,14 +74,7 @@
                     return {value: item, label: item};
                 });
             }
-           /* let transaction = await this.$myIpfs.write(   //data是决定传字符串还是object未决定 暂时传字符串  向ipfs中写入数据  会返回一个transaction参数提供给tra()
-                '{"models":[{"id":"1","name":"模板1"}],"profile":[{"id":"1","name":"个人信息1"}],"project":[{"id":"1","name":"项目1"}]}',
-                "j4M4AoSi522XxNpywfyBahmjzQihc4EegL", "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h", "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS", "ssxWidEVcs6bCtsVbfd7gMXUoRfMW");
-            console.log(transaction);
-            let result=await this.$myIpfs.tra(transaction)
-            console.log(result);    //判断向ipfs写入数据是否完成（同步是否完成）
-            alert(result)*/
-            console.log(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL"));
+            //console.log(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL"));
         },
         methods: {
             submitForm(formName) {
