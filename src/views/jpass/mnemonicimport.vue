@@ -21,7 +21,7 @@
                id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
        </el-form-item>
          <el-form-item>
-              <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false"  style="width:90%;margin-left:3%;"></el-progress>
+              <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:3%;"></el-progress>
           </el-form-item>
          <el-form-item label="密码重复" prop="repassword">
                <el-input  type="password"  v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
@@ -70,7 +70,8 @@
                 };
       return {
         dialogVisible: false,
-          percentage:0,
+        percentage:0,
+        status:"exception",
         ruleForm: {
             mnemonic:'',
             name:'',
@@ -146,6 +147,7 @@
                var pwd= this.ruleForm.password;
                password.pwStrength(pwd);
                this.percentage=password.percentage;
+               this.status = password.status;
              },
               //导出keystore 文件
                 exportkeystore(){

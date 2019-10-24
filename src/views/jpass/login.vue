@@ -47,8 +47,6 @@
         },
         data() {
             return {
-                //进度条值
-                percentage: 0,
                 dialogVisible: false,
                 names: [],
                 operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",//运营商钱包地址
@@ -129,7 +127,7 @@
                     }
                     if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
                    //if(await this.$myIpfs.bal("objKeyStore.wallets[0].address") === "success"){
-                        await this.$myIpfs.init( objKeyStore.wallets[0].address, secret, this.operatorJID,this.operatorSecret);
+                        await this.$myIpfs.init( "j4M4AoSi522XxNpywfyBahmjzQihc4EegL", "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h",this.operatorJID,this.operatorSecret);
                         bal=true;
                     }else{
                         bal=false;

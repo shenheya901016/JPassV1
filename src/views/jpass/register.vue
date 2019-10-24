@@ -14,10 +14,10 @@
                     <el-input v-model="ruleForm.name"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item label="用户密码" prop="password">
-                    <el-input v-model="ruleForm.password"  type="password" @input="pwdLength" style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.password"  type="password" @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false"  style="width:90%;margin-left:2%;"></el-progress>
+                    <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:2%;"></el-progress>
                 </el-form-item>
                 <el-form-item label="密码重复" prop="repassword">
                     <el-input  type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -72,6 +72,7 @@
             return {
                 //进度条值
                 percentage: 0,
+                status:"exception",
                 ruleForm: {
                     name: '',
                     password: '',
@@ -151,6 +152,7 @@
                 var pwd = this.ruleForm.password;
                 password.pwStrength(pwd);
                 this.percentage = password.percentage;
+                this.status = password.status;
             },
             addToLocalStorage(name, keystore) {
                 var nameString = localStorage.getItem("name_string");

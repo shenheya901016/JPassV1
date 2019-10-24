@@ -4,6 +4,7 @@
 
   var PWDlength ={
        percentage:0,
+       status :"exception",
        CharMode:function (iN) {
         if (iN >= 48 && iN <= 57) //数字
             return 1;
@@ -39,34 +40,37 @@
     },
     //显示颜色
      pwStrength:function(pwd) {
-         var percentage=30;
+         // var percentage=30;
         if (pwd == null || pwd == '') {
             this.percentage=0;
         } else {
             var S_level =this.checkStrong(pwd);
-
             switch (S_level) {
                 case 0:
                     this.percentage=25; //密码长度小于;
-                    document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#F56C6C";
+                   // document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#F56C6C";
+                    this. status = "exception";
                     document.getElementById("strong").innerText="弱" ;
                     document.getElementById("strong").style.color="#F56C6C";
                     break;
                 case 1:
                     this.percentage=50;//长度大于四单独类型字符
-                    document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#F56C6C";
+                    //document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#F56C6C";
+                    this. status = "exception";
                     document.getElementById("strong").innerText="弱" ;
                     document.getElementById("strong").style.color="#F56C6C";
                     break;
                 case 2:
                     this.percentage=75;//长度大于四2种类型字符
-                    document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#E6A23C";
+                    //document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#E6A23C";
+                    this. status = "warning";
                     document.getElementById("strong").innerText="中" ;
                     document.getElementById("strong").style.color="#E6A23C";
                     break;
                 default:
                     this.percentage=100;//长度大于四3种类型字符
-                    document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#67C23A";
+                    //document.getElementsByClassName("el-progress-bar__inner")[0].style.backgroundColor="#67C23A";
+                    this.status = "success";
                     document.getElementById("strong").innerText="强" ;
                     document.getElementById("strong").style.color="#67C23A";
                     break;
