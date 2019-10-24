@@ -10,20 +10,18 @@
         <ul class="link">
             <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-ZJ.svg" alt="">增加</a></li>-->
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg"
-                                                                                                      alt="">删除
+                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除
                 </el-button>
             </li>
             <li>
                 <el-button style="border:0;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">同步</el-button>
-                <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus" :show-text="true"
-                             v-show="processShow"></el-progress>
+                <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus" :show-text="true" v-show="processShow"></el-progress>
             </li>
             <li>
                 <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">锁定</el-button>
             </li>
             <!--<li>-->
-                <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
+            <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
             <!--</li>-->
         </ul>
         <div class="hr">
@@ -41,10 +39,9 @@
                 </div>
             </div>
         </div>
-
     </header>
     <!-- 侧边栏 -->
-    <aside class="aside" style="">
+    <aside class="aside">
         <!-- 导航栏 -->
         <nav class="nav" style="">
             <ul class="dh" id="projectUL">
@@ -68,17 +65,38 @@
         <article class="article">
             <input class="ss" type="text" placeholder="请输入要搜索的内容...">
             <ul class="list">
-                <li v-for="(note,index) in projects" @click="noteslick(note,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick">
+                <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index" :class="index == currentNote?click:disclick">
                     <img src="./img/list_logo01.png" alt="" width="30" height="30">
                     <div>
-                        <h5>{{note.id}}</h5>
-                        <span>{{note.name}}</span>
+                        <h5>{{project.name}}</h5>
+                        <span>{{project.name}}</span>
                     </div>
                 </li>
             </ul>
-            <a href="#" class="jh1">+</a>
+            <a href="#" class="jh1" @click="dialogVisibleTemplate=true">+</a>
         </article>
+        <!-- 内容部分 身份标识模板 -->
+        <section class="section">
+            <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
+                <el-form-item label="名称" v-if="this.projectEvent!=''"  style="margin-top:10%" prop="name">
+                    <el-input type="text" v-model="ruleFormProjectDetail.name" style="width:100%;"></el-input>
+                </el-form-item>
+                <template v-for="(data, index) in this.projectEvent.datas">
+                    <el-form-item v-if="data.type==='password'" :label="data.key" :prop="data.key" style="margin-top:10%">
+                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
+                        <span class="strong"></span>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                    </el-form-item>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.key" :prop="data.key" style="margin-top:10%;margin-bottom: 15%">
+                        <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
+                    </el-form-item>
+                </template>
+                <el-button size="small"  v-if="this.projectEvent!=''"  type="primary" @click="">修改</el-button>
+                <el-button size="small"  v-if="this.projectEvent!=''"  @click="dialogVisibleAddProject = false">取 消</el-button>
+            </el-form>
+        </section>
+
+
         <el-dialog title="密码解锁" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
                    :show-close="false">
             <el-form label-width="100px" class="demo-ruleForm">
@@ -119,12 +137,45 @@
                 <el-button size="small" @click="dialogVisibledProject = false">取 消</el-button>
               </span>
         </el-dialog>
+        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" style="">
+            <ul style="border: 1px solid black;">
+                <li v-for="(project,index) in this.templates.templates" @click="projectlick(project,$event)" :data-index="index"
+                    :class="index == currentNote?click:disclick">
+                    <div>
+                        <span>{{project.name}}</span>
+                    </div>
+                </li>
+            </ul>
+            <el-button size="small" type="primary" @click="addproject('ruleFormAddProject')">确 定</el-button>
+            <el-button size="small" @click="dialogVisibleTemplate = false">取 消</el-button>
+        </el-dialog>
+        <el-dialog title="新增记录" :visible.sync="dialogVisibleAddProject" width="50%" :close-on-click-modal="false">
+            <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
+                <el-form-item label="名称" style="margin-top:10%" prop="name">
+                    <el-input type="text" v-model="ruleFormAddProject.name" style="width:100%;"></el-input>
+                </el-form-item>
+                <template v-for="(data, index) in this.templateEvent.datas">
+                    <el-form-item v-if="data.type==='password'" :label="data.key" :prop="data.key" style="margin-top:10%">
+                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
+                        <span class="strong"></span>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                                     style="width:90%;margin-left:2%;"></el-progress>
+                    </el-form-item>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.key" :prop="data.key" style="margin-top:10%;margin-bottom: 15%">
+                        <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
+                    </el-form-item>
+                </template>
+                <el-button size="small" type="primary" @click="submitproject()">确 定</el-button>
+                <el-button size="small" @click="dialogVisibleAddProject = false">取 消</el-button>
+            </el-form>
+        </el-dialog>
     </aside>
     </body>
 </template>
 <script type="es6">
     import low from 'lowdb';
     import LocalStorage from 'lowdb/adapters/LocalStorage';
+    import password from '../../password.js';
     export default {
         mounted: function () {
             //lock定时器启动
@@ -139,7 +190,6 @@
             // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
             //console.log(all);
             this.initialize();
-
             this.getdirectory();
         },
         data() {
@@ -148,6 +198,8 @@
                 dialogVisible2: false,
                 dialogVisibledDirectory: false,
                 dialogVisibledProject: false,
+                dialogVisibleTemplate: false,
+                dialogVisibleAddProject: false,
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -169,17 +221,111 @@
                 delobj: '',
                 isDisabled: true,
                 customColor: "",
-                percentage: 100,
-                synStatus: "exception",
+                percentage: 0,
+                percentageTemplate: 0,
+                synStatus: "exception",//同步进度条状态
+                templateStatus: "exception",
                 db: '',
                 projects: '',
                 operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",//运营商钱包地址
                 operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",//运营商密钥
                 localData: "",//本地数据
                 processShow: false,//同步进度条是否显示
+                projectEvent:"",
+                templates: {
+                    "templates": [
+                        {
+                            "id": "01",
+                            "name": "membership",
+                            "modelsId":["mb"],
+                            "datas": [
+                                {
+                                    "key": "Number",
+                                    "type": "text",
+                                    "val": ""
+                                },
+                                {
+                                    "key": "Login",
+                                    "type": "text",
+                                    "val": ""
+                                },
+                                {
+                                    "key": "Password",
+                                    "type": "password",
+                                    "val": ""
+                                },
+                                {
+                                    "key": "Website",
+                                    "type": "text",
+                                    "val": ""
+                                },
+                                {
+                                    "key": "Phone",
+                                    "type": "text",
+                                    "val": ""
+                                }
+                            ]
+                        },
+                        {
+                            "id": "02",
+                            "name": "EmailAccount",
+                            "modelsId":["mb"],
+                            "datas": [
+                                {
+                                    "key": "Email",
+                                    "type": "text",
+                                    "val": ""
+                                },
+                                {
+                                    "key": "Password",
+                                    "type": "password",
+                                    "val": ""
+                                },
+                                {
+                                    "key": "Website",
+                                    "type": "text",
+                                    "val": ""
+                                },
+                                {
+                                    "key": "One-time Password",
+                                    "type": "text",
+                                    "val": ""
+                                }
+                            ]
+                        },
+                        {
+                            "id": "03",
+                            "name": "Login/Password",
+                            "modelsId":["mb"],
+                            "datas": [
+                                {
+                                    "key": "Email",
+                                    "type": "text",
+                                    "val": "00000"
+                                },
+                                {
+                                    "key": "Password",
+                                    "type": "password",
+                                    "val": "66666"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                templateEvent: "",
                 ruleForm: {
                     modelsType: '',
                     pName: '',
+                },
+                ruleFormAddProject: {
+                    name: '',
+                    modes:["sy"],
+                },
+                ruleFormProjectDetail:{
+
+                },
+                hhhhh: {
+                    val: ''
                 },
                 rules: {
                     modelsType: [
@@ -346,13 +492,13 @@
                 this.isDisabled = false;
                 this.notesBytargeId(note);
             },
-            noteslick(note, event){
+            noteslick(project, event){
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
-                this.delobj = note;
-                console.log(note);
+                this.delobj = project;
                 this.isDisabled = false;
+                this.projectDetail(project);
             },
 
             remove(){
@@ -375,8 +521,7 @@
                         if (index > -1) {
                             //删除modelsId数组中指定位置的项
                             projects[project].modelsId.splice(index, 1);
-                        }
-                        ;
+                        };
                     }
                     this.isDisabled = true;
                     this.dialogVisibledDirectory = false;
@@ -417,8 +562,9 @@
                         address: address,
                     }
                     var newdata = this.$JSON5.parse('{"version":"' + varsion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
-                    console.log(newdata);
                     this.db.defaults(newdata).write();
+                    this.db.set("templates", this.templates.templates).write();
+                    console.log(this.db.value());
                     this.localData = newdata;
                 }
                 //先删除
@@ -463,7 +609,46 @@
                         }
                     }
                 }
+            },
+            pwdLength(pwd) {
+                password.pwStrength(pwd);
+                this.percentageTemplate = password.percentage;
+                this.templateStatus = password.status;
+            },
+            projectlick(project, event){
+                var target = event.currentTarget;
+                var index = Number(target.getAttribute("data-index"));
+                this.currentNote = index;
+                this.templateEvent = this.db.get("templates").find({id: project.id}).value();
+            },
+
+            addproject(formname){
+                this.dialogVisibleTemplate = false;
+                this.dialogVisibleAddProject = true;
+            },
+            //数据提交
+            submitproject(){
+                let projectName = this.ruleFormAddProject.name;
+                let formData =this.templateEvent;
+                let newProject ={
+                        "id": this.$Uuidv1(),
+                        "name": projectName,
+                        "modelsId": this.ruleFormAddProject.modes,
+                        "type": "project",
+                        "datas":formData.datas,
+                        "imgPaht":"",
+                        "dateTime":new Date().valueOf()
+                };
+                   //db project 追加数据
+                   this.db.get("project").push(newProject).write();
+                   console.log(this.db.get("project").value());
+                   this.dialogVisibleAddProject=false;
+            },
+
+            projectDetail(event){
+               this.projectEvent =event
             }
+
         }
     }
 

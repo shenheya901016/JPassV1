@@ -18,7 +18,7 @@
        </el-form-item>
        <el-form-item label="新密码" prop="password">
             <el-input  type="password"  v-model="ruleForm.password" id="password" @input="pwdLength"   style="width:90%;"></el-input>&nbsp;<span
-               id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+               class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
        </el-form-item>
          <el-form-item>
               <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:3%;"></el-progress>

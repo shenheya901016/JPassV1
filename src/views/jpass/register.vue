@@ -14,7 +14,8 @@
                     <el-input v-model="ruleForm.name"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item label="用户密码" prop="password">
-                    <el-input v-model="ruleForm.password"  type="password" @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.password"  type="password" @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span
+                        class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item>
                     <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:2%;"></el-progress>

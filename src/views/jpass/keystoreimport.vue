@@ -26,7 +26,7 @@
           </el-form-item>
           <el-form-item label="新登录密码" prop="newPassword">
                 <el-input  type="password"  v-model="ruleForm.newPassword " @input="pwdLength" placeholder="新密码将代替旧密码" oncopy="return false"
-                            onpaste="return false"style="width:90%;"></el-input>&nbsp;<span id="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            onpaste="return false"style="width:90%;"></el-input>&nbsp;<span class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </el-form-item>
            <el-form-item>
                    <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:3%;"></el-progress>
