@@ -706,9 +706,16 @@
             },
 
             addproject(formname){
-                this.dialogVisibleTemplate = false;
-                this.dialogVisibleAddProject = true;
-            },
+                console.log(this.templateEvent);
+                if(this.templateEvent==""){
+                    this.$message.error("请选择模板！");
+                    return false;
+                }else {
+                    this.dialogVisibleTemplate = false;
+                    this.dialogVisibleAddProject = true;
+                   }
+                },
+
             //数据提交
             submitproject(){
                 let projectName = this.ruleFormAddProject.name;
@@ -732,7 +739,7 @@
                 this.db.get("project").push(newProject).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
-                // this.templateEvent = "";
+                this.templateEvent = "";
                 this.getdirectory();
             },
             projectDetail(event){
