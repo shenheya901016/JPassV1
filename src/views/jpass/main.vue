@@ -79,7 +79,6 @@
             </ul>
             <a href="#" class="jh1" @click="selectTemplate()">+</a>
         </article>
-        <!-- 内容部分 身份标识模板 -->
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm"
                      style="width: 80%;margin: auto">
@@ -146,7 +145,7 @@
         <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" style="">
             <ul style="border: 1px solid black;">
                 <li v-for="(project,index) in this.operateTemplates.templates" @click="projectlick(project,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick">
+                    :class="index == currentTemplate?click:disclick">
                     <div>
                         <span>{{project.name}}</span>
                     </div>
@@ -243,6 +242,7 @@
                 currentProject: -1,//大于li 总数量，如果初始为""，默认选择第0个元素
                 currentDirectory: -1,
                 currentNote: -1,
+                currentTemplate:-1,
                 //allProject:
                 // this.$JSON5.parse("{datas:[{id:'01',name:'shy',typeId:['01','02','03']},{id:'02',name:'shy1',typeId:['01','06','04']},{id:'03',name:'shy3',typeId:['01','02','04']},{id:'05',name:'shy13',typeId:['01','02','04']},{id:'03',name:'shy5',typeId:['01','02','04']},{id:'03',name:'shy8',typeId:['01','02','06']}]}"),
                 allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"02","name":"shy1","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","scj","mm","06"],"type":"project"}]}'),
@@ -700,7 +700,7 @@
                 let temp = this.db.get("templates").find({id: project.id}).value();
                 let target = event.currentTarget;
                 let index = Number(target.getAttribute("data-index"));
-                this.currentNote = index;
+                this.currentTemplate = index;
                 console.log(this.db.get("templates").find({id: project.id}).value());
                 this.templateEvent = temp;
             },
@@ -731,7 +731,7 @@
                     "name": projectName,
                     "modelsId": this.selectlabels,
                     "type": "project",
-                    "datas": formData.datas,
+                   "datas": formData.datas,
                     "imgPaht": "",
                     "dateTime": new Date().valueOf()
                 };
@@ -759,12 +759,12 @@
             },
             //更新模板
             updateTemplates(){
-                console.log("模板更新！")
-                console.log(this.db.get("templates").value());
+                // console.log("模板更新！")
+                // console.log(this.db.get("templates").value());
                 this.db.unset("templates").write();
                 this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                 this.db.set("templates", this.operateTemplates.templates).write();
-                console.log(this.db.get("templates").value());
+                // console.log(this.db.get("templates").value());
             },
         }
     }
