@@ -10,12 +10,14 @@
         <ul class="link">
             <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-ZJ.svg" alt="">增加</a></li>-->
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除
+                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg"
+                                                                                                      alt="">删除
                 </el-button>
             </li>
             <li>
                 <el-button style="border:0;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">同步</el-button>
-                <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus" :show-text="true" v-show="processShow"></el-progress>
+                <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus" :show-text="true"
+                             v-show="processShow"></el-progress>
             </li>
             <li>
                 <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">锁定</el-button>
@@ -66,7 +68,8 @@
         <article class="article">
             <input class="ss" type="text" placeholder="请输入要搜索的内容...">
             <ul class="list">
-                <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index" :class="index == currentNote?click:disclick">
+                <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
+                    :class="index == currentNote?click:disclick">
                     <img src="./img/list_logo01.png" alt="" width="30" height="30">
                     <div>
                         <h5>{{project.name}}</h5>
@@ -74,31 +77,34 @@
                     </div>
                 </li>
             </ul>
-            <a href="#" class="jh1" @click="dialogVisibleTemplate=true">+</a>
+            <a href="#" class="jh1" @click="selectTemplate()">+</a>
         </article>
         <!-- 内容部分 身份标识模板 -->
         <section class="section">
-            <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
-                <el-form-item label="名称" v-if="this.projectEvent!=''"  style="margin-top:10%" prop="name">
+            <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm"
+                     style="width: 80%;margin: auto">
+                <el-form-item label="名称" v-if="this.projectEvent!=''" style="margin-top:10%" prop="name">
                     <el-input type="text" v-model="ruleFormProjectDetail.name" style="width:100%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
                         <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                                     style="width:90%;margin-left:2%;"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
                     </el-form-item>
                 </template>
-                <el-button size="small"  v-if="this.projectEvent!=''"  type="primary" @click="">修改</el-button>
-                <el-button size="small"  v-if="this.projectEvent!=''"  @click="dialogVisibleAddProject = false">取 消</el-button>
+                <el-button size="small" v-if="this.projectEvent!=''" type="primary" @click="">修改</el-button>
+                <el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>
             </el-form>
         </section>
 
 
-        <el-dialog title="密码解锁" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+        <el-dialog title="密码解锁" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+                   :show-close="false">
             <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="登录密码" prop="password" style="margin-top:10%">
                     <el-input type="password" v-model="password" style="width:100%;"></el-input>
@@ -139,7 +145,7 @@
         </el-dialog>
         <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" style="">
             <ul style="border: 1px solid black;">
-                <li v-for="(project,index) in this.templates.templates" @click="projectlick(project,$event)" :data-index="index"
+                <li v-for="(project,index) in this.operateTemplates.templates" @click="projectlick(project,$event)" :data-index="index"
                     :class="index == currentNote?click:disclick">
                     <div>
                         <span>{{project.name}}</span>
@@ -155,7 +161,7 @@
                     <el-input type="text" v-model="ruleFormAddProject.name" style="width:100%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.templateEvent.datas">
-                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
+                    <el-form-item v-if="data.type==='password'" :label="data.key" :prop="data.key" style="margin-top:10%">
                         <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
                         <span class="strong"></span>
                         <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
@@ -165,26 +171,27 @@
                         <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
                     </el-form-item>
                 </template>
-                <el-form-item  label="选择分类"  style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
                     <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:100%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item  label="选择分类"  style="margin-top:10%;margin-bottom: 15%">
-                        <el-dropdown  @command="selectFiled" style="float: left" >
-                            <el-button >
-                                添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
-                            </el-button>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item" >{{item.key}}</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
+                <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
+                    <el-dropdown @command="selectFiled" style="float: left">
+                        <el-button>
+                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </el-form-item>
                 <el-button size="small" type="primary" @click="submitproject()">确 定</el-button>
                 <el-button size="small" @click="dialogVisibleAddProject = false">取 消</el-button>
             </el-form>
         </el-dialog>
-        <el-dialog title="新增项" :visible.sync="dialogVisibleItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog title="新增项" :visible.sync="dialogVisibleItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+                   :show-close="true">
             <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="name" prop="name" style="margin-top:10%">
                     <el-input type="text" v-model="filedName" style="width:100%;"></el-input>
@@ -226,7 +233,7 @@
                 dialogVisibledProject: false,
                 dialogVisibleTemplate: false,
                 dialogVisibleAddProject: false,
-                dialogVisibleItems:false,
+                dialogVisibleItems: false,
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -258,115 +265,130 @@
                 operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",//运营商密钥
                 localData: "",//本地数据
                 processShow: false,//同步进度条是否显示
-                projectEvent:"",
-                labels:'',
-                selectlabels:'',
-                filed:'',//添加项
-                filedName:'',//添加项名称
+                projectEvent: "",
+                labels: '',
+                selectlabels: '',
+                filed: '',//添加项
+                filedName: '',//添加项名称
                 templates: {
                     "templates": [
                         {
                             "id": "01",
                             "name": "membership",
-                            "modelsId":["mb"],
+                            "modelsId": ["mb"],
                             "datas": [
                                 {
                                     "key": "Number",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"Number"
+                                    "tempkey": "Number"
                                 },
                                 {
                                     "key": "Login",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"Login"
+                                    "tempkey": "Login"
                                 },
                                 {
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
-                                    "tempkey":"Password"
+                                    "tempkey": "Password"
                                 },
                                 {
                                     "key": "Website",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"Website"
+                                    "tempkey": "Website"
                                 },
                                 {
                                     "key": "Phone",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"Phone"
+                                    "tempkey": "Phone"
                                 }
                             ]
                         },
                         {
                             "id": "02",
                             "name": "EmailAccount",
-                            "modelsId":["mb"],
+                            "modelsId": ["mb"],
                             "datas": [
                                 {
                                     "key": "Email",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"Email"
+                                    "tempkey": "Email"
                                 },
                                 {
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
-                                    "tempkey":"Password"
+                                    "tempkey": "Password"
                                 },
                                 {
                                     "key": "Website",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"Website"
+                                    "tempkey": "Website"
                                 },
                                 {
                                     "key": "One-time Password",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"One-time Password"
+                                    "tempkey": "One-time Password"
                                 }
                             ]
                         },
                         {
                             "id": "03",
                             "name": "Login/Password",
-                            "modelsId":["mb"],
+                            "modelsId": ["mb"],
                             "datas": [
                                 {
                                     "key": "Email",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey":"Email"
+                                    "tempkey": "Email"
                                 },
                                 {
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
-                                    "tempkey":"Password"
+                                    "tempkey": "Password"
                                 }
                             ]
                         }
                     ]
                 },
+                operateTemplates:"",
                 templateEvent: "",
-                templateItems:{"templateItems":[{"key":"Password","type":"password", "val": "","tempkey":"Password"},{"key":"Number","type":"text", "val": "","tempkey":"Number"},{"key":"Email","type":"text", "val": "","tempkey":"Email"},{"key":"Address","type":"text", "val": "","tempkey":"Address"}]},
+                templateItems: {
+                    "templateItems": [
+                      {"key": "Password", "type": "password", "val": "", "tempkey": "Password"},
+                     {
+                        "key": "Number",
+                        "type": "text",
+                        "val": "",
+                        "tempkey": "Number"
+                    },
+                        {"key": "Email", "type": "text", "val": "", "tempkey": "Email"},
+                        {
+                        "key": "Address",
+                        "type": "text",
+                        "val": "",
+                        "tempkey": "Address"
+                    }]
+                },
                 ruleForm: {
                     modelsType: '',
                     pName: '',
                 },
                 ruleFormAddProject: {
                     name: '',
-                    models:''
+                    models: ''
                 },
-                ruleFormProjectDetail:{
-
-                },
+                ruleFormProjectDetail: {},
                 hhhhh: {
                     val: ''
                 },
@@ -448,8 +470,8 @@
                 var directoryString = ""
                 var jsonProjectstring = ""
                 var jsonDirectoryString = ""
-                var labelsString =""
-                var jsonLabelsString=""
+                var labelsString = ""
+                var jsonLabelsString = ""
                 //设置每一项数量
                 for (var modelkey in alldata) {
                     var count = 0
@@ -473,16 +495,16 @@
                     if (object.modelsType == "directory") {
                         directoryString = directoryString + this.$JSON5.stringify(object) + ",";
                     }
-                    if(object.id!="sy" && object.id!="wbj" && object.id!="mb"){
-                        labelsString = labelsString+ this.$JSON5.stringify(object) + ",";
+                    if (object.id != "sy" && object.id != "wbj" && object.id != "mb") {
+                        labelsString = labelsString + this.$JSON5.stringify(object) + ",";
                     }
                 }
                 projectstring = projectstring.substring(0, projectstring.length - 1);
                 jsonProjectstring = "{project:[" + projectstring + "]}";
                 directoryString = directoryString.substring(0, directoryString.length - 1);
                 jsonDirectoryString = "{directory:[" + directoryString + "]}";
-                labelsString =  labelsString.substring(0, labelsString.length - 1);
-                jsonLabelsString =  "{labels:[" + labelsString + "]}";
+                labelsString = labelsString.substring(0, labelsString.length - 1);
+                jsonLabelsString = "{labels:[" + labelsString + "]}";
                 // console.log(this.$JSON5.parse(jsonProjectstring));
                 // console.log(this.$JSON5.parse(jsonDirectoryString));
                 this.DProject = this.$JSON5.parse(jsonProjectstring);
@@ -492,7 +514,6 @@
 
 
             },
-
             addDirectoryOP(){
                 this.dialogVisible2 = true;
             },
@@ -574,7 +595,8 @@
                         if (index > -1) {
                             //删除modelsId数组中指定位置的项
                             projects[project].modelsId.splice(index, 1);
-                        };
+                        }
+                        ;
                     }
                     this.isDisabled = true;
                     this.dialogVisibledDirectory = false;
@@ -616,7 +638,9 @@
                     }
                     var newdata = this.$JSON5.parse('{"version":"' + varsion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
                     this.db.defaults(newdata).write();
-                    this.db.set("templates", this.templates.templates).write();
+                    this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+                    // console.log(this.operateTemplates);
+                    this.db.set("templates", this.operateTemplates.templates).write();
                     console.log(this.db.value());
                     this.localData = newdata;
                 }
@@ -668,11 +692,17 @@
                 this.percentageTemplate = password.percentage;
                 this.templateStatus = password.status;
             },
+            selectTemplate(){
+                this.dialogVisibleTemplate=true;
+                this.updateTemplates();
+            },
             projectlick(project, event){
-                var target = event.currentTarget;
-                var index = Number(target.getAttribute("data-index"));
+                let temp = this.db.get("templates").find({id: project.id}).value();
+                let target = event.currentTarget;
+                let index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
-                this.templateEvent = this.db.get("templates").find({id: project.id}).value();
+                console.log(this.db.get("templates").find({id: project.id}).value());
+                this.templateEvent = temp;
             },
 
             addproject(formname){
@@ -682,45 +712,53 @@
             //数据提交
             submitproject(){
                 let projectName = this.ruleFormAddProject.name;
-                let formData =this.templateEvent;
-                let newProject=""
-                if(this.selectlabels.length == 0){
-                    this.selectlabels.push("sy","wbj");
-                }else{
+                let formData = this.templateEvent;
+                let newProject = ""
+                if (this.selectlabels.length == 0) {
+                    this.selectlabels.push("sy", "wbj");
+                } else {
                     this.selectlabels.push("sy");
                 }
-                newProject ={
-                        "id": this.$Uuidv1(),
-                        "name": projectName,
-                        "modelsId":this.selectlabels,
-                        "type": "project",
-                        "datas":formData.datas,
-                        "imgPaht":"",
-                        "dateTime":new Date().valueOf()
+                newProject = {
+                    "id": this.$Uuidv1(),
+                    "name": projectName,
+                    "modelsId": this.selectlabels,
+                    "type": "project",
+                    "datas": formData.datas,
+                    "imgPaht": "",
+                    "dateTime": new Date().valueOf()
                 };
-                   //db project 追加数据
-                  this.db.get("project").push(newProject).write();
-                  console.log(this.db.get("project").value());
-                  this.selectlabels="";
-                  this.dialogVisibleAddProject=false;
-                  this.getdirectory();
+                //db project 追加数据
+                this.db.get("project").push(newProject).write();
+                this.selectlabels = "";
+                this.dialogVisibleAddProject = false;
+                // this.templateEvent = "";
+                this.getdirectory();
             },
             projectDetail(event){
-               this.projectEvent =event
+                this.projectEvent = event
             },
 
             selectFiled(command) {
-                this.dialogVisibleItems=true;
-                this.filed=command;
-                this.filedName=command.key
+                this.dialogVisibleItems = true;
+                this.filed = command;
+                this.filedName = command.key
             },
             addFiled(){
-                this.dialogVisibleItems=false;
+                this.dialogVisibleItems = false;
                 this.filed.tempkey = this.filedName;
                 this.templateEvent.datas.push(this.filed);
                 console.log(this.templateEvent.datas);
-            }
-
+            },
+            //更新模板
+            updateTemplates(){
+                console.log("模板更新！")
+                console.log(this.db.get("templates").value());
+                this.db.unset("templates").write();
+                this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+                this.db.set("templates", this.operateTemplates.templates).write();
+                console.log(this.db.get("templates").value());
+            },
         }
     }
 
