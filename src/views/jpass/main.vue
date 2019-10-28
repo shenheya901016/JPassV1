@@ -509,9 +509,7 @@
             //获取目录
             getdirectory(){
                 var alldata = this.db.get("models").value();
-                //console.log(alldata.length);
                 var allProjects = this.db.get("project").value();
-                //console.log(allProjects.length);
                 var projectstring = ""
                 var directoryString = ""
                 var jsonProjectstring = ""
@@ -582,15 +580,11 @@
             addDirectory(formName){
                 let id = this.$Uuidv1();
                 let name = this.ruleForm.pName;
-                // let modelsType = this.ruleForm.modelsType;
                 let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPaht":"","type":"model"}';
-                // this.$ipfs.Ipfs.add(newModel,"models");
                 this.db.get("models").push(this.$JSON5.parse(newModel)).write();
                 this.dialogVisible2 = false,
                         this.getdirectory();
                 this.$refs[formName].resetFields();
-                //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
-                //console.log(all);
             },
 
             projectclick(note, event){
@@ -636,6 +630,7 @@
                 if (type == "model") {
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
+                    this.db.set('version', new Date().valueOf()).write();
                     for (var project in projects) {
                         var index = projects[project].modelsId.indexOf(id);
                         if (index > -1) {
@@ -648,6 +643,7 @@
                     this.dialogVisibledDirectory = false;
                 } else if (type == "project") {
                     this.db.get("project").remove({id: id}).write();
+                    this.db.set('version', new Date().valueOf()).write();
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
                 }
@@ -669,8 +665,8 @@
             //启动加载
             async initialize(){
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
-                // var address = loginObj.address;
-                var address = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+                var address = loginObj.address;
+                // var address = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
                 var db_name = "db_" + address;
                 var localdata = localStorage.getItem(db_name);
                 var adapter = new LocalStorage(db_name);
@@ -687,8 +683,10 @@
                     this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                     // console.log(this.operateTemplates);
                     this.db.set("templates", this.operateTemplates.templates).write();
-                    console.log(this.db.value());
+                    // console.log(this.db.value());
                     this.localData = newdata;
+                }else{
+                    this.localData =this.db.value();
                 }
                 //先删除
                 //this.db.unset("project").write();
@@ -702,15 +700,14 @@
 
             //手动同步。
             async synchronization() {
-                var loginObj = sessionStorage.getItem("userkeyObj");
-                let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
-                //let userSecret = loginObj.secret;
-                let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
+                var loginObj =this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+                var userJID= loginObj.address;
+               // let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+                let userSecret = loginObj.secret;
+                // let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
                 let letoperatorJID = this.operatorJID;//运营商钱包地址
                 let operatorSecret = this.operatorSecret; //运营商密钥
-                // let bal = loginObj.bal;//这个值从sessionStorage中取默认为false：未被激活
-                let bal = true;
-                // let localData = this.localData;//本地数据
+                let bal = loginObj.bal;//这个值从sessionStorage中取默认为false：未被激活
                 if (!bal) {//未被激活时，判断用户钱包地址是否激活
                     this.$notify.error({
                         title: '注意',
@@ -719,10 +716,18 @@
                 } else {
                     //读取IPFS中数据
                     let ipfsData = await this.$myIpfs.read(userJID, userSecret);
-                    if (ipfsData.version > this.localData.version) {//version越大 内容越新
-                        localData = ipfsData;
-                    } else if (ipfsData.version < this.localData.version) {
-                        console.log(JSON.stringify(this.localData));
+                    let tempipfsData= this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
+                    console.log(tempipfsData.version);
+                    console.log(this.localData.version);
+                    if (tempipfsData.version > this.localData.version) {//version越大 内容越新
+                        console.log(111);
+                        this.localData = tempipfsData;
+                        this.processShow = true;
+                        this.percentage = 100;
+                        this.synStatus = "success";
+                    } else if (tempipfsData.version < this.localData.version) {
+                        console.log(222);
+                        // console.log(JSON.stringify(this.localData));
                         let transaction = await this.$myIpfs.write(JSON.stringify(this.localData), userJID, userSecret, letoperatorJID, operatorSecret);
                         this.processShow = true;
                         this.percentage = 50;
@@ -730,6 +735,8 @@
                             this.percentage = 100;
                             this.synStatus = "success";
                         }
+                    }else{
+                        console.log(333);
                     }
                 }
             },
@@ -783,10 +790,13 @@
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
+                console.log(this.db.get("version").value())
+                this.db.set('version', new Date().valueOf()).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
                 this.templateEvent = "";
                 this.getdirectory();
+                console.log(this.db.get("version").value())
             },
             selectFiled(command) {
                 this.dialogVisibleItems = true;
@@ -801,18 +811,16 @@
             },
             //更新模板
             updateTemplates(){
-                // console.log("模板更新！")
-                // console.log(this.db.get("templates").value());
                 this.db.unset("templates").write();
                 this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                 this.db.set("templates", this.operateTemplates.templates).write();
-                // console.log(this.db.get("templates").value());
             },
             //修改页面
             editProject(){
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
                 this.selectlabels= this.editobject.modelsId;
                 this.dialogVisibleEdit =true;
+               // console.log(this.db.get("version").value());
             },
             //修改project
             editDo(){
@@ -820,10 +828,12 @@
                     this.db.get("project").remove({id:this.editobject.id}).write();
                     this.editobject.modelsId= this.selectlabels;
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
+                    this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit =false
                     this.$message.success("修改成功！");
                     this.projectEvent=this.editobject;
                     this.editobject="";
+                 //   console.log(this.db.get("version").value());
                 }catch (e){
                     this.$message.error("修改失败！");
                 }

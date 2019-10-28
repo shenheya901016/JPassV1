@@ -125,9 +125,9 @@
                         this.$message.error("密码有误，请重新输入！");
                         return false;
                     }
-                    if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                   //if(await this.$myIpfs.bal("objKeyStore.wallets[0].address") === "success"){
-                        await this.$myIpfs.init( "j4M4AoSi522XxNpywfyBahmjzQihc4EegL", "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h",this.operatorJID,this.operatorSecret);
+                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
+                   if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
+                        await this.$myIpfs.init( objKeyStore.wallets[0].address, objKeyStore.wallets[0].secret,this.operatorJID,this.operatorSecret);
                         bal=true;
                     }else{
                         bal=false;
