@@ -248,11 +248,11 @@
     export default {
         mounted: function () {
             //lock定时器启动
-            // if (this.loginObj.lock) {
-            //     this.dialogVisible = true;
-            // } else {
-            //     this.eventID = setInterval(this.CheckTime, 1000);
-            // }
+            if (this.loginObj.lock) {
+                this.dialogVisible = true;
+            } else {
+                this.eventID = setInterval(this.CheckTime, 1000);
+            }
 
             //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
 
@@ -458,7 +458,7 @@
                 this.mouse2 = x + ',' + y;
             },
             CheckTime(){
-                let timeout = 300 * 1000;//设定超时时间，单位毫秒
+                let timeout =300 * 1000;//设定超时时间，单位毫秒
                 if (this.mouse1 == this.mouse2) {
                     this.currentSecond = this.currentSecond + 1000;
                     // console.log(this.currentSecond);
@@ -720,13 +720,13 @@
                     console.log(tempipfsData.version);
                     console.log(this.localData.version);
                     if (tempipfsData.version > this.localData.version) {//version越大 内容越新
-                        console.log(111);
+                        console.log("ipfs版本大于本地版本");
                         this.localData = tempipfsData;
                         this.processShow = true;
                         this.percentage = 100;
                         this.synStatus = "success";
                     } else if (tempipfsData.version < this.localData.version) {
-                        console.log(222);
+                        console.log("ipfs版本小于本地版本");
                         // console.log(JSON.stringify(this.localData));
                         let transaction = await this.$myIpfs.write(JSON.stringify(this.localData), userJID, userSecret, letoperatorJID, operatorSecret);
                         this.processShow = true;
@@ -736,7 +736,7 @@
                             this.synStatus = "success";
                         }
                     }else{
-                        console.log(333);
+                        console.log(ipfs版本等于本地版本);
                     }
                 }
             },
