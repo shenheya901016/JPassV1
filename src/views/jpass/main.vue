@@ -79,20 +79,24 @@
             <a href="#" class="jh1" @click="selectTemplate()">+</a>
         </article>
         <section class="section">
-            <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm"
-                     style="width: 80%;margin: auto">
+            <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
+                     style="width: 80%;height:100%;margin: auto;text-align: left;">
                 <el-form-item label="名称" v-if="this.projectEvent!=''" style="margin-top:10%;" prop="name">
-                    <el-input type="text" v-model="projectEvent.name"  style="width:100%;"></el-input>
+                    {{projectEvent.name}}
+                    <hr />
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
-                        <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                        {{data.val}}
+                        <hr />
+                        <!--<el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>-->
+                        <!--<span class="strong"></span>-->
+                        <!--<el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>-->
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
-                        <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
-
+                        <!--<el-input type="text" v-model="data.val" style="width:100%;"></el-input>-->
+                        {{data.val}}
+                        <hr />
                     </el-form-item>
                 </template>
                 <el-button size="small" v-if="this.projectEvent!=''"  @click="editProject()">修改</el-button>
@@ -174,7 +178,7 @@
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
                     <el-dropdown @command="selectFiled" style="float: left">
                         <el-button>
                             添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
@@ -215,8 +219,23 @@
                         <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
                     </el-form-item>
                 </template>
+                <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
+                    <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:100%">
+                        <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                    <el-dropdown @command="selectFiled" style="float: left">
+                        <el-button>
+                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-form-item>
                 <el-button size="small" type="primary" @click="editDo">提交</el-button>
-                <el-button size="small" @click="dialogVisibleAddProject = false">取 消</el-button>
+                <el-button size="small" @click="dialogVisibleEdit = false">取 消</el-button>
             </el-form>
       </el-dialog>
     </aside>
@@ -721,6 +740,7 @@
             },
             selectTemplate(){
                 this.dialogVisibleTemplate=true;
+                this.selectlabels="";
                 this.updateTemplates();
             },
             projectlick(project, event){
@@ -791,12 +811,14 @@
             //修改页面
             editProject(){
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
+                this.selectlabels= this.editobject.modelsId;
                 this.dialogVisibleEdit =true;
             },
             //修改project
             editDo(){
                 try{
                     this.db.get("project").remove({id:this.editobject.id}).write();
+                    this.editobject.modelsId= this.selectlabels;
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.dialogVisibleEdit =false
                     this.$message.success("修改成功！");
@@ -806,6 +828,8 @@
                     this.$message.error("修改失败！");
                 }
            }
+
+
 
        }
     }
