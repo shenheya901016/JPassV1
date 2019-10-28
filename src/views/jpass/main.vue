@@ -10,8 +10,7 @@
         <ul class="link">
             <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-ZJ.svg" alt="">增加</a></li>-->
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg"
-                                                                                                      alt="">删除
+                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除
                 </el-button>
             </li>
             <li>
@@ -82,22 +81,22 @@
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm"
                      style="width: 80%;margin: auto">
-                <el-form-item label="名称" v-if="this.projectEvent!=''" style="margin-top:10%" prop="name">
-                    <el-input type="text" v-model="ruleFormProjectDetail.name" style="width:100%;"></el-input>
+                <el-form-item label="名称" v-if="this.projectEvent!=''" style="margin-top:10%;" prop="name">
+                    <el-input type="text" v-model="projectEvent.name"  style="width:100%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
                         <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
-                                     style="width:90%;margin-left:2%;"></el-progress>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
+
                     </el-form-item>
                 </template>
-                <el-button size="small" v-if="this.projectEvent!=''" type="primary" @click="">修改</el-button>
-                <el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>
+                <el-button size="small" v-if="this.projectEvent!=''"  @click="editProject()">修改</el-button>
+                <!--<el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>-->
             </el-form>
         </section>
 
@@ -201,6 +200,25 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+        <el-dialog title="修改" :visible.sync="dialogVisibleEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <el-form :model="ruleFormProjectEdit" ref="ruleFormProjectEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
+                <el-form-item label="名称" style="margin-top:10%;" prop="name">
+                    <el-input type="text" v-model="editobject.name" style="width:100%;"></el-input>
+                </el-form-item>
+                <template v-for="(data, index) in this.editobject.datas">
+                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
+                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
+                        <span class="strong"></span>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                    </el-form-item>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
+                        <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
+                    </el-form-item>
+                </template>
+                <el-button size="small" type="primary" @click="editDo">提交</el-button>
+                <el-button size="small" @click="dialogVisibleAddProject = false">取 消</el-button>
+            </el-form>
+      </el-dialog>
     </aside>
     </body>
 </template>
@@ -233,6 +251,7 @@
                 dialogVisibleTemplate: false,
                 dialogVisibleAddProject: false,
                 dialogVisibleItems: false,
+                dialogVisibleEdit:false, //修改页面
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -265,11 +284,21 @@
                 operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",//运营商密钥
                 localData: "",//本地数据
                 processShow: false,//同步进度条是否显示
-                projectEvent: "",
+                projectEvent:'',
                 labels: '',
                 selectlabels: '',
                 filed: '',//添加项
                 filedName: '',//添加项名称
+                editobject:'',//修改对象
+                newProject: {
+                    "id": "",
+                    "name": "",
+                    "modelsId": "",
+                    "type": "project",
+                    "datas": "",
+                    "imgPaht": "",
+                    "dateTime":""
+                },
                 templates: {
                     "templates": [
                         {
@@ -388,10 +417,8 @@
                     name: '',
                     models: ''
                 },
-                ruleFormProjectDetail: {},
-                hhhhh: {
-                    val: ''
-                },
+                ruleFormProjectDetail: {name:""},
+                ruleFormProjectEdit:{},
                 rules: {
                     modelsType: [
                         {required: true, message: '请选择类型！', trigger: 'blur'},
@@ -572,7 +599,7 @@
                 this.currentNote = index;
                 this.delobj = project;
                 this.isDisabled = false;
-                this.projectDetail(project);
+                this.projectEvent = this.$JSON5.parse(this.$JSON5.stringify(project));
             },
 
             remove(){
@@ -701,12 +728,11 @@
                 let target = event.currentTarget;
                 let index = Number(target.getAttribute("data-index"));
                 this.currentTemplate = index;
-                console.log(this.db.get("templates").find({id: project.id}).value());
+                // console.log(this.db.get("templates").find({id: project.id}).value());
                 this.templateEvent = temp;
             },
 
             addproject(formname){
-                console.log(this.templateEvent);
                 if(this.templateEvent==""){
                     this.$message.error("请选择模板！");
                     return false;
@@ -720,13 +746,13 @@
             submitproject(){
                 let projectName = this.ruleFormAddProject.name;
                 let formData = this.templateEvent;
-                let newProject = ""
+                var newProject = ""
                 if (this.selectlabels.length == 0) {
                     this.selectlabels.push("sy", "wbj");
                 } else {
                     this.selectlabels.push("sy");
                 }
-                newProject = {
+                this.newProject = {
                     "id": this.$Uuidv1(),
                     "name": projectName,
                     "modelsId": this.selectlabels,
@@ -736,16 +762,12 @@
                     "dateTime": new Date().valueOf()
                 };
                 //db project 追加数据
-                this.db.get("project").push(newProject).write();
+                this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
                 this.templateEvent = "";
                 this.getdirectory();
             },
-            projectDetail(event){
-                this.projectEvent = event
-            },
-
             selectFiled(command) {
                 this.dialogVisibleItems = true;
                 this.filed = command;
@@ -755,7 +777,7 @@
                 this.dialogVisibleItems = false;
                 this.filed.tempkey = this.filedName;
                 this.templateEvent.datas.push(this.filed);
-                console.log(this.templateEvent.datas);
+                // console.log(this.templateEvent.datas);
             },
             //更新模板
             updateTemplates(){
@@ -766,7 +788,26 @@
                 this.db.set("templates", this.operateTemplates.templates).write();
                 // console.log(this.db.get("templates").value());
             },
-        }
+            //修改页面
+            editProject(){
+                this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
+                this.dialogVisibleEdit =true;
+            },
+            //修改project
+            editDo(){
+                try{
+                    this.db.get("project").remove({id:this.editobject.id}).write();
+                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
+                    this.dialogVisibleEdit =false
+                    this.$message.success("修改成功！");
+                    this.projectEvent=this.editobject;
+                    this.editobject="";
+                }catch (e){
+                    this.$message.error("修改失败！");
+                }
+           }
+
+       }
     }
 
 </script>

@@ -31,9 +31,13 @@ var JPasslock = {
             JPasslock.currentSecond =JPasslock.currentSecond + 1000;
             if (JPasslock.currentSecond > JPasslock.timeout) {
                 clearInterval(this.eventID);
-                //console.log("你已经超过3分钟没有操作，页面自动跳转至首页");
 
-                 window.location.href = "http://www.baidu.com";
+                //console.log("你已经超过3分钟没有操作，页面自动跳转至首页");
+                // let local = window.location.host;
+                // let url="http://"+local+"/#/jpass/lock";
+                // window.location.href=url;
+                console.log(this.data);
+                JPasslock.currentSecond=0;
             }
         } else {
             currentSecond = 0;
@@ -44,6 +48,7 @@ var JPasslock = {
         this.mouse1 = "";
         this.mouse2 = "";
         this.eventID = setInterval(JPasslock.CheckTime, 1000);
+
     }
 };
 module.exports = JPasslock;
