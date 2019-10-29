@@ -145,7 +145,7 @@
                 <el-button size="small" @click="dialogVisibledProject = false">取 消</el-button>
               </span>
         </el-dialog>
-        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" @close='closeDialogTemplate'>
+        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" @open='openDialogTemplate'>
             <ul style="border: 1px solid black;">
                 <li v-for="(project,index) in this.operateTemplates.templates" @click="projectlick(project,$event)" :data-index="index"
                     :class="index == currentTemplate?click:disclick">
@@ -163,7 +163,7 @@
                     <el-input type="text" v-model="ruleFormAddProject.name" style="width:100%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.templateEvent.datas">
-                    <el-form-item v-if="data.type==='password'" :label="data.key" :prop="data.key" style="margin-top:10%">
+                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
                         <span class="strong"></span>
                         <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
@@ -413,14 +413,21 @@
                 templateEvent: "",
                 templateItems: {
                     "templateItems": [
-                      {"key": "Password", "type": "password", "val": "", "tempkey": "Password"},
+                      {
+                          "key": "Password",
+                          "type": "password",
+                          "val": "",
+                          "tempkey": "Password"},
                      {
                         "key": "Number",
                         "type": "text",
                         "val": "",
                         "tempkey": "Number"
                     },
-                        {"key": "Email", "type": "text", "val": "", "tempkey": "Email"},
+                        {"key": "Email",
+                            "type": "text",
+                            "val": "",
+                            "tempkey": "Email"},
                         {
                         "key": "Address",
                         "type": "text",
@@ -756,6 +763,7 @@
                 let index = Number(target.getAttribute("data-index"));
                 this.currentTemplate = index;
                 // console.log(this.db.get("templates").find({id: project.id}).value());
+                console.log(temp);
                 this.templateEvent = temp;
             },
 
@@ -805,6 +813,7 @@
             },
             addFiled(){
                 this.dialogVisibleItems = false;
+
                 this.filed.tempkey = this.filedName;
                 this.templateEvent.datas.push(this.filed);
                 // console.log(this.templateEvent.datas);
@@ -838,9 +847,9 @@
                     this.$message.error("修改失败！");
                 }
            },
-            closeDialogTemplate(){
+            openDialogTemplate(){
                 this.currentTemplate= -1;
-                this.templateEvent = "";
+                this.templateEvent=""
             }
        }
     }
