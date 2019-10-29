@@ -653,6 +653,7 @@
                     this.db.set('version', new Date().valueOf()).write();
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
+                    this.projectEvent="";
                 }
                 this.getdirectory();
             },
