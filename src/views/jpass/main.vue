@@ -145,7 +145,7 @@
                 <el-button size="small" @click="dialogVisibledProject = false">取 消</el-button>
               </span>
         </el-dialog>
-        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" style="">
+        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" @close='closeDialogTemplate'>
             <ul style="border: 1px solid black;">
                 <li v-for="(project,index) in this.operateTemplates.templates" @click="projectlick(project,$event)" :data-index="index"
                     :class="index == currentTemplate?click:disclick">
@@ -837,10 +837,11 @@
                 }catch (e){
                     this.$message.error("修改失败！");
                 }
-           }
-
-
-
+           },
+            closeDialogTemplate(){
+                this.currentTemplate= -1;
+                this.templateEvent = "";
+            }
        }
     }
 
