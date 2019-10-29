@@ -526,15 +526,19 @@
                 //设置每一项数量
                 for (var modelkey in alldata) {
                     var count = 0
-                    for (var projectkey in allProjects) {
-                        var project = allProjects[projectkey];
-                        var types = project.modelsId;
-                        // console.log(types);
-                        // console.log(alldata.models[modelkey].id);
-                        if (types.indexOf(alldata[modelkey].id) != -1) {
-                            count++;
-                        }
-                    }
+                     if(alldata[modelkey].id!="mb"){
+                         for (var projectkey in allProjects) {
+                             var project = allProjects[projectkey];
+                             var types = project.modelsId;
+                             // console.log(types);
+                             // console.log(alldata.models[modelkey].id);
+                             if (types.indexOf(alldata[modelkey].id) != -1) {
+                                 count++;
+                             }
+                         }
+                     }else{
+                         count =this.db.get("templates").size().value();
+                     }
                     alldata[modelkey].count = count;
                 }
                 //分组
@@ -661,14 +665,21 @@
             notesBytargeId(obj){
                 var id = obj.id;
                 var projectArray = new Array();
-                var projects = this.db.get("project").value();
-                for (var key in projects) {
-                    let models = projects[key].modelsId;
-                    if (models.indexOf(id) != -1) {
-                        projectArray.push(projects[key]);
+                if( obj.id!="mb"){
+                    var projects = this.db.get("project").value();
+                    for (var key in projects) {
+                        let models = projects[key].modelsId;
+                        if (models.indexOf(id) != -1) {
+                            projectArray.push(projects[key]);
+                        }
+                    }
+                }else{
+                    var projects = this.db.get("templates").value();
+                    for(var key in projects){
+                        projectArray.push(projects[key])
                     }
                 }
-                this.projects = projectArray;
+                     this.projects = projectArray;
             },
             //启动加载
             async initialize(){
@@ -799,13 +810,13 @@
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
-                console.log(this.db.get("version").value())
+                // console.log(this.db.get("version").value())
                 this.db.set('version', new Date().valueOf()).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
                 this.templateEvent = "";
                 this.getdirectory();
-                console.log(this.db.get("version").value())
+                // console.log(this.db.get("version").value())
             },
             selectFiled(command) {
                 this.dialogVisibleItems = true;
@@ -814,7 +825,6 @@
             },
             addFiled(){
                 this.dialogVisibleItems = false;
-
                 this.filed.tempkey = this.filedName;
                 this.templateEvent.datas.push(this.filed);
                 // console.log(this.templateEvent.datas);
