@@ -127,8 +127,10 @@
                     }
                     // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
                    if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                        await this.$myIpfs.init( objKeyStore.wallets[0].address, objKeyStore.wallets[0].secret,this.operatorJID,this.operatorSecret);
-                        bal=true;
+                       let transaction =await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
+                       if (await this.$myIpfs.tra(transaction) === "success") {
+                           bal=true;
+                       }
                     }else{
                         bal=false;
                     }

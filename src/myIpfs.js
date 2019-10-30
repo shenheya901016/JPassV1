@@ -14,10 +14,10 @@ let myIpfs = {
         let jt_tokensOf = await remote.TokensOf([userJID]);
         let jt_getTokenByHash = await remote.GetTokenByHash([jt_tokensOf.result.list[0].token]);
         return jt_getTokenByHash.result.Items[0].Value;
-        /*let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
-        //使用私钥解密数据
-        let msg = JPassUtil.ECCCrypto.decryptWithPrivateKey(key.privateKey, jt_getTokenByHash.result.Items[0].Value);
-        return msg*/
+        // let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+        // //使用私钥解密数据
+        // let msg = JPassUtil.ECCCrypto.decryptWithPrivateKey(key.privateKey, jt_getTokenByHash.result.Items[0].Value);
+        // return msg
     },
     /**
      * 向IPFS中写入数据
@@ -96,7 +96,7 @@ let myIpfs = {
      * @param operatorSecret 运营商钱包秘钥
      * @return {string}
      */
-    async init(userJID, userSecret, operatorJID, operatorSecret) {
+    async initll(userJID, userSecret, operatorJID, operatorSecret) {
         let issueToken =
             '                {\n' +
             '                    "from": "' + userJID + '",\n' +   //用户JID
@@ -135,7 +135,7 @@ let myIpfs = {
                     '            }\n' +
                     '        }';
                 let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
-                return jt_createToken.status
+                return jt_createToken.result[0].transaction
             }
         } else {
             return jt_issueToken.status

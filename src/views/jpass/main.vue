@@ -8,9 +8,19 @@
             </a>
         </h1>
         <ul class="link">
-            <!--<li><a href="#"><img style="top:-1px;" src="./img/ICON-ZJ.svg" alt="">增加</a></li>-->
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除
+                <el-button @click="addDirectoryOP" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建文件夹</el-button>
+            </li>
+            <li>
+                <el-button @click="" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建模板</el-button>
+            </li>
+            <li>
+                <el-button @click="selectTemplate" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建项目</el-button>
+            </li>
+
+            <li>
+                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg"
+                                                                                                      alt="">删除
                 </el-button>
             </li>
             <li>
@@ -29,7 +39,7 @@
             <!--<a href="#" class="mr2w">-->
             <!--<img src="./img/icon_tz.svg" alt="">-->
             <!--</a>-->
-            <a href="#" class="mr4w">
+            <a href="#" class="mr4w" @click="openSetting">
                 <img src="./img/icon_sz.svg" alt="">
             </a>
             <div class="touxiang">
@@ -61,7 +71,7 @@
                     <i>{{project.count}}</i>
                 </li>
             </ul>
-            <a href="#" class="jh" @click="addDirectoryOP">+</a>
+            <!--<a href="#" class="jh" @click="addDirectoryOP">+</a>-->
         </nav>
         <!-- 副导航栏 -->
         <article class="article">
@@ -76,19 +86,18 @@
                     </div>
                 </li>
             </ul>
-            <a href="#" class="jh1" @click="selectTemplate()">+</a>
         </article>
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
                      style="width: 80%;height:100%;margin: auto;text-align: left;">
                 <el-form-item label="名称" v-if="this.projectEvent!=''" style="margin-top:10%;" prop="name">
                     {{projectEvent.name}}
-                    <hr />
+                    <hr/>
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         {{data.val}}
-                        <hr />
+                        <hr/>
                         <!--<el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>-->
                         <!--<span class="strong"></span>-->
                         <!--<el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>-->
@@ -96,10 +105,10 @@
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <!--<el-input type="text" v-model="data.val" style="width:100%;"></el-input>-->
                         {{data.val}}
-                        <hr />
+                        <hr/>
                     </el-form-item>
                 </template>
-                <el-button size="small" v-if="this.projectEvent!=''"  @click="editProject()">修改</el-button>
+                <el-button size="small" v-if="this.projectEvent!=''" @click="editProject()">修改</el-button>
                 <!--<el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>-->
             </el-form>
         </section>
@@ -204,7 +213,8 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="修改" :visible.sync="dialogVisibleEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog title="修改" :visible.sync="dialogVisibleEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+                   :show-close="true">
             <el-form :model="ruleFormProjectEdit" ref="ruleFormProjectEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
                 <el-form-item label="名称" style="margin-top:10%;" prop="name">
                     <el-input type="text" v-model="editobject.name" style="width:100%;"></el-input>
@@ -213,7 +223,8 @@
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
                         <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                                     style="width:90%;margin-left:2%;"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
@@ -237,7 +248,39 @@
                 <el-button size="small" type="primary" @click="editDo">提交</el-button>
                 <el-button size="small" @click="dialogVisibleEdit = false">取 消</el-button>
             </el-form>
-      </el-dialog>
+        </el-dialog>
+        <el-dialog title="" :visible.sync="dialogVisibleSetting" width="50%" :show-close="true" style="text-align: left">
+            <div style="text-align: center">系统设置</div>
+            <el-form label-width="100px" style="border: 1px solid #50A4FF">
+                <el-form-item prop="">
+                    <div>锁定</div>
+                    定时锁定
+                    <el-switch v-model="lock" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                    <br>
+                    闲置时间
+                    <el-slider v-model="locktime"></el-slider>
+                </el-form-item>
+                <el-form-item prop="">
+                    <div>语言</div>
+                    <el-select v-model="language" placeholder="语言选择">
+                        <el-option v-for="item in this.languages" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="">
+                    <div>密码服务</div>
+                    显示密码
+                    <el-switch v-model="showPassword" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                    <br>
+                    新用户和密码自动保存
+                    <el-select v-model="savePassword" placeholder="请选择">
+                        <el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
+                    <el-button type="primary" size="small" style="width:35%;" @click="">保存</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -245,32 +288,43 @@
     import low from 'lowdb';
     import LocalStorage from 'lowdb/adapters/LocalStorage';
     import password from '../../password.js';
+
     export default {
         mounted: function () {
             //lock定时器启动
-            if (this.loginObj.lock) {
-                this.dialogVisible = true;
-            } else {
-                this.eventID = setInterval(this.CheckTime, 1000);
-            }
+            // if (this.loginObj.lock) {
+            //     this.dialogVisible = true;
+            // } else {
+            //     this.eventID = setInterval(this.CheckTime, 1000);
+            // }
 
             //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
 
             // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
             //console.log(all);
             this.initialize();
-            this.getdirectory();
+            // this.getdirectory();
         },
         data() {
             return {
-                dialogVisible: false,
-                dialogVisible2: false,
-                dialogVisibledDirectory: false,
-                dialogVisibledProject: false,
-                dialogVisibleTemplate: false,
-                dialogVisibleAddProject: false,
-                dialogVisibleItems: false,
-                dialogVisibleEdit:false, //修改页面
+                //弹出框
+                dialogVisible: false,//密码锁定弹出框
+                dialogVisible2: false,//增加文件夹弹出框
+                dialogVisibledDirectory: false,//删除文件夹弹出框
+                dialogVisibledProject: false,//删除项目弹出框
+                dialogVisibleTemplate: false,//模板弹出框
+                dialogVisibleAddProject: false, //增加项目弹出框
+                dialogVisibleItems: false,//增加Items 弹出框
+                dialogVisibleEdit: false, //修改项目弹出框
+                dialogVisibleSetting: false,//设置弹出框
+                //设置参数
+                lock: true,//锁定开关
+                locktime: 5,//自动锁定时间
+                languages: [{value: '中文', label: '中文'}, {value: '英文', label: '英文'}],
+                language: '',//语言选择
+                showPassword: "",//是否显示密码
+                savePasswords: [{value: 'ask', label: '询问'}, {value: 'off', label: '关闭'}, {value: 'automatically', label: '自动填充'}],
+                savePassword: '',
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -280,7 +334,7 @@
                 currentProject: -1,//大于li 总数量，如果初始为""，默认选择第0个元素
                 currentDirectory: -1,
                 currentNote: -1,
-                currentTemplate:-1,
+                currentTemplate: -1,
                 //allProject:
                 // this.$JSON5.parse("{datas:[{id:'01',name:'shy',typeId:['01','02','03']},{id:'02',name:'shy1',typeId:['01','06','04']},{id:'03',name:'shy3',typeId:['01','02','04']},{id:'05',name:'shy13',typeId:['01','02','04']},{id:'03',name:'shy5',typeId:['01','02','04']},{id:'03',name:'shy8',typeId:['01','02','06']}]}"),
                 allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"02","name":"shy1","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","scj","mm","06"],"type":"project"}]}'),
@@ -303,12 +357,12 @@
                 operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",//运营商密钥
                 localData: "",//本地数据
                 processShow: false,//同步进度条是否显示
-                projectEvent:'',
+                projectEvent: '',
                 labels: '',
                 selectlabels: '',
                 filed: '',//添加项
                 filedName: '',//添加项名称
-                editobject:'',//修改对象
+                editobject: '',//修改对象
                 newProject: {
                     "id": "",
                     "name": "",
@@ -316,7 +370,7 @@
                     "type": "project",
                     "datas": "",
                     "imgPaht": "",
-                    "dateTime":""
+                    "dateTime": ""
                 },
                 templates: {
                     "templates": [
@@ -409,31 +463,34 @@
                         }
                     ]
                 },
-                operateTemplates:"",
+                operateTemplates: "",
                 templateEvent: "",
                 templateItems: {
                     "templateItems": [
-                      {
-                          "key": "Password",
-                          "type": "password",
-                          "val": "",
-                          "tempkey": "Password"},
-                     {
-                        "key": "Number",
-                        "type": "text",
-                        "val": "",
-                        "tempkey": "Number"
-                    },
-                        {"key": "Email",
+                        {
+                            "key": "Password",
+                            "type": "password",
+                            "val": "",
+                            "tempkey": "Password"
+                        },
+                        {
+                            "key": "Number",
                             "type": "text",
                             "val": "",
-                            "tempkey": "Email"},
+                            "tempkey": "Number"
+                        },
                         {
-                        "key": "Address",
-                        "type": "text",
-                        "val": "",
-                        "tempkey": "Address"
-                    }]
+                            "key": "Email",
+                            "type": "text",
+                            "val": "",
+                            "tempkey": "Email"
+                        },
+                        {
+                            "key": "Address",
+                            "type": "text",
+                            "val": "",
+                            "tempkey": "Address"
+                        }]
                 },
                 ruleForm: {
                     modelsType: '',
@@ -443,8 +500,8 @@
                     name: '',
                     models: ''
                 },
-                ruleFormProjectDetail: {name:""},
-                ruleFormProjectEdit:{},
+                ruleFormProjectDetail: {name: ""},
+                ruleFormProjectEdit: {},
                 rules: {
                     modelsType: [
                         {required: true, message: '请选择类型！', trigger: 'blur'},
@@ -465,7 +522,7 @@
                 this.mouse2 = x + ',' + y;
             },
             CheckTime(){
-                let timeout =300 * 1000;//设定超时时间，单位毫秒
+                let timeout = 300 * 1000;//设定超时时间，单位毫秒
                 if (this.mouse1 == this.mouse2) {
                     this.currentSecond = this.currentSecond + 1000;
                     // console.log(this.currentSecond);
@@ -526,19 +583,19 @@
                 //设置每一项数量
                 for (var modelkey in alldata) {
                     var count = 0
-                     if(alldata[modelkey].id!="mb"){
-                         for (var projectkey in allProjects) {
-                             var project = allProjects[projectkey];
-                             var types = project.modelsId;
-                             // console.log(types);
-                             // console.log(alldata.models[modelkey].id);
-                             if (types.indexOf(alldata[modelkey].id) != -1) {
-                                 count++;
-                             }
-                         }
-                     }else{
-                         count =this.db.get("templates").size().value();
-                     }
+                    if (alldata[modelkey].id != "mb") {
+                        for (var projectkey in allProjects) {
+                            var project = allProjects[projectkey];
+                            var types = project.modelsId;
+                            // console.log(types);
+                            // console.log(alldata.models[modelkey].id);
+                            if (types.indexOf(alldata[modelkey].id) != -1) {
+                                count++;
+                            }
+                        }
+                    } else {
+                        count = this.db.get("templates").size().value();
+                    }
                     alldata[modelkey].count = count;
                 }
                 //分组
@@ -657,7 +714,7 @@
                     this.db.set('version', new Date().valueOf()).write();
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
-                    this.projectEvent="";
+                    this.projectEvent = "";
                 }
                 this.getdirectory();
             },
@@ -665,7 +722,7 @@
             notesBytargeId(obj){
                 var id = obj.id;
                 var projectArray = new Array();
-                if( obj.id!="mb"){
+                if (obj.id != "mb") {
                     var projects = this.db.get("project").value();
                     for (var key in projects) {
                         let models = projects[key].modelsId;
@@ -673,55 +730,48 @@
                             projectArray.push(projects[key]);
                         }
                     }
-                }else{
+                } else {
                     var projects = this.db.get("templates").value();
-                    for(var key in projects){
+                    for (var key in projects) {
                         projectArray.push(projects[key])
                     }
                 }
-                     this.projects = projectArray;
+                this.projects = projectArray;
             },
             //启动加载
             async initialize(){
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
-                // var address = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
                 var db_name = "db_" + address;
-                var localdata = localStorage.getItem(db_name);
-                var adapter = new LocalStorage(db_name);
-                this.db = low(adapter);
-                if (localdata == null) {
-                    //初始化新数据
-                    var varsion = new Date().valueOf();
-                    let profiles = {
-                        name: loginObj.name,
-                        address: address,
+                this.db = await this.$Lowdb(db_name);
+                let version = await this.db.get("version").value();
+                if (!version || version.length <= 0) {  //判断version是否undefind 或者version.length<0
+                        //初始化新数据
+                        var varsion = new Date().valueOf();
+                        let profiles = {
+                            name: loginObj.name,
+                            address: address,
+                        }
+                        var newdata = this.$JSON5.parse('{"version":"' + varsion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
+                        await this.db.defaults(newdata).write();
+                        this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+                        await this.db.set("templates", this.operateTemplates.templates).write();
                     }
-                    var newdata = this.$JSON5.parse('{"version":"' + varsion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
-                    this.db.defaults(newdata).write();
-                    this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
-                    // console.log(this.operateTemplates);
-                    this.db.set("templates", this.operateTemplates.templates).write();
-                    // console.log(this.db.value());
-                    this.localData = newdata;
-                }else{
-                    this.localData =this.db.value();
-                }
-                //先删除
-                //this.db.unset("project").write();
-                //this.db.unset("models").write();
-                //localStorage.removeItem(db_name);
-                //console.log(localStorage.getItem(db_name));
-                //console.log(localStorage.getItem(db_name));
-                // this.db.get("project").remove().write();
-                // this.db.get("models").remove().write();
+                    //先删除
+                    //this.db.unset("project").write();
+                    //this.db.unset("models").write();
+                    //localStorage.removeItem(db_name);
+                    //console.log(localStorage.getItem(db_name));
+                    //console.log(localStorage.getItem(db_name));
+                    // this.db.get("project").remove().write();
+                    // this.db.get("models").remove().write();
             },
 
             //手动同步。
             async synchronization() {
-                var loginObj =this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
-                var userJID= loginObj.address;
-               // let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+                var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+                var userJID = loginObj.address;
+                // let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
                 let userSecret = loginObj.secret;
                 // let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
                 let letoperatorJID = this.operatorJID;//运营商钱包地址
@@ -735,27 +785,26 @@
                 } else {
                     //读取IPFS中数据
                     let ipfsData = await this.$myIpfs.read(userJID, userSecret);
-                    let tempipfsData= this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
+                    let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
                     console.log(tempipfsData.version);
-                    console.log(this.localData.version);
-                    if (tempipfsData.version > this.localData.version) {//version越大 内容越新
+                    console.log(this.db.get("version").value());
+                    if (tempipfsData.version > this.db.get("version").value()) {//version越大 内容越新
                         console.log("ipfs版本大于本地版本");
-                        this.localData = tempipfsData;
+                        this.db = tempipfsData;
                         this.processShow = true;
                         this.percentage = 100;
                         this.synStatus = "success";
-                    } else if (tempipfsData.version < this.localData.version) {
+                    } else if (tempipfsData.version < this.db.get("version").value()) {
                         console.log("ipfs版本小于本地版本");
-                        // console.log(JSON.stringify(this.localData));
-                        let transaction = await this.$myIpfs.write(JSON.stringify(this.localData), userJID, userSecret, letoperatorJID, operatorSecret);
+                        let transaction = await this.$myIpfs.write(JSON.stringify(this.db), userJID, userSecret, letoperatorJID, operatorSecret);
                         this.processShow = true;
                         this.percentage = 50;
                         if (await this.$myIpfs.tra(transaction) == "success") {
                             this.percentage = 100;
                             this.synStatus = "success";
                         }
-                    }else{
-                        console.log(ipfs版本等于本地版本);
+                    } else {
+                        console.log("ipfs版本等于本地版本");
                     }
                 }
             },
@@ -765,8 +814,8 @@
                 this.templateStatus = password.status;
             },
             selectTemplate(){
-                this.dialogVisibleTemplate=true;
-                this.selectlabels="";
+                this.dialogVisibleTemplate = true;
+                this.selectlabels = "";
                 this.updateTemplates();
             },
             projectlick(project, event){
@@ -780,14 +829,14 @@
             },
 
             addproject(formname){
-                if(this.templateEvent==""){
+                if (this.templateEvent == "") {
                     this.$message.error("请选择模板！");
                     return false;
-                }else {
+                } else {
                     this.dialogVisibleTemplate = false;
                     this.dialogVisibleAddProject = true;
-                   }
-                },
+                }
+            },
 
             //数据提交
             submitproject(){
@@ -804,7 +853,7 @@
                     "name": projectName,
                     "modelsId": this.selectlabels,
                     "type": "project",
-                   "datas": formData.datas,
+                    "datas": formData.datas,
                     "imgPaht": "",
                     "dateTime": new Date().valueOf()
                 };
@@ -832,37 +881,40 @@
             //更新模板
             updateTemplates(){
                 this.db.unset("templates").write();
-                this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                 this.db.set("templates", this.operateTemplates.templates).write();
             },
             //修改页面
             editProject(){
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
-                this.selectlabels= this.editobject.modelsId;
-                this.dialogVisibleEdit =true;
-               // console.log(this.db.get("version").value());
+                this.selectlabels = this.editobject.modelsId;
+                this.dialogVisibleEdit = true;
+                // console.log(this.db.get("version").value());
             },
             //修改project
             editDo(){
-                try{
-                    this.db.get("project").remove({id:this.editobject.id}).write();
-                    this.editobject.modelsId= this.selectlabels;
+                try {
+                    this.db.get("project").remove({id: this.editobject.id}).write();
+                    this.editobject.modelsId = this.selectlabels;
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
-                    this.dialogVisibleEdit =false
+                    this.dialogVisibleEdit = false
                     this.$message.success("修改成功！");
-                    this.projectEvent=this.editobject;
-                    this.editobject="";
-                 //   console.log(this.db.get("version").value());
-                }catch (e){
+                    this.projectEvent = this.editobject;
+                    this.editobject = "";
+                    //   console.log(this.db.get("version").value());
+                } catch (e) {
                     this.$message.error("修改失败！");
                 }
-           },
+            },
             openDialogTemplate(){
-                this.currentTemplate= -1;
-                this.templateEvent=""
+                this.currentTemplate = -1;
+                this.templateEvent = ""
+            },
+            openSetting(){
+                this.dialogVisibleSetting = true;
             }
-       }
+        }
     }
 
 </script>

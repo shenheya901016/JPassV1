@@ -9,6 +9,8 @@ import ElementLocale from 'element-ui/lib/locale';
 //const JPassUtil = require("./JPassUtil");
 import JPassUtil from "jpass-util";
 import myIpfs from './myIpfs';
+import Lowdb from "lowdb";
+import IndexDB from "./indexDB";
 let test=require("./assets/test");
 
 
@@ -39,6 +41,7 @@ Vue.prototype.$JSON5 = require('json5');
 Vue.prototype.$Uuidv1 = require('uuid/v1');
 Vue.prototype.$myIpfs = myIpfs;
 Vue.prototype.$test = test;
+Vue.prototype.$Lowdb = source => Lowdb(new IndexDB(source));
 new Vue({
     i18n,
     router,
