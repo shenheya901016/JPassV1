@@ -303,7 +303,6 @@
             // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
             //console.log(all);
             this.initialize();
-            // this.getdirectory();
         },
         data() {
             return {
@@ -740,23 +739,43 @@
             },
             //启动加载
             async initialize(){
+                let letoperatorJID = this.operatorJID;//运营商钱包地址
+                let operatorSecret = this.operatorSecret; //运营商密钥
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
                 let version = await this.db.get("version").value();
+                let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
+                let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
+                console.log("本地version:"+version);
+                console.log("ipfsversion:"+tempipfsData.version);
                 if (!version || version.length <= 0) {  //判断version是否undefind 或者version.length<0
-                        //初始化新数据
-                        var varsion = new Date().valueOf();
-                        let profiles = {
-                            name: loginObj.name,
-                            address: address,
-                        }
-                        var newdata = this.$JSON5.parse('{"version":"' + varsion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
-                        await this.db.defaults(newdata).write();
-                        this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
-                        await this.db.set("templates", this.operateTemplates.templates).write();
-                    }
+                     if(tempipfsData.version==0){
+                         console.log("初始化");
+                         //初始化新数据
+                         var newversion = new Date().valueOf();
+                         let profiles = {
+                             name: loginObj.name,
+                             address: address,
+                         }
+                         var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
+                         await this.db.defaults(newdata).write();
+                         this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+                         await this.db.set("templates", this.operateTemplates.templates).write();
+                     } else if(tempipfsData.version>0){
+                         await this.db.defaults(tempipfsData).write();
+                         // console.log(JSON.stringify(this.db));
+                     }
+                }else if(version>tempipfsData.version){
+                    console.log("本机覆盖ipfs");
+                    let transaction = await this.$myIpfs.write(JSON.stringify(this.db), address,loginObj.secret, letoperatorJID, operatorSecret);
+                }else if(version<tempipfsData.version){
+                    console.log("ipfs覆盖本机");
+                    this.cleardb();
+                    await this.db.defaults(tempipfsData).write();
+                }
+                this.getdirectory();
                     //先删除
                     //this.db.unset("project").write();
                     //this.db.unset("models").write();
@@ -913,6 +932,14 @@
             },
             openSetting(){
                 this.dialogVisibleSetting = true;
+            },
+            cleardb(){
+                this.db.unset("project").write();
+                this.db.unset("models").write();
+                this.db.unset("version").write();
+                this.db.unset("templates").write();
+                this.db.unset("profiles").write();
+                this.db.unset("settings").write();
             }
         }
     }
