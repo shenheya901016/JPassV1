@@ -12,7 +12,7 @@
                 <el-button @click="addDirectoryOP" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建文件夹</el-button>
             </li>
             <li>
-                <el-button @click="" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建模板</el-button>
+                <el-button @click="addTemplate" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建模板</el-button>
             </li>
             <li>
                 <el-button @click="selectTemplate" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建项目</el-button>
@@ -154,9 +154,16 @@
                 <el-button size="small" @click="dialogVisibledProject = false">取 消</el-button>
               </span>
         </el-dialog>
+        <el-dialog title="提示" :visible.sync="dialogVisibledTemplate" width="30%">
+            <span>是否删除模板？</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button size="small" type="primary" @click="removeData()">确 定</el-button>
+                <el-button size="small" @click="dialogVisibledTemplate = false">取 消</el-button>
+              </span>
+        </el-dialog>
         <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" @open='openDialogTemplate'>
             <ul style="border: 1px solid black;">
-                <li v-for="(project,index) in this.operateTemplates.templates" @click="projectlick(project,$event)" :data-index="index"
+                <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)" :data-index="index"
                     :class="index == currentTemplate?click:disclick">
                     <div>
                         <span>{{project.name}}</span>
@@ -201,15 +208,27 @@
                 <el-button size="small" @click="dialogVisibleAddProject = false">取 消</el-button>
             </el-form>
         </el-dialog>
-        <el-dialog title="新增项" :visible.sync="dialogVisibleItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
-                   :show-close="true">
+        <el-dialog title="新增项" :visible.sync="dialogVisibleItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="name" prop="name" style="margin-top:10%">
                     <el-input type="text" v-model="filedName" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:10%">
                     <el-button type="primary" size="small" style="width:35%;float:left;" @click="addFiled">确定</el-button>
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="this.dialogVisibleItems=false">取消</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleItems=false">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+        <el-dialog title="新增项" :visible.sync="dialogVisibleAddTempItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+                   :show-close="true">
+            <el-form label-width="100px" class="demo-ruleForm">
+                <el-form-item label="name" prop="name" style="margin-top:10%">
+                    <el-input type="text" v-model="filedName" style="width:100%;"></el-input>
+                </el-form-item>
+                <el-form-item label="" prop="" style="margin-top:10%">
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="addFiledTemplate">确定</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleAddTempItems = false">取消
+                    </el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -281,6 +300,33 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+        <el-dialog title="增加模板" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
+                <el-form-item label="模板名称" style="margin-top:10%;" prop="name">
+                    <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:100%;"></el-input>
+                </el-form-item>
+                <template v-for="(data, index) in this.tempTemplate">
+                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
+                        <el-input type="password" v-model="data.val" readonly   style="width:100%;"></el-input>
+                    </el-form-item>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
+                        <el-input type="text" v-model="data.val" readonly style="width:100%;"></el-input>
+                    </el-form-item>
+                </template>
+                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                    <el-dropdown @command="selectFiledTemplate" style="float: left">
+                        <el-button>
+                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-form-item>
+                <el-button size="small" type="primary" @click="saveTamplate">提交</el-button>
+                <el-button size="small" @click="dialogVisibleAddTemplate = false">取 消</el-button>
+            </el-form>
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -311,11 +357,14 @@
                 dialogVisible2: false,//增加文件夹弹出框
                 dialogVisibledDirectory: false,//删除文件夹弹出框
                 dialogVisibledProject: false,//删除项目弹出框
+                dialogVisibledTemplate:false, //删除模板弹框
                 dialogVisibleTemplate: false,//模板弹出框
                 dialogVisibleAddProject: false, //增加项目弹出框
                 dialogVisibleItems: false,//增加Items 弹出框
                 dialogVisibleEdit: false, //修改项目弹出框
                 dialogVisibleSetting: false,//设置弹出框
+                dialogVisibleAddTemplate:false,//增加模板
+                dialogVisibleAddTempItems:false,//增加模板项弹出框
                 //设置参数
                 lock: true,//锁定开关
                 locktime: 5,//自动锁定时间
@@ -362,6 +411,7 @@
                 filed: '',//添加项
                 filedName: '',//添加项名称
                 editobject: '',//修改对象
+                tempTemplate:[],//新增模板构造变量
                 newProject: {
                     "id": "",
                     "name": "",
@@ -371,12 +421,20 @@
                     "imgPaht": "",
                     "dateTime": ""
                 },
+                newTemplate: {
+                    "id":"",
+                    "name": "",
+                    "modelsId": ["mb"],
+                    "type":"template",
+                    "datas": []
+                },
                 templates: {
                     "templates": [
                         {
-                            "id": "01",
+                            "id":"01",
                             "name": "membership",
                             "modelsId": ["mb"],
+                            "type":"template",
                             "datas": [
                                 {
                                     "key": "Number",
@@ -411,9 +469,10 @@
                             ]
                         },
                         {
-                            "id": "02",
+                            "id":"02",
                             "name": "EmailAccount",
                             "modelsId": ["mb"],
+                            "type":"template",
                             "datas": [
                                 {
                                     "key": "Email",
@@ -445,6 +504,7 @@
                             "id": "03",
                             "name": "Login/Password",
                             "modelsId": ["mb"],
+                            "type":"template",
                             "datas": [
                                 {
                                     "key": "Email",
@@ -467,6 +527,7 @@
                 templateItems: {
                     "templateItems": [
                         {
+                            "id":"",
                             "key": "Password",
                             "type": "password",
                             "val": "",
@@ -499,8 +560,13 @@
                     name: '',
                     models: ''
                 },
-                ruleFormProjectDetail: {name: ""},
+                ruleFormProjectDetail: {
+                    name: ""
+                },
                 ruleFormProjectEdit: {},
+                ruleFormAddTemplate:{
+                    name:""
+                },
                 rules: {
                     modelsType: [
                         {required: true, message: '请选择类型！', trigger: 'blur'},
@@ -586,8 +652,6 @@
                         for (var projectkey in allProjects) {
                             var project = allProjects[projectkey];
                             var types = project.modelsId;
-                            // console.log(types);
-                            // console.log(alldata.models[modelkey].id);
                             if (types.indexOf(alldata[modelkey].id) != -1) {
                                 count++;
                             }
@@ -616,14 +680,10 @@
                 jsonDirectoryString = "{directory:[" + directoryString + "]}";
                 labelsString = labelsString.substring(0, labelsString.length - 1);
                 jsonLabelsString = "{labels:[" + labelsString + "]}";
-                // console.log(this.$JSON5.parse(jsonProjectstring));
-                // console.log(this.$JSON5.parse(jsonDirectoryString));
                 this.DProject = this.$JSON5.parse(jsonProjectstring);
                 this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
                 this.labels = this.$JSON5.parse(jsonLabelsString);
                 this.projects = this.db.get("project").value();
-
-
             },
             addDirectoryOP(){
                 this.dialogVisible2 = true;
@@ -649,8 +709,9 @@
                 let name = this.ruleForm.pName;
                 let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPaht":"","type":"model"}';
                 this.db.get("models").push(this.$JSON5.parse(newModel)).write();
+                this.db.set('version', new Date().valueOf()).write();
                 this.dialogVisible2 = false,
-                        this.getdirectory();
+                 this.getdirectory();
                 this.$refs[formName].resetFields();
             },
 
@@ -689,8 +750,12 @@
                     this.dialogVisibledDirectory = true;
                 } else if (type == "project") {
                     this.dialogVisibledProject = true;
+                }else if(type == "template"){
+                    this.dialogVisibledTemplate = true;
                 }
             },
+
+            //删除数据
             removeData(){
                 var type = this.delobj.type;
                 var id = this.delobj.id;
@@ -703,19 +768,29 @@
                         if (index > -1) {
                             //删除modelsId数组中指定位置的项
                             projects[project].modelsId.splice(index, 1);
-                        }
-                        ;
+                        };
                     }
                     this.isDisabled = true;
                     this.dialogVisibledDirectory = false;
+                    this.getdirectory();
                 } else if (type == "project") {
                     this.db.get("project").remove({id: id}).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
                     this.projectEvent = "";
+                    this.getdirectory();
+                } else if(type == "template"){
+                    this.db.get("templates").remove({id: id}).write();
+                    this.db.set('version', new Date().valueOf()).write();
+                    //更新template 在project中显示
+                    this.projects=this.db.get("templates").value();
+                    this.dialogVisibledTemplate = false;
+                    this.projectEvent = "";
+                    this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id:"mb"}).value());
+
                 }
-                this.getdirectory();
             },
             //点击目录生成projects列表
             notesBytargeId(obj){
@@ -746,7 +821,8 @@
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
                 let version = await this.db.get("version").value();
-                let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
+                // let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
+                let  ipfsData = {"version":0};
                 let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
                 console.log("本地version:"+version);
                 console.log("ipfsversion:"+tempipfsData.version);
@@ -763,19 +839,25 @@
                          await this.db.defaults(newdata).write();
                          this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                          await this.db.set("templates", this.operateTemplates.templates).write();
+                         this.getdirectory();
                      } else if(tempipfsData.version>0){
                          await this.db.defaults(tempipfsData).write();
+                         this.getdirectory();
                          // console.log(JSON.stringify(this.db));
                      }
                 }else if(version>tempipfsData.version){
                     console.log("本机覆盖ipfs");
-                    let transaction = await this.$myIpfs.write(JSON.stringify(this.db), address,loginObj.secret, letoperatorJID, operatorSecret);
+                    this.getdirectory();
+                   // let transaction = await this.$myIpfs.write(JSON.stringify(this.db), address,loginObj.secret, letoperatorJID, operatorSecret);
                 }else if(version<tempipfsData.version){
                     console.log("ipfs覆盖本机");
                     this.cleardb();
                     await this.db.defaults(tempipfsData).write();
+                }else {
+                    this.getdirectory();
                 }
-                this.getdirectory();
+
+
                     //先删除
                     //this.db.unset("project").write();
                     //this.db.unset("models").write();
@@ -835,7 +917,7 @@
             selectTemplate(){
                 this.dialogVisibleTemplate = true;
                 this.selectlabels = "";
-                this.updateTemplates();
+                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").value()));
             },
             projectlick(project, event){
                 let temp = this.db.get("templates").find({id: project.id}).value();
@@ -883,6 +965,7 @@
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
                 this.templateEvent = "";
+                this.ruleFormAddProject.name="";
                 this.getdirectory();
                 // console.log(this.db.get("version").value())
             },
@@ -896,12 +979,6 @@
                 this.filed.tempkey = this.filedName;
                 this.templateEvent.datas.push(this.filed);
                 // console.log(this.templateEvent.datas);
-            },
-            //更新模板
-            updateTemplates(){
-                this.db.unset("templates").write();
-                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
-                this.db.set("templates", this.operateTemplates.templates).write();
             },
             //修改页面
             editProject(){
@@ -921,7 +998,6 @@
                     this.$message.success("修改成功！");
                     this.projectEvent = this.editobject;
                     this.editobject = "";
-                    //   console.log(this.db.get("version").value());
                 } catch (e) {
                     this.$message.error("修改失败！");
                 }
@@ -933,6 +1009,7 @@
             openSetting(){
                 this.dialogVisibleSetting = true;
             },
+            //清除数据库数据
             cleardb(){
                 this.db.unset("project").write();
                 this.db.unset("models").write();
@@ -940,6 +1017,35 @@
                 this.db.unset("templates").write();
                 this.db.unset("profiles").write();
                 this.db.unset("settings").write();
+            },
+            addTemplate(){
+                this.dialogVisibleAddTemplate=true;
+            },
+            selectFiledTemplate(command){
+                this.dialogVisibleAddTempItems=true;
+                this.filed = command;
+                this.filedName = command.key;
+            },
+            addFiledTemplate(){
+                this.dialogVisibleAddTempItems = false;
+                this.filed.tempkey = this.filedName;
+                this.tempTemplate.push(this.filed);
+            },
+            saveTamplate(){
+                 this.newTemplate = {
+                    "id":this.$Uuidv1(),
+                    "name": this.ruleFormAddTemplate.name,
+                    "modelsId": ["mb"],
+                    "type":"template",
+                    "datas":this.tempTemplate
+                }
+                this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
+                this.ruleFormAddTemplate.name="",
+                this.newTemplate="",
+                this.tempTemplate=[],
+                this.dialogVisibleAddTemplate=false;
+                this.getdirectory();
+                this.notesBytargeId(this.db.get("models").find({id:"mb"}).value());//刷新列表页
             }
         }
     }
