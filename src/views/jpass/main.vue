@@ -219,6 +219,18 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+        <el-dialog title="新增项" :visible.sync="dialogVisibleItemsEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+                   :show-close="true">
+            <el-form label-width="100px" class="demo-ruleForm">
+                <el-form-item label="name" prop="name" style="margin-top:10%">
+                    <el-input type="text" v-model="filedName" style="width:100%;"></el-input>
+                </el-form-item>
+                <el-form-item label="" prop="" style="margin-top:10%">
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="editAddFiled">确定</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleItemsEdit=false">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
         <el-dialog title="新增项" :visible.sync="dialogVisibleAddTempItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
                    :show-close="true">
             <el-form label-width="100px" class="demo-ruleForm">
@@ -232,7 +244,7 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="修改" :visible.sync="dialogVisibleEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+        <el-dialog title="修改项目" :visible.sync="dialogVisibleEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
                    :show-close="true">
             <el-form :model="ruleFormProjectEdit" ref="ruleFormProjectEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
                 <el-form-item label="名称" style="margin-top:10%;" prop="name">
@@ -255,7 +267,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
-                    <el-dropdown @command="selectFiled" style="float: left">
+                    <el-dropdown @command="editSelectFiled" style="float: left">
                         <el-button>
                             添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
@@ -268,6 +280,7 @@
                 <el-button size="small" @click="dialogVisibleEdit = false">取 消</el-button>
             </el-form>
         </el-dialog>
+
         <el-dialog title="" :visible.sync="dialogVisibleSetting" width="50%" :show-close="true" style="text-align: left">
             <div style="text-align: center">系统设置</div>
             <el-form label-width="100px" style="border: 1px solid #50A4FF">
@@ -323,8 +336,35 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
-                <el-button size="small" type="primary" @click="saveTamplate">提交</el-button>
+                <el-button size="small" type="primary" @click="saveTemplate">提交</el-button>
                 <el-button size="small" @click="dialogVisibleAddTemplate = false">取 消</el-button>
+            </el-form>
+        </el-dialog>
+        <el-dialog title="修改模板" :visible.sync="dialogVisibleTemplateEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
+                <el-form-item label="名称" style="margin-top:10%;" prop="name">
+                    <el-input type="text" v-model="editobject.name" style="width:100%;"></el-input>
+                </el-form-item>
+                <template v-for="(data, index) in this.editobject.datas">
+                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
+                        <el-input type="password" v-model="data.val"  readonly style="width:100%;"></el-input>
+                    </el-form-item>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
+                        <el-input type="text" v-model="data.val" style="width:100%;" readonly></el-input>
+                    </el-form-item>
+                </template>
+                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                    <el-dropdown @command="editSelectFiled" style="float: left">
+                        <el-button>
+                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-form-item>
+                <el-button size="small" type="primary" @click="editTemplate">提交</el-button>
+                <el-button size="small" @click="dialogVisibleTemplateEdit = false">取 消</el-button>
             </el-form>
         </el-dialog>
     </aside>
@@ -365,6 +405,8 @@
                 dialogVisibleSetting: false,//设置弹出框
                 dialogVisibleAddTemplate:false,//增加模板
                 dialogVisibleAddTempItems:false,//增加模板项弹出框
+                dialogVisibleTemplateEdit:false,//修改模板弹出框
+                dialogVisibleItemsEdit:false, //修改模板项弹出框
                 //设置参数
                 lock: true,//锁定开关
                 locktime: 5,//自动锁定时间
@@ -567,6 +609,7 @@
                 ruleFormAddTemplate:{
                     name:""
                 },
+                ruleFormTemplateEdit:{},
                 rules: {
                     modelsType: [
                         {required: true, message: '请选择类型！', trigger: 'blur'},
@@ -969,23 +1012,40 @@
                 this.getdirectory();
                 // console.log(this.db.get("version").value())
             },
+            //增加选中项
             selectFiled(command) {
                 this.dialogVisibleItems = true;
                 this.filed = command;
                 this.filedName = command.key
             },
+            //添加项目，模板增加项
             addFiled(){
                 this.dialogVisibleItems = false;
                 this.filed.tempkey = this.filedName;
                 this.templateEvent.datas.push(this.filed);
-                // console.log(this.templateEvent.datas);
             },
+            //修改选中项
+            editSelectFiled(command) {
+                this.dialogVisibleItemsEdit = true;
+                this.filed = command;
+                this.filedName = command.key
+            },
+            //修改项目，模板增加项
+            editAddFiled(){
+                this.dialogVisibleItemsEdit = false;
+                this.filed.tempkey = this.filedName;
+                this.editobject.datas.push(this.filed);
+            },
+
             //修改页面
             editProject(){
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
-                this.selectlabels = this.editobject.modelsId;
-                this.dialogVisibleEdit = true;
-                // console.log(this.db.get("version").value());
+                if(this.editobject.type=="project"){
+                    this.selectlabels = this.editobject.modelsId;
+                    this.dialogVisibleEdit = true;
+                }else if(this.editobject.type=="template"){
+                    this.dialogVisibleTemplateEdit=true;
+                }
             },
             //修改project
             editDo(){
@@ -1031,7 +1091,8 @@
                 this.filed.tempkey = this.filedName;
                 this.tempTemplate.push(this.filed);
             },
-            saveTamplate(){
+            //增加模板
+            saveTemplate(){
                  this.newTemplate = {
                     "id":this.$Uuidv1(),
                     "name": this.ruleFormAddTemplate.name,
@@ -1046,7 +1107,24 @@
                 this.dialogVisibleAddTemplate=false;
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id:"mb"}).value());//刷新列表页
+            },
+            //修改模板
+            editTemplate(){
+                try {
+                    this.db.get("templates").remove({id: this.editobject.id}).write();
+                    this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
+                    this.db.set('version', new Date().valueOf()).write();
+                    this.dialogVisibleTemplateEdit = false
+                    this.$message.success("修改成功！");
+                    this.editobject = "";
+                    this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id:"mb"}).value());//刷新列表页
+                } catch (e) {
+                    this.$message.error("修改失败！");
+                }
+
             }
+
         }
     }
 
