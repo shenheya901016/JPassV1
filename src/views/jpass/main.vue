@@ -180,13 +180,15 @@
                 </el-form-item>
                 <template v-for="(data, index) in this.templateEvent.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
+                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:80%;"></el-input>
+                        <el-button size="mini" @click="addProjectRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                         <span class="strong"></span>
                         <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
                                      style="width:90%;margin-left:2%;"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
-                        <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
+                        <el-input type="text" v-model="data.val" style="width:80%;"></el-input>
+                        <el-button size="mini" @click="addProjectRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                 </template>
                 <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
@@ -200,7 +202,7 @@
                             添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
@@ -253,12 +255,14 @@
                 <template v-for="(data, index) in this.editobject.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>
+                        <el-button size="mini" @click="editRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                         <span class="strong"></span>
                         <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
                                      style="width:90%;margin-left:2%;"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <el-input type="text" v-model="data.val" style="width:100%;"></el-input>
+                        <el-button size="mini" @click="editRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                 </template>
                 <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
@@ -272,7 +276,7 @@
                             添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
@@ -320,10 +324,12 @@
                 </el-form-item>
                 <template v-for="(data, index) in this.tempTemplate">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <el-input type="password" v-model="data.val" readonly   style="width:100%;"></el-input>
+                        <el-input type="password" v-model="data.val" readonly   style="width:80%;"></el-input>
+                        <el-button size="mini" @click="addTemplageRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
-                        <el-input type="text" v-model="data.val" readonly style="width:100%;"></el-input>
+                        <el-input type="text" v-model="data.val" readonly style="width:80%;"></el-input>
+                        <el-button size="mini" @click="addTemplageRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                 </template>
                 <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
@@ -343,14 +349,16 @@
         <el-dialog title="修改模板" :visible.sync="dialogVisibleTemplateEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
                 <el-form-item label="名称" style="margin-top:10%;" prop="name">
-                    <el-input type="text" v-model="editobject.name" style="width:100%;"></el-input>
+                    <el-input type="text" v-model="editobject.name" style="width:80%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.editobject.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <el-input type="password" v-model="data.val"  readonly style="width:100%;"></el-input>
+                        <el-input type="password" v-model="data.val" readonly style="width:80%;"></el-input>
+                        <el-button size="mini" @click="editRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
-                        <el-input type="text" v-model="data.val" style="width:100%;" readonly></el-input>
+                        <el-input type="text" v-model="data.val" style="width:80%;" readonly></el-input>
+                        <el-button size="mini" @click="editRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                 </template>
                 <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
@@ -479,30 +487,35 @@
                             "type":"template",
                             "datas": [
                                 {
+                                    "id":"fdbce150-fec4-11e9-bd45-854c67bf088b",
                                     "key": "Number",
                                     "type": "text",
                                     "val": "",
                                     "tempkey": "Number"
                                 },
                                 {
+                                    "id":"fdbce182-fec4-11e9-bd32-854c67bf088b",
                                     "key": "Login",
                                     "type": "text",
                                     "val": "",
                                     "tempkey": "Login"
                                 },
                                 {
+                                    "id":"fdbce150-fob4-11e9-bd32-854c67bf088b",
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
                                     "tempkey": "Password"
                                 },
                                 {
+                                    "id":"fdbce196-fec4-11e9-bd32-854c67bf088b",
                                     "key": "Website",
                                     "type": "text",
                                     "val": "",
                                     "tempkey": "Website"
                                 },
                                 {
+                                    "id":"fdbce150-fec4-11e9-bd32-854c67bf987b",
                                     "key": "Phone",
                                     "type": "text",
                                     "val": "",
@@ -517,24 +530,28 @@
                             "type":"template",
                             "datas": [
                                 {
+                                    "id":"fdbce183-fec4-11e9-bd32-854c67bf088b",
                                     "key": "Email",
                                     "type": "text",
                                     "val": "",
                                     "tempkey": "Email"
                                 },
                                 {
+                                    "id":"fdbce269-fec4-11e9-bd32-854c67bf088b",
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
                                     "tempkey": "Password"
                                 },
                                 {
+                                    "id":"fffce150-fec4-11e9-bd32-854c67bf088b",
                                     "key": "Website",
                                     "type": "text",
                                     "val": "",
                                     "tempkey": "Website"
                                 },
                                 {
+                                    "id":"fdbce161-fec4-11e9-bd32-854c67bf088b",
                                     "key": "One-time Password",
                                     "type": "text",
                                     "val": "",
@@ -549,12 +566,14 @@
                             "type":"template",
                             "datas": [
                                 {
+                                    "id":"fdbce150-fec4-20e9-bd32-854c67bf088b",
                                     "key": "Email",
                                     "type": "text",
                                     "val": "",
                                     "tempkey": "Email"
                                 },
                                 {
+                                    "id":"fdbce150-feb9-11e9-bd32-854c67bf088b",
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
@@ -569,31 +588,35 @@
                 templateItems: {
                     "templateItems": [
                         {
-                            "id":"",
+                            "id":"fdbce150-fec4-11e9-bd32-854c67bf088b",
                             "key": "Password",
                             "type": "password",
                             "val": "",
                             "tempkey": "Password"
                         },
                         {
+                            "id":"fdbce150-fec4-11e9-bd32-854c67bf388b",
                             "key": "Number",
                             "type": "text",
                             "val": "",
                             "tempkey": "Number"
                         },
                         {
+                            "id":"fdbce150-fec4-11e9-bd32-984c67bf088b",
                             "key": "Email",
                             "type": "text",
                             "val": "",
                             "tempkey": "Email"
                         },
                         {
+                            "id":"fdbce150-fec4-11e9-bd32-854d67bf088b",
                             "key": "Address",
                             "type": "text",
                             "val": "",
                             "tempkey": "Address"
                         }]
                 },
+                templateItemsTemp:"",
                 ruleForm: {
                     modelsType: '',
                     pName: '',
@@ -869,6 +892,7 @@
                 let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
                 console.log("本地version:"+version);
                 console.log("ipfsversion:"+tempipfsData.version);
+                this.templateItemsTemp=this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
                 if (!version || version.length <= 0) {  //判断version是否undefind 或者version.length<0
                      if(tempipfsData.version==0){
                          console.log("初始化");
@@ -967,9 +991,7 @@
                 let target = event.currentTarget;
                 let index = Number(target.getAttribute("data-index"));
                 this.currentTemplate = index;
-                // console.log(this.db.get("templates").find({id: project.id}).value());
-                console.log(temp);
-                this.templateEvent = temp;
+                this.templateEvent = this.$JSON5.parse(this.$JSON5.stringify(temp));
             },
 
             addproject(formname){
@@ -1015,26 +1037,33 @@
             //增加选中项
             selectFiled(command) {
                 this.dialogVisibleItems = true;
-                this.filed = command;
+                this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key
             },
             //添加项目，模板增加项
             addFiled(){
                 this.dialogVisibleItems = false;
                 this.filed.tempkey = this.filedName;
+                this.filed.id=this.$Uuidv1();
                 this.templateEvent.datas.push(this.filed);
+                this.filed="";
+                this.filedName="";
             },
             //修改选中项
             editSelectFiled(command) {
                 this.dialogVisibleItemsEdit = true;
-                this.filed = command;
+                this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key
+
             },
             //修改项目，模板增加项
             editAddFiled(){
                 this.dialogVisibleItemsEdit = false;
                 this.filed.tempkey = this.filedName;
+                this.filed.id=this.$Uuidv1(),
                 this.editobject.datas.push(this.filed);
+                this.filedName="";
+                this.filed="";
             },
 
             //修改页面
@@ -1122,8 +1151,34 @@
                 } catch (e) {
                     this.$message.error("修改失败！");
                 }
-
-            }
+            },
+            //删除项(修改模板，项目)
+            editRemoveItem(itemsId){
+                let itemArray = this.editobject.datas;
+                for(var i = 0; i < itemArray.length; i++){
+                    if(itemArray[i].id === itemsId){
+                        itemArray.splice(i,1);
+                    }
+                }
+            },
+            //删除项(增加模板)
+           addTemplageRemoveItem(itemsId){
+                let itemArray = this.tempTemplate.datas;
+                for(var i = 0; i < itemArray.length; i++){
+                    if(itemArray[i].id === itemsId){
+                        itemArray.splice(i,1);
+                    }
+                }
+            },
+            //删除项(增加项目)
+            addProjectRemoveItem(itemsId){
+                let itemArray = this.templateEvent.datas;
+                for(var i = 0; i < itemArray.length; i++){
+                    if(itemArray[i].id === itemsId){
+                        itemArray.splice(i,1);
+                    }
+                }
+            },
 
         }
     }
