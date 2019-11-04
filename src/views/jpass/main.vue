@@ -391,10 +391,6 @@
             //     this.eventID = setInterval(this.CheckTime, 1000);
             // }
 
-            //var all = this.$ipfs.Ipfs.selAll("j4M4AoSi522XxNpywfyBahmjzQihc4EegL");
-
-            // this.$ipfs.Ipfs.add('{"id":"01","name":"shy"}',"models");
-            //console.log(all);
             this.initialize();
         },
         data() {
