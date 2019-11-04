@@ -19,8 +19,7 @@
             </li>
 
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg"
-                                                                                                      alt="">删除
+                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除
                 </el-button>
             </li>
             <li>
@@ -1145,9 +1144,11 @@
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleTemplateEdit = false
                     this.$message.success("修改成功！");
+                    this.projectEvent = this.editobject;
                     this.editobject = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id:"mb"}).value());//刷新列表页
+
                 } catch (e) {
                     this.$message.error("修改失败！");
                 }
