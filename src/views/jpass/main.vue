@@ -293,7 +293,7 @@
                     <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="locksystem()"></el-switch>
                     <br>
                     闲置时间
-                    <el-slider v-model="locktime"></el-slider>
+                    <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
                 </el-form-item>
                 <el-form-item prop="">
                     <div>语言</div>
@@ -397,6 +397,7 @@
                 savePassword:"",
                 savePasswords: [{value: 'ask', label: '询问'}, {value: 'off', label: '关闭'}, {value: 'automatically', label: '自动填充'}],
                 showpassword:"",
+                locktimedisabled:"",
                 //弹出框
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
@@ -1180,9 +1181,10 @@
                 if (this.loginObj.lock) {
                     this.dialogVisible = true;
                 } else if(this.systemlock){
+                    this.locktimedisabled=false;
                     this.eventID = setInterval(this.CheckTime,1000);
                 }else{
-                    console.log("结束了！");
+                    this.locktimedisabled=true;
                     clearInterval(this.eventID);
                 }
             },
@@ -1190,6 +1192,11 @@
             updatesetting(){
                 var setting =this.db.get("settings").value();
                 this.systemlock=setting.systemlock;
+                if(this.systemlock){
+                    this.locktimedisabled=false;
+                }else{
+                    this.locktimedisabled=true;
+                }
                 this.locktime=setting.locktime;//自动锁定时间
                 this.language=setting.language;//语言选择
                 this.showPassword=setting.showPassword;//是否显示密码
