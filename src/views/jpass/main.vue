@@ -428,11 +428,9 @@
                 currentDirectory: -1,
                 currentNote: -1,
                 currentTemplate: -1,
-                //allProject:
-                // this.$JSON5.parse("{datas:[{id:'01',name:'shy',typeId:['01','02','03']},{id:'02',name:'shy1',typeId:['01','06','04']},{id:'03',name:'shy3',typeId:['01','02','04']},{id:'05',name:'shy13',typeId:['01','02','04']},{id:'03',name:'shy5',typeId:['01','02','04']},{id:'03',name:'shy8',typeId:['01','02','06']}]}"),
-                allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"02","name":"shy1","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","scj","mm","06"],"type":"project"}]}'),
-                // models: this.$JSON5.parse("{models:[{id:'sy',name:'所有项目',modelsType:'project',type:'model',imgPaht:'',},{id:'scj',name:'收藏夹',modelsType:'project',type:'model',imgPaht:''},{id:'mm',name:'密码',modelsType:'project',type:'model',imgPaht:''},{id:'mb',name:'模板',modelsType:'project',type:'model',imgPaht:''},{id:'wbj',name:'未标记',modelsType:'project',type:'model',imgPaht:''},{id:'06',name:'家人账号',modelsType:'directory',type:'model',imgPaht:''},{id:'07',name:'私人账号',modelsType:'directory',type:'model',imgPaht:''}]}"),
-                alldata: this.$JSON5.parse('{"project":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06","mm","mb"],"type":"project"},{"id":"02","name":"shy1", "modelsId":["sy","06","scj","06","mm","wbj"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","06","scj","07"],"type":"project"}],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}'),
+                // allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"02","name":"shy1","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","scj","mm","06"],"type":"project"}]}'),
+                //alldata:
+                // this.$JSON5.parse('{"project":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06","mm","mb"],"type":"project"},{"id":"02","name":"shy1", "modelsId":["sy","06","scj","06","mm","wbj"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","06","scj","07"],"type":"project"}],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}'),
                 DProject: '',
                 DDirectory: '',
                 click: 'click',
@@ -897,7 +895,7 @@
                              name: loginObj.name,
                              address: address,
                          }
-                         var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}');
+                         var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPath":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPath":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPath":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPath":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPath":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPath":""}]}');
                          await this.db.defaults(newdata).write();
                          this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                          await this.db.set("templates", this.operateTemplates.templates).write();
@@ -918,8 +916,6 @@
                 }else {
                     this.getdirectory();
                 }
-
-
                     //先删除
                     //this.db.unset("project").write();
                     //this.db.unset("models").write();
