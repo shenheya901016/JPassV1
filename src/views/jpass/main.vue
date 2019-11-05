@@ -290,7 +290,7 @@
                 <el-form-item prop="">
                     <div>锁定</div>
                     定时锁定
-                    <el-switch v-model="lock" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                    <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="locksystem()"></el-switch>
                     <br>
                     闲置时间
                     <el-slider v-model="locktime"></el-slider>
@@ -384,17 +384,19 @@
 
     export default {
         mounted: function () {
-            //lock定时器启动
-            // if (this.loginObj.lock) {
-            //     this.dialogVisible = true;
-            // } else {
-            //     this.eventID = setInterval(this.CheckTime, 1000);
-            // }
-
             this.initialize();
         },
         data() {
             return {
+                //系统设置配置项
+                systemlock: "",//锁定开关
+                locktime:"",//自动锁定时间
+                languages: [{value: '中文', label: '中文'}, {value: '英文', label: '英文'}],
+                language: '',//语言选择
+                showPassword: "",//是否显示密码
+                savePassword:"",
+                savePasswords: [{value: 'ask', label: '询问'}, {value: 'off', label: '关闭'}, {value: 'automatically', label: '自动填充'}],
+                showpassword:"",
                 //弹出框
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
@@ -410,14 +412,7 @@
                 dialogVisibleAddTempItems:false,//增加模板项弹出框
                 dialogVisibleTemplateEdit:false,//修改模板弹出框
                 dialogVisibleItemsEdit:false, //修改模板项弹出框
-                //设置参数
-                lock: true,//锁定开关
-                locktime: 5,//自动锁定时间
-                languages: [{value: '中文', label: '中文'}, {value: '英文', label: '英文'}],
-                language: '',//语言选择
-                showPassword: "",//是否显示密码
-                savePasswords: [{value: 'ask', label: '询问'}, {value: 'off', label: '关闭'}, {value: 'automatically', label: '自动填充'}],
-                savePassword: '',
+
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -428,9 +423,6 @@
                 currentDirectory: -1,
                 currentNote: -1,
                 currentTemplate: -1,
-                // allProject: this.$JSON5.parse('{"datas":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"02","name":"shy1","modelsId":["sy","scj","07","06"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","scj","mm","06"],"type":"project"}]}'),
-                //alldata:
-                // this.$JSON5.parse('{"project":[{"id":"01","name":"shy","modelsId":["sy","scj","07","06","mm","mb"],"type":"project"},{"id":"02","name":"shy1", "modelsId":["sy","06","scj","06","mm","wbj"],"type":"project"},{"id":"03","name":"shy3","modelsId":["sy","06","scj","07"],"type":"project"}],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPaht":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPaht":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPaht":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPaht":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPaht":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPaht":""}]}'),
                 DProject: '',
                 DDirectory: '',
                 click: 'click',
@@ -455,6 +447,9 @@
                 filedName: '',//添加项名称
                 editobject: '',//修改对象
                 tempTemplate:[],//新增模板构造变量
+                operateTemplates: "",
+                templateEvent: "",
+                templateItemsTemp:"",
                 newProject: {
                     "id": "",
                     "name": "",
@@ -576,8 +571,6 @@
                         }
                     ]
                 },
-                operateTemplates: "",
-                templateEvent: "",
                 templateItems: {
                     "templateItems": [
                         {
@@ -609,7 +602,15 @@
                             "tempkey": "Address"
                         }]
                 },
-                templateItemsTemp:"",
+                 settings:{
+                     systemlock: true,//锁定开关
+                     locktime:5,//自动锁定时间
+                     language: '中文',//语言选择
+                     showPassword: false,//是否显示密码
+                     savePassword:"ask",
+                 },
+
+
                 ruleForm: {
                     modelsType: '',
                     pName: '',
@@ -646,7 +647,7 @@
                 this.mouse2 = x + ',' + y;
             },
             CheckTime(){
-                let timeout = 300 * 1000;//设定超时时间，单位毫秒
+                let timeout =this.locktime * 60 * 1000;//设定超时时间，单位毫秒
                 if (this.mouse1 == this.mouse2) {
                     this.currentSecond = this.currentSecond + 1000;
                     // console.log(this.currentSecond);
@@ -686,7 +687,7 @@
                 this.$message.success("解锁成功！");
                 this.password = "";
                 //继续监听
-                this.eventID = setInterval(this.CheckTime, 1000);
+               // this.eventID = setInterval(this.CheckTime, 1000);
             },
             lock(){
                 this.loginObj.lock = true;
@@ -899,6 +900,7 @@
                          await this.db.defaults(newdata).write();
                          this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                          await this.db.set("templates", this.operateTemplates.templates).write();
+                         await this.db.set('settings',this.settings).write();
                          this.getdirectory();
                      } else if(tempipfsData.version>0){
                          await this.db.defaults(tempipfsData).write();
@@ -916,6 +918,8 @@
                 }else {
                     this.getdirectory();
                 }
+                this.updatesetting();
+                this.locksystem();
                     //先删除
                     //this.db.unset("project").write();
                     //this.db.unset("models").write();
@@ -1140,7 +1144,6 @@
                     this.editobject = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id:"mb"}).value());//刷新列表页
-
                 } catch (e) {
                     this.$message.error("修改失败！");
                 }
@@ -1172,7 +1175,26 @@
                     }
                 }
             },
-
+            //lock定时器启动
+            locksystem(){
+                if (this.loginObj.lock) {
+                    this.dialogVisible = true;
+                } else if(this.systemlock){
+                    this.eventID = setInterval(this.CheckTime,1000);
+                }else{
+                    console.log("结束了！");
+                    clearInterval(this.eventID);
+                }
+            },
+            //启动初始化设置参数
+            updatesetting(){
+                var setting =this.db.get("settings").value();
+                this.systemlock=setting.systemlock;
+                this.locktime=setting.locktime;//自动锁定时间
+                this.language=setting.language;//语言选择
+                this.showPassword=setting.showPassword;//是否显示密码
+                this.savePassword=setting.savePassword;
+            },
         }
     }
 

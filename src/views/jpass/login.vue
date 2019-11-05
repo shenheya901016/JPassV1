@@ -126,12 +126,13 @@
                         return false;
                     }
                     // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                   if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                        await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
-                        bal=true;
-                    }else{
-                        bal=false;
-                    }
+                   // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
+                   //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
+                   //      bal=true;
+                   //  }else{
+                   //      bal=false;
+                   //  }
+                    bal=true;
                     let userkeyObj = {
                         name:this.ruleForm.name,
                         secret: secret,
