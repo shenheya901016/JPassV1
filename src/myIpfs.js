@@ -1,7 +1,13 @@
 import {IpfsRemote} from "ipfslib";
 
-let JPassUtil = require("jpass-util")
-let remote = new IpfsRemote({urls: ["/jsonrpc"]})
+let JPassUtil = require("jpass-util");
+let baserpcurl = "http://139.198.191.254:8545/v1";
+//判断是否为开发者模式
+if (process.env.NODE_ENV === "development") {
+    baserpcurl = '';
+}
+
+let remote = new IpfsRemote({urls: [baserpcurl + "/jsonrpc"]});
 
 let myIpfs = {
     /**
