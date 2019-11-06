@@ -76,8 +76,7 @@
         <article class="article">
             <input class="ss" type="text" placeholder="请输入要搜索的内容...">
             <ul class="list">
-                <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick">
+                <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index" :class="index == currentNote?click:disclick">
                     <img src="./img/list_logo01.png" alt="" width="30" height="30">
                     <div>
                         <h5>{{project.name}}</h5>
@@ -182,15 +181,16 @@
                         <input type="password" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
                             <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                             <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
-                        <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                            <span class="strong"></span>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                                     style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item  v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <input type="text" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
                             <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                             <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
-                        <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                            <span class="strong"></span>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <input type="text" v-model="data.val" class="myInput"/>
@@ -198,7 +198,7 @@
                     </el-form-item>
                 </template>
                 <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
-                    <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:100%">
+                    <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:80%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -263,14 +263,16 @@
                         <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                         <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                                     style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item v-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <input type="text" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
                         <a href="#" @click="changePass($event)" ><i class="el-icon-view"></i></a>
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                         <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                                     style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <input type="text" v-model="data.val" class="myInput"/>
@@ -278,7 +280,7 @@
                     </el-form-item>
                 </template>
                 <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
-                    <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:100%">
+                    <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:80%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
