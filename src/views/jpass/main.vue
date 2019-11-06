@@ -1160,7 +1160,7 @@
             },
             //删除项(增加模板)
            addTemplageRemoveItem(itemsId){
-                let itemArray = this.tempTemplate.datas;
+                let itemArray = this.tempTemplate;
                 for(var i = 0; i < itemArray.length; i++){
                     if(itemArray[i].id === itemsId){
                         itemArray.splice(i,1);

@@ -19,7 +19,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="用户密码" prop="password" style="margin-top:10%">
-                    <el-input type="password" v-model="ruleForm.password" style="width:100%;"></el-input>
+                    <el-input type="password" v-model="ruleForm.password" style="width:100%;" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
                     <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">登录</el-button>
