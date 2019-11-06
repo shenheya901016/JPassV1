@@ -178,12 +178,20 @@
                     <el-input type="text" v-model="ruleFormAddProject.name" style="width:100%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.templateEvent.datas">
-                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:80%;"></el-input>
+                    <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
+                        <el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:80%;">
+                            <i slot="suffix" title="显示密码" @click="changePass('show')" style="cursor:pointer;" class="el-input__icon iconfont el-icon-view"></i>
+                        </el-input>
                         <el-button size="mini" @click="addProjectRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                         <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
-                                     style="width:90%;margin-left:2%;"></el-progress>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
+                    </el-form-item>
+                    <el-form-item  v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
+                        <el-input type="text" v-model="data.val" @input="pwdLength(data.val)" style="width:80%;">
+                            <i slot="suffix" title="隐藏密码" @click="changePass('hide')" style="cursor:pointer;" class="el-input__icon iconfont el-icon-view"></i>                        </el-input>
+                        <el-button size="mini" @click="addProjectRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
+                        <span class="strong"></span>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <el-input type="text" v-model="data.val" style="width:80%;"></el-input>
@@ -640,6 +648,11 @@
             };
         },
         methods: {
+            //密码显示控制
+            changePass(value) {
+                console.log(value);
+                this.showPassword =(value === 'show');
+            },    //判断渲染，true:暗文显示，false:明文显示
             GetXYPosition(){
                 var x, y;
                 var e = window.event;
