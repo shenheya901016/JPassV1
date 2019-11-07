@@ -171,7 +171,7 @@
             <el-button size="small" type="primary" @click="addproject('ruleFormAddProject')">确 定</el-button>
             <el-button size="small" @click="dialogVisibleTemplate = false">取 消</el-button>
         </el-dialog>
-        <el-dialog title="新增记录" :visible.sync="dialogVisibleAddProject" width="50%" :close-on-click-modal="false">
+        <el-dialog title="新增项目" :visible.sync="dialogVisibleAddProject" width="50%" :close-on-click-modal="false">
             <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
                 <el-form-item label="名称" style="margin-top:10%" prop="name">
                     <input type="text" v-model="ruleFormAddProject.name" class="myInput"/>
@@ -182,8 +182,7 @@
                             <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                             <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
                             <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
-                                     style="width:80%;margin-top: 1%"></el-progress>
+                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item  v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <input type="text" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
@@ -327,7 +326,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
-                    <el-button type="primary" size="small" style="width:35%;" @click="">保存</el-button>
+                    <el-button type="primary" size="small" style="width:35%;" @click="savesettings">保存</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -1226,7 +1225,16 @@
                 this.showPassword=setting.showPassword;//是否显示密码
                 this.savePassword=setting.savePassword;
             },
+             //保存设置
+            savesettings(){
+              this.db.get("settings").set("systemlock",this.systemlock).write();
+              this.db.get("settings").set("locktime",this.locktime).write();
+              this.db.get("settings").set("showPassword",this.showPassword).write();
+              this.db.get("settings").set("savePassword",this.savePassword).write();
+              this.db.get("settings").set("language",this.language).write();
+              console.log(this.db.get("settings").value());
         }
+      }
     }
 
 </script>
