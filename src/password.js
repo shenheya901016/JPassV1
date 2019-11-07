@@ -49,35 +49,18 @@
                 case 0:
                     this.percentage=25; //密码长度小于;
                     this. status = "exception";
-                  //  document.getElementById("strong").innerText="弱" ;
-                  //   document.getElementById("strong").style.color="#F56C6C";
-                    dounment.getElementsByClassName("strong")[0].innerText="弱" ;
-                    dounment.getElementsByClassName("strong")[0].style.color="#F56C6C";
-
                     break;
                 case 1:
                     this.percentage=50;//长度大于四单独类型字符
                     this. status = "exception";
-                    // document.getElementById("strong").innerText="弱" ;
-                    // document.getElementById("strong").style.color="#F56C6C";
-                    document.getElementsByClassName("strong")[0].innerText="弱" ;
-                    document.getElementsByClassName("strong")[0].style.color="#F56C6C";
                     break;
                 case 2:
                     this.percentage=75;//长度大于四2种类型字符
                     this. status = "warning";
-                    // document.getElementById("strong").innerText="中" ;
-                    // document.getElementById("strong").style.color="#E6A23C";
-                    document.getElementsByClassName("strong")[0].innerText="中" ;
-                    document.getElementsByClassName("strong")[0].style.color="#E6A23C";
                     break;
                 default:
                     this.percentage=100;//长度大于四3种类型字符
                     this.status = "success";
-                    // document.getElementById("strong").innerText="强" ;
-                    // document.getElementById("strong").style.color="#67C23A";
-                    document.getElementsByClassName("strong")[0].innerText="强" ;
-                    document.getElementsByClassName("strong")[0].style.color="#67C23A";
                     break;
             }
         }

@@ -96,9 +96,6 @@
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         {{data.val}}
                         <hr/>
-                        <!--<el-input type="password" v-model="data.val" @input="pwdLength(data.val)" style="width:100%;"></el-input>-->
-                        <!--<span class="strong"></span>-->
-                        <!--<el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:90%;margin-left:2%;"></el-progress>-->
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <!--<el-input type="text" v-model="data.val" style="width:100%;"></el-input>-->
@@ -178,18 +175,16 @@
                 </el-form-item>
                 <template v-for="(data, index) in this.templateEvent.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <input type="password" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
+                        <input type="password" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                             <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                             <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
-                            <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:80%;margin-top: 1%"></el-progress>
+                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item  v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <input type="text" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
+                        <input type="text" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                             <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                             <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
-                            <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus" style="width:80%;margin-top: 1%"></el-progress>
+                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <input type="text" v-model="data.val" class="myInput"/>
@@ -258,19 +253,17 @@
                 </el-form-item>
                 <template v-for="(data, index) in this.editobject.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <input type="password" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
+                        <input type="password" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                         <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
-                        <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :status="data.pwdstatus"  :text-inside="true"  :format="format"
                                      style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item v-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        <input type="text" v-model="data.val" @input="pwdLength(data.val)" class="myInput"/>
+                        <input type="text" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                         <a href="#" @click="changePass($event)" ><i class="el-icon-view"></i></a>
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
-                        <span class="strong"></span>
-                        <el-progress id="process" :stroke-width="5" :percentage="percentageTemplate" :show-text="false" :status="templateStatus"
+                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage"  :status="data.pwdstatus" :text-inside="true"  :format="format"
                                      style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
@@ -448,7 +441,8 @@
                 customColor: "",
                 percentage: 0,
                 percentageTemplate: 0,
-                synStatus: "exception",//同步进度条状态
+                tempPercentage:0,
+            synStatus: "exception",//同步进度条状态
                 templateStatus: "exception",
                 db: '',
                 projects: '',
@@ -495,21 +489,23 @@
                                     "key": "Number",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey": "Number"
+                                    "tempkey": "Number",
                                 },
                                 {
                                     "id":"fdbce182-fec4-11e9-bd32-854c67bf088b",
                                     "key": "Login",
                                     "type": "text",
                                     "val": "",
-                                    "tempkey": "Login"
+                                    "tempkey": "Login",
                                 },
                                 {
                                     "id":"fdbce150-fob4-11e9-bd32-854c67bf088b",
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
-                                    "tempkey": "Password"
+                                    "tempkey": "Password",
+                                    "percentage":0,
+                                    "pwdstatus":"",
                                 },
                                 {
                                     "id":"fdbce196-fec4-11e9-bd32-854c67bf088b",
@@ -545,7 +541,9 @@
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
-                                    "tempkey": "Password"
+                                    "tempkey": "Password",
+                                    "percentage":0,
+                                    "pwdstatus":"",
                                 },
                                 {
                                     "id":"fffce150-fec4-11e9-bd32-854c67bf088b",
@@ -581,7 +579,9 @@
                                     "key": "Password",
                                     "type": "password",
                                     "val": "",
-                                    "tempkey": "Password"
+                                    "tempkey": "Password",
+                                    "percentage":0,
+                                    "pwdstatus":"",
                                 }
                             ]
                         }
@@ -594,7 +594,9 @@
                             "key": "Password",
                             "type": "password",
                             "val": "",
-                            "tempkey": "Password"
+                            "tempkey": "Password",
+                            "percentage":0,
+                            "pwdstatus":"",
                         },
                         {
                             "id":"fdbce150-fec4-11e9-bd32-854c67bf388b",
@@ -995,10 +997,27 @@
                     }
                 }
             },
-            pwdLength(pwd) {
-                password.pwStrength(pwd);
-                this.percentageTemplate = password.percentage;
-                this.templateStatus = password.status;
+            // pwdLength(pwd) {
+            //     password.pwStrength(pwd);
+            //     this.percentageTemplate = password.percentage;
+            //     this.tempPercentage= password.percentage;
+            //     this.percentageTemplate=this.$JSON5.parse(this.$JSON5.stringify(this.tempPercentage));
+            //     this.templateStatus = password.status;
+            // },
+            pwdLength(obj) {
+                password.pwStrength(obj.val);
+                obj.percentage = password.percentage;
+                obj.pwdstatus =password.status;
+            },
+            //格式化密码进度条
+            format(percentage) {
+                if(percentage<=50){
+                    return percentage="弱"
+                }else if(50>percentage<=75){
+                    return percentage="中"
+                }else if(percentage==100){
+                    return percentage="强"
+                }
             },
             selectTemplate(){
                 this.dialogVisibleTemplate = true;
@@ -1227,12 +1246,17 @@
             },
              //保存设置
             savesettings(){
+              try {
               this.db.get("settings").set("systemlock",this.systemlock).write();
               this.db.get("settings").set("locktime",this.locktime).write();
               this.db.get("settings").set("showPassword",this.showPassword).write();
               this.db.get("settings").set("savePassword",this.savePassword).write();
               this.db.get("settings").set("language",this.language).write();
-              console.log(this.db.get("settings").value());
+               this.$message.success("设置保存成功！");
+               this.dialogVisibleSetting = false;
+              }catch (e){
+                  this.$message.error("设置保存失败！");
+              }
         }
       }
     }
