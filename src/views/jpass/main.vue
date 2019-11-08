@@ -86,19 +86,25 @@
         </article>
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
-                     style="width: 80%;height:100%;margin: auto;text-align: left;">
-                <el-form-item label="名称" v-if="this.projectEvent!=''" style="margin-top:10%;" prop="name">
-                    {{projectEvent.name}}
+                     style="width: 80%;height:100%;margin: auto;text-align: left;margin-top:3%">
+                <el-form-item label="名称" v-if="this.projectEvent!=''"  style="margin-bottom:3px;"  prop="name">
+                    <input type="text" v-model="projectEvent.name" readonly/>
                     <hr/>
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
-                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
-                        {{data.val}}
+                    <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
+                        <input type="password" v-model="data.val" readonly style=" width:90%"/><a href="#" @click="changePass($event)" ><i
+                            class="el-icon-view"></i></a>
+                      <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:50%;margin-top: 1%"></el-progress>
                         <hr/>
                     </el-form-item>
-                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
-                        <!--<el-input type="text" v-model="data.val" style="width:100%;"></el-input>-->
-                        {{data.val}}
+                    <el-form-item v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
+                        <input type="text" v-model="data.val" readonly style=" width:90%"/><a href="#" @click="changePass($event)" ><i class="el-icon-view"></i></a>
+                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:50%;margin-top: 1%"></el-progress>
+                        <hr/>
+                    </el-form-item>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
+                        <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
                 </template>
@@ -1011,11 +1017,13 @@
             //格式化密码进度条
             format(percentage) {
                 if(percentage<=50){
-                    return percentage="弱"
-                }else if(50>percentage<=75){
-                    return percentage="中"
-                }else if(percentage==100){
-                    return percentage="强"
+                    return percentage="弱";
+                }
+                if(percentage==75){
+                    return percentage="中";
+                }
+                if(percentage==100){
+                    return percentage="强";
                 }
             },
             selectTemplate(){
@@ -1286,6 +1294,23 @@
         height: 5vh;
         float: left;
     }
+
+    .el-form--label-top .el-form-item__label {
+        float: none;
+        display: inline-block;
+        text-align: left;
+        padding: 0 0 0 0;
+        line-height: 30px;
+        font-weight:bold;
+    }
+
+    .el-form-item__content {
+        line-height: 15px;
+        position: relative;
+        font-size: 14px;
+    }
+
+
 
 
 </style>
