@@ -7,32 +7,31 @@
         </div>
         <div style="width:30%;margin:0 auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin-top:5%">
             <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
-                登录jpass
+               {{$t('login.title')}}
             </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:75%; margin:10% 20% 5% 10%;">
-                <el-form-item label="用户名称" prop="name">
-                    <el-select placeholder="请选择登录用户" v-model="ruleForm.name" title="请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！"
+                <el-form-item :label="$t('login.name')" prop="name">
+                    <el-select :placeholder="$t('login.selectuser')" v-model="ruleForm.name" :title="$t('login.nametitle')"
                                style="width:100%;">
-                        <el-option v-for="item in names" :key="item.value" :label="item.label"
-                                   :value="item.value"></el-option>
+                        <el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="用户密码" prop="password" style="margin-top:10%">
+                <el-form-item :label="$t('login.password')" prop="password" style="margin-top:10%">
                     <el-input type="password" v-model="ruleForm.password" style="width:100%;" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">登录</el-button>
+                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">{{$t('login.login')}}</el-button>
                 </el-form-item>
             </el-form>
             <div style="margin-bottom:4%;">
-                <button class="bottom" @click="register">注册</button>
-                <button class="bottom" @click="dialogVisible = true">导入钱包</button>
+                <button class="bottom" @click="register">{{$t('login.register')}}</button>
+                <button class="bottom" @click="dialogVisible = true">{{$t('login.importwallet')}}</button>
             </div>
-            <el-dialog title="导入方式选择" :visible.sync="dialogVisible" width="30%">
-                <el-button type="primary" style="width:30%;" @click="importwallet(0)">密钥导入</el-button>
-                <el-button type="primary" style="width:30%;" @click="importwallet(1)">keystore</el-button>
-                <el-button type="primary" style="width:30%;" @click="importwallet(2)">助记词导入</el-button>
+            <el-dialog :title="$t('login.importmode')" :visible.sync="dialogVisible" width="30%">
+                <el-button type="primary" style="width:30%;" @click="importwallet(0)">{{$t('login.importkey')}}</el-button>
+                <el-button type="primary" style="width:30%;" @click="importwallet(1)">{{$t('login.importkeystory')}}</el-button>
+                <el-button type="primary" style="width:30%;" @click="importwallet(2)">{{$t('login.importmnemonic')}}</el-button>
             </el-dialog>
             <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
         </div>
@@ -57,11 +56,11 @@
                 },
                 rules: {
                     name: [
-                        {required: true, message: '请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！', trigger: 'blur'},
+                        {required: true, message: this.$t('login.namevalidation'), trigger: 'blur'},
                     ],
                     password: [
-                        {required: true, message: '请输入用户密码', trigger: 'blur'},
-                        {min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur'}
+                        {required: true, message: this.$t('login.pwdvalidaion'), trigger: 'blur'},
+                        {min: 4, max: 20, message: this.$t('login.pwdlengthvalidaion'), trigger: 'blur'}
                     ]
                 }
             };
@@ -122,7 +121,7 @@
                             secret = value;
                         });
                     } catch (e) {
-                        this.$message.error("密码有误，请重新输入！");
+                        this.$message.error(this.$t('login.pwderror'));
                         return false;
                     }
                     // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
@@ -144,7 +143,7 @@
                     //this.$message.success("用户登录成功！");
                     this.$router.push('/jpass/main');
                 } else {
-                    this.$message.error("用户不存在，请重新输入");
+                    this.$message.error(this.$t('login.loginerror'));
                 }
             },
         }

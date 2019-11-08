@@ -24,8 +24,7 @@
             </li>
             <li>
                 <el-button style="border:0;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">同步</el-button>
-                <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus" :show-text="true"
-                             v-show="processShow"></el-progress>
+                <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus" :show-text="true" v-show="processShow"></el-progress>
             </li>
             <li>
                 <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">锁定</el-button>
@@ -304,8 +303,8 @@
                 </el-form-item>
                 <el-form-item prop="">
                     <div>语言</div>
-                    <el-select v-model="language" placeholder="语言选择">
-                        <el-option v-for="item in this.languages" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    <el-select v-model="language" placeholder="语言选择" @change="changeLang">
+                        <el-option v-for="item in this.languages" :key="item.value" :label="item.label" :value="item.value" ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="">
@@ -1257,7 +1256,18 @@
               }catch (e){
                   this.$message.error("设置保存失败！");
               }
-        }
+        },
+            //国际化
+            changeLang() {
+                if (this.$i18n.locale === 'zh-CN') {
+                    this.$i18n.locale = 'en-US';
+                } else {
+                    this.$i18n.locale = 'zh-CN';
+                }
+                // console.log(this.$JPassUtil.Mnemonic.createMnemonic(12, this.$i18n.locale));
+                localStorage.setItem('lang', this.$i18n.locale);
+            }
+
       }
     }
 
