@@ -84,9 +84,8 @@
                 </li>
             </ul>
         </article>
-        <section class="section">
-            <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
-                     style="width: 80%;height:100%;margin: auto;text-align: left;margin-top:3%">
+        <section class="section" id="detail">
+            <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top" style="width: 80%;height:100%;margin: auto;text-align: left;margin-top:3%">
                 <el-form-item label="名称" v-if="this.projectEvent!=''"  style="margin-bottom:3px;"  prop="name">
                     <input type="text" v-model="projectEvent.name" readonly/>
                     <hr/>
@@ -1295,7 +1294,7 @@
         float: left;
     }
 
-    .el-form--label-top .el-form-item__label {
+    .section .el-form--label-top .el-form-item__label {
         float: none;
         display: inline-block;
         text-align: left;
@@ -1303,8 +1302,7 @@
         line-height: 30px;
         font-weight:bold;
     }
-
-    .el-form-item__content {
+    .section .el-form-item__content {
         line-height: 15px;
         position: relative;
         font-size: 14px;
