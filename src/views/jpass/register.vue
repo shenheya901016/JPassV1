@@ -1,6 +1,6 @@
 <template>
-    <div style="width:100%;" id="main" >
-        <div style="margin-left:5px;width:150px;">
+    <div style="width:100%;" id="main">
+        <div style="margin:0 auto;width:150px;">
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
@@ -9,22 +9,30 @@
             <div style="width:100%;border-radius:10px 10px 0 0; font-size:20px;margin-top:50px;">
                 用户注册
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:75%; margin:10% 20% 10% 10%;">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
+                     style="width:75%; margin:10% 20% 10% 10%;">
                 <el-form-item label="用户名称" prop="name">
-                    <el-input v-model="ruleForm.name"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.name" style="width:90%;"></el-input>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item label="用户密码" prop="password">
-                    <el-input v-model="ruleForm.password"  type="password" @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span
+                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength"
+                              style="width:90%;"></el-input>&nbsp;<span
                         class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:2%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false"
+                                 :status="status" style="width:90%;margin-left:2%;"></el-progress>
                 </el-form-item>
                 <el-form-item label="密码重复" prop="repassword">
-                    <el-input  type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;"></el-input>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item label="" prop="password">
-                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">注册</el-button><span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">注册
+                    </el-button>
+                    <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                 </el-form-item>
             </el-form>
@@ -41,7 +49,6 @@
 
     export default {
         mounted: function () {
-
         },
         components: {
             vueCanvasNest
@@ -73,7 +80,7 @@
             return {
                 //进度条值
                 percentage: 0,
-                status:"exception",
+                status: "exception",
                 ruleForm: {
                     name: '',
                     password: '',
@@ -100,6 +107,9 @@
             };
         },
         methods: {
+            toLoginPage() {
+                this.$router.push('/jpass/login');
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -142,7 +152,13 @@
                     this.addToSessionStorage();
                     this.$router.push({
                         name: "registersuccess",
-                        params: {secret: jtWallet.secret, mnemonic: mnemonic, address: jtWallet.address}
+                        params: {
+                            name: this.ruleForm.name,
+                            secret: jtWallet.secret,
+                            mnemonic: mnemonic,
+                            address: jtWallet.address,
+                            password:this.ruleForm.password
+                        }
                     });
                 } catch (e) {
                     this.$message.error("本地存储失败！");

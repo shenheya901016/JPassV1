@@ -1,6 +1,6 @@
 <template>
     <div id="main" style="width:100%;">
-        <div style="margin-left:5px;width:150px;">
+        <div style="margin:0 auto;width:150px;" >
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
@@ -104,14 +104,14 @@
             login() {
                 this.$router.push('/index');
             },
-            async  login(){
+            async login(){
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(this.ruleForm.name);
                 let objKeyStore = this.$JSON5.parse(keyStoreString);
                 let keystring = "";
                 let bal=""
-                if (keyStoreString != null) {
+                if (keyStoreString != null)     {
                     try {
                         //钱包生成密钥
                         wallet.setJingchangWallet(objKeyStore);
