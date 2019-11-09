@@ -102,13 +102,14 @@
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
-                        <input type="password" v-model="data.val" readonly style=" width:90%"/><a href="#" @click="changePass($event)" ><i
+                        <input type="password" v-model="data.val" readonly style="width:90%;color: #606266"/><a href="#" @click="changePass($event)" ><i
                             class="el-icon-view"></i></a>
                         <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:50%;margin-top: 1%"></el-progress>
                         <hr/>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
-                        <input type="text" v-model="data.val" readonly style=" width:90%"/><a href="#" @click="changePass($event)" ><i class="el-icon-view"></i></a>
+                        <input type="text" v-model="data.val" readonly style=""/><a href="#" @click="changePass($event)" ><i
+                            class="el-icon-view"></i></a>
                         <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:50%;margin-top: 1%"></el-progress>
                         <hr/>
                     </el-form-item>
@@ -133,24 +134,18 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="增加目录" :visible.sync="dialogVisible2" width="28%" :close-on-click-modal="false"
-                   :show-close="false">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
-                     style="width: 80%;">
+        <el-dialog title="新建目录" :visible.sync="dialogVisible2" width="30%" :close-on-click-modal="false" :show-close="false">
+            <el-form :model="ruleForm"  ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;">
                 <!--<el-form-item label="类型选择" prop="modelsType">-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit">目录</el-radio>-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit">文件夹</el-radio>-->
                 <!--</el-form-item>-->
-                <el-form-item label="名称" prop="pName" style="margin-top:10%">
+                <el-form-item label="名称" prop="pName" style="">
                     <el-input v-model="ruleForm.pName" style="width:100%;"></el-input>
                 </el-form-item>
-                <el-form-item label="" prop="" style="margin-top:10%">
-                    <el-button type="primary" size="small" style="width:35%;float:left;"
-                               @click="submitForm('ruleForm')">确定
-                    </el-button>
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="cancel('ruleForm')">
-                        取消
-                    </el-button>
+                <el-form-item label="" prop="" style="margin-top:15%;text-align: center">
+                    <el-button type="primary" size="small"  @click="submitForm('ruleForm')">确定</el-button>
+                    <el-button  size="small"  @click="cancel('ruleForm')">取消</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -175,7 +170,7 @@
                 <el-button size="small" @click="dialogVisibledTemplate = false">取 消</el-button>
               </span>
         </el-dialog>
-        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false"
+        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="30%" :close-on-click-modal="false"
                    @open='openDialogTemplate'>
             <ul style="border: 1px solid black;">
                 <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)"
@@ -189,7 +184,7 @@
             <el-button size="small" type="primary" @click="addproject('ruleFormAddProject')">确 定</el-button>
             <el-button size="small" @click="dialogVisibleTemplate = false">取 消</el-button>
         </el-dialog>
-        <el-dialog title="新增项目" :visible.sync="dialogVisibleAddProject" width="50%" :close-on-click-modal="false">
+        <el-dialog title="新增项目" :visible.sync="dialogVisibleAddProject" width="30%" :close-on-click-modal="false">
             <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm"
                      style="width: 80%;margin: auto">
                 <el-form-item label="名称" style="margin-top:10%" prop="name">
@@ -305,25 +300,20 @@
                                      :status="data.pwdstatus" :text-inside="true" :format="format"
                                      style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
-                    <el-form-item v-if="data.type==='password' && showPassword" :label="data.tempkey"
-                                  :prop="data.tempkey" style="margin-top:10%">
+                    <el-form-item v-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%">
                         <input type="text" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                         <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
-                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage"
-                                     :status="data.pwdstatus" :text-inside="true" :format="format"
-                                     style="width:80%;margin-top: 1%"></el-progress>
+                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :status="data.pwdstatus" :text-inside="true" :format="format" style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
-                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey"
-                                  style="margin-top:10%;margin-bottom: 15%">
+                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;margin-bottom: 15%">
                         <input type="text" v-model="data.val" class="myInput"/>
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                     </el-form-item>
                 </template>
                 <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
                     <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:80%">
-                        <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name"
-                                   :value="item.id"></el-option>
+                        <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
@@ -378,28 +368,22 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="增加模板" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true">
-            <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px" class="demo-ruleForm"
-                     style="width: 80%;margin: auto">
-                <el-form-item label="模板名称" style="margin-top:10%;" prop="name">
-                    <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:100%;"></el-input>
+        <el-dialog class="mb" title="新建模板" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px" class="demo-ruleForm" style="width: 85%;margin: auto">
+                <el-form-item label="模板名称" style="width: 90%;margin-bottom: -6%" prop="name">
+                    <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.tempTemplate">
-                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey"
-                                  style="margin-top:10%">
-                        <el-input type="password" v-model="data.val" readonly style="width:80%;"></el-input>
-                        <el-button size="mini" @click="addTemplageRemoveItem(data.id)" type="danger"
-                                   icon="el-icon-delete" circle></el-button>
+                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
+                        <el-input type="password" v-model="data.val" readonly style="width:90%;float: left"></el-input>
+                        <a href="#"><i class="el-icon-close"  @click="addTemplageRemoveItem(data.id)" ></i></a>
                     </el-form-item>
-                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey"
-                                  style="margin-top:10%;margin-bottom: 15%">
-                        <el-input type="text" v-model="data.val" readonly style="width:80%;"></el-input>
-                        <el-button size="mini" @click="addTemplageRemoveItem(data.id)" type="danger"
-                                   icon="el-icon-delete" circle></el-button>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
+                        <el-input type="text" v-model="data.val" readonly style="width:90%;float: left"></el-input>
+                        <a href="#"><i class="el-icon-close"  @click="addTemplageRemoveItem(data.id)" ></i></a>
                     </el-form-item>
                 </template>
-                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 10%;">
                     <el-dropdown @command="selectFiledTemplate" style="float: left">
                         <el-button>
                             添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
@@ -415,28 +399,22 @@
                 <el-button size="small" @click="dialogVisibleAddTemplate = false">取 消</el-button>
             </el-form>
         </el-dialog>
-        <el-dialog title="修改模板" :visible.sync="dialogVisibleTemplateEdit" width="30%" :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true">
-            <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px" class="demo-ruleForm"
-                     style="width: 80%;margin: auto">
-                <el-form-item label="名称" style="margin-top:10%;" prop="name">
-                    <el-input type="text" v-model="editobject.name" style="width:80%;"></el-input>
+        <el-dialog title="修改模板" class="mb" :visible.sync="dialogVisibleTemplateEdit" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px" class="demo-ruleForm" style="width: 85%;margin: auto">
+                <el-form-item label="名称" style="width: 90%;margin-bottom: -6%" prop="name">
+                    <el-input type="text" v-model="editobject.name" style="float: left;width:90%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.editobject.datas">
-                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey"
-                                  style="margin-top:10%">
-                        <el-input type="password" v-model="data.val" readonly style="width:80%;"></el-input>
-                        <el-button size="mini" @click="editRemoveItem(data.id)" type="danger" icon="el-icon-delete"
-                                   circle></el-button>
+                    <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
+                        <el-input type="password" v-model="data.val" readonly style="float: left;width:90%;"></el-input>
+                        <a href="#"><i class="el-icon-close"  @click="editRemoveItem(data.id)"></i></a>
                     </el-form-item>
-                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey"
-                                  style="margin-top:10%;margin-bottom: 15%">
-                        <el-input type="text" v-model="data.val" style="width:80%;" readonly></el-input>
-                        <el-button size="mini" @click="editRemoveItem(data.id)" type="danger" icon="el-icon-delete"
-                                   circle></el-button>
+                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
+                        <el-input type="text" v-model="data.val" style="float: left;width:90%;" readonly></el-input>
+                        <a href="#"><i class="el-icon-close"  @click="editRemoveItem(data.id)"></i></a>
                     </el-form-item>
                 </template>
-                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 10%;">
                     <el-dropdown @command="editSelectFiled" style="float: left">
                         <el-button>
                             添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
@@ -854,14 +832,15 @@
             },
             //提交添加目录
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.addDirectory(formName);
-                    } else {
-                        console.log('输入有误，请确认无误后再提交!');
-                        return false;
-                    }
-                });
+                // this.$refs[formName].validate((valid) => {
+                //     if (valid) {
+                //         this.addDirectory(formName);
+                //     } else {
+                //         console.log('输入有误，请确认无误后再提交!');
+                //         return false;
+                //     }
+                // });
+                this.addDirectory(formName);
             },
             cancel(formName) {
                 this.$refs[formName].resetFields();
@@ -1371,7 +1350,7 @@
         float: left;
     }
 
-    .el-form--label-top .el-form-item__label {
+    .section .el-form--label-top .el-form-item__label {
         float: none;
         display: inline-block;
         text-align: left;
@@ -1380,8 +1359,26 @@
         font-weight:bold;
     }
 
-    .el-form-item__content {
+    .section .el-form-item__content {
         line-height: 15px;
+        position: relative;
+        font-size: 14px;
+    }
+    .section input{
+        width:90%;
+        color: #606266;
+        font-size: 13px;
+    }
+
+    .mb .el-form--label-top .el-form-item__label {
+        float: none;
+        display: inline-block;
+        text-align: left;
+        padding: 0 0 0 0;
+        line-height: 30px;
+        font-weight:bold;
+    }
+    .mb .el-form-item__content {
         position: relative;
         font-size: 14px;
     }
