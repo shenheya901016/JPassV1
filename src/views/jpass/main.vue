@@ -445,11 +445,11 @@
                 //系统设置配置项
                 systemlock: "",//锁定开关
                 locktime:"",//自动锁定时间
-                languages: [{value: '中文', label: '中文'}, {value: '英文', label: '英文'}],
+                languages: [{value: '中文', label: '中文'}, {value: 'English', label: 'English'}],
                 language: '',//语言选择
                 showPassword: "",//是否显示密码
                 savePassword:"",
-                savePasswords: [{value: 'ask', label: '询问'}, {value: 'off', label: '关闭'}, {value: 'automatically', label: '自动填充'}],
+                savePasswords: [{value: 'ask', label: this.$t('admin.ask')}, {value: 'off', label: this.$t('admin.shutDown')}, {value: 'automatically', label:this.$t('admin.autofill')}],
                 showpassword:"",
                 locktimedisabled:"",
                 showpass:"",
@@ -969,7 +969,7 @@
                             name: loginObj.name,
                             address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('admin.allProjects')+'","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"'+this.$t('admin.favorites')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mm","name":"'+this.$t('admin.password')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mb","name":"'+this.$t('admin.template')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"wbj","name":"'+this.$t('admin.unmarked')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"06","name":"'+this.$t('admin.familyAccount')+'","modelsType":"directory","type":"model","imgPath":""}, {"id":"07","name":"'+this.$t('admin.privateAccount')+'","modelsType":"directory","type":"model","imgPath":""}]}');
+                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('main.allProjects')+'","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"'+this.$t('main.favorites')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mm","name":"'+this.$t('main.password')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mb","name":"'+this.$t('main.template')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"wbj","name":"'+this.$t('main.unmarked')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"06","name":"'+this.$t('main.familyAccount')+'","modelsType":"directory","type":"model","imgPath":""}, {"id":"07","name":"'+this.$t('main.privateAccount')+'","modelsType":"directory","type":"model","imgPath":""}]}');
                         await this.db.defaults(newdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
@@ -1014,8 +1014,8 @@
                 let bal = loginObj.bal;//这个值从sessionStorage中取默认为false：未被激活
                 if (!bal) {//未被激活时，判断用户钱包地址是否激活
                     this.$notify.error({
-                        title: this.$t('admin.note'),
-                        message: this.$t('admin.pleaseGoToTheOfficialWebsiteToActivateYourWallet')
+                        title: this.$t('main.note'),
+                        message: this.$t('main.pleaseGoToTheOfficialWebsiteToActivateYourWallet')
                     });
                 } else {
                     //读取IPFS中数据
@@ -1059,11 +1059,11 @@
             //格式化密码进度条
             format(percentage) {
                 if(percentage<=50){
-                    return percentage=this.$t('admin.weak')
+                    return percentage=this.$t('main.weak')
                 }else if(percentage==75){
-                    return percentage=this.$t('admin.mid')
+                    return percentage=this.$t('main.mid')
                 }else if(percentage==100){
-                    return percentage=this.$t('admin.strong')
+                    return percentage=this.$t('main.strong')
                 }
             },
             selectTemplate() {
@@ -1081,7 +1081,7 @@
 
             addproject(formname) {
                 if (this.templateEvent == "") {
-                    this.$message.error(this.$t('admin.pleaseChooseATemplate'));
+                    this.$message.error(this.$t('main.pleaseChooseATemplate'));
                     return false;
                 } else {
                     this.dialogVisibleTemplate = false;
@@ -1169,11 +1169,11 @@
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit = false
-                    this.$message.success(this.$t('admin.successfullyModified'));
+                    this.$message.success(this.$t('main.successfullyModified'));
                     this.projectEvent = this.editobject;
                     this.editobject = "";
                 } catch (e) {
-                    this.$message.error(this.$t('admin.failToEdit'));
+                    this.$message.error(this.$t('main.failToEdit'));
                 }
             },
             openDialogTemplate() {
@@ -1229,13 +1229,13 @@
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleTemplateEdit = false
-                    this.$message.success(this.$t('admin.successfullyModified'));
+                    this.$message.success(this.$t('main.successfullyModified'));
                     this.projectEvent = this.editobject;
                     this.editobject = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                 } catch (e) {
-                    this.$message.error(this.$t('admin.failToEdit'));
+                    this.$message.error(this.$t('main.failToEdit'));
                 }
             },
             //删除项(修改模板，项目)
@@ -1299,10 +1299,10 @@
                     this.db.get("settings").set("showPassword", this.showPassword).write();
                     this.db.get("settings").set("savePassword", this.savePassword).write();
                     this.db.get("settings").set("language", this.language).write();
-                    this.$message.success(this.$t('admin.settingSavedSuccessfully'));
+                    this.$message.success(this.$t('main.settingSavedSuccessfully'));
                     this.dialogVisibleSetting = false;
                 } catch (e) {
-                    this.$message.error(this.$t('admin.settingSaveFailed'));
+                    this.$message.error(this.$t('main.settingSaveFailed'));
                 }
             },
             //国际化
