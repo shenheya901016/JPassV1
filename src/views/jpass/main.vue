@@ -135,8 +135,8 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog :title="$t('main.addDirectory')" :visible.sync="dialogVisible2" width="28%" :close-on-click-modal="false" :show-close="false">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;">
+        <el-dialog :title="$t('main.addDirectory')" :visible.sync="dialogVisible2" width="30%" :close-on-click-modal="false" :show-close="false">
+            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;">
                 <!--<el-form-item label="类型选择" prop="modelsType">-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit">目录</el-radio>-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit">文件夹</el-radio>-->
@@ -366,10 +366,10 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
-                <el-form-item :label="$t('main.templateName')" style="margin-top:10%;" prop="name">
-                    <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:100%;"></el-input>
+                <el-form-item :label="$t('main.templateName')" style="width: 90%;margin-bottom: -6%" prop="name">
+                    <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.tempTemplate">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
@@ -1372,7 +1372,6 @@
         position: relative;
         font-size: 14px;
     }
-
 
 
 </style>
