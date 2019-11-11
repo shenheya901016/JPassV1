@@ -39,7 +39,7 @@
 	float: left;
 	position: relative;
 	z-index: 1;
-	overflow: scroll;
+	overflow: auto;
 }
 
 /* 侧边栏-副导航栏 */

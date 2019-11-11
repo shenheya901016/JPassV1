@@ -96,7 +96,7 @@
         </article>
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
-                     style="width: 80%;height:100%;margin: auto;text-align: left;margin-top:3%">
+                     style="width:80%;height:95%;margin: auto;text-align: left;margin-top:3%;">
                 <el-form-item :label="$t('main.name')" v-if="this.projectEvent!=''"  style="margin-bottom:3px;"  prop="name">
                     <input type="text" v-model="projectEvent.name" readonly/>
                     <hr/>
@@ -173,18 +173,15 @@
               </span>
         </el-dialog>
         <!--模板弹出框-->
-        <el-dialog :title="$t('main.selectTemplate')" :visible.sync="dialogVisibleTemplate" width="30%" :close-on-click-modal="false"
-                   @open='openDialogTemplate'>
-            <ul style="border: 1px solid black;">
-                <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)"
-                    :data-index="index"
-                    :class="index == currentTemplate?click:disclick">
-                    <div>
-                        <span>{{project.name}}</span>
-                    </div>
+        <el-dialog :title="$t('main.selectTemplate')" :visible.sync="dialogVisibleTemplate" width="30%" height="30%" :close-on-click-modal="false" @open='openDialogTemplate'>
+            <ul style="border:1px solid #9E9E9E;padding: 2px;height: 40vh;overflow-y:auto;">
+                <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)" :data-index="index"
+                    :class="index == currentTemplate?click:disclick" style="height:5vh;border: 0;text-align: left;">
+                        <span style="border: 1px solid #9E9E9E;display:inline-block;height:5vh;width:5vh;margin-left:2px;line-height:5vh;vertical-align:middle;text-align: center">图片</span>
+                        <span style="margin-left: 3%;font-size: 15px">{{project.name}}</span>
                 </li>
             </ul>
-            <el-button size="small" type="primary" @click="addproject('ruleFormAddProject')">{{$t('main.okFormat')}}</el-button>
+            <el-button style="margin-top: 5%" size="small" type="primary" @click="addproject('ruleFormAddProject')">{{$t('main.okFormat')}}</el-button>
             <el-button size="small" @click="dialogVisibleTemplate = false">{{$t('main.cancelFormat')}}</el-button>
         </el-dialog>
         <!--增加项目弹出框-->
@@ -331,28 +328,26 @@
             </el-form>
         </el-dialog>
         <!--设置弹出框-->
-        <el-dialog title="" :visible.sync="dialogVisibleSetting" width="50%" :show-close="true"
-                   style="text-align: left">
-            <div style="text-align: center">{{$t('main.systemSettings')}}</div>
+        <el-dialog title="" :visible.sync="dialogVisibleSetting" width="50%" :show-close="true" style="text-align: left">
+            <div style="text-align: center;font-weight:bolder">{{$t('main.systemSettings')}}</div>
             <el-form label-width="100px" style="border: 1px solid #50A4FF">
                 <el-form-item prop="">
-                    <div>{{$t('main.locking')}}</div>
+                    <div style="font-weight:bold">{{$t('main.locking')}}</div>
                     {{$t('main.timedLock')}}
-                    <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949"
-                               @change="locksystem()"></el-switch>
+                    <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="locksystem()"></el-switch>
                     <br>
                     {{$t('main.idleTime')}}
                     <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
                 </el-form-item>
                 <el-form-item prop="">
-                    <div>{{$t('main.language')}}</div>
+                    <div style="font-weight:bolder">{{$t('main.language')}}</div>
                     <el-select v-model="language" :placeholder="$t('main.languageSelection')" @change="changeLang">
                         <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
                                    :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="">
-                    <div>{{$t('main.passwordService')}}</div>
+                    <div style="font-weight:bolder">{{$t('main.passwordService')}}</div>
                     {{$t('main.showPassword')}}
                     <el-switch v-model="showPassword" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
                     <br>
