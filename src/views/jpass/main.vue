@@ -142,7 +142,7 @@
                 <el-form-item :label="$t('main.name')" prop="pName" style="">
                     <el-input v-model="ruleForm.pName" style="width:100%;"></el-input>
                 </el-form-item>
-                <el-form-item label="" prop="" style="margin-top:15%;text-align: center">
+                <el-form-item label="" prop="" style="margin-top:10%;text-align: center">
                     <el-button type="primary" size="small"  @click="submitForm('ruleForm')">{{$t('main.ok')}}</el-button>
                     <el-button  size="small"  @click="cancel('ruleForm')">{{$t('main.cancel')}}</el-button>
                 </el-form-item>
