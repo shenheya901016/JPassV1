@@ -1146,7 +1146,7 @@
                 this.dialogVisibleItemsEdit = false;
                 this.filed.tempkey = this.filedName;
                 this.filed.id = this.$Uuidv1(),
-                    this.editobject.datas.push(this.filed);
+                this.editobject.datas.push(this.filed);
                 this.filedName = "";
                 this.filed = "";
             },
@@ -1197,13 +1197,16 @@
             },
             selectFiledTemplate(command) {
                 this.dialogVisibleAddTempItems = true;
-                this.filed = command;
+                this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
             },
             addFiledTemplate() {
                 this.dialogVisibleAddTempItems = false;
                 this.filed.tempkey = this.filedName;
+                this.filed.id = this.$Uuidv1(),
                 this.tempTemplate.push(this.filed);
+                this.filed = "";
+                this.filedName = "";
             },
             //增加模板
             saveTemplate() {
@@ -1250,6 +1253,7 @@
             //删除项(增加模板)
             addTemplageRemoveItem(itemsId) {
                 let itemArray = this.tempTemplate;
+                console.log(itemArray);
                 for (var i = 0; i < itemArray.length; i++) {
                     if (itemArray[i].id === itemsId) {
                         itemArray.splice(i, 1);
