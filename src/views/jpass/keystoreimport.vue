@@ -7,38 +7,38 @@
       </div>
    <div style="width:35%;box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin:0 auto;border-radius:10px;">
     <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
-        keystore导入钱包
+        {{$t('keystoreImport.importKeystoreWallet')}}
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
-         <el-form-item label=" keystore文件" prop="">
+         <el-form-item :label="$t('keystoreImport.keystoreFile')" prop="">
                <el-upload class="upload-demo"  style="width:90%;margin-left:10px;" action="https://jsonplaceholder.typicode.com/posts/"
                multiple:limit="1" :on-exceed="handleExceed" accept="text/plain"  :on-change="getkeystore">
-               <el-button   type="primary" style="width:100%">上传keysore</el-button>
+               <el-button   type="primary" style="width:100%">{{$t('keystoreImport.uploadKeystore')}}</el-button>
                </el-upload>
          </el-form-item>
-           <el-form-item label="旧登录密码" prop="password">
-                <el-input  type="password"  v-model="ruleForm.password" placeholder="请输入旧的登录密码" oncopy="return false" onpaste="return false"
+           <el-form-item :label="$t('keystoreImport.oldLoginPassword')" prop="password">
+                <el-input  type="password"  v-model="ruleForm.password" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false" onpaste="return false"
                 style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
            </el-form-item>
 
-          <el-form-item label="新用户名称" prop="name">
-               <el-input  type="text"  v-model="ruleForm.name" placeholder="新用户名将代替旧用户名" oncopy="return false" onpaste="return false"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
+          <el-form-item :label="$t('keystoreImport.newUserName')" prop="name">
+               <el-input  type="text"  v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false" onpaste="return false"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
           </el-form-item>
-          <el-form-item label="新登录密码" prop="newPassword">
-                <el-input  type="password"  v-model="ruleForm.newPassword " @input="pwdLength" placeholder="新密码将代替旧密码" oncopy="return false"
+          <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="newPassword">
+                <el-input  type="password"  v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')" oncopy="return false"
                             onpaste="return false"style="width:90%;"></el-input>&nbsp;<span class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </el-form-item>
            <el-form-item>
                    <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:3%;"></el-progress>
             </el-form-item>
-           <el-form-item label="密码重复" prop="repassword">
+           <el-form-item :label="$t('keystoreImport.passwordRepetition')" prop="repassword">
                    <el-input type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
            </el-form-item>
           <el-form-item label="" prop="">
-               <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">导入钱包</el-button>
+               <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">{{$t('keystoreImport.importWallet')}}</el-button>
            </el-form-item>
-            <el-dialog title="钱包导入成功，keystore 文件已经更新，请及时下载并妥善保管！" :visible.sync="dialogVisible" width="30%" >
-               <el-button type="primary" size="small"  @click="exportkeystore">keystore导出</el-button>
+            <el-dialog :title="$t('keystoreImport.walletImportedSuccessfully')" :visible.sync="dialogVisible" width="30%" >
+               <el-button type="primary" size="small"  @click="exportkeystore">{{$t('keystoreImport.keystoreExport')}}</el-button>
             </el-dialog>
        </el-form>
     </div>
@@ -59,7 +59,7 @@
             if(nameString!=null){
                 var nameArray=nameString.split(",");
                 if(nameArray.indexOf(value)>=0){
-                    callback(new Error('用户名重复，请重新输入'));
+                    callback(new Error(this.$t('keystoreImport.userNameIsDuplicatePleaseEnter')));
                 }else{
                     callback();
                 }
@@ -69,9 +69,9 @@
         };
        var validateRepassword = (rule, value, callback) => {
                   if (value === '') {
-                    callback(new Error('请再次输入密码'));
+                    callback(new Error(this.$t('keystoreImport.pleaseEnterYourPasswordAgain')));
                   } else if (value !== this.ruleForm.newPassword) {
-                    callback(new Error('两次输入密码不一致!'));
+                    callback(new Error(this.$t('keystoreImport.twoPasswordsAreInconsistent')));
                   } else {
                     callback();
                   }
@@ -91,19 +91,19 @@
         },
         rules: {
           name: [
-            { required: true, message: '请输入新用户名', trigger: 'blur' },
+            { required: true, message: this.$t('keystoreImport.pleaseEnterANewUsername'), trigger: 'blur' },
               {validator:  validateName,  trigger: 'blur' }
             ],
           password: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
+            { required: true, message: this.$t('keystoreImport.pleaseEnterYourPassword'), trigger: 'blur' },
 
           ],
            newPassword: [
-              { required: true, message: '请输入用户密码', trigger: 'blur' },
-              { min: 4, max:20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
+              { required: true, message: this.$t('keystoreImport.pleaseEnterAUserPassword'), trigger: 'blur' },
+              { min: 4, max:20, message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'), trigger: 'blur' }
           ],
           repassword: [
-            {required:true, message: '请再次输入用户密码',trigger: 'blur' },
+            {required:true, message: this.$t('keystoreImport.pleaseEnterTheUserPasswordAgain'),trigger: 'blur' },
             {validator: validateRepassword,  trigger: 'blur' }
             ],
         }
@@ -121,7 +121,9 @@
             });
           },
             handleExceed(files, fileList) {
-               this.$message.warning(`当前限制选择 1个文件，本次选择了 ${files.length} 个文件`);
+               let msg =this.$t('keystoreImport.theCurrentLimitSelects1FileThisTimeSelectedFiles');
+               msg.replace("{0}",files.length);
+               this.$message.warning(msg);
             },
             //获取keystore文件
             getkeystore(file){
@@ -147,7 +149,7 @@
                             })
                              }catch(e){
                              console.log(e);
-                             this.$message.error("keystory 文件未导入或文件解析失败，请重新输入！");
+                             this.$message.error(this.$t('keystoreImport.importedKeystoryFilePFailed'));
                               return false;
                          }
 
@@ -164,7 +166,7 @@
                            this.ruleForm.secret=secret;
                            this.generateWallet();
                        }catch(e){
-                             this.$message.error("keystory 文件或密码有误，请重新输入！");
+                             this.$message.error(this.$t('keystoreImport.theKeystoryFileOrPasswordIsIncorrectPleaseEnter'));
                               return false;
                            }
                        },
@@ -179,14 +181,14 @@
                                            //this.ruleForm.keystore=keystore;
                                    }catch (e){
                                            console.log(e);
-                                           this.$message.error("新keystore 生成错误！");
+                                           this.$message.error(this.$t('keystoreImport.newKeystoreGeneratedError'));
                                             return false;
                                    }
                                   try{
                                       this.addToLocalStorage(this.ruleForm.name,keystore);
                                       this.dialogVisible = true;
                                   }catch (e){
-                                      this.$message.error("本地存储失败！");
+                                      this.$message.error(this.$t('keystoreImport.localStorageFailed'));
                                       return false;
                                   }
                                },

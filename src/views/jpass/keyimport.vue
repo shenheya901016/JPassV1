@@ -7,30 +7,30 @@
       </div>
    <div style="width:40%;box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin:0 auto;border-radius:10px;">
     <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
-         钱包密钥导入
+        {{$t('keyImport.walletKeyImport')}}
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
-      <el-form-item label="钱包密钥" prop="secret">
+      <el-form-item :label="$t('keyImport.walletKey')" prop="secret">
         <el-input v-model="ruleForm.secret" style="width:90%;" ></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </el-form-item>
-       <el-form-item label="新用户名称" prop="name">
+       <el-form-item :label="$t('keyImport.newUserName')" prop="name">
               <el-input v-model="ruleForm.name"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
        </el-form-item>
-       <el-form-item label="新密码" prop="password">
+       <el-form-item :label="$t('keyImport.newPassword')" prop="password">
               <el-input type="password" v-model="ruleForm.password"  @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span
                class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </el-form-item>
         <el-form-item>
                <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false"  :status="status" style="width:90%;margin-left:3%;"></el-progress>
         </el-form-item>
-         <el-form-item label="密码重复" prop="repassword">
+         <el-form-item :label="$t('keyImport.passwordRepetition')" prop="repassword">
               <el-input type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;</span>
          </el-form-item>
          <el-form-item label="" >
-              <el-button type="primary"  style="width:90%;"  @click="submitForm('ruleForm')">导入钱包</el-button>
+              <el-button type="primary"  style="width:90%;"  @click="submitForm('ruleForm')">{{$t('keyImport.importWallet')}}</el-button>
          </el-form-item>
-           <el-dialog title="钱包导入成功，keystore 文件已经更新，请及时下载并妥善保管！" :visible.sync="dialogVisible" width="30%" >
-                      <el-button type="primary"  size="small" @click="exportkeystore">keystore导出</el-button>
+           <el-dialog :title="$t('keyImport.walletImportedSuccessfully')" :visible.sync="dialogVisible" width="30%" >
+                      <el-button type="primary"  size="small" @click="exportkeystore">{{$t('keyImport.keystoreExport')}}</el-button>
            </el-dialog>
        </el-form>
        <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
@@ -49,9 +49,9 @@
     data() {
      var validateRepassword = (rule, value, callback) => {
               if (value === '') {
-                callback(new Error('请再次输入密码'));
+                callback(new Error(this.$t('keyImport.pleaseEnterYourPasswordAgain')));
               } else if (value !== this.ruleForm.password) {
-                callback(new Error('两次输入密码不一致!'));
+                callback(new Error(this.$t('keyImport.TwoPasswordsAreInconsistent')));
               } else {
                 callback();
               }
@@ -62,7 +62,7 @@
             if(nameString!=null){
                 var nameArray=nameString.split(",");
                 if(nameArray.indexOf(value)>=0){
-                    callback(new Error('用户名重复，请重新输入'));
+                    callback(new Error(this.$t('keyImport.userNameIsDuplicatePleaseEnter')));
                 }else{
                     callback();
                 }
@@ -83,19 +83,19 @@
         },
         rules: {
           secret: [
-             { required: true, message: '请输入钱包密钥', trigger: 'blur' },
+             { required: true, message: this.$t('keyImport.pleaseEnterTheWalletKey'), trigger: 'blur' },
           ],
            name: [
-                  { required: true, message: '请输入用户名称', trigger: 'blur' },
-                  { min: 3, max:20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
+                  { required: true, message: this.$t('keyImport.pleaseEnterAUserName'), trigger: 'blur' },
+                  { min: 3, max:20, message: this.$t('keyImport.theLengthIsBetween3And20Characters'), trigger: 'blur' },
                   {validator:  validateName,  trigger: 'blur' }
                   ],
                 password: [
-                  { required: true, message: '请输入用户密码', trigger: 'blur' },
-                  { min: 4, max:20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
+                  { required: true, message: this.$t('keyImport.pleaseEnterAUserPassword'), trigger: 'blur' },
+                  { min: 4, max:20, message: this.$t('keyImport.lengthIsBetween4And20Characters'), trigger: 'blur' }
                 ],
                  repassword: [
-                  {required:true, message: '请再次输入用户密码',trigger: 'blur' },
+                  {required:true, message:  this.$t('keyImport.pleaseEnterTheUserPasswordAgain'),trigger: 'blur' },
                   {validator: validateRepassword,  trigger: 'blur' }
                   ],
             }
@@ -125,14 +125,14 @@
                     // console.log("新keystore:"+this.$JSON5.stringify(this.ruleForm.keystore));
                     // console.log("用户名称:"+this.ruleForm.name );
                  }catch(e){
-                   this.$message.error("密钥错误，请重新输入！");
+                   this.$message.error(this.$t('keyImport.keyIsWrongPleaseEnter'));
                     return false;
                 }
                   try{
                       this.addToLocalStorage(this.ruleForm.name,keystore);
                       this.dialogVisible = true;
                   }catch (e){
-                      this.$message.error("本地存储失败！");
+                      this.$message.error(this.$t('keyImport.localStorageFailed'));
                       return false;
                   }
             },

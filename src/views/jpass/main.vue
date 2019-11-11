@@ -9,25 +9,25 @@
         </h1>
         <ul class="link">
             <li>
-                <el-button @click="addDirectoryOP" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建文件夹</el-button>
+                <el-button @click="addDirectoryOP" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">{{$t('main.newFolder')}}</el-button>
             </li>
             <li>
-                <el-button @click="addTemplate" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建模板</el-button>
+                <el-button @click="addTemplate" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">{{$t('main.newTemplate')}}</el-button>
             </li>
             <li>
-                <el-button @click="selectTemplate" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">新建项目</el-button>
+                <el-button @click="selectTemplate" style="border:0"><img style="top:-2px;" src="./img/ICON-ZJ.svg" alt="">{{$t('main.newProject')}}</el-button>
             </li>
 
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">删除
+                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;" src="./img/ICON-SC.svg" alt="">{{$t('main.delete')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">同步</el-button>
+                <el-button style="border:0;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">{{$t('main.synchronize')}}</el-button>
                 <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus" :show-text="true" v-show="processShow"></el-progress>
             </li>
             <li>
-                <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">锁定</el-button>
+                <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}</el-button>
             </li>
             <!--<li>-->
             <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
@@ -61,7 +61,7 @@
                     <i>{{project.count}}</i>
                 </li>
             </ul>
-            <h3>文件夹</h3>
+            <h3>{{$t('main.folder')}}</h3>
             <ul class="dhwjj" id="DirUL">
                 <li v-for="(project,index) in DDirectory.directory" @click="directoryclick(project,$event)" :data-index="index"
                     :class="index == currentDirectory?click:disclick">
@@ -73,7 +73,7 @@
         </nav>
         <!-- 副导航栏 -->
         <article class="article">
-            <input class="ss" type="text" placeholder="请输入要搜索的内容...">
+            <input class="ss" type="text" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')">
             <ul class="list">
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index" :class="index == currentNote?click:disclick">
                     <img src="./img/list_logo01.png" alt="" width="30" height="30">
@@ -87,7 +87,7 @@
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
                      style="width: 80%;height:100%;margin: auto;text-align: left;">
-                <el-form-item label="名称" v-if="this.projectEvent!=''" style="margin-top:10%;" prop="name">
+                <el-form-item :label="$t('main.name')" v-if="this.projectEvent!=''" style="margin-top:10%;" prop="name">
                     {{projectEvent.name}}
                     <hr/>
                 </el-form-item>
@@ -102,60 +102,60 @@
                         <hr/>
                     </el-form-item>
                 </template>
-                <el-button size="small" v-if="this.projectEvent!=''" @click="editProject()">修改</el-button>
+                <el-button size="small" v-if="this.projectEvent!=''" @click="editProject()">{{$t('main.modify')}}</el-button>
                 <!--<el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>-->
             </el-form>
         </section>
 
 
-        <el-dialog title="密码解锁" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+        <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
                    :show-close="false">
             <el-form label-width="100px" class="demo-ruleForm">
-                <el-form-item label="登录密码" prop="password" style="margin-top:10%">
+                <el-form-item :label="$t('main.loginPassword')" prop="password" style="margin-top:10%">
                     <el-input type="password" v-model="password" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:10%;margin-bottom: 15%">
-                    <el-button type="primary" style="width:100%;" @click="unlock()">解锁</el-button>
+                    <el-button type="primary" style="width:100%;" @click="unlock()">{{$t('main.unlock')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="增加目录" :visible.sync="dialogVisible2" width="28%" :close-on-click-modal="false" :show-close="false">
+        <el-dialog :title="$t('main.addDirectory')" :visible.sync="dialogVisible2" width="28%" :close-on-click-modal="false" :show-close="false">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;">
                 <!--<el-form-item label="类型选择" prop="modelsType">-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit">目录</el-radio>-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit">文件夹</el-radio>-->
                 <!--</el-form-item>-->
-                <el-form-item label="名称" prop="pName" style="margin-top:10%">
+                <el-form-item :label="$t('main.name')" prop="pName" style="margin-top:10%">
                     <el-input v-model="ruleForm.pName" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:10%">
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="submitForm('ruleForm')">确定</el-button>
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="cancel('ruleForm')">取消</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="submitForm('ruleForm')">{{$t('main.ok')}}</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="cancel('ruleForm')">{{$t('main.cancel')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="提示" :visible.sync="dialogVisibledDirectory" width="30%">
-            <span>是否删除文件夹？</span>
+        <el-dialog :title="$t('main.prompt')" :visible.sync="dialogVisibledDirectory" width="30%">
+            <span>{{$t('main.doYouWantToDeleteTheFolder')}}</span>
               <span slot="footer" class="dialog-footer">
-                <el-button size="small" type="primary" @click="removeData()">确 定</el-button>
-                <el-button size="small" @click="dialogVisibledDirectory = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="removeData()">{{$t('main.okFormat')}}</el-button>
+                <el-button size="small" @click="dialogVisibledDirectory = false">{{$t('main.cancelFormat')}}</el-button>
               </span>
         </el-dialog>
-        <el-dialog title="提示" :visible.sync="dialogVisibledProject" width="30%">
-            <span>是否删除项目？</span>
+        <el-dialog :title="$t('main.prompt')" :visible.sync="dialogVisibledProject" width="30%">
+            <span>{{$t('main.doYouWantToDeleteTheProject')}}</span>
               <span slot="footer" class="dialog-footer">
-                <el-button size="small" type="primary" @click="removeData()">确 定</el-button>
-                <el-button size="small" @click="dialogVisibledProject = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="removeData()">{{$t('main.okFormat')}}</el-button>
+                <el-button size="small" @click="dialogVisibledProject = false">{{$t('main.cancelFormat')}}</el-button>
               </span>
         </el-dialog>
-        <el-dialog title="提示" :visible.sync="dialogVisibledTemplate" width="30%">
-            <span>是否删除模板？</span>
+        <el-dialog :title="$t('main.prompt')" :visible.sync="dialogVisibledTemplate" width="30%">
+            <span>{{$t('main.doYouWantToDeleteTheTemplate')}}</span>
               <span slot="footer" class="dialog-footer">
-                <el-button size="small" type="primary" @click="removeData()">确 定</el-button>
-                <el-button size="small" @click="dialogVisibledTemplate = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="removeData()">{{$t('main.okFormat')}}</el-button>
+                <el-button size="small" @click="dialogVisibledTemplate = false">{{$t('main.cancelFormat')}}</el-button>
               </span>
         </el-dialog>
-        <el-dialog title="选择模板" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" @open='openDialogTemplate'>
+        <el-dialog :title="$t('main.selectTemplate')" :visible.sync="dialogVisibleTemplate" width="28%" :close-on-click-modal="false" @open='openDialogTemplate'>
             <ul style="border: 1px solid black;">
                 <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)" :data-index="index"
                     :class="index == currentTemplate?click:disclick">
@@ -164,12 +164,12 @@
                     </div>
                 </li>
             </ul>
-            <el-button size="small" type="primary" @click="addproject('ruleFormAddProject')">确 定</el-button>
-            <el-button size="small" @click="dialogVisibleTemplate = false">取 消</el-button>
+            <el-button size="small" type="primary" @click="addproject('ruleFormAddProject')">{{$t('main.okFormat')}}</el-button>
+            <el-button size="small" @click="dialogVisibleTemplate = false">{{$t('main.cancelFormat')}}</el-button>
         </el-dialog>
-        <el-dialog title="新增项目" :visible.sync="dialogVisibleAddProject" width="50%" :close-on-click-modal="false">
+        <el-dialog :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="50%" :close-on-click-modal="false">
             <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
-                <el-form-item label="名称" style="margin-top:10%" prop="name">
+                <el-form-item :label="$t('main.name')" style="margin-top:10%" prop="name">
                     <input type="text" v-model="ruleFormAddProject.name" class="myInput"/>
                 </el-form-item>
                 <template v-for="(data, index) in this.templateEvent.datas">
@@ -190,64 +190,64 @@
                         <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
                     </el-form-item>
                 </template>
-                <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
-                    <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:80%">
+                <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;margin-bottom: 15%">
+                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:80%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item :label="$t('main.addOtherItems')" style="margin-top:10%;margin-bottom: 15%">
                     <el-dropdown @command="selectFiled" style="float: left">
                         <el-button>
-                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
-                <el-button size="small" type="primary" @click="submitproject()">确 定</el-button>
-                <el-button size="small" @click="dialogVisibleAddProject = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="submitproject()">{{$t('main.okFormat')}}</el-button>
+                <el-button size="small" @click="dialogVisibleAddProject = false">{{$t('main.cancelFormat')}}</el-button>
             </el-form>
         </el-dialog>
-        <el-dialog title="新增项" :visible.sync="dialogVisibleItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog :title="$t('main.additionalItem')" :visible.sync="dialogVisibleItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="name" prop="name" style="margin-top:10%">
                     <el-input type="text" v-model="filedName" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:10%">
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="addFiled">确定</el-button>
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleItems=false">取消</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="addFiled">{{$t('main.ok')}}</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleItems=false">{{$t('main.cancel')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="新增项" :visible.sync="dialogVisibleItemsEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+        <el-dialog :title="$t('main.additionalItem')" :visible.sync="dialogVisibleItemsEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
                    :show-close="true">
             <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="name" prop="name" style="margin-top:10%">
                     <el-input type="text" v-model="filedName" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:10%">
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="editAddFiled">确定</el-button>
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleItemsEdit=false">取消</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="editAddFiled">{{$t('main.ok')}}</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleItemsEdit=false">{{$t('main.cancel')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="新增项" :visible.sync="dialogVisibleAddTempItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
+        <el-dialog :title="$t('main.additionalItem')" :visible.sync="dialogVisibleAddTempItems" width="30%" :close-on-click-modal="false" :close-on-press-escape="false"
                    :show-close="true">
             <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="name" prop="name" style="margin-top:10%">
                     <el-input type="text" v-model="filedName" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:10%">
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="addFiledTemplate">确定</el-button>
-                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleAddTempItems = false">取消
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="addFiledTemplate">{{$t('main.ok')}}</el-button>
+                    <el-button type="primary" size="small" style="width:35%;float:left;" @click="dialogVisibleAddTempItems = false">{{$t('main.cancel')}}
                     </el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="修改项目" :visible.sync="dialogVisibleEdit" width="50%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog :title="$t('main.modifyTheProject')" :visible.sync="dialogVisibleEdit" width="50%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormProjectEdit" ref="ruleFormProjectEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
-                <el-form-item label="名称" style="margin-top:10%;" prop="name">
+                <el-form-item :label="$t('main.name')" style="margin-top:10%;" prop="name">
                     <input type="text" v-model="editobject.name" class="myInput" />
                 </el-form-item>
                 <template v-for="(data, index) in this.editobject.datas">
@@ -270,61 +270,61 @@
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                     </el-form-item>
                 </template>
-                <el-form-item label="选择分类" style="margin-top:10%;margin-bottom: 15%">
-                    <el-select v-model="selectlabels" multiple placeholder="请选择" style="float: left;width:80%">
+                <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;margin-bottom: 15%">
+                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:80%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item :label="$t('main.addOtherItems')" style="margin-top:10%;margin-bottom: 15%">
                     <el-dropdown @command="editSelectFiled" style="float: left">
                         <el-button>
-                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
-                <el-button size="small" type="primary" @click="editDo">提交</el-button>
-                <el-button size="small" @click="dialogVisibleEdit = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="editDo">{{$t('main.submit')}}</el-button>
+                <el-button size="small" @click="dialogVisibleEdit = false">{{$t('main.cancelFormat')}}</el-button>
             </el-form>
         </el-dialog>
 
         <el-dialog title="" :visible.sync="dialogVisibleSetting" width="50%" :show-close="true" style="text-align: left">
-            <div style="text-align: center">系统设置</div>
+            <div style="text-align: center">{{$t('main.systemSettings')}}</div>
             <el-form label-width="100px" style="border: 1px solid #50A4FF">
                 <el-form-item prop="">
-                    <div>锁定</div>
-                    定时锁定
+                    <div>{{$t('main.locking')}}</div>
+                    {{$t('main.timedLock')}}
                     <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="locksystem()"></el-switch>
                     <br>
-                    闲置时间
+                    {{$t('main.idleTime')}}
                     <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
                 </el-form-item>
                 <el-form-item prop="">
-                    <div>语言</div>
-                    <el-select v-model="language" placeholder="语言选择" @change="changeLang">
+                    <div>{{$t('main.language')}}</div>
+                    <el-select v-model="language" :placeholder="$t('main.languageSelection')" @change="changeLang">
                         <el-option v-for="item in this.languages" :key="item.value" :label="item.label" :value="item.value" ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="">
-                    <div>密码服务</div>
-                    显示密码
+                    <div>{{$t('main.passwordService')}}</div>
+                    {{$t('main.showPassword')}}
                     <el-switch v-model="showPassword" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
                     <br>
-                    新用户和密码自动保存
-                    <el-select v-model="savePassword" placeholder="请选择">
+                    {{$t('main.newUserAndPasswordAreAutomaticallySaved')}}
+                    <el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">
                         <el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
-                    <el-button type="primary" size="small" style="width:35%;" @click="savesettings">保存</el-button>
+                    <el-button type="primary" size="small" style="width:35%;" @click="savesettings">{{$t('main.save')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <el-dialog title="增加模板" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
-                <el-form-item label="模板名称" style="margin-top:10%;" prop="name">
+                <el-form-item :label="$t('main.templateName')" style="margin-top:10%;" prop="name">
                     <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:100%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.tempTemplate">
@@ -337,23 +337,23 @@
                         <el-button size="mini" @click="addTemplageRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                 </template>
-                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item :label="$t('main.addOtherItems')" style="margin-top:10%;margin-bottom: 15%">
                     <el-dropdown @command="selectFiledTemplate" style="float: left">
                         <el-button>
-                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
-                <el-button size="small" type="primary" @click="saveTemplate">提交</el-button>
-                <el-button size="small" @click="dialogVisibleAddTemplate = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="saveTemplate">{{$t('main.submit')}}</el-button>
+                <el-button size="small" @click="dialogVisibleAddTemplate = false">{{$t('main.cancelFormat')}}</el-button>
             </el-form>
         </el-dialog>
-        <el-dialog title="修改模板" :visible.sync="dialogVisibleTemplateEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog :title="$t('main.modifyTemplate')" :visible.sync="dialogVisibleTemplateEdit" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
-                <el-form-item label="名称" style="margin-top:10%;" prop="name">
+                <el-form-item :label="$t('main.name')" style="margin-top:10%;" prop="name">
                     <el-input type="text" v-model="editobject.name" style="width:80%;"></el-input>
                 </el-form-item>
                 <template v-for="(data, index) in this.editobject.datas">
@@ -366,18 +366,18 @@
                         <el-button size="mini" @click="editRemoveItem(data.id)" type="danger" icon="el-icon-delete" circle></el-button>
                     </el-form-item>
                 </template>
-                <el-form-item label=" 添加其他项" style="margin-top:10%;margin-bottom: 15%">
+                <el-form-item :label="$t('main.addOtherItems')" style="margin-top:10%;margin-bottom: 15%">
                     <el-dropdown @command="editSelectFiled" style="float: left">
                         <el-button>
-                            添加其他项<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">{{item.key}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
-                <el-button size="small" type="primary" @click="editTemplate">提交</el-button>
-                <el-button size="small" @click="dialogVisibleTemplateEdit = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="editTemplate">{{$t('main.submit')}}</el-button>
+                <el-button size="small" @click="dialogVisibleTemplateEdit = false">{{$t('main.cancelFormat')}}</el-button>
             </el-form>
         </el-dialog>
     </aside>
@@ -397,11 +397,11 @@
                 //系统设置配置项
                 systemlock: "",//锁定开关
                 locktime:"",//自动锁定时间
-                languages: [{value: '中文', label: '中文'}, {value: '英文', label: '英文'}],
+                languages: [{value: '中文', label: '中文'}, {value: 'English', label: 'English'}],
                 language: '',//语言选择
                 showPassword: "",//是否显示密码
                 savePassword:"",
-                savePasswords: [{value: 'ask', label: '询问'}, {value: 'off', label: '关闭'}, {value: 'automatically', label: '自动填充'}],
+                savePasswords: [{value: 'ask', label: this.$t('admin.ask')}, {value: 'off', label: this.$t('admin.shutDown')}, {value: 'automatically', label:this.$t('admin.autofill')}],
                 showpassword:"",
                 locktimedisabled:"",
                 showpass:"",
@@ -646,11 +646,11 @@
                 ruleFormTemplateEdit:{},
                 rules: {
                     modelsType: [
-                        {required: true, message: '请选择类型！', trigger: 'blur'},
+                        {required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'},
                     ],
                     pName: [
-                        {required: true, message: '请输入名称', trigger: 'blur'},
-                        {min: 1, max: 10, message: '长度在 1 到10 个字符', trigger: 'blur'}
+                        {required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
+                        {min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}
                     ]
                 }
             };
@@ -703,13 +703,13 @@
                         secret = value;
                     });
                 } catch (e) {
-                    this.$message.error("密码有误，请重新输入！");
+                    this.$message.error(this.$t('main.thePasswordIsIncorrectPleaseReEnter'));
                     return false;
                 }
                 this.loginObj.lock = false;
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = false;
-                this.$message.success("解锁成功！");
+                this.$message.success(this.$t('main.unlockedSuccessfully'));
                 this.password = "";
                 //继续监听
                // this.eventID = setInterval(this.CheckTime, 1000);
@@ -779,7 +779,7 @@
                     if (valid) {
                         this.addDirectory(formName);
                     } else {
-                        console.log('输入有误，请确认无误后再提交!');
+                        console.log(this.$t('main.theInputIsIncorrectPleaseConfirmItAndSubmitItAgain'));
                         return false;
                     }
                 });
@@ -921,7 +921,7 @@
                              name: loginObj.name,
                              address: address,
                          }
-                         var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"所有项目","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"收藏夹","modelsType":"project","type":"model","imgPath":""}, {"id":"mm","name":"密码","modelsType":"project","type":"model","imgPath":""}, {"id":"mb","name":"模板","modelsType":"project","type":"model","imgPath":""}, {"id":"wbj","name":"未标记","modelsType":"project","type":"model","imgPath":""}, {"id":"06","name":"家人账号","modelsType":"directory","type":"model","imgPath":""}, {"id":"07","name":"私人账号","modelsType":"directory","type":"model","imgPath":""}]}');
+                         var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('admin.allProjects')+'","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"'+this.$t('admin.favorites')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mm","name":"'+this.$t('admin.password')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mb","name":"'+this.$t('admin.template')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"wbj","name":"'+this.$t('admin.unmarked')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"06","name":"'+this.$t('admin.familyAccount')+'","modelsType":"directory","type":"model","imgPath":""}, {"id":"07","name":"'+this.$t('admin.privateAccount')+'","modelsType":"directory","type":"model","imgPath":""}]}');
                          await this.db.defaults(newdata).write();
                          this.operateTemplates=this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                          await this.db.set("templates", this.operateTemplates.templates).write();
@@ -967,8 +967,8 @@
                 let bal = loginObj.bal;//这个值从sessionStorage中取默认为false：未被激活
                 if (!bal) {//未被激活时，判断用户钱包地址是否激活
                     this.$notify.error({
-                        title: '注意',
-                        message: '请先去官网激活您的钱包！'
+                        title: this.$t('admin.note'),
+                        message: this.$t('admin.pleaseGoToTheOfficialWebsiteToActivateYourWallet')
                     });
                 } else {
                     //读取IPFS中数据
@@ -1011,11 +1011,11 @@
             //格式化密码进度条
             format(percentage) {
                 if(percentage<=50){
-                    return percentage="弱"
+                    return percentage=this.$t('admin.weak')
                 }else if(50>percentage<=75){
-                    return percentage="中"
+                    return percentage=this.$t('admin.mid')
                 }else if(percentage==100){
-                    return percentage="强"
+                    return percentage=this.$t('admin.strong')
                 }
             },
             selectTemplate(){
@@ -1033,7 +1033,7 @@
 
             addproject(formname){
                 if (this.templateEvent == "") {
-                    this.$message.error("请选择模板！");
+                    this.$message.error(this.$t('admin.pleaseChooseATemplate'));
                     return false;
                 } else {
                     this.dialogVisibleTemplate = false;
@@ -1121,11 +1121,11 @@
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit = false
-                    this.$message.success("修改成功！");
+                    this.$message.success(this.$t('admin.successfullyModified'));
                     this.projectEvent = this.editobject;
                     this.editobject = "";
                 } catch (e) {
-                    this.$message.error("修改失败！");
+                    this.$message.error(this.$t('admin.failToEdit'));
                 }
             },
             openDialogTemplate(){
@@ -1181,13 +1181,13 @@
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleTemplateEdit = false
-                    this.$message.success("修改成功！");
+                    this.$message.success(this.$t('admin.successfullyModified'));
                     this.projectEvent = this.editobject;
                     this.editobject = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id:"mb"}).value());//刷新列表页
                 } catch (e) {
-                    this.$message.error("修改失败！");
+                    this.$message.error(this.$t('admin.failToEdit'));
                 }
             },
             //删除项(修改模板，项目)
@@ -1251,10 +1251,10 @@
               this.db.get("settings").set("showPassword",this.showPassword).write();
               this.db.get("settings").set("savePassword",this.savePassword).write();
               this.db.get("settings").set("language",this.language).write();
-               this.$message.success("设置保存成功！");
+               this.$message.success(this.$t('admin.settingSavedSuccessfully'));
                this.dialogVisibleSetting = false;
               }catch (e){
-                  this.$message.error("设置保存失败！");
+                  this.$message.error(this.$t('admin.settingSaveFailed'));
               }
         },
             //国际化

@@ -7,20 +7,22 @@
         </div>
         <div style="width:30%;margin:0 auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin-top:5%">
             <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
-                解锁jpass
+                {{$t('main.unlockJpass')}}
             </div>
-            <el-form :model="ruleForm"  ref="ruleForm" label-width="100px" class="demo-ruleForm"
+            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:75%; margin:10% 20% 5% 10%;">
                 <!--<el-form-item label="用户名称" prop="name">-->
-                    <!--<el-select placeholder="请选择登录用户" v-model="ruleForm.name" title="请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！" style="width:100%;">-->
-                        <!--<el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.value"></el-option>-->
-                    <!--</el-select>-->
+                <!--<el-select placeholder="请选择登录用户" v-model="ruleForm.name" title="请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！" style="width:100%;">-->
+                <!--<el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.value"></el-option>-->
+                <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item label="登录密码" prop="password" style="margin-top:10%">
+                <el-form-item :label="$t('main.loginPassword')" prop="password" style="margin-top:10%">
                     <el-input type="password" v-model="ruleForm.password" style="width:100%;"></el-input>
                 </el-form-item>
-                <el-form-item label="" prop=""  style="margin-top:10%;margin-bottom: 15%">
-                    <el-button type="primary" style="width:100%;" @click="submitForm('ruleForm')">解锁</el-button>
+                <el-form-item label="" prop="" style="margin-top:10%;margin-bottom: 15%">
+                    <el-button type="primary" style="width:100%;" @click="submitForm('ruleForm')">
+                        {{$t('main.unlock')}}
+                    </el-button>
                 </el-form-item>
             </el-form>
             <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
@@ -30,6 +32,7 @@
 
 <script type="es6">
     import vueCanvasNest from 'vue-canvas-nest';
+
     export default {
         components: {
             vueCanvasNest
@@ -58,28 +61,28 @@
                 });
             },
 
-            async  login(){
-                let loginString=sessionStorage.getItem("userkeyObj");
-                let loginObj= this.$JSON5.parse(loginString);
+            async login() {
+                let loginString = sessionStorage.getItem("userkeyObj");
+                let loginObj = this.$JSON5.parse(loginString);
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(loginObj.name);
                 let objKeyStore = this.$JSON5.parse(keyStoreString);
                 let keystring = "";
-                    try {
-                        //钱包生成密钥
-                        wallet.setJingchangWallet(objKeyStore);
-                        var address = objKeyStore.wallets[0].address;
-                        keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
-                        await keystring.then(function (value) {
-                            secret = value;
-                        });
-                    } catch (e) {
-                        this.$message.error("密码有误，请重新输入！");
-                        return false;
-                    }
-                    this.$message.success("解锁成功！");
-                    this.$router.go(-1);
+                try {
+                    //钱包生成密钥
+                    wallet.setJingchangWallet(objKeyStore);
+                    var address = objKeyStore.wallets[0].address;
+                    keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
+                    await keystring.then(function (value) {
+                        secret = value;
+                    });
+                } catch (e) {
+                    this.$message.error(this.$t('main.thePasswordIsIncorrectPleaseReEnter'));
+                    return false;
+                }
+                this.$message.success(this.$t('main.unlockedSuccessfully'));
+                this.$router.go(-1);
             },
         }
     }

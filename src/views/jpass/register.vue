@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%;" id="main" >
+    <div style="width:100%;" id="main">
         <div style="margin-left:5px;width:150px;">
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;">
@@ -7,24 +7,32 @@
         </div>
         <div style="width:30%;border:1px solid white;margin:0 auto;border-radius:10px;margin-top:5%;box-shadow: 0 0 7px 1px #c5c5c5;">
             <div style="width:100%;border-radius:10px 10px 0 0; font-size:20px;margin-top:50px;">
-                用户注册
+                {{$t('register.title')}}
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:75%; margin:10% 20% 10% 10%;">
-                <el-form-item label="用户名称" prop="name">
-                    <el-input v-model="ruleForm.name"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
+                     style="width:75%; margin:10% 20% 10% 10%;">
+                <el-form-item :label="$t('register.name')" prop="name">
+                    <el-input v-model="ruleForm.name" style="width:90%;"></el-input>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
-                <el-form-item label="用户密码" prop="password">
-                    <el-input v-model="ruleForm.password"  type="password" @input="pwdLength"  style="width:90%;"></el-input>&nbsp;<span
+                <el-form-item :label="$t('register.password')" prop="password">
+                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength"
+                              style="width:90%;"></el-input>&nbsp;<span
                         class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process"  :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;margin-left:2%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false"
+                                 :status="status" style="width:90%;margin-left:2%;"></el-progress>
                 </el-form-item>
-                <el-form-item label="密码重复" prop="repassword">
-                    <el-input  type="password" v-model="ruleForm.repassword"  style="width:90%;"></el-input><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <el-form-item :label="$t('register.duplicatePassword')" prop="repassword">
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;"></el-input>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item label="" prop="password">
-                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">注册</el-button><span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">
+                        {{$t('register.register')}}
+                    </el-button>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                 </el-form-item>
             </el-form>
@@ -49,9 +57,9 @@
         data() {
             var validateRepassword = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请再次输入密码！'));
+                    callback(new Error($t('register.repassword')));
                 } else if (value !== this.ruleForm.password) {
-                    callback(new Error('两次输入密码不一致!'));
+                    callback(new Error($t('register.samepwd')));
                 } else {
                     callback();
                 }
@@ -62,7 +70,7 @@
                 if (nameString != null) {
                     var nameArray = nameString.split(",");
                     if (nameArray.indexOf(value) >= 0) {
-                        callback(new Error('用户名重复，请重新输入'));
+                        callback(new Error($t('register.uservalidaion')));
                     } else {
                         callback();
                     }
@@ -73,7 +81,7 @@
             return {
                 //进度条值
                 percentage: 0,
-                status:"exception",
+                status: "exception",
                 ruleForm: {
                     name: '',
                     password: '',
@@ -84,16 +92,16 @@
                 },
                 rules: {
                     name: [
-                        {required: true, message: '请输入用户名称', trigger: 'blur'},
-                        {min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur'},
+                        {required: true, message: this.$t('register.ruleuser'), trigger: 'blur'},
+                        {min: 3, max: 20, message: this.$t('register.ruleuserLength'), trigger: 'blur'},
                         {validator: validateName, trigger: 'blur'}
                     ],
                     password: [
-                        {required: true, message: '请输入用户密码', trigger: 'blur'},
-                        {min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur'}
+                        {required: true, message: this.$t('register.pleaseEnterUserPassword'), trigger: 'blur'},
+                        {min: 4, max: 20, message: this.$t('register.lengthCharacters'), trigger: 'blur'}
                     ],
                     repassword: [
-                        {required: true, message: '请再次输入用户密码', trigger: 'blur'},
+                        {required: true, message: this.$t('register.pleaseEnterUserPasswordAgain'), trigger: 'blur'},
                         {validator: validateRepassword, trigger: 'blur'}
                     ],
                 }
@@ -114,7 +122,7 @@
                 this.$refs[formName].resetFields();
                 this.percentage = 0;
                 document.getElementById("strong").style.color = "#EBEEF5"
-                document.getElementById("strong").innerText = "无";
+                document.getElementById("strong").innerText = this.$t('register.no');
             },
             async register() {
                 //助记词生成钱包
@@ -123,7 +131,7 @@
                     var seed = this.$JPassUtil.Mnemonic.wordsToEntropy(mnemonic, this.$i18n.locale);
                     var jtWallet = this.$JPassUtil.Wallet.generateWallet(seed);
                 } catch (e) {
-                    this.$message.error("钱包生成失败！");
+                    this.$message.error( this.$t('register.walletGenerationFailed'));
                     return false;
                 }
                 try {
@@ -134,7 +142,7 @@
                         keystore = value;
                     });
                 } catch (e) {
-                    this.$message.error("keystore生成失败！");
+                    this.$message.error( this.$t('register.keystoreGenerationFailed'));
                     return false;
                 }
                 try {
@@ -145,7 +153,7 @@
                         params: {secret: jtWallet.secret, mnemonic: mnemonic, address: jtWallet.address}
                     });
                 } catch (e) {
-                    this.$message.error("本地存储失败！");
+                    this.$message.error( this.$t('register.localStorageFailed'));
                     return false;
                 }
             },
