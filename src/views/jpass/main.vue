@@ -679,8 +679,6 @@
                     showPassword: false,//是否显示密码
                     savePassword: "ask",
                 },
-
-
                 ruleForm: {
                     modelsType: '',
                     pName: '',
@@ -776,7 +774,6 @@
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = true;
             },
-
             //获取目录
             getdirectory() {
                 var alldata = this.db.get("models").value();
@@ -885,7 +882,6 @@
                 this.isDisabled = false;
                 this.projectEvent = this.$JSON5.parse(this.$JSON5.stringify(project));
             },
-
             remove() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
@@ -897,7 +893,6 @@
                     this.dialogVisibledTemplate = true;
                 }
             },
-
             //删除数据
             removeData() {
                 var type = this.delobj.type;
@@ -1013,7 +1008,6 @@
                 // this.db.get("project").remove().write();
                 // this.db.get("models").remove().write();
             },
-
             //手动同步。
             async synchronization() {
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
