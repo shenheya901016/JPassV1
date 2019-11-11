@@ -123,15 +123,13 @@
                 <!--<el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>-->
             </el-form>
         </section>
-        <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false"
-                   :close-on-press-escape="false"
-                   :show-close="false">
-            <el-form label-width="100px" class="demo-ruleForm">
-                <el-form-item :label="$t('main.loginPassword')" prop="password" style="margin-top:10%">
-                    <el-input type="password" v-model="password" style="width:100%;"></el-input>
+        <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+            <el-form label-width="100px" class="demo-ruleForm" style="width:80%;">
+                <el-form-item :label="$t('main.loginPassword')" prop="password" >
+                    <el-input type="password" v-model="password" style="width:90%;"></el-input>
                 </el-form-item>
-                <el-form-item label="" prop="" style="margin-top:10%;margin-bottom: 15%">
-                    <el-button type="primary" style="width:100%;" @click="unlock()">{{$t('main.unlock')}}</el-button>
+                <el-form-item label="" prop="" style="margin-bottom: 8%">
+                    <el-button type="primary"  @click="unlock()">{{$t('main.unlock')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
