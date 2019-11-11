@@ -47,7 +47,7 @@
             var S_level =this.checkStrong(pwd);
             switch (S_level) {
                 case 0:
-                    this.percentage=25; //密码长度小于;
+                    this.percentage=25; //密码长度小于4;
                     this. status = "exception";
                     break;
                 case 1:
@@ -58,7 +58,7 @@
                     this.percentage=75;//长度大于四2种类型字符
                     this. status = "warning";
                     break;
-                default:
+                case 3:
                     this.percentage=100;//长度大于四3种类型字符
                     this.status = "success";
                     break;

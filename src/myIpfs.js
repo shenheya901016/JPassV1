@@ -1,7 +1,7 @@
 import {IpfsRemote} from "ipfslib";
 
 let JPassUtil = require("jpass-util");
-let baserpcurl = "http://139.198.191.254:8545/v1";
+let baserpcurl = "http://106.13.63.56:7545/v1";
 //判断是否为开发者模式
 if (process.env.NODE_ENV === "development") {
     baserpcurl = '';
@@ -145,6 +145,104 @@ let myIpfs = {
             }
         } else {
             return jt_issueToken.status
+        }
+    },
+    async getIssueToken(userJID, userSecret, operatorJID, operatorSecret, type) {
+        let issueToken =
+            '                {\n' +
+            '                    "from": "' + userJID + '",\n' +   //用户JID
+            '                    "to": "' + operatorJID + '",\n' +     //运营商JID
+            '                    "secret": "' + userSecret + '",\n' +
+            '                    "token_info": {\n' +       //token的定义信息
+            '                        "name": "' + userJID + ':' + type + '",\n' +        //类erc721的token的名称
+            '                        "symbol": "' + type + '",\n' +      //类erc721的token的简称
+            '                        "total_supply": 100,\n' +      //该token的总供应量
+            '                        "items": [\n' +        //定义该token的属性
+            '                            {\n' +
+            '                                "name": "' + type + '",\n' +        //该属性的名称
+            '                                "type": "map",\n' +        //该属性的类型
+            '                                "desc": "the ' + type + ' of the token"\n' +        //该属性描述, 可以为空
+            '                            }\n' +
+            '                        ]\n' +
+            '                    }\n' +
+            '                }';
+        console.log(issueToken);
+        let jt_issueToken = await remote.IssueToken([JSON.parse(issueToken)]);
+        return jt_issueToken;
+    },
+    async getCreateToken(userJID, userSecret, operatorJID, operatorSecret, type, info, data) {
+        let createToken =
+            '        {\n' +
+            '            "from": "' + operatorJID + '",\n' +
+            '            "to": "' + userJID + '",\n' +
+            '            "secret": "' + operatorSecret + '",\n' +
+            '            "token": {\n' +
+            '                "info": "' + info + '",\n' + //类erc721的定义token的hash, 见jt_issueToken返回值
+            '                "uri": "",\n' +  //类erc721的token的uri, erc721标准属性
+            '                "items": [\n' +    //该token的属性
+            '                    {\n' +
+            '                        "name": "' + type + '",\n' +   //该属性的名称
+            '                        "value": ' + data + '\n' +    //该属性的值，要符合jt_issueToken中的定义
+            '                    }\n' +
+            '                ]\n' +
+            '            }\n' +
+            '        }';
+        console.log(createToken);
+        let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
+        return jt_createToken;
+    },
+    async initTest(userJID, userSecret, operatorJID, operatorSecret, type) {
+        let jt_issueToken = await this.getIssueToken(userJID, userSecret, operatorJID, operatorSecret, type);
+        if (jt_issueToken.status === "success") {
+            if (await this.tra(jt_issueToken.result[0].transaction) === "success") {
+                let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+                //使用公钥加密数据
+                let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, "{'base64':''}");
+                return await this.getCreateToken(userJID, userSecret, operatorJID, operatorSecret, type, jt_issueToken.result[0].hash, JSON.stringify(encryptData))
+            }
+        }
+    },
+    async readTest(userJID, userSecret) {
+        let jt_tokensOf = await remote.TokensOf([userJID]);
+        for (let i = 0; i < jt_tokensOf.result.list.length; i++) {
+            if (jt_tokensOf.result.list[i].symbol === 'data') {
+                return await this.readByHash(jt_tokensOf.result.list[i].token, userSecret);
+            }
+        }
+    },
+    async readByHash(token, userSecret) {
+        let jt_getTokenByHash = await remote.GetTokenByHash([token]);
+        let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+        //使用私钥解密数据
+        let msg = JPassUtil.ECCCrypto.decryptWithPrivateKey(key.privateKey, jt_getTokenByHash.result.Items[0].Value);
+        return msg;
+    },
+    async writeTest(type, data, userJID, userSecret, operatorJID, operatorSecret) {
+        let jt_tokensOf = await remote.TokensOf([userJID]);
+        if (type === 'data') {
+            for (let i = 0; i < jt_tokensOf.result.list.length; i++) {
+                if (jt_tokensOf.result.list[i].symbol === 'data') {
+                    await remote.RemoveToken([{
+                        from: userJID,
+                        to: operatorJID,
+                        secret: userSecret,
+                        token: jt_tokensOf.result.list[i].token,
+                    }]);
+                    let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+                    //使用公钥加密数据
+                    let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, data);
+                    return await this.getCreateToken(userJID, userSecret, operatorJID, operatorSecret, type, jt_tokensOf.result.list[i].info, JSON.stringify(encryptData));
+                }
+            }
+        } else if (type === 'file') {
+            for (let i = 0; i < jt_tokensOf.result.list.length; i++) {
+                if (jt_tokensOf.result.list[i].symbol === 'file') {
+                    let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+                    //使用公钥加密数据
+                    let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, data);
+                    return await this.getCreateToken(userJID, userSecret, operatorJID, operatorSecret, type, jt_tokensOf.result.list[i].info, JSON.stringify(encryptData));
+                }
+            }
         }
     }
 }

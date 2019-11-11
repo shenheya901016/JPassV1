@@ -1,6 +1,6 @@
 <template>
     <div style="width:100%;" id="main">
-        <div style="margin-left:5px;width:150px;">
+        <div style="margin:0 auto;width:150px;">
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
@@ -125,7 +125,9 @@
             };
         },
         methods: {
-            submitForm(formName) {
+            toLoginPage(){
+                this.$router.push('/jpass/login');
+            },submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.mnemonicImport();

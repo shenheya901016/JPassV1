@@ -1,6 +1,6 @@
 <template>
     <div style="width:100%;" id="main">
-        <div style="margin-left:5px;width:150px;">
+        <div style="margin:0 auto;width:150px;">
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
@@ -29,9 +29,9 @@
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item label="" prop="password">
-                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">
-                        {{$t('register.register')}}
+                    <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">{{$t('register.register')}}
                     </el-button>
+                    <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                 </el-form-item>
@@ -49,7 +49,6 @@
 
     export default {
         mounted: function () {
-
         },
         components: {
             vueCanvasNest
@@ -108,6 +107,9 @@
             };
         },
         methods: {
+            toLoginPage() {
+                this.$router.push('/jpass/login');
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -150,7 +152,13 @@
                     this.addToSessionStorage();
                     this.$router.push({
                         name: "registersuccess",
-                        params: {secret: jtWallet.secret, mnemonic: mnemonic, address: jtWallet.address}
+                        params: {
+                            name: this.ruleForm.name,
+                            secret: jtWallet.secret,
+                            mnemonic: mnemonic,
+                            address: jtWallet.address,
+                            password:this.ruleForm.password
+                        }
                     });
                 } catch (e) {
                     this.$message.error( this.$t('register.localStorageFailed'));

@@ -1,7 +1,7 @@
 <template>
 
     <div style="width:100%;" id="main">
-        <div style="margin-left:5px;width:150px;">
+        <div style="margin:0 auto;width:150px;">
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
@@ -12,9 +12,7 @@
 
                 <!--<p style="color: red">注：1.请您及时记录您的私钥和助记词,并妥善保管，这是找回您钱包的必要信息，请不要外泄。</p>-->
                 <!--<p>2.keystore 文件用于钱包的导入，请妥善保存。</p>-->
-
             </div>
-
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:75%; margin:10% 20% 10% 10%;">
                 <el-form-item :label="$t('registersuccess.mnemonic')">
@@ -37,6 +35,9 @@
                 <el-form-item :label="$t('registersuccess.keystoreFile')" prop="password">
                     <el-button type="primary" size="small" @click="exportkeystore">{{$t('registersuccess.exportKeystoreFile')}}</el-button>
                 </el-form-item>
+                <el-form-item label="">
+                    <el-button type="primary" style="width:90%;margin-left: -50px" @click="toMainPage">登录主界面</el-button>
+                </el-form-item>
             </el-form>
             <div style="margin-bottom:30px">
             </div>
@@ -58,8 +59,8 @@
                 //进度条值
                 percentage: 0,
                 ruleForm: {
-                    name: '',
-                    password: '',
+                    name: this.$route.params.name,
+                    password: this.$route.params.password,
                     address: this.$route.params.address,
                     secret: this.$route.params.secret,
                     mnemonic: this.$route.params.mnemonic,
@@ -68,6 +69,48 @@
             };
         },
         methods: {
+            async toMainPage() {
+                let secret = "";
+                let wallet = new this.$JINGCHUANGWallet();
+                let keyStoreString = localStorage.getItem(this.ruleForm.name);
+                let objKeyStore = this.$JSON5.parse(keyStoreString);
+                let keystring = "";
+                let bal=""
+                if (keyStoreString != null) {
+                    try {
+                        //钱包生成密钥
+                        wallet.setJingchangWallet(objKeyStore);
+                        var address = objKeyStore.wallets[0].address;
+                        keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
+                        await keystring.then(function (value) {
+                            secret = value;
+                        });
+                    } catch (e) {
+                        this.$message.error(this.$t('login.pwderror'));
+                        return false;
+                    }
+                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
+                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
+                    //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
+                    //      bal=true;
+                    //  }else{
+                    //      bal=false;
+                    //  }
+                    bal=true;
+                    let userkeyObj = {
+                        name:this.ruleForm.name,
+                        secret: secret,
+                        address: objKeyStore.wallets[0].address,
+                        lock:false,//是否锁定
+                        bal:bal,
+                    }
+                    sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
+                    //this.$message.success("用户登录成功！");
+                    this.$router.push('/jpass/main');
+                } else {
+                    this.$message.error(this.$t('login.loginerror'));
+                }
+            },
             //导出keystore 文件
             exportkeystore() {
                 let userObjString = sessionStorage.getItem("userObj");
@@ -78,6 +121,9 @@
                 saveAs(blob, "keystore");
             },
         },
+        mounted() {
+            console.log( this.$route.params)
+        }
     }
 </script>
 <style>
