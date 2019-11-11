@@ -1,12 +1,12 @@
 <template>
 
     <div style="width:100%;" id="main">
-        <div style="margin:0 auto;width:150px;">
+        <div style="margin:30px auto;width:150px;">
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:40%;border:1px solid white;margin:0 auto;border-radius:10px;margin-top:5%;box-shadow: 0 0 7px 1px #c5c5c5;">
+        <div style="width:40%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
             <div style="width:100%;border-radius:10px 10px 0 0; font-size:20px;margin-top:50px; color: #66B1FF">
                 <div v-html="$t('registersuccess.title')"></div>
 
@@ -36,7 +36,7 @@
                     <el-button type="primary" size="small" @click="exportkeystore">{{$t('registersuccess.exportKeystoreFile')}}</el-button>
                 </el-form-item>
                 <el-form-item label="">
-                    <el-button type="primary" style="width:90%;margin-left: -50px" @click="toMainPage">登录主界面</el-button>
+                    <el-button type="primary" style="width:90%;margin-left: -50px" @click="toMainPage">直接登录</el-button>
                 </el-form-item>
             </el-form>
             <div style="margin-bottom:30px">
