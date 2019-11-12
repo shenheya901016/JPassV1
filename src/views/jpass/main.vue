@@ -83,7 +83,7 @@
         </nav>
         <!-- 副导航栏 -->
         <article class="article">
-            <input class="ss" type="text" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')">
+            <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')" @input="search(searchTemp)">
             <ul class="list">
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
                     :class="index == currentNote?click:disclick">
@@ -513,7 +513,7 @@
                 synStatus: "exception",//同步进度条状态
                 templateStatus: "exception",
                 db: '',
-                projects: '',
+                projects: [],
                 operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",//运营商钱包地址
                 operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",//运营商密钥
                 localData: "",//本地数据
@@ -528,6 +528,7 @@
                 operateTemplates: "",
                 templateEvent: "",
                 templateItemsTemp: "",
+                searchTemp:"",
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1339,6 +1340,33 @@
                 }
                 // console.log(this.$JPassUtil.Mnemonic.createMnemonic(12, this.$i18n.locale));
                 localStorage.setItem('lang', this.$i18n.locale);
+            },
+            //搜索框
+            search(temp){
+                this.projects=[];
+                let projectArray=[];
+                let templateArray=[];
+                let tempProjects=[];
+                let tempTemplates=[];
+                //project
+                if(this.delobj.id!="mb"){
+                    projectArray=this.db.get("project").value();
+                    for(var projectIndex in projectArray){
+                        if( projectArray[projectIndex].name.indexOf(temp)!=-1){
+                            tempProjects.push(projectArray[projectIndex]);
+                        }
+                    }
+                    this.projects=tempProjects;
+                }else{
+                    //template
+                    templateArray=this.db.get("templates").value();
+                    for(var templateIndex in templateArray){
+                        if(templateArray[templateIndex].name.indexOf(temp)!=-1){
+                            tempTemplates.push(templateArray[templateIndex]);
+                        }
+                        this.projects=tempTemplates;
+                    }
+                }
             }
 
         }
