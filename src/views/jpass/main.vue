@@ -228,6 +228,7 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-form-item>
+
                 <el-button size="small" type="primary" @click="submitproject()">{{$t('main.okFormat')}}</el-button>
                 <el-button size="small" @click="dialogVisibleAddProject = false">{{$t('main.cancelFormat')}}</el-button>
             </el-form>
