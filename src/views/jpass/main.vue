@@ -53,7 +53,8 @@
                     <span>yuansushi@163.com</span>
                 </div>
             </div>
-            <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut">退出登录</el-button>
+            <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"><img
+                    style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""></el-button>
         </div>
     </header>
     <!-- 侧边栏 -->
@@ -347,7 +348,6 @@
                 </fieldset>
 
                 </el-form-item>
-
                 <el-form-item prop="">
                     <fieldset style="width: 80%;margin: auto;height: 15vh;border: 1px solid #6C6C6C">
                         <legend style="margin-left: 1%">
