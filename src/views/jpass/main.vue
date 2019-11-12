@@ -329,32 +329,55 @@
         </el-dialog>
         <!--设置弹出框-->
         <el-dialog title="" :visible.sync="dialogVisibleSetting" width="50%" :show-close="true" style="text-align: left">
-            <div style="text-align: center;font-weight:bolder">{{$t('main.systemSettings')}}</div>
-            <el-form label-width="100px" style="border: 1px solid #50A4FF">
+            <div style="text-align: center;font-weight:bolder;margin-bottom:3%;margin-top: -2%">{{$t('main.systemSettings')}}</div>
+            <el-form>
+            <el-form-item prop="">
+                <fieldset style="width: 80%;margin: auto;border: 1px solid #6C6C6C">
+                        <legend style="margin-left: 1%">
+                            {{$t('main.locking')}}
+                        </legend>
+                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
+                            {{$t('main.timedLock')}}
+                            <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="locksystem()"></el-switch>
+                          </span>
+                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
+                            {{$t('main.idleTime')}}
+                             <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
+                        </span>
+                </fieldset>
+
+                </el-form-item>
+
                 <el-form-item prop="">
-                    <div style="font-weight:bold">{{$t('main.locking')}}</div>
-                    {{$t('main.timedLock')}}
-                    <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="locksystem()"></el-switch>
-                    <br>
-                    {{$t('main.idleTime')}}
-                    <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
+                    <fieldset style="width: 80%;margin: auto;height: 15vh;border: 1px solid #6C6C6C">
+                        <legend style="margin-left: 1%">
+                            {{$t('main.language')}}
+                        </legend>
+                        <span style="margin-left: 2vw">
+                            <el-select v-model="language" :placeholder="$t('main.languageSelection')" @change="changeLang">
+                               <el-option v-for="item in this.languages" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </span>
+                    </fieldset>
                 </el-form-item>
                 <el-form-item prop="">
-                    <div style="font-weight:bolder">{{$t('main.language')}}</div>
-                    <el-select v-model="language" :placeholder="$t('main.languageSelection')" @change="changeLang">
-                        <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
-                                   :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item prop="">
-                    <div style="font-weight:bolder">{{$t('main.passwordService')}}</div>
-                    {{$t('main.showPassword')}}
-                    <el-switch v-model="showPassword" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-                    <br>
-                    {{$t('main.newUserAndPasswordAreAutomaticallySaved')}}
-                    <el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">
-                        <el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
+                    <fieldset style="width: 80%;height: 23vh;margin: auto;border: 1px solid #6C6C6C">
+                        <legend style="margin-left: 1%">
+                            {{$t('main.passwordService')}}
+                        </legend>
+                        <div style="margin-left: 2vw">
+                            {{$t('main.showPassword')}}
+                            <el-switch v-model="showPassword" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                        </div>
+
+                        <div style="margin-left: 2vw">
+                            {{$t('main.newUserAndPasswordAreAutomaticallySaved')}}
+                            <el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">
+                                <el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </div>
+
+                    </fieldset>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
                     <el-button type="primary" size="small" style="width:35%;" @click="savesettings">{{$t('main.save')}}</el-button>
