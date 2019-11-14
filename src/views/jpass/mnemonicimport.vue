@@ -33,9 +33,10 @@
                     <span>&nbsp;&nbsp;&nbsp;</span>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">
+                    <el-button type="primary" style="width:40%;" @click="submitForm('ruleForm')">
                         {{$t('mnemonicimport.importWallet')}}
                     </el-button>
+                    <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
                 </el-form-item>
                 <el-dialog :title="$t('mnemonicimport.importSuccessfully')" :visible.sync="dialogVisible" width="30%">
                     <el-button type="primary" size="small" @click="exportkeystore">

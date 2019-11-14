@@ -402,7 +402,7 @@
             };
         },
         methods: {
-            submitUpload(file,fileList) {
+            submitUpload(file, fileList) {
                 console.log(this.$refs.upload.uploadFiles[0].raw);
             },
             handleRemove(file, fileList) {
@@ -417,29 +417,32 @@
                 let operatorJID = "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
                 let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
                 //console.log(await this.$myIpfs.initTest(userJID, userSecret, operatorJID, operatorSecret, 'file'));
-                let base64;
+                /*let base64;
                 let md5;
+                let data;
                 let file = document.getElementById("file").files[0];
                 let name = file.name;
                 let size = file.size;
                 let type = file.type;
+                let t = this;
                 console.log(file);
                 let reader = new FileReader();
                 reader.readAsBinaryString(file);
-                var spark = new SparkMD5();
-                reader.onload = function (e) {
+                let spark = new SparkMD5();
+                reader.onload = async function (e) {
                     // 创建MD5计算对象
                     spark.appendBinary(this.result);
                     console.log("md5:" + spark.end());
                     reader.readAsDataURL(file);
                     reader.onload = async function (e) {
-                        base64 = this.result/*.substring(this.result.indexOf(',') + 1)*/;
+                        base64 = this.result/!*.substring(this.result.indexOf(',') + 1)*!/;
                         console.log("base64:" + base64);
-                        let data = '{"name":"' + name + '","size":"' + size + '","type":"' + type + '","md5":"' + md5 + '","base64":"' + base64 + '"}';
-                        console.log(data);
-                        //await this.$myIpfs.writeTest('file', data, userJID, userSecret, operatorJID, operatorSecret);
+                        data = '{"name":"' + name + '","size":"' + size + '","type":"' + type + '","md5":"' + md5 + '","base64":"' + base64 + '"}';
+                        //console.log(await t.$myIpfs.bal("jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS"));
+                        console.log(await t.$myIpfs.writeTest('file', data, userJID, ;.userSecret, operatorJID, operatorSecret));
                     }
-                }
+                };*/
+                console.log(await this.$myIpfs.readByHash("319EB7ECEAD4D60F5C7864D59D397A42C4E254E9034710D6580A31043DCCAD85",userSecret));
             },
             GetXYPosition() {
                 var x, y;
