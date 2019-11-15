@@ -48,6 +48,7 @@
 	width: 25vw;
 	background: #F6F8FD;
 	float: left;
+	overflow: auto;
 }
 
 
@@ -325,11 +326,11 @@
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	margin-top: 10px;
-	background: rgba(255,255,255,0.8) url(../img/start.svg) no-repeat 90% center;
+	/*background: rgba(255,255,255,0.8) url(../img/start.svg) no-repeat 90% center;*/
 	cursor: pointer;
 }
 .aside .article ul.list li img{
-	margin-right: 10px;
+	margin-right: 5px;
 	float: left;
 	margin-top: 4px;
 }
@@ -347,13 +348,15 @@
 	color: #999;
 }
 .aside .article ul.list li:hover{
-	background: #0169D9 url(../img/start_s.svg) no-repeat 90% center;
+	/*background: #0169D9 url(../img/start_s.svg) no-repeat 90% center;*/
+	font-weight: bold;
+	border: 1px solid #409EFF;
 }
 .aside .article ul.list li:hover div h5{
-	color: #fff;
+	font-weight: bold;
 }
 .aside .article ul.list li:hover div span{
-	color: #fff;
+	font-weight: bold;
 	opacity: .5;
 }
 
@@ -530,4 +533,76 @@
 	border-radius:3px;
 	background-color:#DCEDFF  !important;
 }
+
+
+.el-dialog {
+	border-radius: 10px;
+}
+
+.myInput {
+	width:90%;
+	border-radius:4px;
+	border: 1px solid #C0C4CC;
+	height: 5vh;
+	float: left;
+}
+
+.section .el-form--label-top .el-form-item__label {
+	float: none;
+	display: inline-block;
+	text-align: left;
+	padding: 0 0 0 0;
+	line-height: 30px;
+	font-weight:bold;
+}
+
+.section .el-form-item__content {
+	line-height: 15px;
+	position: relative;
+	font-size: 14px;
+}
+.section input{
+	width:90%;
+	color: #606266;
+	font-size: 13px;
+}
+
+.mb .el-form--label-top .el-form-item__label {
+	float: none;
+	display: inline-block;
+	text-align: left;
+	padding: 0 0 0 0;
+	line-height: 30px;
+	font-weight:bold;
+}
+.mb .el-form-item__content {
+	position: relative;
+	font-size: 14px;
+}
+
+/*图片*/
+.avatar-uploader .el-upload {
+	border: 1px dashed #d9d9d9;
+	border-radius: 6px;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+	border-color: #409EFF;
+}
+.avatar-uploader-icon {
+	font-size: 15px;
+	color: #8c939d;
+	width:2.5vw;
+	height:2vh;
+	line-height: 2vh;
+	text-align: center;
+}
+.avatar {
+	width: 3vw;
+	height: 5vh;
+	display: block;
+}
+
 

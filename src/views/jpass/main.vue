@@ -87,31 +87,38 @@
             <ul class="list">
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
                     :class="index == currentNote?click:disclick">
-                    <img src="./img/list_logo01.png" alt="" width="30" height="30">
+                    <img :src="project.tempBase64"  width="30" height="30">
                     <div>
                         <h5>{{project.name}}</h5>
                         <span>{{project.name}}</span>
                     </div>
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" style="float: right"
+                          @click="favorite(project)" >
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" style="float: right"
+                          @click="unfavorite(project)"  >
                 </li>
             </ul>
         </article>
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
                      style="width:80%;height:95%;margin: auto;text-align: left;margin-top:3%;">
-                <el-form-item :label="$t('main.name')" v-if="this.projectEvent!=''"  style="margin-bottom:3px;"  prop="name">
-                    <input type="text" v-model="projectEvent.name" readonly/>
-                    <hr/>
+                <el-form-item  v-if="this.projectEvent!=''"  style="margin-bottom: 5vh;margin-top: 5vh"  prop="name">
+                    <img :src="projectEvent.tempBase64" style="width: 10%;height: 10%" >
+                    <span style="font-size: 25px;font-weight: bolder;margin-left: 2%">{{projectEvent.name}}</span>
+                    <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
+                          style="float: right;margin-right:8%;margin-top:3%" @click="favorite(projectEvent)" >
+                    <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')!=-1"  src="./img/start_sc.svg"
+                          style="float:right;margin-right:8%;margin-top:3%" @click="unfavorite(projectEvent)" >
+
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
-                        <input type="password" v-model="data.val" readonly style="width:90%;color: #606266"/><a href="#" @click="changePass($event)" ><i
-                            class="el-icon-view"></i></a>
+                        <input type="password" v-model="data.val" readonly style="width:90%;color: #606266"/><a href="#" @click="changePass($event)" ><i class="el-icon-view"></i></a>
                         <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:50%;margin-top: 1%"></el-progress>
                         <hr/>
                     </el-form-item>
                     <el-form-item v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
-                        <input type="text" v-model="data.val" readonly style=""/><a href="#" @click="changePass($event)" ><i
-                            class="el-icon-view"></i></a>
+                        <input type="text" v-model="data.val" readonly style=""/><a href="#" @click="changePass($event)" ><i class="el-icon-view"></i></a>
                         <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:50%;margin-top: 1%"></el-progress>
                         <hr/>
                     </el-form-item>
@@ -120,7 +127,7 @@
                         <hr/>
                     </el-form-item>
                 </template>
-                <el-button size="small" v-if="this.projectEvent!=''" @click="editProject()">{{$t('main.modify')}}</el-button>
+                <el-button size="small" v-if="this.projectEvent!=''" @click="editProject()" style="margin-left: 3%">{{$t('main.modify')}}</el-button>
                 <!--<el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>-->
             </el-form>
         </section>
@@ -178,7 +185,7 @@
             <ul style="border:1px solid #9E9E9E;padding: 2px;height: 40vh;overflow-y:auto;">
                 <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)" :data-index="index"
                     :class="index == currentTemplate?click:disclick" style="height:5vh;border: 0;text-align: left;">
-                        <span style="border: 1px solid #9E9E9E;display:inline-block;height:5vh;width:5vh;margin-left:2px;line-height:5vh;vertical-align:middle;text-align: center">图片</span>
+                        <img  :src="project.tempBase64" style="display:inline-block;height:5vh;width:5vh;margin-left:2px;line-height:5vh;vertical-align:middle;text-align:center"/>
                         <span style="margin-left: 3%;font-size: 15px">{{project.name}}</span>
                 </li>
             </ul>
@@ -187,10 +194,14 @@
         </el-dialog>
         <!--增加项目弹出框-->
         <el-dialog class="mb" :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="40%" :close-on-click-modal="false">
-            <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm"
-                     style="width: 80%;margin: auto">
-                <el-form-item :label="$t('main.name')" style="width: 90%;margin-bottom: -6%" prop="name">
-                    <input type="text" v-model="ruleFormAddProject.name" class="myInput"/>
+            <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
+                <el-form-item :label="$t('main.name')" style="width:90%;margin-bottom: -6%" prop="name">
+                    <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:60%;float: left"/>
+                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
+                               :on-success="handleAvatarSuccessAddPro" :before-upload="beforeAvatarUpload">
+                        <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64"  class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <template v-for="(data, index) in this.templateEvent.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
@@ -286,7 +297,12 @@
         <el-dialog class="mb" title="修改项目" :visible.sync="dialogVisibleEdit" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormProjectEdit" ref="ruleFormProjectEdit" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
                 <el-form-item label="名称"   style="width: 90%;margin-bottom: -6%" prop="name">
-                    <input type="text" v-model="editobject.name" class="myInput" />
+                    <input type="text" v-model="editobject.name" class="myInput"  style="width:60%;float: left" />
+                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
+                               :on-success="handleAvatarSuccessEdit" :before-upload="beforeAvatarUpload">
+                        <img v-if="editobject.tempBase64"  :src="editobject.tempBase64"  class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <template v-for="(data, index) in this.editobject.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey"  style="margin-top:10%;width: 90%;margin-bottom: -6%">
@@ -309,7 +325,8 @@
                     </el-form-item>
                 </template>
                 <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">
-                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:80%">
+                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')"
+                               style="float: left;width:80%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -389,7 +406,13 @@
         <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
                 <el-form-item :label="$t('main.templateName')" style="width: 90%;margin-bottom: -6%" prop="name">
-                    <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:90%;float: left"></el-input>
+                    <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:60%;float: left"></el-input>
+                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
+                            :on-success="handleAvatarSuccessAdd"
+                            :before-upload="beforeAvatarUpload">
+                         <img v-if="imageBase64"  :src="imageBase64"  class="avatar">
+                          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <template v-for="(data, index) in this.tempTemplate">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
@@ -421,7 +444,13 @@
         <el-dialog :title="$t('main.modifyTemplate')" class="mb" :visible.sync="dialogVisibleTemplateEdit" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px" class="demo-ruleForm" style="width: 85%;margin: auto">
                 <el-form-item :label="$t('main.name')" style="width: 90%;margin-bottom: -6%" prop="name">
-                    <el-input type="text" v-model="editobject.name" style="float: left;width:90%;"></el-input>
+                    <el-input type="text" v-model="editobject.name" style="float: left;width:60%;"></el-input>
+                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
+                               :on-success="handleAvatarSuccessEdit"
+                               :before-upload="beforeAvatarUpload">
+                        <img v-if="editobject.tempBase64"  :src="editobject.tempBase64"  class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <template v-for="(data, index) in this.editobject.datas">
                     <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
@@ -529,21 +558,26 @@
                 templateEvent: "",
                 templateItemsTemp: "",
                 searchTemp:"",
+                imageBase64:"",
+                imgHash:"",
                 newProject: {
                     "id": "",
                     "name": "",
                     "modelsId": "",
                     "type": "project",
                     "datas": "",
-                    "imgPaht": "",
-                    "dateTime": ""
+                    "dateTime": "",
+                    "tempBase64":"",
+                    "imgHash":"",
                 },
                 newTemplate: {
                     "id": "",
                     "name": "",
                     "modelsId": ["mb"],
                     "type": "template",
-                    "datas": []
+                    "datas": [],
+                    "tempBase64":"",
+                    "imgHash":"",
                 },
                 templates: {
                     "templates": [
@@ -1116,10 +1150,18 @@
                 let projectName = this.ruleFormAddProject.name;
                 let formData = this.templateEvent;
                 var newProject = ""
-                if (this.selectlabels.length == 0) {
-                    this.selectlabels.push("sy", "wbj");
-                } else {
-                    this.selectlabels.push("sy");
+                if (this.selectlabels.indexOf("sy")==-1) {
+                    this.selectlabels.push("sy");//所有项必须有
+                }
+                if(this.selectlabels.length == 1 && this.selectlabels.indexOf("sy")!=-1){
+                    this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                }
+                if(this.selectlabels.length >2 && this.selectlabels.indexOf("sy")!=-1 && this.selectlabels.indexOf("wbj")!=-1)
+                {
+                    //大于2项，包含所有项和为标记项时删除为标记项
+                    this.selectlabels = this.selectlabels.filter(function(item) {
+                        return item !== "wbj"
+                    })
                 }
                 this.newProject = {
                     "id": this.$Uuidv1(),
@@ -1127,8 +1169,9 @@
                     "modelsId": this.selectlabels,
                     "type": "project",
                     "datas": formData.datas,
-                    "imgPaht": "",
-                    "dateTime": new Date().valueOf()
+                    "dateTime": new Date().valueOf(),
+                    "tempBase64":formData.tempBase64,
+                    "imgHash":"",
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
@@ -1187,13 +1230,29 @@
             editDo() {
                 try {
                     this.db.get("project").remove({id: this.editobject.id}).write();
+                    if (this.selectlabels.indexOf("sy")==-1) {
+                        this.selectlabels.push("sy");//所有项必须有
+                    }
+                    if(this.selectlabels.length == 1 && this.selectlabels.indexOf("sy")!=-1){
+                        this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                    }
+                    if(this.selectlabels.length >2 && this.selectlabels.indexOf("sy")!=-1 && this.selectlabels.indexOf("wbj")!=-1)
+                    {
+                        //大于2项，包含所有项和为标记项时删除为标记项
+                        this.selectlabels = this.selectlabels.filter(function(item) {
+                            return item !== "wbj"
+                        })
+                    }
                     this.editobject.modelsId = this.selectlabels;
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit = false
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.projectEvent = this.editobject;
+                    this.imageBase64 = "";
                     this.editobject = "";
+                    this.selectlabels="";
+                    this.getdirectory();
                 } catch (e) {
                     this.$message.error(this.$t('main.failToEdit'));
                 }
@@ -1231,19 +1290,34 @@
                 this.filedName = "";
             },
             //增加模板
-            saveTemplate() {
+        async saveTemplate() {
+              let letoperatorJID = this.operatorJID;//运营商钱包地址
+              let operatorSecret = this.operatorSecret; //运营商密钥
+              var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+              var address = loginObj.address;
+             //图片
+             let data = '{"base64":"'+this.imageBase64+'"}';
+             this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
+             console.log(this.imgHash);
                 this.newTemplate = {
                     "id": this.$Uuidv1(),
                     "name": this.ruleFormAddTemplate.name,
                     "modelsId": ["mb"],
                     "type": "template",
-                    "datas": this.tempTemplate
+                    "datas": this.tempTemplate,
+                    "tempBase64":this.imageBase64,
+                    "imgHash":this.imgHash,
                 }
+                console.log(this.newTemplate);
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
+
+             //清空变量
                 this.ruleFormAddTemplate.name = "",
-                    this.newTemplate = "",
-                    this.tempTemplate = [],
-                    this.dialogVisibleAddTemplate = false;
+                this.imageBase64="";
+                this.imgHash="";
+                this.newTemplate = "";
+                this.tempTemplate = [];
+                this.dialogVisibleAddTemplate = false;
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
             },
@@ -1257,6 +1331,7 @@
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.projectEvent = this.editobject;
                     this.editobject = "";
+                    this.imageBase64 = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                 } catch (e) {
@@ -1367,8 +1442,86 @@
                         this.projects=tempTemplates;
                     }
                 }
-            }
+            },
+            //图片处理(增加模板)
+              handleAvatarSuccessAdd(res, file) {
+                let temp=this;
+                var reader = new FileReader();
+                var base64="";
+                reader.readAsDataURL(file.raw);
+                reader.onload = async function(e){
+                temp.imageBase64=this.result;
+                console.log(temp.imageBase64);
+              }
+            },
+            //图片处理（修改模板）
+            handleAvatarSuccessEdit(res, file) {
+                let temp=this;
+                var reader = new FileReader();
+                var base64="";
+                reader.readAsDataURL(file.raw);
+                reader.onload = async function(e){
+                temp.imageBase64=this.result;
+                temp.editobject.tempBase64=this.result;
+                }
+            },
 
+            //图片处理（增加项目）
+            handleAvatarSuccessAddPro(res, file){
+                let temp=this;
+                var reader = new FileReader();
+                var base64="";
+                reader.readAsDataURL(file.raw);
+                reader.onload = async function(e){
+                temp.imageBase64=this.result;
+                temp.templateEvent.tempBase64=this.result;
+               }
+            },
+
+               //图片大小验证
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg;image/png;';
+                let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png'];
+                const isImage = types.includes(file.type);
+                const isLt200K = file.size / 1024 / 1024 / 1024< 200;
+
+                if (!isImage) {
+                    this.$message.error('上传头像图片只能是 JPG ,GIF,BMP,PNG 格式!');
+                }
+                if (!isLt200K) {
+                    this.$message.error('上传头像图片大小不能超过 200KB!');
+                }
+                return isImage && isLt200K;
+            },
+            favorite(obj){
+                console.log(obj);
+                console.log("收藏");
+                this.db.get("project").remove({id:obj.id}).write();
+                obj.modelsId.push("scj");
+                if(obj.modelsId.indexOf("wbj")!=-1){//有未标记项，删除
+                    obj.modelsId = obj.modelsId.filter(function(item) {
+                        return item !== "wbj"
+                    })
+                }
+                this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
+                this.db.set('version', new Date().valueOf()).write();
+                this.getdirectory();
+            },
+            unfavorite(obj){
+                console.log(obj);
+                console.log("取消收藏");
+                this.db.get("project").remove({id:obj.id}).write();
+                //删除指定项
+                obj.modelsId = obj.modelsId.filter(function(item) {
+                    return item !== "scj"
+                })
+                if(obj.modelsId .length == 1 && obj.modelsId .indexOf("sy")!=-1){
+                    obj.modelsId.push("wbj");//只有所有项，增加未标记项
+                }
+                this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
+                this.db.set('version', new Date().valueOf()).write()
+                this.getdirectory();
+            },
         }
     }
 
@@ -1376,51 +1529,5 @@
 <style>
     @import './css/base.css';
     @import './css/sy.css';
-
-    .el-dialog {
-        border-radius: 10px;
-    }
-
-    .myInput {
-        width:90%;
-        border-radius:4px;
-        border: 1px solid #C0C4CC;
-        height: 5vh;
-        float: left;
-    }
-
-    .section .el-form--label-top .el-form-item__label {
-        float: none;
-        display: inline-block;
-        text-align: left;
-        padding: 0 0 0 0;
-        line-height: 30px;
-        font-weight:bold;
-    }
-
-    .section .el-form-item__content {
-        line-height: 15px;
-        position: relative;
-        font-size: 14px;
-    }
-    .section input{
-        width:90%;
-        color: #606266;
-        font-size: 13px;
-    }
-
-    .mb .el-form--label-top .el-form-item__label {
-        float: none;
-        display: inline-block;
-        text-align: left;
-        padding: 0 0 0 0;
-        line-height: 30px;
-        font-weight:bold;
-    }
-    .mb .el-form-item__content {
-        position: relative;
-        font-size: 14px;
-    }
-
 
 </style>

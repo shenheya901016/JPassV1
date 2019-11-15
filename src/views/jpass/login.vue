@@ -124,14 +124,15 @@
                         this.$message.error(this.$t('login.pwderror'));
                         return false;
                     }
-                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
+                   // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                   //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
+                   //       await this.$myIpfs.initTest( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret,"data");
+                   //       await this.$myIpfs.initTest( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret,"file");
                    //      bal=true;
                    //  }else{
                    //      bal=false;
                    //  }
-                    bal=true;
+                   bal=true;
                     let userkeyObj = {
                         name:this.ruleForm.name,
                         secret: secret,
