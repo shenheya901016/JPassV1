@@ -1,17 +1,16 @@
 import {IpfsRemote} from "ipfslib";
-
+import Ipfs from './Ipfs';
 const fs = require("fs")
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
 let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
 let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
 let operatorJID = "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
 let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
-import Ipfs from './Ipfs';
 
 describe("test Ipfs", async function () {
     describe("myIpfs", async function () {
         it("myIpfs: test", async function () {
-            console.log(await Ipfs.bal('jEjFVyxPMjdtJotLJHnxpBQ4bDQumVXLTk'));   //查询该钱包地址是否被激活
+            console.log(await Ipfs.bal('j4M4AoSi522XxNpywfyBahmjzQihc4EegL'));   //查询该钱包地址是否被激活
             //console.log(await MyIpfs.read(userJID));    //读取该钱包地址在ipfs中存储的数据
             /*let transaction = await MyIpfs.write(   //data是决定传字符串还是object未决定 暂时传字符串  向ipfs中写入数据  会返回一个transaction参数提供给tra()
                 '{"models":[{"id":"1","name":"模板1"}],"profile":[{"id":"1","name":"个人信息1"}],"project":[{"id":"1","name":"项目1"}]}',
@@ -27,7 +26,7 @@ describe("test Ipfs", async function () {
             //console.log(await Ipfs.readTest(userJID, userSecret));
             //console.log(await Ipfs.readByHash('776CAA6B90F6C08023EF64F6177F8D10080C0F69766DD635EA45E94CAB1D76E2', userSecret));
             //console.log(await Ipfs.writeTest('data', '{"version":"11111111111"}', userJID, userSecret, operatorJID, operatorSecret));
-            console.log(await Ipfs.writeTest('file','{"base64":"asdsar123dsfsd23453fsdf234"}',userJID, userSecret, operatorJID, operatorSecret));
+            //console.log(await Ipfs.writeTest('file','{"base64":"asdsar123dsfsd23453fsdf234"}',userJID, userSecret, operatorJID, operatorSecret));
         })
     });
     /*describe("test get tokens", function () {
