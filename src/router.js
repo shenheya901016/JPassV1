@@ -14,7 +14,7 @@ import Keyimport from "./views/jpass/keyimport.vue";
 import Index from "./views/Index";
 import Registersuccess from "./views/jpass/registersuccess.vue";
 import LockJpass from "./views/jpass/lock.vue";
-import Main from "./views/jpass/mainTest.vue";
+import Main from "./views/jpass/main.vue";
 
 Vue.use(Router);
 

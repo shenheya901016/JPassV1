@@ -88,13 +88,13 @@
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
                     :class="index == currentNote?click:disclick">
                     <img :src="project.tempBase64"  width="30" height="30">
-                    <div>
+                    <div style="width: 73%;text-align: left">
                         <h5>{{project.name}}</h5>
-                        <span>{{project.name}}</span>
+                        <span>{{project.modelsName.length>15? project.modelsName.substring(0,15)+"...":project.modelsName}}</span>
                     </div>
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" style="float: right"
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" style="float: right;width: 8%"
                           @click="favorite(project)" >
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" style="float: right"
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" style="float: right;width:8%"
                           @click="unfavorite(project)"  >
                 </li>
             </ul>
@@ -102,14 +102,18 @@
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
                      style="width:80%;height:95%;margin: auto;text-align: left;margin-top:3%;">
-                <el-form-item  v-if="this.projectEvent!=''"  style="margin-bottom: 5vh;margin-top: 5vh"  prop="name">
-                    <img :src="projectEvent.tempBase64" style="width: 10%;height: 10%" >
-                    <span style="font-size: 25px;font-weight: bolder;margin-left: 2%">{{projectEvent.name}}</span>
+                <el-form-item  v-if="this.projectEvent!=''"  style="margin-bottom: 5vh;margin-top: 5vh;"  prop="name">
+                    <div style="display: inline-block;width:80%;height:8vh; ">
+                        <img :src="projectEvent.tempBase64" style="width: 4vw;height:8vh;display: inline-block;position:absolute" >
+                        <ul style="display: inline-block;margin-top: 20px;height:8vh;margin-left:15%" >
+                            <li style="font-size: 25px;font-weight: bolder;">{{projectEvent.name}}</li>
+                            <li style="margin-top: 1vh">{{projectEvent.modelsName}}</li>
+                        </ul>
+                    </div>
                     <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
-                          style="float: right;margin-right:8%;margin-top:3%" @click="favorite(projectEvent)" >
+                          style="float: right;margin-right:8%;margin-top:3%;" @click="favorite(projectEvent)" >
                     <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')!=-1"  src="./img/start_sc.svg"
-                          style="float:right;margin-right:8%;margin-top:3%" @click="unfavorite(projectEvent)" >
-
+                          style="float:right;margin-right:8%;margin-top:3%;" @click="unfavorite(projectEvent)" >
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
@@ -563,7 +567,8 @@
                 newProject: {
                     "id": "",
                     "name": "",
-                    "modelsId": "",
+                    "modelsId": [],
+                    "modelsName":"",
                     "type": "project",
                     "datas": "",
                     "dateTime": "",
@@ -574,6 +579,7 @@
                     "id": "",
                     "name": "",
                     "modelsId": ["mb"],
+                    "modelsName":"模板",
                     "type": "template",
                     "datas": [],
                     "tempBase64":"",
@@ -585,6 +591,7 @@
                             "id": "01",
                             "name": "membership",
                             "modelsId": ["mb"],
+                            "modelsName":"模板",
                             "type": "template",
                             "datas": [
                                 {
@@ -630,6 +637,7 @@
                             "id": "02",
                             "name": "EmailAccount",
                             "modelsId": ["mb"],
+                            "modelsName":"模板",
                             "type": "template",
                             "datas": [
                                 {
@@ -668,6 +676,7 @@
                             "id": "03",
                             "name": "Login/Password",
                             "modelsId": ["mb"],
+                            "modelsName":"模板",
                             "type": "template",
                             "datas": [
                                 {
@@ -873,6 +882,18 @@
                 this.DProject = this.$JSON5.parse(jsonProjectstring);
                 this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
                 this.labels = this.$JSON5.parse(jsonLabelsString);
+                //类型名称
+                for(var index in  allProjects){
+                    var newArray =new Array();
+                    for(var indexMode in allProjects[index].modelsId){
+                          var modelId=allProjects[index].modelsId[indexMode];
+                          var model = this.db.get("models").find({id:modelId}).value();
+                          if(model.id!="sy"){
+                              newArray.push(model.name);
+                          }
+                    }
+                    allProjects[index].modelsName=newArray.toString();
+                }
                 this.projects = this.db.get("project").value();
             },
             addDirectoryOP() {
@@ -1025,7 +1046,7 @@
                             name: loginObj.name,
                             address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('main.allProjects')+'","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"'+this.$t('main.favorites')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mm","name":"'+this.$t('main.password')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mb","name":"'+this.$t('main.template')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"wbj","name":"'+this.$t('main.unmarked')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"06","name":"'+this.$t('main.familyAccount')+'","modelsType":"directory","type":"model","imgPath":""}, {"id":"07","name":"'+this.$t('main.privateAccount')+'","modelsType":"directory","type":"model","imgPath":""}]}');
+                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('main.allProjects')+'","modelsType":"project","type":"model"}, {"id":"scj","name":"'+this.$t('main.favorites')+'","modelsType":"project","type":"model"}, {"id":"mm","name":"'+this.$t('main.password')+'","modelsType":"project","type":"model"}, {"id":"mb","name":"'+this.$t('main.template')+'","modelsType":"project","type":"model"}, {"id":"wbj","name":"'+this.$t('main.unmarked')+'","modelsType":"project","type":"model"}, {"id":"06","name":"'+this.$t('main.familyAccount')+'","modelsType":"directory","type":"model"}, {"id":"07","name":"'+this.$t('main.privateAccount')+'","modelsType":"directory","type":"model"}]}');
                         await this.db.defaults(newdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
@@ -1163,10 +1184,18 @@
                         return item !== "wbj"
                     })
                 }
+                // //类型名称
+                // var modelsId = this.selectlabels;
+                // var newArray =new Array();
+                // for(var label in modelsId){
+                //     var model = this.db.get("models").find({id: modelsId[label]}).value();
+                //     newArray.push(model.name);
+                // }
                 this.newProject = {
                     "id": this.$Uuidv1(),
                     "name": projectName,
                     "modelsId": this.selectlabels,
+                    // "modelsName":newArray.toString(),
                     "type": "project",
                     "datas": formData.datas,
                     "dateTime": new Date().valueOf(),
@@ -1175,14 +1204,12 @@
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
-                // console.log(this.db.get("version").value())
                 this.db.set('version', new Date().valueOf()).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
                 this.templateEvent = "";
                 this.ruleFormAddProject.name = "";
                 this.getdirectory();
-                // console.log(this.db.get("version").value())
             },
             //增加选中项
             selectFiled(command) {
@@ -1243,7 +1270,16 @@
                             return item !== "wbj"
                         })
                     }
+
+                    // //类型名称
+                    // var modelsId = this.selectlabels;
+                    // var newArray =new Array();
+                    // for(var label in modelsId){
+                    //     var model = this.db.get("models").find({id: modelsId[label]}).value();
+                    //     newArray.push(model.name);
+                    // }
                     this.editobject.modelsId = this.selectlabels;
+                    // this.editobject.modelsName=newArray.toString();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit = false
@@ -1297,8 +1333,7 @@
               var address = loginObj.address;
              //图片
              let data = '{"base64":"'+this.imageBase64+'"}';
-             this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
-             console.log(this.imgHash);
+             // this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
                 this.newTemplate = {
                     "id": this.$Uuidv1(),
                     "name": this.ruleFormAddTemplate.name,
@@ -1308,7 +1343,6 @@
                     "tempBase64":this.imageBase64,
                     "imgHash":this.imgHash,
                 }
-                console.log(this.newTemplate);
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
 
              //清空变量
@@ -1480,13 +1514,12 @@
 
                //图片大小验证
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg;image/png;';
-                let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png'];
+                let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png','image/svg'];
                 const isImage = types.includes(file.type);
                 const isLt200K = file.size / 1024 / 1024 / 1024< 200;
 
                 if (!isImage) {
-                    this.$message.error('上传头像图片只能是 JPG ,GIF,BMP,PNG 格式!');
+                    this.$message.error('上传头像图片只能是 JPG ,GIF,BMP,PNG,SVG 格式!');
                 }
                 if (!isLt200K) {
                     this.$message.error('上传头像图片大小不能超过 200KB!');
@@ -1503,12 +1536,18 @@
                         return item !== "wbj"
                     })
                 }
+                // //类型名称
+                // var newArray =new Array();
+                // for(var label in  obj.modelsId){
+                //     var model = this.db.get("models").find({id:obj.modelsId[label]}).value();
+                //     newArray.push(model.name);
+                // }
+                // obj.modelsName =newArray.toString();
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 this.db.set('version', new Date().valueOf()).write();
                 this.getdirectory();
             },
             unfavorite(obj){
-                console.log(obj);
                 console.log("取消收藏");
                 this.db.get("project").remove({id:obj.id}).write();
                 //删除指定项
@@ -1518,6 +1557,13 @@
                 if(obj.modelsId .length == 1 && obj.modelsId .indexOf("sy")!=-1){
                     obj.modelsId.push("wbj");//只有所有项，增加未标记项
                 }
+                // //类型名称
+                // var newArray =new Array();
+                // for(var label in  obj.modelsId){
+                //     var model = this.db.get("models").find({id:obj.modelsId[label]}).value();
+                //     newArray.push(model.name);
+                // }
+                // obj.modelsName =newArray.toString();
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();
