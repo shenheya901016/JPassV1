@@ -50,7 +50,6 @@
                 <img src="./img/tx.svg" alt="">
                 <div>
                     <a @click="myInfo">{{username}}</a>
-                    <span>yuansushi@163.com</span>
                 </div>
             </div>
             <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"><img style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""></el-button>
