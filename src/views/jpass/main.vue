@@ -39,18 +39,15 @@
             <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
             <!--</li>-->
         </ul>
-        <div class="hr" style="margin-left: 180px;">
-            <!--<a href="#" class="mr2w">-->
-            <!--<img src="./img/icon_tz.svg" alt="">-->
-            <!--</a>-->
-            <a style="margin:0;width: 100px;" class="mr4w" @click="openSetting">
+        <div class="hr" style="margin-left: 80%;position: absolute;width: 18%">
+            <a style="margin:0;width: 30%;" class="mr4w" @click="openSetting">
                 <img src="./img/icon_sz.svg" alt="">
             </a>
             <div class="touxiang" style="margin:0;">
-                <img src="./img/tx.svg" alt="">
-                <div>
-                    <a @click="myInfo">{{username}}</a>
-                </div>
+                <img src="./img/tx.svg" @click="myInfo">
+                <!--<div>-->
+                    <!--<a @click="myInfo">{{username}}</a>-->
+                <!--</div>-->
             </div>
             <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"><img style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""></el-button>
         </div>
@@ -88,7 +85,7 @@
                     <img :src="project.tempBase64"  width="30" height="30">
                     <div style="width: 73%;text-align: left">
                         <h5>{{project.name}}</h5>
-                        <span>{{project.modelsName.length>15? project.modelsName.substring(0,15)+"...":project.modelsName}}</span>
+                        <span>{{project.modelsName.length>10? project.modelsName.substring(0,10)+"...":project.modelsName}}</span>
                     </div>
                     <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" style="float: right;width: 8%"
                           @click="favorite(project)" >
@@ -513,6 +510,16 @@
 
     export default {
         mounted: function () {
+            if (window.IpcRenderer) {
+                window.IpcRenderer.removeAllListeners("closeEditorWarning");
+                window.IpcRenderer.on("closeEditorWarning", event => {
+                    if (confirm("还未同步,是否同步")) {
+                        alert("同步中....");
+                    } else {
+                        window.IpcRenderer.send("app.exit");
+                    }
+                });
+            }
             this.initialize();
         },
         data() {
@@ -1403,6 +1410,7 @@
                     "id": this.$Uuidv1(),
                     "name": this.ruleFormAddTemplate.name,
                     "modelsId": ["mb"],
+                    "modelsName":"模板",
                     "type": "template",
                     "datas": this.tempTemplate,
                     "tempBase64":this.imageBase64,
