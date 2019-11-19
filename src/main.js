@@ -42,6 +42,10 @@ Vue.prototype.$Uuidv1 = require('uuid/v1');
 Vue.prototype.$myIpfs = myIpfs;
 Vue.prototype.$test = test;
 Vue.prototype.$Lowdb = source => Lowdb(new IndexDB(source));
+if (typeof window.require === 'function') {
+    window.IpcRenderer = window.require('electron').ipcRenderer;
+    Vue.prototype.$IpcRenderer = window.IpcRenderer;
+}
 new Vue({
     i18n,
     router,

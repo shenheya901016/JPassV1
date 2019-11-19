@@ -39,22 +39,17 @@
             <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
             <!--</li>-->
         </ul>
-        <div class="hr" style="margin-left: 180px;">
-            <!--<a href="#" class="mr2w">-->
-            <!--<img src="./img/icon_tz.svg" alt="">-->
-            <!--</a>-->
-            <a href="#" style="margin:0;width: 100px;" class="mr4w" @click="openSetting">
+        <div class="hr" style="margin-left: 80%;position: absolute;width: 18%">
+            <a style="margin:0;width: 30%;" class="mr4w" @click="openSetting">
                 <img src="./img/icon_sz.svg" alt="">
             </a>
             <div class="touxiang" style="margin:0;">
-                <img src="./img/tx.svg" alt="">
-                <div>
-                    <a href="#">请叫我特仑苏</a>
-                    <span>yuansushi@163.com</span>
-                </div>
+                <img src="./img/tx.svg" @click="myInfo">
+                <!--<div>-->
+                    <!--<a @click="myInfo">{{username}}</a>-->
+                <!--</div>-->
             </div>
-            <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"><img
-                    style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""></el-button>
+            <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"><img style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""></el-button>
         </div>
     </header>
     <!-- 侧边栏 -->
@@ -88,13 +83,13 @@
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
                     :class="index == currentNote?click:disclick">
                     <img :src="project.tempBase64"  width="30" height="30">
-                    <div>
+                    <div style="width: 73%;text-align: left">
                         <h5>{{project.name}}</h5>
-                        <span>{{project.name}}</span>
+                        <span>{{project.modelsName.length>10? project.modelsName.substring(0,10)+"...":project.modelsName}}</span>
                     </div>
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" style="float: right"
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" style="float: right;width: 8%"
                           @click="favorite(project)" >
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" style="float: right"
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" style="float: right;width:8%"
                           @click="unfavorite(project)"  >
                 </li>
             </ul>
@@ -102,14 +97,18 @@
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px" class="demo-ruleForm" label-position="top"
                      style="width:80%;height:95%;margin: auto;text-align: left;margin-top:3%;">
-                <el-form-item  v-if="this.projectEvent!=''"  style="margin-bottom: 5vh;margin-top: 5vh"  prop="name">
-                    <img :src="projectEvent.tempBase64" style="width: 10%;height: 10%" >
-                    <span style="font-size: 25px;font-weight: bolder;margin-left: 2%">{{projectEvent.name}}</span>
+                <el-form-item  v-if="this.projectEvent!=''"  style="margin-bottom: 5vh;margin-top: 5vh;"  prop="name">
+                    <div style="display: inline-block;width:80%;height:8vh; ">
+                        <img :src="projectEvent.tempBase64" style="width: 4vw;height:8vh;display: inline-block;position:absolute" >
+                        <ul style="display: inline-block;margin-top: 20px;height:8vh;margin-left:15%" >
+                            <li style="font-size: 25px;font-weight: bolder;">{{projectEvent.name}}</li>
+                            <li style="margin-top: 1vh">{{projectEvent.modelsName}}</li>
+                        </ul>
+                    </div>
                     <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
-                          style="float: right;margin-right:8%;margin-top:3%" @click="favorite(projectEvent)" >
+                          style="float: right;margin-right:8%;margin-top:3%;" @click="favorite(projectEvent)" >
                     <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')!=-1"  src="./img/start_sc.svg"
-                          style="float:right;margin-right:8%;margin-top:3%" @click="unfavorite(projectEvent)" >
-
+                          style="float:right;margin-right:8%;margin-top:3%;" @click="unfavorite(projectEvent)" >
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-bottom:3px;">
@@ -478,6 +477,29 @@
                 <el-button size="small" @click="dialogVisibleTemplateEdit = false">{{$t('main.cancelFormat')}}</el-button>
             </el-form>
         </el-dialog>
+        <!--个人信息弹出框-->
+        <el-dialog title="" :visible.sync="dialogMyInfo" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <img src="./img/tx.svg" alt="">
+            <el-form label-width="100px" class="demo-ruleForm">
+                <el-form-item label="用户名" prop="username" style="margin-top: 5%">
+                    <el-input type="text" v-model="username" style="width:100%;" readonly>{{username}}</el-input>
+                </el-form-item>
+                <el-form-item label="钱包地址" prop="myInfoKey" >
+                    <el-input type="text" v-model="myInfoKey" style="width:100%;" readonly>{{myInfoKey}}</el-input>
+                </el-form-item>
+                <el-input type="password" v-model="password" style="width:70%;" placeholder="验证密码导出密钥"></el-input>
+                <el-form-item label="密钥" prop="password" >
+                    <el-input type="text" v-model="key" style="width:100%;" readonly="readonly" oncut="return false"
+                              onpaste="return false" oncopy="return false" hidden></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('registersuccess.keystoreFile')" prop="password">
+                    <el-button type="primary" size="small" @click="exportkeystore">{{$t('registersuccess.exportKeystoreFile')}}</el-button>
+                </el-form-item>
+                <el-form-item label="" prop="" style="margin-top:5%;margin-bottom: 10%">
+                    <el-button type="primary" style="width:80%;" @click="exportKey()">导出</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -488,6 +510,16 @@
 
     export default {
         mounted: function () {
+            if (window.IpcRenderer) {
+                window.IpcRenderer.removeAllListeners("closeEditorWarning");
+                window.IpcRenderer.on("closeEditorWarning", event => {
+                    if (confirm("还未同步,是否同步")) {
+                        alert("同步中....");
+                    } else {
+                        window.IpcRenderer.send("app.exit");
+                    }
+                });
+            }
             this.initialize();
         },
         data() {
@@ -518,6 +550,7 @@
                 dialogVisibleAddTempItems: false,//增加模板项弹出框
                 dialogVisibleTemplateEdit: false,//修改模板弹出框
                 dialogVisibleItemsEdit: false, //修改模板项弹出框
+                dialogMyInfo:false, //个人信息弹出框
 
                 mouse1: '',
                 mouse2: '',
@@ -560,10 +593,15 @@
                 searchTemp:"",
                 imageBase64:"",
                 imgHash:"",
+                searchTemp: "",
+                username: "",
+                key: "",
+                myInfoKey: "",
                 newProject: {
                     "id": "",
                     "name": "",
-                    "modelsId": "",
+                    "modelsId": [],
+                    "modelsName":"",
                     "type": "project",
                     "datas": "",
                     "dateTime": "",
@@ -574,6 +612,7 @@
                     "id": "",
                     "name": "",
                     "modelsId": ["mb"],
+                    "modelsName":"模板",
                     "type": "template",
                     "datas": [],
                     "tempBase64":"",
@@ -585,6 +624,7 @@
                             "id": "01",
                             "name": "membership",
                             "modelsId": ["mb"],
+                            "modelsName":"模板",
                             "type": "template",
                             "datas": [
                                 {
@@ -630,6 +670,7 @@
                             "id": "02",
                             "name": "EmailAccount",
                             "modelsId": ["mb"],
+                            "modelsName":"模板",
                             "type": "template",
                             "datas": [
                                 {
@@ -668,6 +709,7 @@
                             "id": "03",
                             "name": "Login/Password",
                             "modelsId": ["mb"],
+                            "modelsName":"模板",
                             "type": "template",
                             "datas": [
                                 {
@@ -825,6 +867,41 @@
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = true;
             },
+            myInfo(){
+                this.dialogMyInfo=true;
+            },
+            async exportKey() {
+                let secret = "";
+                let wallet = new this.$JINGCHUANGWallet();
+                let keyStoreString = localStorage.getItem(this.loginObj.name);
+                let objKeyStore = this.$JSON5.parse(keyStoreString);
+                let keystring = "";
+                try {
+                    //钱包生成密钥
+                    wallet.setJingchangWallet(objKeyStore);
+                    var address = objKeyStore.wallets[0].address;
+                    keystring = wallet.getSecretWithAddress(this.password, address);
+                    await keystring.then(function (value) {
+                        secret = value;
+                    });
+                } catch (e) {
+                    this.password = "";
+                    this.key = "";
+                    this.$message.error(this.$t('密码错误'));
+                    return false;
+                }
+                sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
+                this.$message.success(this.$t('导出成功'));
+                this.key = secret;
+            },
+            exportkeystore() {
+                let userObjString = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+                let username = userObjString.name;
+                let wallet = localStorage.getItem(username);
+                let FileSaver = require('file-saver');
+                let blob = new Blob([wallet], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, "keystore");
+            },
             //获取目录
             getdirectory() {
                 var alldata = this.db.get("models").value();
@@ -873,6 +950,18 @@
                 this.DProject = this.$JSON5.parse(jsonProjectstring);
                 this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
                 this.labels = this.$JSON5.parse(jsonLabelsString);
+                //类型名称
+                for(var index in  allProjects){
+                    var newArray =new Array();
+                    for(var indexMode in allProjects[index].modelsId){
+                          var modelId=allProjects[index].modelsId[indexMode];
+                          var model = this.db.get("models").find({id:modelId}).value();
+                          if(model.id!="sy"){
+                              newArray.push(model.name);
+                          }
+                    }
+                    allProjects[index].modelsName=newArray.toString();
+                }
                 this.projects = this.db.get("project").value();
             },
             addDirectoryOP() {
@@ -1007,6 +1096,8 @@
                 let operatorSecret = this.operatorSecret; //运营商密钥
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
+                this.myInfoKey = address;
+                this.username = loginObj.name;
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
                 let version = await this.db.get("version").value();
@@ -1025,7 +1116,7 @@
                             name: loginObj.name,
                             address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('main.allProjects')+'","modelsType":"project","type":"model","imgPaht":""}, {"id":"scj","name":"'+this.$t('main.favorites')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mm","name":"'+this.$t('main.password')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"mb","name":"'+this.$t('main.template')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"wbj","name":"'+this.$t('main.unmarked')+'","modelsType":"project","type":"model","imgPath":""}, {"id":"06","name":"'+this.$t('main.familyAccount')+'","modelsType":"directory","type":"model","imgPath":""}, {"id":"07","name":"'+this.$t('main.privateAccount')+'","modelsType":"directory","type":"model","imgPath":""}]}');
+                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('main.allProjects')+'","modelsType":"project","type":"model"}, {"id":"scj","name":"'+this.$t('main.favorites')+'","modelsType":"project","type":"model"}, {"id":"mm","name":"'+this.$t('main.password')+'","modelsType":"project","type":"model"}, {"id":"mb","name":"'+this.$t('main.template')+'","modelsType":"project","type":"model"}, {"id":"wbj","name":"'+this.$t('main.unmarked')+'","modelsType":"project","type":"model"}, {"id":"06","name":"'+this.$t('main.familyAccount')+'","modelsType":"directory","type":"model"}, {"id":"07","name":"'+this.$t('main.privateAccount')+'","modelsType":"directory","type":"model"}]}');
                         await this.db.defaults(newdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
@@ -1163,10 +1254,18 @@
                         return item !== "wbj"
                     })
                 }
+                // //类型名称
+                // var modelsId = this.selectlabels;
+                // var newArray =new Array();
+                // for(var label in modelsId){
+                //     var model = this.db.get("models").find({id: modelsId[label]}).value();
+                //     newArray.push(model.name);
+                // }
                 this.newProject = {
                     "id": this.$Uuidv1(),
                     "name": projectName,
                     "modelsId": this.selectlabels,
+                    // "modelsName":newArray.toString(),
                     "type": "project",
                     "datas": formData.datas,
                     "dateTime": new Date().valueOf(),
@@ -1243,7 +1342,16 @@
                             return item !== "wbj"
                         })
                     }
+
+                    // //类型名称
+                    // var modelsId = this.selectlabels;
+                    // var newArray =new Array();
+                    // for(var label in modelsId){
+                    //     var model = this.db.get("models").find({id: modelsId[label]}).value();
+                    //     newArray.push(model.name);
+                    // }
                     this.editobject.modelsId = this.selectlabels;
+                    // this.editobject.modelsName=newArray.toString();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit = false
@@ -1297,18 +1405,17 @@
               var address = loginObj.address;
              //图片
              let data = '{"base64":"'+this.imageBase64+'"}';
-             this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
-             console.log(this.imgHash);
+             // this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
                 this.newTemplate = {
                     "id": this.$Uuidv1(),
                     "name": this.ruleFormAddTemplate.name,
                     "modelsId": ["mb"],
+                    "modelsName":"模板",
                     "type": "template",
                     "datas": this.tempTemplate,
                     "tempBase64":this.imageBase64,
                     "imgHash":this.imgHash,
                 }
-                console.log(this.newTemplate);
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
 
              //清空变量
@@ -1480,13 +1587,12 @@
 
                //图片大小验证
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg;image/png;';
-                let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png'];
+                let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png','image/svg'];
                 const isImage = types.includes(file.type);
                 const isLt200K = file.size / 1024 / 1024 / 1024< 200;
 
                 if (!isImage) {
-                    this.$message.error('上传头像图片只能是 JPG ,GIF,BMP,PNG 格式!');
+                    this.$message.error('上传头像图片只能是 JPG ,GIF,BMP,PNG,SVG 格式!');
                 }
                 if (!isLt200K) {
                     this.$message.error('上传头像图片大小不能超过 200KB!');
@@ -1503,12 +1609,18 @@
                         return item !== "wbj"
                     })
                 }
+                // //类型名称
+                // var newArray =new Array();
+                // for(var label in  obj.modelsId){
+                //     var model = this.db.get("models").find({id:obj.modelsId[label]}).value();
+                //     newArray.push(model.name);
+                // }
+                // obj.modelsName =newArray.toString();
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 this.db.set('version', new Date().valueOf()).write();
                 this.getdirectory();
             },
             unfavorite(obj){
-                console.log(obj);
                 console.log("取消收藏");
                 this.db.get("project").remove({id:obj.id}).write();
                 //删除指定项
@@ -1518,6 +1630,13 @@
                 if(obj.modelsId .length == 1 && obj.modelsId .indexOf("sy")!=-1){
                     obj.modelsId.push("wbj");//只有所有项，增加未标记项
                 }
+                // //类型名称
+                // var newArray =new Array();
+                // for(var label in  obj.modelsId){
+                //     var model = this.db.get("models").find({id:obj.modelsId[label]}).value();
+                //     newArray.push(model.name);
+                // }
+                // obj.modelsName =newArray.toString();
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();

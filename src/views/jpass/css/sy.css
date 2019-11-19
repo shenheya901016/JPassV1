@@ -125,9 +125,9 @@
 	margin-right: 2vw;
 }
 .header .hr .touxiang img{
-	height: 8vh;
-	min-height: 54px;
-	min-width: 54px;
+	height: 5vh;
+	min-height: 45px;
+	min-width: 45px;
 	margin-right: 10px;
 }
 .header .hr .touxiang>div{
@@ -318,7 +318,7 @@
 	width: 20vw;
 }
 .aside .article ul.list li{
-	width: 20vw;
+	width: 22vw;
 	height: 58px;
 	border-radius: 14px;
 	padding: 10px 2.4vw 10px 1vw;
