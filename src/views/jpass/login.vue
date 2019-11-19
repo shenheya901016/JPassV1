@@ -66,6 +66,11 @@
             };
         },
         async mounted(){
+            if (this.$IpcRenderer) {
+                this.$IpcRenderer.on("closeEditorWarning", event => {
+                    this.$IpcRenderer.send("app.exit");
+                });
+            }
             //select 数据生成
             var names = localStorage.getItem("name_string");
             if (names != null) {
