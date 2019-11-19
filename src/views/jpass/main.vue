@@ -43,18 +43,17 @@
             <!--<a href="#" class="mr2w">-->
             <!--<img src="./img/icon_tz.svg" alt="">-->
             <!--</a>-->
-            <a href="#" style="margin:0;width: 100px;" class="mr4w" @click="openSetting">
+            <a style="margin:0;width: 100px;" class="mr4w" @click="openSetting">
                 <img src="./img/icon_sz.svg" alt="">
             </a>
             <div class="touxiang" style="margin:0;">
                 <img src="./img/tx.svg" alt="">
                 <div>
-                    <a href="#">请叫我特仑苏</a>
+                    <a @click="myInfo">{{username}}</a>
                     <span>yuansushi@163.com</span>
                 </div>
             </div>
-            <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"><img
-                    style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""></el-button>
+            <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"><img style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""></el-button>
         </div>
     </header>
     <!-- 侧边栏 -->
@@ -482,6 +481,29 @@
                 <el-button size="small" @click="dialogVisibleTemplateEdit = false">{{$t('main.cancelFormat')}}</el-button>
             </el-form>
         </el-dialog>
+        <!--个人信息弹出框-->
+        <el-dialog title="" :visible.sync="dialogMyInfo" width="40%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <img src="./img/tx.svg" alt="">
+            <el-form label-width="100px" class="demo-ruleForm">
+                <el-form-item label="用户名" prop="username" style="margin-top: 5%">
+                    <el-input type="text" v-model="username" style="width:100%;" readonly>{{username}}</el-input>
+                </el-form-item>
+                <el-form-item label="钱包地址" prop="myInfoKey" >
+                    <el-input type="text" v-model="myInfoKey" style="width:100%;" readonly>{{myInfoKey}}</el-input>
+                </el-form-item>
+                <el-input type="password" v-model="password" style="width:70%;" placeholder="验证密码导出密钥"></el-input>
+                <el-form-item label="密钥" prop="password" >
+                    <el-input type="text" v-model="key" style="width:100%;" readonly="readonly" oncut="return false"
+                              onpaste="return false" oncopy="return false" hidden></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('registersuccess.keystoreFile')" prop="password">
+                    <el-button type="primary" size="small" @click="exportkeystore">{{$t('registersuccess.exportKeystoreFile')}}</el-button>
+                </el-form-item>
+                <el-form-item label="" prop="" style="margin-top:5%;margin-bottom: 10%">
+                    <el-button type="primary" style="width:80%;" @click="exportKey()">导出</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -522,6 +544,7 @@
                 dialogVisibleAddTempItems: false,//增加模板项弹出框
                 dialogVisibleTemplateEdit: false,//修改模板弹出框
                 dialogVisibleItemsEdit: false, //修改模板项弹出框
+                dialogMyInfo:false, //个人信息弹出框
 
                 mouse1: '',
                 mouse2: '',
@@ -564,6 +587,10 @@
                 searchTemp:"",
                 imageBase64:"",
                 imgHash:"",
+                searchTemp: "",
+                username: "",
+                key: "",
+                myInfoKey: "",
                 newProject: {
                     "id": "",
                     "name": "",
@@ -834,6 +861,41 @@
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = true;
             },
+            myInfo(){
+                this.dialogMyInfo=true;
+            },
+            async exportKey() {
+                let secret = "";
+                let wallet = new this.$JINGCHUANGWallet();
+                let keyStoreString = localStorage.getItem(this.loginObj.name);
+                let objKeyStore = this.$JSON5.parse(keyStoreString);
+                let keystring = "";
+                try {
+                    //钱包生成密钥
+                    wallet.setJingchangWallet(objKeyStore);
+                    var address = objKeyStore.wallets[0].address;
+                    keystring = wallet.getSecretWithAddress(this.password, address);
+                    await keystring.then(function (value) {
+                        secret = value;
+                    });
+                } catch (e) {
+                    this.password = "";
+                    this.key = "";
+                    this.$message.error(this.$t('密码错误'));
+                    return false;
+                }
+                sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
+                this.$message.success(this.$t('导出成功'));
+                this.key = secret;
+            },
+            exportkeystore() {
+                let userObjString = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+                let username = userObjString.name;
+                let wallet = localStorage.getItem(username);
+                let FileSaver = require('file-saver');
+                let blob = new Blob([wallet], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, "keystore");
+            },
             //获取目录
             getdirectory() {
                 var alldata = this.db.get("models").value();
@@ -1028,6 +1090,8 @@
                 let operatorSecret = this.operatorSecret; //运营商密钥
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
+                this.myInfoKey = address;
+                this.username = loginObj.name;
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
                 let version = await this.db.get("version").value();
@@ -1204,12 +1268,14 @@
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
+                // console.log(this.db.get("version").value())
                 this.db.set('version', new Date().valueOf()).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
                 this.templateEvent = "";
                 this.ruleFormAddProject.name = "";
                 this.getdirectory();
+                // console.log(this.db.get("version").value())
             },
             //增加选中项
             selectFiled(command) {
