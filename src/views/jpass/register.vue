@@ -28,9 +28,6 @@
                     <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
                 </el-form-item>
             </el-form>
-            <div style="margin-bottom:30px">
-                <!-- <el-button type="primary"  @click="resetForm('ruleForm')">重置</el-button>-->
-            </div>
         </div>
         <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
     </div>
@@ -48,9 +45,9 @@
         data() {
             var validateRepassword = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error($t('register.repassword')));
+                    callback(new Error(this.$t('register.repassword')));
                 } else if (value !== this.ruleForm.password) {
-                    callback(new Error($t('register.samepwd')));
+                    callback(new Error(this.$t('register.samepwd')));
                 } else {
                     callback();
                 }
@@ -61,7 +58,7 @@
                 if (nameString != null) {
                     var nameArray = nameString.split(",");
                     if (nameArray.indexOf(value) >= 0) {
-                        callback(new Error($t('register.uservalidaion')));
+                        callback(new Error(this.$t('register.uservalidaion')));
                     } else {
                         callback();
                     }
