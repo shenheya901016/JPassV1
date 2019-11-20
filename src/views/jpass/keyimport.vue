@@ -12,25 +12,19 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:70%; margin:10% 20% 10% 10%">
                 <el-form-item :label="$t('keyImport.walletKey')" prop="secret">
-                    <el-input v-model="ruleForm.secret" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.secret" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keyImport.newUserName')" prop="name">
-                    <el-input v-model="ruleForm.name" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.name" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keyImport.newPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" @input="pwdLength"
-                              style="width:90%;"></el-input>&nbsp;<span
-                        class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.password" @input="pwdLength" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false"
-                                 :status="status" style="width:90%;margin-left:3%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;float: left"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('keyImport.passwordRepetition')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item label="">
                     <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">{{$t('keyImport.importWallet')}}</el-button>
@@ -65,7 +59,7 @@
             };
             var validateName = (rule, value, callback) => {
                 var nameString = localStorage.getItem("name_string");
-                console.log(nameString);
+
                 if (nameString != null) {
                     var nameArray = nameString.split(",");
                     if (nameArray.indexOf(value) >= 0) {

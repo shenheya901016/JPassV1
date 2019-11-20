@@ -308,9 +308,7 @@
                         <input type="password" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                         <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                         <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
-                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage"
-                                     :status="data.pwdstatus" :text-inside="true" :format="format"
-                                     style="width:80%;margin-top: 1%"></el-progress>
+                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :status="data.pwdstatus" :text-inside="true" :format="format" style="width:80%;margin-top: 1%"></el-progress>
                     </el-form-item>
                     <el-form-item v-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey"   style="margin-top:10%;width: 90%;margin-bottom: -6%" >
                         <input type="text" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
