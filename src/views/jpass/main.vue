@@ -197,8 +197,8 @@
                 <el-form-item :label="$t('main.name')" style="width:90%;margin-bottom: -6%" prop="name">
                     <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:60%;float: left"/>
                     <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
-                               :on-success="handleAvatarSuccessAddPro" :before-upload="beforeAvatarUpload">
-                        <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64"  class="avatar">
+                               :on-success="handleAvatarSuccessAddPro" :before-upload="beforeAvatarUpload"  style="width: 85%">
+                        <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64"  class="avatar" >
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
@@ -223,7 +223,7 @@
                     </el-form-item>
                 </template>
                 <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">
-                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:80%">
+                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -298,7 +298,7 @@
                 <el-form-item label="名称"   style="width: 90%;margin-bottom: -6%" prop="name">
                     <input type="text" v-model="editobject.name" class="myInput"  style="width:60%;float: left" />
                     <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
-                               :on-success="handleAvatarSuccessEdit" :before-upload="beforeAvatarUpload">
+                               :on-success="handleAvatarSuccessEdit" :before-upload="beforeAvatarUpload" style="width: 85%">
                         <img v-if="editobject.tempBase64"  :src="editobject.tempBase64"  class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
@@ -325,12 +325,12 @@
                 </template>
                 <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">
                     <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')"
-                               style="float: left;width:80%">
+                               style="float: left;width:75%">
                         <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('main.addOtherItems')" style="margin-bottom:10%;">
-                    <el-dropdown @command="editSelectFiled" style="float: left">
+                    <el-dropdown @command="editSelectFiled" style="float: left;">
                         <el-button>
                             {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
@@ -408,7 +408,7 @@
                     <el-input type="text" v-model="ruleFormAddTemplate.name" style="width:60%;float: left"></el-input>
                     <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
                             :on-success="handleAvatarSuccessAdd"
-                            :before-upload="beforeAvatarUpload">
+                            :before-upload="beforeAvatarUpload"  style="width: 85%">
                          <img v-if="imageBase64"  :src="imageBase64"  class="avatar">
                           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
@@ -446,7 +446,7 @@
                     <el-input type="text" v-model="editobject.name" style="float: left;width:60%;"></el-input>
                     <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
                                :on-success="handleAvatarSuccessEdit"
-                               :before-upload="beforeAvatarUpload">
+                               :before-upload="beforeAvatarUpload" style="width: 85%">
                         <img v-if="editobject.tempBase64"  :src="editobject.tempBase64"  class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
