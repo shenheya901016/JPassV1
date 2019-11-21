@@ -87,10 +87,10 @@
                         <h5>{{project.name}}</h5>
                         <span>{{project.modelsName.length>10? project.modelsName.substring(0,10)+"...":project.modelsName}}</span>
                     </div>
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" style="float: right;width: 8%"
-                          @click="favorite(project)" >
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" style="float: right;width:8%"
-                          @click="unfavorite(project)"  >
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
+                          style="float: right;width:1.8%;position: absolute;" @click="favorite(project)" >
+                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg"
+                          style="float: right;width:1.8%;position: absolute;" @click="unfavorite(project)"  >
                 </li>
             </ul>
         </article>
@@ -188,7 +188,7 @@
                         <span style="margin-left: 3%;font-size: 15px">{{project.name}}</span>
                 </li>
             </ul>
-            <el-button style="margin-top: 5%" size="small" type="primary" @click="addproject('ruleFormAddProject')">{{$t('main.okFormat')}}</el-button>
+            <el-button style="margin-top: 5%" size="small" type="primary" @click="addproject">{{$t('main.okFormat')}}</el-button>
             <el-button size="small" @click="dialogVisibleTemplate = false">{{$t('main.cancelFormat')}}</el-button>
         </el-dialog>
         <!--增加项目弹出框-->
@@ -421,6 +421,11 @@
                         <a href="#"><i class="el-icon-close"  @click="addTemplageRemoveItem(data.id)" ></i></a>
                     </el-form-item>
                 </template>
+                <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">
+                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">
+                        <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item :label="$t('main.addOtherItems')" style="margin-top:10%;margin-bottom: 10%;">
                     <el-dropdown @command="selectFiledTemplate" style="float: left">
                         <el-button>
@@ -459,6 +464,11 @@
                         <a href="#"><i class="el-icon-close"  @click="editRemoveItem(data.id)"></i></a>
                     </el-form-item>
                 </template>
+                <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">
+                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">
+                        <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item :label="$t('main.addOtherItems')" style="margin-top:10%;margin-bottom: 10%;">
                     <el-dropdown @command="editSelectFiled" style="float: left">
                         <el-button>
@@ -1082,6 +1092,18 @@
                     }
                 } else {
                     var projects = this.db.get("templates").value();
+                    for(var index in  projects){
+                        var newArray =new Array();
+                        //插入类别名称
+                        for(var indexMode in projects[index].modelsId){
+                            var modelId=projects[index].modelsId[indexMode];
+                            var model = this.db.get("models").find({id:modelId}).value();
+                            if(model.id!="sy"){
+                                newArray.push(model.name);
+                            }
+                        }
+                        projects[index].modelsName=newArray.toString();
+                    }
                     for (var key in projects) {
                         projectArray.push(projects[key])
                     }
@@ -1203,6 +1225,7 @@
 
             //格式化密码进度条
             format(percentage) {
+                console.log(percentage);
                 if(percentage<=50){
                     return percentage=this.$t('main.weak')
                 }else if(percentage==75){
@@ -1222,9 +1245,17 @@
                 let index = Number(target.getAttribute("data-index"));
                 this.currentTemplate = index;
                 this.templateEvent = this.$JSON5.parse(this.$JSON5.stringify(temp));
+                let modelsId= temp.modelsId;
+                let models=[];
+                for(var idIndex in modelsId){ //下拉框不显示mb
+                    if( modelsId[idIndex].indexOf("mb")==-1){
+                        models.push(modelsId[idIndex]);
+                    }
+                }
+                this.selectlabels=models;
             },
 
-            addproject(formname) {
+            addproject() {
                 if (this.templateEvent == "") {
                     this.$message.error(this.$t('main.pleaseChooseATemplate'));
                     return false;
@@ -1317,9 +1348,24 @@
             editProject() {
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
                 if (this.editobject.type == "project") {
-                    this.selectlabels = this.editobject.modelsId;
+                    let modelsId= this.editobject.modelsId;
+                    let models=[];
+                    for(var index in modelsId){ //下拉框不显示sy,wbj
+                        if( modelsId[index].indexOf("sy")==-1 && modelsId[index].indexOf("wbj")){
+                            models.push(modelsId[index]);
+                        }
+                    }
+                    this.selectlabels =models;
                     this.dialogVisibleEdit = true;
                 } else if (this.editobject.type == "template") {
+                      var modelsId= this.editobject.modelsId;
+                      var models=[];
+                    for(var index in modelsId){ //下拉框不显示mb
+                        if( modelsId[index].indexOf("mb")==-1){
+                            models.push(modelsId[index]);
+                        }
+                    }
+                    this.selectlabels = models;
                     this.dialogVisibleTemplateEdit = true;
                 }
             },
@@ -1380,6 +1426,7 @@
                 this.db.unset("settings").write();
             },
             addTemplate() {
+                this.selectlabels=[];
                 this.dialogVisibleAddTemplate = true;
             },
             selectFiledTemplate(command) {
@@ -1401,13 +1448,17 @@
               let operatorSecret = this.operatorSecret; //运营商密钥
               var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
               var address = loginObj.address;
-             //图片
+             //处理分类
+                if(this.selectlabels.indexOf("mb")==-1){
+                    this.selectlabels.push("mb");//必须增加模板分类
+                }
+                 //图片
              let data = '{"base64":"'+this.imageBase64+'"}';
              // this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
                 this.newTemplate = {
                     "id": this.$Uuidv1(),
                     "name": this.ruleFormAddTemplate.name,
-                    "modelsId": ["mb"],
+                    "modelsId": this.selectlabels,
                     "modelsName":"模板",
                     "type": "template",
                     "datas": this.tempTemplate,
@@ -1415,21 +1466,26 @@
                     "imgHash":this.imgHash,
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
-
+                console.log(this.newTemplate);
              //清空变量
                 this.ruleFormAddTemplate.name = "",
                 this.imageBase64="";
                 this.imgHash="";
                 this.newTemplate = "";
                 this.tempTemplate = [];
+                this.selectlabels ="";
                 this.dialogVisibleAddTemplate = false;
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
             },
             //修改模板
             editTemplate() {
+                if(this.selectlabels.indexOf("mb")==-1){
+                    this.selectlabels.push("mb");//必须增加模板分类
+                }
                 try {
                     this.db.get("templates").remove({id: this.editobject.id}).write();
+                    this.editobject.modelsId = this.selectlabels;
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleTemplateEdit = false
@@ -1437,6 +1493,7 @@
                     this.projectEvent = this.editobject;
                     this.editobject = "";
                     this.imageBase64 = "";
+                    this.selectlabels="",
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                 } catch (e) {
