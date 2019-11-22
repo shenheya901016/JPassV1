@@ -1,5 +1,5 @@
 import {IpfsRemote} from "ipfslib";
-import Ipfs from './Ipfs';
+import myIpfs from '../src/myIpfs';
 const fs = require("fs")
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
 let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
@@ -10,23 +10,12 @@ let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
 describe("test Ipfs", async function () {
     describe("myIpfs", async function () {
         it("myIpfs: test", async function () {
-            console.log(await Ipfs.bal('j4M4AoSi522XxNpywfyBahmjzQihc4EegL'));   //查询该钱包地址是否被激活
-            //console.log(await MyIpfs.read(userJID));    //读取该钱包地址在ipfs中存储的数据
-            /*let transaction = await MyIpfs.write(   //data是决定传字符串还是object未决定 暂时传字符串  向ipfs中写入数据  会返回一个transaction参数提供给tra()
-                '{"models":[{"id":"1","name":"模板1"}],"profile":[{"id":"1","name":"个人信息1"}],"project":[{"id":"1","name":"项目1"}]}',
-                userJID, userSecret, operatorJID, operatorSecret);
-            console.log(transaction);*/
-            //console.log(await MyIpfs.init(userJID,userSecret,operatorJID,operatorSecret));    //当判断用户钱包地址已被激活时执行 每个用户只会执行一次该方法
-            //console.log(await Ipfs.tra("819FBB17F14757D71C1091ABF562C4E2D200CE3976283DFD3896D3E087BEDDC5"));    //判断向ipfs写入数据是否完成（同步是否完成）
-            //await Ipfs.downloadfile("/JPassV1/test/2.jpg","BD1A3B547B20F91635F6F4B625A7BF736916D8E32C60F4F7572349CB3756DDD5")
-            //console.log(await Ipfs.uploadfile("/JPassV1/test/1.jpg",userJID, userSecret, operatorJID, operatorSecret))
-            //await Ipfs.getIssueToken(userJID, userSecret, operatorJID, operatorSecret,"filetest");
-            //await Ipfs.getCreateToken(userJID, userSecret, operatorJID, operatorSecret,'file','E99D40CFA6AE7C459240B7E29492592FCEDF392A3B242A323A1AD9739998664A','{"base64":""}');
-            //console.log(await Ipfs.initTest(userJID, userSecret, operatorJID, operatorSecret,'filetest8'));
-            //console.log(await Ipfs.readTest(userJID, userSecret));
-            //console.log(await Ipfs.readByHash('776CAA6B90F6C08023EF64F6177F8D10080C0F69766DD635EA45E94CAB1D76E2', userSecret));
-            //console.log(await Ipfs.writeTest('data', '{"version":"11111111111"}', userJID, userSecret, operatorJID, operatorSecret));
-            //console.log(await Ipfs.writeTest('file','{"base64":"asdsar123dsfsd23453fsdf234"}',userJID, userSecret, operatorJID, operatorSecret));
+            //console.log(await myIpfs.getWalletBalance('j4M4AoSi522XxNpywfyBahmjzQihc4EegL'));   //查询该钱包地址是否被激活
+            //console.log(await myIpfs.init("file",userJID,userSecret,operatorJID,operatorSecret));    //初始化IPFS type：1.file类型 2.data类型
+            //console.log(await myIpfs.read(userJID));    //读取该钱包地址在ipfs中存储的所有data数据
+            //console.log(await myIpfs.write('file','{"base64":"asdsar123dsfsd23453fsdf234"}',userJID, userSecret, operatorJID, operatorSecret)); //向IPFS中保存数据
+            //console.log(await myIpfs.getTransactionStat("819FBB17F14757D71C1091ABF562C4E2D200CE3976283DFD3896D3E087BEDDC5"));    //判断向ipfs写入数据是否完成（同步是否完成）
+            //console.log(await myIpfs.readByHash('776CAA6B90F6C08023EF64F6177F8D10080C0F69766DD635EA45E94CAB1D76E2', userSecret));   //直接根据hash值，查找单个file数据
         })
     });
     /*describe("test get tokens", function () {
