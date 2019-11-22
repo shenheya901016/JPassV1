@@ -128,6 +128,7 @@ export default {
         password: "密码",
         template: "模板",
         unmarked: "未标记",
+        trash:"垃圾桶",
         familyAccount: "家人账号",
         privateAccount: "私人账号",
         note: "注意",
