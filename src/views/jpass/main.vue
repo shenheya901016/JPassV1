@@ -87,9 +87,9 @@
                         <h5>{{project.name}}</h5>
                         <span>{{project.modelsName.length>10? project.modelsName.substring(0,10)+"...":project.modelsName}}</span>
                     </div>
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
+                    <img  v-if="project.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
                           style="float: right;width:1.8%;position: absolute;" @click="favorite(project)" >
-                    <img  v-if="project.type=='project'&& project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg"
+                    <img  v-if="project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg"
                           style="float: right;width:1.8%;position: absolute;" @click="unfavorite(project)"  >
                 </li>
             </ul>
@@ -105,9 +105,9 @@
                             <li style="margin-top: 1vh">{{projectEvent.modelsName}}</li>
                         </ul>
                     </div>
-                    <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
+                    <img  v-if="projectEvent.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
                           style="float: right;margin-right:8%;margin-top:3%;" @click="favorite(projectEvent)" >
-                    <img  v-if="projectEvent.type=='project'&& projectEvent.modelsId.indexOf('scj')!=-1"  src="./img/start_sc.svg"
+                    <img  v-if="projectEvent.modelsId.indexOf('scj')!=-1"  src="./img/start_sc.svg"
                           style="float:right;margin-right:8%;margin-top:3%;" @click="unfavorite(projectEvent)" >
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
@@ -126,7 +126,9 @@
                         <hr/>
                     </el-form-item>
                 </template>
-                <el-button size="small" v-if="this.projectEvent!=''" @click="editProject()" style="margin-left: 3%">{{$t('main.modify')}}</el-button>
+                <el-button v-if="this.projectEvent!=''&& this.projectEvent.isDel!=true" size="small" @click="editProject()" style="margin-left: 3%">
+                    {{$t('main.modify')}}
+                </el-button>
                 <!--<el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>-->
             </el-form>
         </section>
@@ -615,6 +617,7 @@
                     "dateTime": "",
                     "tempBase64":"",
                     "imgHash":"",
+                    "isDel":false,
                 },
                 newTemplate: {
                     "id": "",
@@ -625,6 +628,7 @@
                     "datas": [],
                     "tempBase64":"",
                     "imgHash":"",
+                    "isDel":false,
                 },
                 templates: {
                     "templates": [
@@ -634,6 +638,7 @@
                             "modelsId": ["mb"],
                             "modelsName":"模板",
                             "type": "template",
+                            "isDel":false,
                             "datas": [
                                 {
                                     "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
@@ -680,6 +685,7 @@
                             "modelsId": ["mb"],
                             "modelsName":"模板",
                             "type": "template",
+                            "isDel":false,
                             "datas": [
                                 {
                                     "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
@@ -719,6 +725,7 @@
                             "modelsId": ["mb"],
                             "modelsName":"模板",
                             "type": "template",
+                            "isDel":false,
                             "datas": [
                                 {
                                     "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
@@ -913,6 +920,7 @@
             //获取目录
             getdirectory() {
                 var alldata = this.db.get("models").value();
+                console.log(alldata);
                 var allProjects = this.db.get("project").value();
                 var projectstring = ""
                 var directoryString = ""
@@ -923,16 +931,18 @@
                 //设置每一项数量
                 for (var modelkey in alldata) {
                     var count = 0
-                    if (alldata[modelkey].id != "mb") {
+                    if (alldata[modelkey].id != "mb" && alldata[modelkey].id != "ljt") {
                         for (var projectkey in allProjects) {
                             var project = allProjects[projectkey];
                             var types = project.modelsId;
-                            if (types.indexOf(alldata[modelkey].id) != -1) {
+                            if (types.indexOf(alldata[modelkey].id) != -1 && project.isDel !=true) {
                                 count++;
                             }
                         }
-                    } else {
-                        count = this.db.get("templates").size().value();
+                    } else if(alldata[modelkey].id == "mb") {
+                        count = this.db.get("templates").filter({isDel: false}).size().value();
+                    }else if(alldata[modelkey].id == "ljt") {
+                        count = this.db.get("templates").filter({isDel: true}).size().value()+this.db.get("project").filter({isDel: true}).size().value();
                     }
                     alldata[modelkey].count = count;
                 }
@@ -945,7 +955,7 @@
                     if (object.modelsType == "directory") {
                         directoryString = directoryString + this.$JSON5.stringify(object) + ",";
                     }
-                    if (object.id != "sy" && object.id != "wbj" && object.id != "mb") {
+                    if (object.id != "sy" && object.id != "wbj" && object.id != "mb" && object.id != "ljt" ) {
                         labelsString = labelsString + this.$JSON5.stringify(object) + ",";
                     }
                 }
@@ -970,7 +980,7 @@
                     }
                     allProjects[index].modelsName=newArray.toString();
                 }
-                this.projects = this.db.get("project").value();
+                this.projects = this.db.get("project").filter({isDel: false}).value();
             },
             addDirectoryOP() {
                 this.dialogVisible2 = true;
@@ -995,11 +1005,11 @@
             addDirectory(formName) {
                 let id = this.$Uuidv1();
                 let name = this.ruleForm.pName;
-                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPaht":"","type":"model"}';
+                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPaht":"","type":"model","isDel":false,}';
                 this.db.get("models").push(this.$JSON5.parse(newModel)).write();
                 this.db.set('version', new Date().valueOf()).write();
                 this.dialogVisible2 = false,
-                    this.getdirectory();
+                this.getdirectory();
                 this.$refs[formName].resetFields();
             },
 
@@ -1028,7 +1038,7 @@
                 this.currentNote = index;
                 this.delobj = project;
                 this.isDisabled = false;
-                this.projectEvent = this.$JSON5.parse(this.$JSON5.stringify(project));
+                this.projectEvent = project;
             },
             remove() {
                 var type = this.delobj.type;
@@ -1060,14 +1070,16 @@
                     this.dialogVisibledDirectory = false;
                     this.getdirectory();
                 } else if (type == "project") {
-                    this.db.get("project").remove({id: id}).write();
+                    // this.db.get("project").remove({id: id}).write();
+                    this.delobj.isDel=true;
                     this.db.set('version', new Date().valueOf()).write();
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
                     this.projectEvent = "";
                     this.getdirectory();
                 } else if (type == "template") {
-                    this.db.get("templates").remove({id: id}).write();
+                    // this.db.get("templates").remove({id: id}).write();
+                    this.delobj.isDel=true;
                     this.db.set('version', new Date().valueOf()).write();
                     //更新template 在project中显示
                     this.projects = this.db.get("templates").value();
@@ -1080,33 +1092,36 @@
             },
             //点击目录生成projects列表
             notesBytargeId(obj) {
-                var id = obj.id;
-                var projectArray = new Array();
-                if (obj.id != "mb") {
-                    var projects = this.db.get("project").value();
-                    for (var key in projects) {
+                let id = obj.id;
+                let projectArray = new Array();
+                if (obj.id != "mb" && obj.id != "ljt") {
+                    let projects = this.db.get("project").value();
+                    for (let key in projects) {
                         let models = projects[key].modelsId;
-                        if (models.indexOf(id) != -1) {
+                        if (models.indexOf(id) != -1 && projects[key].isDel!=true) {
                             projectArray.push(projects[key]);
                         }
                     }
-                } else {
-                    var projects = this.db.get("templates").value();
-                    for(var index in  projects){
-                        var newArray =new Array();
+                } else if(obj.id == "mb" ) {
+                    let projects = this.db.get("templates").filter({isDel: false}).value();
+                    for(let index in  projects){
+                        let newArray =new Array();
                         //插入类别名称
-                        for(var indexMode in projects[index].modelsId){
-                            var modelId=projects[index].modelsId[indexMode];
-                            var model = this.db.get("models").find({id:modelId}).value();
+                        for(let indexMode in projects[index].modelsId){
+                            let modelId=projects[index].modelsId[indexMode];
+                            let model = this.db.get("models").find({id:modelId}).value();
                             if(model.id!="sy"){
                                 newArray.push(model.name);
                             }
                         }
                         projects[index].modelsName=newArray.toString();
                     }
-                    for (var key in projects) {
-                        projectArray.push(projects[key])
-                    }
+                    projectArray=projects;
+
+                } else if(obj.id == "ljt" ) {
+                    let delTemplate = this.db.get("templates").filter({isDel: true}).value();
+                    let delProject = this.db.get("project").filter({isDel: true}).value();
+                    projectArray =delTemplate.concat(delProject);
                 }
                 this.projects = projectArray;
             },
@@ -1136,7 +1151,7 @@
                             name: loginObj.name,
                             address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('main.allProjects')+'","modelsType":"project","type":"model"}, {"id":"scj","name":"'+this.$t('main.favorites')+'","modelsType":"project","type":"model"}, {"id":"mm","name":"'+this.$t('main.password')+'","modelsType":"project","type":"model"}, {"id":"mb","name":"'+this.$t('main.template')+'","modelsType":"project","type":"model"}, {"id":"wbj","name":"'+this.$t('main.unmarked')+'","modelsType":"project","type":"model"}, {"id":"06","name":"'+this.$t('main.familyAccount')+'","modelsType":"directory","type":"model"}, {"id":"07","name":"'+this.$t('main.privateAccount')+'","modelsType":"directory","type":"model"}]}');
+                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"'+this.$t('main.allProjects')+'","modelsType":"project","type":"model"}, {"id":"scj","name":"'+this.$t('main.favorites')+'","modelsType":"project","type":"model"}, {"id":"mm","name":"'+this.$t('main.password')+'","modelsType":"project","type":"model"}, {"id":"mb","name":"'+this.$t('main.template')+'","modelsType":"project","type":"model"}, {"id":"wbj","name":"'+this.$t('main.unmarked')+'","modelsType":"project","type":"model"},{"id":"ljt","name":"'+this.$t('main.trash')+'","modelsType":"project","type":"model"}, {"id":"06","name":"'+this.$t('main.familyAccount')+'","modelsType":"directory","type":"model"}, {"id":"07","name":"'+this.$t('main.privateAccount')+'","modelsType":"directory","type":"model"}]}');
                         await this.db.defaults(newdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
@@ -1295,6 +1310,7 @@
                     "name": projectName,
                     "modelsId": this.selectlabels,
                     // "modelsName":newArray.toString(),
+                    "isDel":false,
                     "type": "project",
                     "datas": formData.datas,
                     "dateTime": new Date().valueOf(),
@@ -1460,6 +1476,7 @@
                     "name": this.ruleFormAddTemplate.name,
                     "modelsId": this.selectlabels,
                     "modelsName":"模板",
+                    "isDel":false,
                     "type": "template",
                     "datas": this.tempTemplate,
                     "tempBase64":this.imageBase64,
@@ -1655,29 +1672,25 @@
                 return isImage && isLt200K;
             },
             favorite(obj){
+                if(obj.isDel){
+                    return false;
+                }
                 console.log(obj);
                 console.log("收藏");
-                this.db.get("project").remove({id:obj.id}).write();
                 obj.modelsId.push("scj");
                 if(obj.modelsId.indexOf("wbj")!=-1){//有未标记项，删除
                     obj.modelsId = obj.modelsId.filter(function(item) {
                         return item !== "wbj"
                     })
                 }
-                // //类型名称
-                // var newArray =new Array();
-                // for(var label in  obj.modelsId){
-                //     var model = this.db.get("models").find({id:obj.modelsId[label]}).value();
-                //     newArray.push(model.name);
-                // }
-                // obj.modelsName =newArray.toString();
-                this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 this.db.set('version', new Date().valueOf()).write();
                 this.getdirectory();
             },
             unfavorite(obj){
+                if(obj.isDel){
+                    return false;
+                }
                 console.log("取消收藏");
-                this.db.get("project").remove({id:obj.id}).write();
                 //删除指定项
                 obj.modelsId = obj.modelsId.filter(function(item) {
                     return item !== "scj"
@@ -1685,14 +1698,6 @@
                 if(obj.modelsId .length == 1 && obj.modelsId .indexOf("sy")!=-1){
                     obj.modelsId.push("wbj");//只有所有项，增加未标记项
                 }
-                // //类型名称
-                // var newArray =new Array();
-                // for(var label in  obj.modelsId){
-                //     var model = this.db.get("models").find({id:obj.modelsId[label]}).value();
-                //     newArray.push(model.name);
-                // }
-                // obj.modelsName =newArray.toString();
-                this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();
             },
