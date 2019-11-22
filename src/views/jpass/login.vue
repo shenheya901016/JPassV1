@@ -12,9 +12,8 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:75%; margin:10% 20% 5% 10%;">
                 <el-form-item :label="$t('login.name')" prop="name">
-                    <el-select :placeholder="$t('login.selectuser')" v-model="ruleForm.name" :title="$t('login.nametitle')"
-                               style="width:100%;">
-                        <el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    <el-select :placeholder="$t('login.selectuser')" v-model="ruleForm.name" :title="$t('login.nametitle')" style="width:100%;">
+                    <el-option v-for="item in names"  :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('login.password')" prop="password" style="margin-top:10%">

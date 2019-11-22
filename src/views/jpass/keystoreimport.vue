@@ -9,8 +9,7 @@
             <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
                 {{$t('keystoreImport.importKeystoreWallet')}}
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
-                     style="width:70%; margin:10% 20% 10% 10%">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
                 <el-form-item :label="$t('keystoreImport.keystoreFile')" prop="">
                     <el-upload class="upload-demo" style="width:90%;margin-left:10px;"
                                action="https://jsonplaceholder.typicode.com/posts/"
@@ -20,29 +19,19 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.oldLoginPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false"
-                              onpaste="return false"
-                              style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;</span>
-                </el-form-item>
-
+                    <el-input type="password" v-model="ruleForm.password" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false" onpaste="return false" style="width:90%;float: left"></el-input>
+                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newUserName')" prop="name">
-                    <el-input type="text" v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false"
-                              onpaste="return false" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="text" v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false" onpaste="return false" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="newPassword">
-                    <el-input type="password" v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')"
-                              oncopy="return false"
-                              onpaste="return false" style="width:90%;"></el-input>&nbsp;<span class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')" oncopy="return false" onpaste="return false" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false"
-                                 :status="status" style="width:90%;margin-left:3%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.passwordRepetition')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
                     <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">{{$t('keystoreImport.importWallet')}}</el-button>
@@ -130,7 +119,6 @@
                     if (valid) {
                         this.keystoreAnalysis()
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -163,7 +151,6 @@
                         keyStoreObj = JSON5.parse(result);
                     })
                 } catch (e) {
-                    console.log(e);
                     this.$message.error(this.$t('keystoreImport.importedKeystoryFilePFailed'));
                     return false;
                 }
@@ -195,7 +182,6 @@
                     });
                     //this.ruleForm.keystore=keystore;
                 } catch (e) {
-                    console.log(e);
                     this.$message.error(this.$t('keystoreImport.newKeystoreGeneratedError'));
                     return false;
                 }

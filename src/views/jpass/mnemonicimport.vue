@@ -12,28 +12,22 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:70%; margin:10% 20% 10% 10%">
                 <el-form-item :label="$t('mnemonicimport.enterMnemonic')" prop="mnemonic">
-                    <el-input v-model="ruleForm.mnemonic" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.mnemonic" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('mnemonicimport.newUserName')" prop="name">
-                    <el-input v-model="ruleForm.name" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.name" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('mnemonicimport.newPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" id="password" @input="pwdLength"
-                              style="width:90%;"></el-input>&nbsp;<span
-                        class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.password" id="password" @input="pwdLength" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false"
-                                 :status="status" style="width:90%;margin-left:3%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('mnemonicimport.duplicatePassword')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary" style="width:40%;" @click="submitForm('ruleForm')">
+                    <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">
                         {{$t('mnemonicimport.importWallet')}}
                     </el-button>
                     <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>

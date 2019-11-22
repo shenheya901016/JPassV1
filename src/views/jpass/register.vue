@@ -5,40 +5,29 @@
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:30%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
+        <div style="width:35%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
             <div style="width:100%;border-radius:10px 10px 0 0; font-size:20px;margin-top:50px;">
                 {{$t('register.title')}}
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
-                     style="width:75%; margin:10% 20% 10% 10%;">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:75%; margin:10% 20% 10% 10%;">
                 <el-form-item :label="$t('register.name')" prop="name">
-                    <el-input v-model="ruleForm.name" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.name" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('register.password')" prop="password">
-                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength"
-                              style="width:90%;"></el-input>&nbsp;<span
-                        class="strong">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false"
-                                 :status="status" style="width:90%;margin-left:2%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('register.duplicatePassword')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;"></el-input>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="password">
                     <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">{{$t('register.register')}}
                     </el-button>
                     <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;
-                      </span>
                 </el-form-item>
             </el-form>
-            <div style="margin-bottom:30px">
-                <!-- <el-button type="primary"  @click="resetForm('ruleForm')">重置</el-button>-->
-            </div>
         </div>
         <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
     </div>
@@ -56,9 +45,9 @@
         data() {
             var validateRepassword = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error($t('register.repassword')));
+                    callback(new Error(this.$t('register.repassword')));
                 } else if (value !== this.ruleForm.password) {
-                    callback(new Error($t('register.samepwd')));
+                    callback(new Error(this.$t('register.samepwd')));
                 } else {
                     callback();
                 }
@@ -69,7 +58,7 @@
                 if (nameString != null) {
                     var nameArray = nameString.split(",");
                     if (nameArray.indexOf(value) >= 0) {
-                        callback(new Error($t('register.uservalidaion')));
+                        callback(new Error(this.$t('register.uservalidaion')));
                     } else {
                         callback();
                     }
