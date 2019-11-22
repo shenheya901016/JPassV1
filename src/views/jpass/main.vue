@@ -607,6 +607,7 @@
                 username: "",
                 key: "",
                 myInfoKey: "",
+                directoryClickId:"",
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1020,7 +1021,9 @@
                 this.currentDirectory = -1;
                 this.isDisabled = true;
                 this.delobj = note;
+                this.directoryClickId=note.id;
                 this.notesBytargeId(note);
+
             },
             directoryclick(note, event) {
                 var target = event.currentTarget;
@@ -1030,6 +1033,7 @@
                 this.delobj = note;
                 // console.log(note);
                 this.isDisabled = false;
+                this.directoryClickId=note.id;
                 this.notesBytargeId(note);
             },
             noteslick(project, event) {
@@ -1298,13 +1302,6 @@
                         return item !== "wbj"
                     })
                 }
-                // //类型名称
-                // var modelsId = this.selectlabels;
-                // var newArray =new Array();
-                // for(var label in modelsId){
-                //     var model = this.db.get("models").find({id: modelsId[label]}).value();
-                //     newArray.push(model.name);
-                // }
                 this.newProject = {
                     "id": this.$Uuidv1(),
                     "name": projectName,
@@ -1326,7 +1323,7 @@
                 this.templateEvent = "";
                 this.ruleFormAddProject.name = "";
                 this.getdirectory();
-                // console.log(this.db.get("version").value())
+                this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
             },
             //增加选中项
             selectFiled(command) {
@@ -1402,14 +1399,6 @@
                             return item !== "wbj"
                         })
                     }
-
-                    // //类型名称
-                    // var modelsId = this.selectlabels;
-                    // var newArray =new Array();
-                    // for(var label in modelsId){
-                    //     var model = this.db.get("models").find({id: modelsId[label]}).value();
-                    //     newArray.push(model.name);
-                    // }
                     this.editobject.modelsId = this.selectlabels;
                     // this.editobject.modelsName=newArray.toString();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
@@ -1421,6 +1410,7 @@
                     this.editobject = "";
                     this.selectlabels="";
                     this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                 } catch (e) {
                     this.$message.error(this.$t('main.failToEdit'));
                 }
@@ -1685,6 +1675,7 @@
                 }
                 this.db.set('version', new Date().valueOf()).write();
                 this.getdirectory();
+                this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
             },
             unfavorite(obj){
                 if(obj.isDel){
@@ -1700,6 +1691,7 @@
                 }
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
             },
         }
     }
