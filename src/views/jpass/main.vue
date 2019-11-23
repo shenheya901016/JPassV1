@@ -81,8 +81,7 @@
             <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')" @input="search(searchTemp)">
             <ul class="list">
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick" style="margin-top: 5px">
-                    </span>
+                    :class="index == currentNote?click:disclick" style="margin-top: 5px;">
                     <span>
                          <img :src="project.tempBase64"  width="30px" height="30px">
                     </span>
