@@ -81,16 +81,19 @@
             <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')" @input="search(searchTemp)">
             <ul class="list">
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick">
-                    <img :src="project.tempBase64"  width="30" height="30">
-                    <div style="width: 73%;text-align: left">
+                    :class="index == currentNote?click:disclick" style="margin-top: 5px;">
+                    <span>
+                         <img :src="project.tempBase64"  width="30px" height="30px">
+                    </span>
+                    <div style="width: 70%;text-align: left;">
                         <h5>{{project.name}}</h5>
                         <span>{{project.modelsName.length>10? project.modelsName.substring(0,10)+"...":project.modelsName}}</span>
                     </div>
-                    <img  v-if="project.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
-                          style="float: right;width:1.8%;position: absolute;" @click="favorite(project)" >
-                    <img  v-if="project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg"
-                          style="float: right;width:1.8%;position: absolute;" @click="unfavorite(project)"  >
+                    <span  style="float: right;height:5.5vh;">
+                        <img  v-if="project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" @click="favorite(project)">
+                         <img  v-if="project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" @click="unfavorite(project)">
+                    </span>
+
                 </li>
             </ul>
         </article>
@@ -607,6 +610,7 @@
                 username: "",
                 key: "",
                 myInfoKey: "",
+                directoryClickId:"",
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1020,7 +1024,9 @@
                 this.currentDirectory = -1;
                 this.isDisabled = true;
                 this.delobj = note;
+                this.directoryClickId=note.id;
                 this.notesBytargeId(note);
+
             },
             directoryclick(note, event) {
                 var target = event.currentTarget;
@@ -1030,6 +1036,7 @@
                 this.delobj = note;
                 // console.log(note);
                 this.isDisabled = false;
+                this.directoryClickId=note.id;
                 this.notesBytargeId(note);
             },
             noteslick(project, event) {
@@ -1298,13 +1305,6 @@
                         return item !== "wbj"
                     })
                 }
-                // //类型名称
-                // var modelsId = this.selectlabels;
-                // var newArray =new Array();
-                // for(var label in modelsId){
-                //     var model = this.db.get("models").find({id: modelsId[label]}).value();
-                //     newArray.push(model.name);
-                // }
                 this.newProject = {
                     "id": this.$Uuidv1(),
                     "name": projectName,
@@ -1326,7 +1326,7 @@
                 this.templateEvent = "";
                 this.ruleFormAddProject.name = "";
                 this.getdirectory();
-                // console.log(this.db.get("version").value())
+                this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
             },
             //增加选中项
             selectFiled(command) {
@@ -1402,14 +1402,6 @@
                             return item !== "wbj"
                         })
                     }
-
-                    // //类型名称
-                    // var modelsId = this.selectlabels;
-                    // var newArray =new Array();
-                    // for(var label in modelsId){
-                    //     var model = this.db.get("models").find({id: modelsId[label]}).value();
-                    //     newArray.push(model.name);
-                    // }
                     this.editobject.modelsId = this.selectlabels;
                     // this.editobject.modelsName=newArray.toString();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
@@ -1421,6 +1413,7 @@
                     this.editobject = "";
                     this.selectlabels="";
                     this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                 } catch (e) {
                     this.$message.error(this.$t('main.failToEdit'));
                 }
@@ -1685,6 +1678,7 @@
                 }
                 this.db.set('version', new Date().valueOf()).write();
                 this.getdirectory();
+                this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
             },
             unfavorite(obj){
                 if(obj.isDel){
@@ -1700,6 +1694,7 @@
                 }
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
             },
         }
     }
