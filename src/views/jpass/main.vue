@@ -81,16 +81,20 @@
             <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')" @input="search(searchTemp)">
             <ul class="list">
                 <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick">
-                    <img :src="project.tempBase64"  width="30" height="30">
-                    <div style="width: 73%;text-align: left">
+                    :class="index == currentNote?click:disclick" style="margin-top: 5px">
+                    </span>
+                    <span>
+                         <img :src="project.tempBase64"  width="30px" height="30px">
+                    </span>
+                    <div style="width: 70%;text-align: left;">
                         <h5>{{project.name}}</h5>
                         <span>{{project.modelsName.length>10? project.modelsName.substring(0,10)+"...":project.modelsName}}</span>
                     </div>
-                    <img  v-if="project.modelsId.indexOf('scj')== -1"  src="./img/start.svg"
-                          style="float: right;width:1.8%;position: absolute;" @click="favorite(project)" >
-                    <img  v-if="project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg"
-                          style="float: right;width:1.8%;position: absolute;" @click="unfavorite(project)"  >
+                    <span  style="float: right;height:5.5vh;">
+                        <img  v-if="project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" @click="favorite(project)">
+                         <img  v-if="project.modelsId.indexOf('scj')!= -1"  src="./img/start_sc.svg" @click="unfavorite(project)">
+                    </span>
+
                 </li>
             </ul>
         </article>
