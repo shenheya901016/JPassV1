@@ -35,6 +35,9 @@
                 <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
                 </el-button>
             </li>
+            <li>
+                <el-button style="border:0" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;" src="./img/钥匙.svg" alt="">密码生成器</el-button>
+            </li>
             <!--<li>-->
             <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
             <!--</li>-->
@@ -197,56 +200,71 @@
             <el-button size="small" @click="dialogVisibleTemplate = false">{{$t('main.cancelFormat')}}</el-button>
         </el-dialog>
         <!--增加项目弹出框-->
-        <el-dialog class="mb" :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="40%" :close-on-click-modal="false">
-            <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm" style="width: 80%;margin: auto">
-                <el-form-item :label="$t('main.name')" style="width:90%;margin-bottom: -6%" prop="name">
-                    <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:60%;float: left"/>
-                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
-                               :on-success="handleAvatarSuccessAddPro" :before-upload="beforeAvatarUpload"  style="width: 85%">
-                        <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64"  class="avatar" >
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
-                <template v-for="(data, index) in this.templateEvent.datas">
-                    <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
-                        <input type="password" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
-                        <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
-                        <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
-                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true"
-                                     :status="data.pwdstatus" :format="format"
-                                     style="width:80%;margin-top: 1%"></el-progress>
-                    </el-form-item>
-                    <el-form-item v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
-                        <input type="text" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
-                        <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
-                        <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
-                        <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:80%;margin-top: 1%"></el-progress>
-                    </el-form-item>
-                    <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="margin-top:10%;width: 90%;margin-bottom: -6%">
-                        <input type="text" v-model="data.val" class="myInput"/>
-                        <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
-                    </el-form-item>
-                </template>
-                <el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">
-                    <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">
-                        <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="$t('main.addOtherItems')" style="margin-bottom: 10%;" >
-                    <el-dropdown @command="selectFiled" style="float: left">
-                        <el-button>
-                            {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
-                        </el-button>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </el-form-item>
+        <el-dialog class="mb" :visible.sync="dialogVisibleAddProject" width="40%" height="90%" :close-on-click-modal="false">
+            <div style="border: 1px solid black;width: 90%;height: 5%;text-align: left;">
+                <el-button style="display: inline-block;height: 30px;"  class="el-icon-document-checked" @click="submitproject()">{{$t('main.okFormat')}}</el-button>
+                <!--<el-button size="small" @click="dialogVisibleAddProject = false">{{$t('main.cancelFormat')}}</el-button>-->
+            </div>
+            <hr/>
+            <div style="height: 20%">
+                <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:75%;float: left"/>
+                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccessAddPro" :before-upload="beforeAvatarUpload"
+                           style="width:5vw;height:7vh;border: 1px solid black;margin-left:77%">
+                    <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64"  class="avatar">
+                    <img v-else="templateEvent.tempBase64"  src="./img/start.svg"  class="avatar">
+                </el-upload>
+            </div>
+            <br>
+            <el-tabs type="border-card">
+                <el-tab-pane label="模板项">
+                    <div style="height:45vh;overflow: auto;">
+                    <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm"
+                             style="width: 95%;margin: auto;">
+                        <!--<el-form-item :label="$t('main.name')" style="width:90%;margin-bottom: -6%" prop="name">-->
 
-                <el-button size="small" type="primary" @click="submitproject()">{{$t('main.okFormat')}}</el-button>
-                <el-button size="small" @click="dialogVisibleAddProject = false">{{$t('main.cancelFormat')}}</el-button>
-            </el-form>
+                        <!--</el-form-item>-->
+                        <template v-for="(data, index) in this.templateEvent.datas">
+                            <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="width:90%;height: 3%;margin-bottom:0;">
+                                <input type="password" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
+                                <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
+                                <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
+                                <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true"
+                                             :status="data.pwdstatus" :format="format" style="width:80%;margin-top: 0%"></el-progress>
+                            </el-form-item>
+                            <el-form-item v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;height: 3%;border: 1px solid black;margin-bottom:0;">
+                                <input type="text" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
+                                <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
+                                <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
+                                <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:80%;margin-top: 0%"></el-progress>
+                            </el-form-item>
+                            <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;height: 3%;line-height:3%;vertical-align:middle;margin-bottom:0;">
+                                <input type="text" v-model="data.val" class="myInput"/>
+                                <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
+                            </el-form-item>
+                        </template>
+                        <!--<el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">-->
+                            <!--<el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">-->
+                                <!--<el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>-->
+                            <!--</el-select>-->
+                        <!--</el-form-item>-->
+                        <el-form-item :label="$t('main.addOtherItems')" style="margin-top: 1%;" >
+                            <el-dropdown @command="selectFiled" style="float: left;">
+                                <el-button style="">
+                                   {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </el-form-item>
+                    </el-form>
+
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+
+
         </el-dialog>
         <!--增加Items 弹出框-->
         <el-dialog :title="$t('main.additionalItem')" :visible.sync="dialogVisibleItems" width="30%" :close-on-click-modal="false"
@@ -513,6 +531,32 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+        <!--密码生成器-->
+        <el-dialog title="密码生成器" :visible.sync="dialogVisiblePasswordGenerator" width="40%"
+                   :close-on-click-modal="false"
+                   :close-on-press-escape="false" :show-close="true">
+            <el-input v-model="crypt"></el-input>
+            <el-progress :text-inside="true" :stroke-width="20" :percentage="percentage"></el-progress>
+            <el-tag type="danger">{{level}}</el-tag>
+            <el-slider
+                    :format-tooltip="formatTooltip"
+                    :step="5"
+                    show-stops
+                    v-model="value2">
+            </el-slider>
+            <el-radio-group v-model="radio">
+                <el-radio :label="1">便于记忆</el-radio>
+                <el-radio :label="2">仅字母和数字</el-radio>
+                <el-radio :label="3">完全随机</el-radio>
+                <el-radio :label="4">仅允许数字</el-radio>
+            </el-radio-group>
+            <br>
+            <el-button style="margin-top: 5%" size="small" type="primary" @click="module()">
+                {{$t('main.okFormat')}}
+            </el-button>
+            <el-button size="small" @click="dialogVisiblePasswordGenerator = false">{{$t('main.cancelFormat')}}
+            </el-button>
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -537,6 +581,11 @@
         },
         data() {
             return {
+                //密码器
+                crypt: "",
+                level: "",
+                radio: 3,
+                value2: 0,
                 //系统设置配置项
                 systemlock: "",//锁定开关
                 locktime:"",//自动锁定时间
@@ -549,6 +598,7 @@
                 locktimedisabled:"",
                 showpass:"",
                 //弹出框
+                dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
                 dialogVisibledDirectory: false,//删除文件夹弹出框
@@ -819,6 +869,31 @@
             };
         },
         methods: {
+            //密码
+            module() {
+                console.log(8 + this.value2 / 5);
+                console.log(this.radio);
+                this.crypt = this.$createPassword.genCrypt(this.radio, 8 + this.value2 / 5);
+                this.level = this.$createPassword.cryptLevel(this.crypt);
+                if (this.level.indexOf("世纪") !== -1) {
+                    this.percentage = 100;
+                } else if (this.level.indexOf("年") !== -1) {
+                    this.percentage = 80;
+                } else if (this.level.indexOf("月") !== -1) {
+                    this.percentage = 60;
+                } else if (this.level.indexOf("周") !== -1) {
+                    this.percentage = 40;
+                } else if (this.level.indexOf("天") !== -1) {
+                    this.percentage = 20;
+                } else {
+                    this.percentage = 0;
+                }
+                console.log(this.crypt);
+                console.log(this.level);
+            },
+            formatTooltip(val) {
+                return 8 + Math.floor(val / 5);
+            },
             logOut() {
                 sessionStorage.removeItem("userkeyObj");
                 this.$router.push("/jpass/login");
@@ -1695,6 +1770,9 @@
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+            },
+            passwordGenerator() {
+                this.dialogVisiblePasswordGenerator = true;
             },
         }
     }

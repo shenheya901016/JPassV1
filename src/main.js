@@ -12,7 +12,7 @@ import myIpfs from './myIpfs';
 import Lowdb from "lowdb";
 import IndexDB from "./indexDB";
 let test=require("./assets/test");
-import createPassword from '../test/createPassword'
+import createPassword from '../src/createPassword'
 window.myIpfs=myIpfs;
 
 Vue.config.productionTip = false;
