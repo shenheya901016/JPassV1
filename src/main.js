@@ -12,7 +12,8 @@ import myIpfs from './myIpfs';
 import Lowdb from "lowdb";
 import IndexDB from "./indexDB";
 let test=require("./assets/test");
-
+import createPassword from '../test/createPassword'
+window.myIpfs=myIpfs;
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
@@ -33,6 +34,7 @@ const i18n = new VueI18n({
 
 
 ElementLocale.i18n((key, value) => i18n.t(key, value));
+Vue.prototype.$createPassword=createPassword;
 Vue.prototype.$JPassUtil = JPassUtil;
 Vue.prototype.$JCCWallet = require('jcc_wallet');
 Vue.prototype.$JINGCHUANGWallet = require('jcc_wallet').JingchangWallet;
@@ -46,9 +48,12 @@ if (typeof window.require === 'function') {
     window.IpcRenderer = window.require('electron').ipcRenderer;
     Vue.prototype.$IpcRenderer = window.IpcRenderer;
 }
+
 new Vue({
     i18n,
     router,
     store,
     render: h => h(App)//入口页面
 }).$mount("#app");
+
+

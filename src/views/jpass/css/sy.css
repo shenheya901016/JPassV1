@@ -331,7 +331,7 @@
 }
 .aside .article ul.list li{
 	width: 22vw;
-	height:6vh;
+	height:6.5vh;
 	border-radius:7px;
 	padding:0.5vh 1vw 0.5vh 1vw;
 	-webkit-box-sizing: border-box;
@@ -359,7 +359,7 @@
 	color: #333;
 }
 .aside .article ul.list li div span{
-	font-size: 11px;
+	font-size: 10px;
 	color: #999;
 }
 .aside .article ul.list li:hover{

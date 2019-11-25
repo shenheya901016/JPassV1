@@ -87,7 +87,7 @@
                     </span>
                     <div style="width: 70%;text-align: left;">
                         <h5>{{project.name}}</h5>
-                        <span>{{project.modelsName.length>10? project.modelsName.substring(0,10)+"...":project.modelsName}}</span>
+                        <span>{{project.modelsName.length>12? project.modelsName.substring(0,12)+"...":project.modelsName}}</span>
                     </div>
                     <span  style="float: right;height:5.5vh;">
                         <img  v-if="project.modelsId.indexOf('scj')== -1"  src="./img/start.svg" @click="favorite(project)">
