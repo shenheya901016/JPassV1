@@ -200,23 +200,21 @@
             <el-button size="small" @click="dialogVisibleTemplate = false">{{$t('main.cancelFormat')}}</el-button>
         </el-dialog>
         <!--增加项目弹出框-->
-        <el-dialog class="mb" :visible.sync="dialogVisibleAddProject" width="40%" height="90%" :close-on-click-modal="false">
-            <div style="border: 1px solid black;width: 90%;height: 5%;text-align: left;">
-                <el-button style="display: inline-block;height: 30px;"  class="el-icon-document-checked" @click="submitproject()">{{$t('main.okFormat')}}</el-button>
-                <!--<el-button size="small" @click="dialogVisibleAddProject = false">{{$t('main.cancelFormat')}}</el-button>-->
-            </div>
-            <hr/>
-            <div style="height: 20%">
-                <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:75%;float: left"/>
+        <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddProject" width="40%" height="90%" :close-on-click-modal="false">
+            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
+                <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
+                    {{$t('main.name')}}
+                </span>
+                <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:35%;margin-left: 0.5vw"/>
                 <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccessAddPro" :before-upload="beforeAvatarUpload"
-                           style="width:5vw;height:7vh;border: 1px solid black;margin-left:77%">
-                    <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64"  class="avatar">
-                    <img v-else="templateEvent.tempBase64"  src="./img/start.svg"  class="avatar">
+                           style="height:7vh;width:4vw;margin-left:45%;">
+                    <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64" class="avatar">
+                    <i  v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>
                 </el-upload>
             </div>
             <br>
             <el-tabs type="border-card">
-                <el-tab-pane label="模板项">
+                <el-tab-pane label="添加项">
                     <div style="height:45vh;overflow: auto;">
                     <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm"
                              style="width: 95%;margin: auto;">
@@ -224,30 +222,30 @@
 
                         <!--</el-form-item>-->
                         <template v-for="(data, index) in this.templateEvent.datas">
-                            <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="width:90%;height: 3%;margin-bottom:0;">
+                            <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey" :prop="data.tempkey" style="width:90%;margin-bottom:0;">
                                 <input type="password" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                                 <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                 <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
                                 <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true"
                                              :status="data.pwdstatus" :format="format" style="width:80%;margin-top: 0%"></el-progress>
                             </el-form-item>
-                            <el-form-item v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;height: 3%;border: 1px solid black;margin-bottom:0;">
+                            <el-form-item v-else-if="data.type==='password' && showPassword" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;margin-bottom:0;">
                                 <input type="text" v-model="data.val" @input="pwdLength(data)" class="myInput"/>
                                 <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                 <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
                                 <el-progress id="process" :stroke-width="15" :percentage="data.percentage" :text-inside="true" :status="data.pwdstatus" :format="format" style="width:80%;margin-top: 0%"></el-progress>
                             </el-form-item>
-                            <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;height: 3%;line-height:3%;vertical-align:middle;margin-bottom:0;">
+                            <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;margin-bottom:0;">
                                 <input type="text" v-model="data.val" class="myInput"/>
                                 <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
                             </el-form-item>
                         </template>
-                        <!--<el-form-item :label="$t('main.chooseCategory')" style="margin-top:10%;">-->
-                            <!--<el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">-->
-                                <!--<el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>-->
-                            <!--</el-select>-->
-                        <!--</el-form-item>-->
-                        <el-form-item :label="$t('main.addOtherItems')" style="margin-top: 1%;" >
+                        <el-form-item :label="$t('main.chooseCategory')" style="margin-top:1%;margin-bottom: 0px;">
+                            <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">
+                                <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="$t('main.addOtherItems')" style="margin-top: 1%;margin-bottom: 0px;" >
                             <el-dropdown @command="selectFiled" style="float: left;">
                                 <el-button style="">
                                    {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -259,10 +257,13 @@
                             </el-dropdown>
                         </el-form-item>
                     </el-form>
-
                     </div>
                 </el-tab-pane>
             </el-tabs>
+            <div style="margin-top:1vh;text-align: center">
+                <el-button style="display: inline-block;" type="primary"  size="small"  @click="submitproject()">{{$t('main.okFormat')}}</el-button>
+                <el-button style="display: inline-block;"  size="small" @click="dialogVisibleAddProject = false">{{$t('main.cancelFormat')}}</el-button>
+            </div>
 
 
         </el-dialog>
@@ -518,16 +519,8 @@
                 <el-form-item label="钱包地址" prop="myInfoKey" >
                     <el-input type="text" v-model="myInfoKey" style="width:100%;" readonly>{{myInfoKey}}</el-input>
                 </el-form-item>
-                <el-input type="password" v-model="password" style="width:70%;" placeholder="验证密码导出密钥"></el-input>
-                <el-form-item label="密钥" prop="password" >
-                    <el-input type="text" v-model="key" style="width:100%;" readonly="readonly" oncut="return false"
-                              onpaste="return false" oncopy="return false" hidden></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('registersuccess.keystoreFile')" prop="password">
-                    <el-button type="primary" size="small" @click="exportkeystore">{{$t('registersuccess.exportKeystoreFile')}}</el-button>
-                </el-form-item>
-                <el-form-item label="" prop="" style="margin-top:5%;margin-bottom: 10%">
-                    <el-button type="primary" style="width:80%;" @click="exportKey()">导出</el-button>
+                <el-form-item :label="$t('registersuccess.keystoreFile')" >
+                    <el-button type="primary" size="small" style="float: left" @click="exportkeystore">{{$t('registersuccess.exportKeystoreFile')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
