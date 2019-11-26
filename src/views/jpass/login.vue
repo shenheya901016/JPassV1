@@ -5,7 +5,7 @@
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:30%;margin:2% auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;">
+        <div style="width:35%;margin:2% auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;">
             <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
                {{$t('login.title')}}
             </div>
@@ -20,7 +20,7 @@
                     <el-input type="password" v-model="ruleForm.password" style="width:100%;" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary" style="width:90%;" @click="submitForm('ruleForm')">{{$t('login.login')}}</el-button>
+                    <el-button type="primary" style="width:90%;"  size="small" @click="submitForm('ruleForm')">{{$t('login.login')}}</el-button>
                 </el-form-item>
             </el-form>
             <div style="margin-bottom:4%;">
@@ -28,9 +28,9 @@
                 <button class="bottom" @click="dialogVisible = true">{{$t('login.importwallet')}}</button>
             </div>
             <el-dialog :title="$t('login.importmode')" :visible.sync="dialogVisible" width="30%">
-                <el-button type="primary" style="width:30%;" @click="importwallet(0)">{{$t('login.importkey')}}</el-button>
-                <el-button type="primary" style="width:30%;" @click="importwallet(1)">{{$t('login.importkeystory')}}</el-button>
-                <el-button type="primary" style="width:30%;" @click="importwallet(2)">{{$t('login.importmnemonic')}}</el-button>
+                <el-button type="primary" style="width:30%;"  size="small" @click="importwallet(0)">{{$t('login.importkey')}}</el-button>
+                <el-button type="primary" style="width:30%;"  size="small" @click="importwallet(1)">{{$t('login.importkeystory')}}</el-button>
+                <el-button type="primary" style="width:30%;"  size="small" @click="importwallet(2)">{{$t('login.importmnemonic')}}</el-button>
             </el-dialog>
             <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
         </div>

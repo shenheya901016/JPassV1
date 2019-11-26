@@ -5,27 +5,27 @@
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:35%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
+        <div style="width:40%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
             <div style="width:100%;border-radius:10px 10px 0 0; font-size:20px;margin-top:50px;">
                 {{$t('register.title')}}
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:75%; margin:10% 20% 10% 10%;">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="8vw" class="demo-ruleForm" style="width:75%; margin:10% 20% 10% 10%;">
                 <el-form-item :label="$t('register.name')" prop="name">
-                    <el-input v-model="ruleForm.name" style="width:90%;float: left"></el-input>
+                    <el-input v-model="ruleForm.name" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('register.password')" prop="password">
-                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength" style="width:90%;float: left"></el-input>
+                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('register.duplicatePassword')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="password">
-                    <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">{{$t('register.register')}}
+                    <el-button type="primary" size="small" style="width:35%;" @click="submitForm('ruleForm')">{{$t('register.register')}}
                     </el-button>
-                    <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
+                    <el-button type="primary" size="small" style="width:35%;" @click="toLoginPage">{{$t('register.cancel')}}</el-button>
                 </el-form-item>
             </el-form>
         </div>
