@@ -42,7 +42,7 @@
             </li>
             <li>
                 <el-button style="border:0" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;"
-                                                                              src="./img/钥匙.svg" alt="">密码生成器
+                                                                              src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
                 </el-button>
             </li>
             <!--<li>-->
@@ -165,7 +165,7 @@
         <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="false">
-            <el-form label-width="100px" class="demo-ruleForm" style="width:80%;">
+            <el-form label-width="8vw" class="demo-ruleForm" style="width:80%;">
                 <el-form-item :label="$t('main.loginPassword')" prop="password">
                     <el-input type="password" v-model="password" style="width:90%;"></el-input>
                 </el-form-item>

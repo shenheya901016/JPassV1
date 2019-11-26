@@ -87,7 +87,7 @@ export default {
         passwordUnlock: "密码解锁",
         loginPassword: "登录密码",
         unlock: "解锁",
-        addDirectory: "增加目录",
+        addDirectory: "增加文件夹",
         ok: "确定",
         cancel: "取消",
         prompt: "提示",
@@ -98,7 +98,6 @@ export default {
         doYouWantToDeleteTheTemplate: "是否删除模板？",
         selectTemplate: "选择模板",
         addItem: "新增项目",
-
         chooseCategory: "选择分类",
         addOtherItems: "添加其他项",
         additionalItem: "新增项",
@@ -143,7 +142,8 @@ export default {
         successfullyModified: "修改成功！",
         failToEdit: "修改失败！",
         settingSavedSuccessfully: "设置保存成功！",
-        settingSaveFailed: "设置保存失败！"
+        settingSaveFailed: "设置保存失败！",
+        PasswordGenerator:"密码生成器"
     },
     lock: {
         unlockJpass: "解锁jpass",
