@@ -949,9 +949,6 @@
             formatTooltip(val) {
                 return 8 + Math.floor(val / 5);
             },
-            passwordGenerator() {
-                this.dialogVisiblePasswordGenerator = true;
-            },
             logOut() {
                 sessionStorage.removeItem("userkeyObj");
                 this.$router.push("/jpass/login");
