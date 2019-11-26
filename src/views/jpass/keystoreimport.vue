@@ -5,37 +5,37 @@
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:35%;box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin:2% auto;border-radius:10px;">
+        <div style="width:50%;box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin:2% auto;border-radius:10px;">
             <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
                 {{$t('keystoreImport.importKeystoreWallet')}}
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="8vw" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
                 <el-form-item :label="$t('keystoreImport.keystoreFile')" prop="">
-                    <el-upload class="upload-demo" style="width:90%;margin-left:10px;"
+                    <el-upload class="upload-demo" style="text-align: left;"
                                action="https://jsonplaceholder.typicode.com/posts/"
                                multiple:limit="1" :on-exceed="handleExceed" accept="text/plain"
-                               :on-change="getkeystore">
-                        <el-button type="primary" style="width:100%">{{$t('keystoreImport.uploadKeystore')}}</el-button>
+                               :on-change="getkeystore" >
+                        <el-button type="primary" size="small" style="float: left">{{$t('keystoreImport.uploadKeystore')}}</el-button>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.oldLoginPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false" onpaste="return false" style="width:90%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.password" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                  </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newUserName')" prop="name">
-                    <el-input type="text" v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false" onpaste="return false" style="width:90%;float: left"></el-input>
+                    <el-input type="text" v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="newPassword">
-                    <el-input type="password" v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')" oncopy="return false" onpaste="return false" style="width:90%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.passwordRepetition')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">{{$t('keystoreImport.importWallet')}}</el-button>
-                    <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
+                    <el-button type="primary"  size="small"  style="width:40%" @click="submitForm('ruleForm')">{{$t('keystoreImport.importWallet')}}</el-button>
+                    <el-button type="primary"  size="small" style="width:40%" @click="toLoginPage">{{$t('keystoreImport.cancel')}}</el-button>
                 </el-form-item>
                 <el-dialog :title="$t('keystoreImport.walletImportedSuccessfully')" :visible.sync="dialogVisible" width="30%">
                     <el-button type="primary" size="small" @click="exportkeystore">{{$t('keystoreImport.keystoreExport')}}</el-button>

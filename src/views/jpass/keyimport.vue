@@ -5,30 +5,29 @@
               <img src="../../img/logo.png" alt="" style="width:150px;">
           </a>
       </div>
-   <div style="width:40%;box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin:2% auto;border-radius:10px;">
+   <div style="width:50%;box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;margin:2% auto;border-radius:10px;">
     <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
         {{$t('keyImport.walletKeyImport')}}
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
-                     style="width:70%; margin:10% 20% 10% 10%">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="8vw" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
                 <el-form-item :label="$t('keyImport.walletKey')" prop="secret">
-                    <el-input v-model="ruleForm.secret" style="width:90%;float: left"></el-input>
+                    <el-input v-model="ruleForm.secret" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keyImport.newUserName')" prop="name">
-                    <el-input v-model="ruleForm.name" style="width:90%;float: left"></el-input>
+                    <el-input v-model="ruleForm.name" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keyImport.newPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" @input="pwdLength" style="width:90%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.password" @input="pwdLength" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;float: left"></el-progress>
+                    <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;float: left"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('keyImport.passwordRepetition')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:90%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item label="">
-                    <el-button type="primary" style="width:40%;float:left" @click="submitForm('ruleForm')">{{$t('keyImport.importWallet')}}</el-button>
-                    <el-button type="primary" style="width:40%;float:left" @click="toLoginPage">放弃</el-button>
+                    <el-button type="primary" size="small" style="width:40%;" @click="submitForm('ruleForm')">{{$t('keyImport.importWallet')}}</el-button>
+                    <el-button type="primary" size="small" style="width:40%;" @click="toLoginPage">{{$t('keyImport.cancel')}}</el-button>
                 </el-form-item>
                 <el-dialog :title="$t('keyImport.walletImportedSuccessfully')" :visible.sync="dialogVisible" width="30%">
                     <el-button type="primary" size="small" @click="exportkeystore">{{$t('keyImport.keystoreExport')}}</el-button>

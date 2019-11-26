@@ -26,6 +26,7 @@ export default {
         password: "用户密码",
         duplicatePassword: "密码重复",
         register: "注册",
+        cancel:"取消",
         repassword: "请再次输入密码！",
         samepwd: "两次输入密码不一致！",
         uservalidaion: "用户名重复，请重新输入！",
@@ -41,12 +42,13 @@ export default {
         localStorageFailed: "本地存储失败！"
     },
     registersuccess: {
-        title: '恭喜您，钱包注册成功,请您用<span style="color: red">钱包地址</span>到井通官网激活钱包！<p style="color: red;font-size: 15px">注:请您及时抄录并妥善保存好以下信息，这是找回您钱包的必要资料，请不要外泄!</p>',
+        title: '&#12288;恭喜您，钱包注册成功,请您用<span style="color: red">钱包地址</span>到井通官网激活钱包！<p style="color: red;font-size: 15px">注:请您及时抄录并妥善保存好以下信息，这是找回您钱包的必要资料，请不要外泄!</p>',
         mnemonic: "助记词:",
         walletAddress: "钱包地址:",
         secret: "私钥:",
         keystoreFile: "keystore文件:",
-        exportKeystoreFile: "keystore导出"
+        exportKeystoreFile: "keystore导出",
+        login:"登录",
     },
     mnemonicimport: {
         importmnemonic: "助记词导入",
@@ -68,7 +70,8 @@ export default {
         pleaseEnterUserPasswordAgain: "请再次输入用户密码",
         mnemonicError: "助记词错误，请重新输入！",
         keystoreGeneratedError: "keystore 生成出错！",
-        localStorageFailed: "本地存储失败！"
+        localStorageFailed: "本地存储失败！",
+        cancel:"取消",
     },
     main: {
         newFolder: "新建文件夹",
@@ -175,7 +178,8 @@ export default {
         importedKeystoryFilePFailed: "keystory 文件未导入或文件解析失败，请重新输入！",
         theKeystoryFileOrPasswordIsIncorrectPleaseEnter: "keystory 文件或密码有误，请重新输入！",
         newKeystoreGeneratedError: "新keystore 生成错误！",
-        localStorageFailed: "本地存储失败！"
+        localStorageFailed: "本地存储失败！",
+        cancel:"取消"
     },
     keyImport: {
         walletKeyImport: "钱包密钥导入",
@@ -196,7 +200,8 @@ export default {
         lengthIsBetween4And20Characters: "长度在 4 到 20 个字符",
         pleaseEnterTheUserPasswordAgain: "请再次输入用户密码",
         keyIsWrongPleaseEnter: "密钥错误，请重新输入！",
-        localStorageFailed: "本地存储失败！"
+        localStorageFailed: "本地存储失败！",
+        cancel:"取消"
     },
     ...zhLocale
 };
