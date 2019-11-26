@@ -559,8 +559,9 @@
 	width:85%;
 	border-radius:4px;
 	border: 1px solid #C0C4CC;
-	height: 5vh;
+	height: 4vh;
 	float: left;
+	margin-top: 2%;
 }
 
 .section .el-form--label-top .el-form-item__label {
@@ -614,11 +615,13 @@
 	height:2vh;
 	line-height: 2vh;
 	text-align: center;
+	border: 1px solid black;
 }
 .avatar {
 	width: 3vw;
-	height: 5vh;
+	height: 6vh;
 	display: block;
+	border: 0;
 }
 
 
