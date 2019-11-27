@@ -190,8 +190,6 @@ export default {
         template: "Template",
         unmarked: "Unmarked",
         trash:"Trash",
-        // familyAccount: "家人账号",
-        // privateAccount: "私人账号",
         note: "Attention",
         pleaseGoToTheOfficialWebsiteToActivateYourWallet: "Please go to the official website to activate your wallet first！",
         weak: "Weakness",
