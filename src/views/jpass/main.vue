@@ -282,7 +282,8 @@
                                 </el-form-item>
                                 <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey"
                                               style="width: 90%;margin-bottom:0;">
-                                    <input type="text" v-model="data.val" class="myInput"/> <a href="#"><i class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
+                                    <input type="text" v-model="data.val" class="myInput"/> <a href="#"><i
+                                        class="el-icon-close" @click="addProjectRemoveItem(data.id)"></i></a>
                                 </el-form-item>
                             </template>
                             <el-form-item :label="$t('main.chooseCategory')" style="margin-top:1%;margin-bottom: 0px;">
@@ -299,7 +300,8 @@
                                         {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}
+                                        <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems"
+                                                          :command="item">{{item.key}}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
@@ -324,7 +326,8 @@
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="editobject.name" class="myInput" style="width:35%;margin-left: 0.5vw"/>
+                </span> <input type="text" v-model="editobject.name" class="myInput"
+                               style="width:35%;margin-left: 0.5vw"/>
                 <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                            :show-file-list="false" :on-success="handleAvatarSuccessEdit"
                            :before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">
@@ -364,7 +367,8 @@
                                 </el-form-item>
                                 <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey"
                                               style="width: 90%;margin-bottom:0">
-                                    <input type="text" v-model="data.val" class="myInput"/> <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
+                                    <input type="text" v-model="data.val" class="myInput"/> <a href="#"><i
+                                        class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                                 </el-form-item>
                             </template>
                             <el-form-item :label="$t('main.chooseCategory')" style="margin-top:1%;margin-bottom: 0px;">
@@ -397,42 +401,54 @@
             </div>
         </el-dialog>
         <!--增加模板-->
-        <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%" height="90%"
+        <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%"
+                   height="90%"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="true">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                  <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw" class="myInput"/>
+                </span> <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw"
+                               class="myInput"/>
                 <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                            :show-file-list="false"
                            :on-success="handleAvatarSuccessAdd"
                            :before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">
-                    <img v-if="imageBase64" :src="imageBase64" class="avatar"> <i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>
+                    <img v-if="imageBase64" :src="imageBase64" class="avatar"> <i v-else class="el-icon-plus"
+                                                                                  style="height: 6vh;line-height: 6vh;width:3.5vw "></i>
                 </el-upload>
             </div>
             <br>
             <el-tabs type="border-card">
                 <el-tab-pane label="添加项">
                     <div style="height:45vh;overflow: auto;">
-                        <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px" class="demo-ruleForm"
+                        <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px"
+                                 class="demo-ruleForm"
                                  style="width: 80%;margin: auto">
                             <!--<el-form-item :label="$t('main.templateName')" style="width: 90%;margin-bottom: -6%" prop="name">-->
                             <!---->
                             <!--</el-form-item>-->
                             <template v-for="(data, index) in this.tempTemplate">
-                                <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;margin-bottom:0">
-                                    <input type="password" v-model="data.val" readonly style="width:90%;float: left" class="myInput"/>
-                                    <a href="#"><i class="el-icon-close" @click="addTemplageRemoveItem(data.id)"></i></a>
+                                <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey"
+                                              style="width: 90%;margin-bottom:0">
+                                    <input type="password" v-model="data.val" readonly style="width:90%;float: left"
+                                           class="myInput"/>
+                                    <a href="#"><i class="el-icon-close"
+                                                   @click="addTemplageRemoveItem(data.id)"></i></a>
                                 </el-form-item>
-                                <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey" style="width: 90%;margin-bottom: 0">
-                                    <input type="text" v-model="data.val" readonly style="width:90%;float: left" class="myInput"/>
-                                    <a href="#"><i class="el-icon-close" @click="addTemplageRemoveItem(data.id)"></i></a>
+                                <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey"
+                                              style="width: 90%;margin-bottom: 0">
+                                    <input type="text" v-model="data.val" readonly style="width:90%;float: left"
+                                           class="myInput"/>
+                                    <a href="#"><i class="el-icon-close"
+                                                   @click="addTemplageRemoveItem(data.id)"></i></a>
                                 </el-form-item>
                             </template>
                             <el-form-item :label="$t('main.chooseCategory')" style="margin-bottom: 1vh">
-                                <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')" style="float: left;width:75%">
-                                    <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')"
+                                           style="float: left;width:75%">
+                                    <el-option v-for="(item,index) in this.labels.labels" :key="item.id"
+                                               :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item :label="$t('main.addOtherItems')">
@@ -441,7 +457,8 @@
                                         {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">
+                                        <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems"
+                                                          :command="item">
                                             {{item.key}}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
@@ -464,7 +481,8 @@
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                    <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="editobject.name" style="width:35%;margin-left: 0.5vw" class="myInput"/>
+                </span> <input type="text" v-model="editobject.name" style="width:35%;margin-left: 0.5vw"
+                               class="myInput"/>
                 <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                            :show-file-list="false"
                            :on-success="handleAvatarSuccessEdit"
@@ -477,26 +495,30 @@
             <el-tabs type="border-card">
                 <el-tab-pane label="添加项">
                     <div style="height:45vh;overflow: auto;">
-                        <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px" class="demo-ruleForm" style="width: 85%;margin: auto">
+                        <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px"
+                                 class="demo-ruleForm" style="width: 85%;margin: auto">
                             <!--<el-form-item :label="$t('main.name')" style="width: 90%;margin-bottom: -6%" prop="name">-->
                             <!---->
                             <!--</el-form-item>-->
                             <template v-for="(data, index) in this.editobject.datas">
                                 <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey"
                                               style="width: 90%;margin-bottom: 0">
-                                    <input type="password" v-model="data.val" readonly style="float: left;width:90%;" class="myInput"/>
+                                    <input type="password" v-model="data.val" readonly style="float: left;width:90%;"
+                                           class="myInput"/>
                                     <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                                 </el-form-item>
                                 <el-form-item v-else-if="data.type==='text'" :label="data.tempkey" :prop="data.tempkey"
                                               style="width: 90%;margin-bottom:0">
-                                    <input type="text" v-model="data.val" style="float: left;width:90%;" readonly class="myInput"/>
+                                    <input type="text" v-model="data.val" style="float: left;width:90%;" readonly
+                                           class="myInput"/>
                                     <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                                 </el-form-item>
                             </template>
                             <el-form-item :label="$t('main.chooseCategory')" style="margin-bottom: 1vh;">
                                 <el-select v-model="selectlabels" multiple :placeholder="$t('main.pleaseChoose')"
                                            style="float: left;width:75%">
-                                    <el-option v-for="(item,index) in this.labels.labels" :key="item.id" :label="item.name"
+                                    <el-option v-for="(item,index) in this.labels.labels" :key="item.id"
+                                               :label="item.name"
                                                :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
@@ -506,7 +528,8 @@
                                         {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems" :command="item">
+                                        <el-dropdown-item v-for="(item,index) in this.templateItems.templateItems"
+                                                          :command="item">
                                             {{item.key}}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
@@ -611,10 +634,8 @@
                             {{$t('main.language')}}
                         </legend>
                         <span style="margin-left: 2vw">
-                            <el-select v-model="language" :placeholder="$t('main.languageSelection')"
-                                       @change="changeLang">
-                               <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
-                                          :value="item.value"></el-option>
+                            <el-select v-model="language" :placeholder="$t('main.languageSelection')" @change="changeLang(language)">
+                               <el-option v-for="item in this.languages" :key="item.value" :label="item.label" :value="item.value"></el-option>
                             </el-select>
                         </span>
                     </fieldset>
@@ -712,6 +733,7 @@
                 });
             }
             this.initialize();
+
         }, data() {
             return {
                 //密码器
@@ -725,9 +747,7 @@
                 language: '',//语言选择
                 showPassword: "",//是否显示密码
                 savePassword: "",
-                savePasswords: [{value: 'ask', label: this.$t('admin.ask')}, {
-                    value: 'off', label: this.$t('admin.shutDown')
-                }, {value: 'automatically', label: this.$t('admin.autofill')}],
+                savePasswords: [],
                 showpassword: "",
                 locktimedisabled: "",
                 showpass: "", //弹出框
@@ -1092,7 +1112,6 @@
             }, //获取目录
             getdirectory() {
                 var alldata = this.db.get("models").value();
-                console.log(alldata);
                 var allProjects = this.db.get("project").value();
                 var projectstring = ""
                 var directoryString = ""
@@ -1114,7 +1133,8 @@
                     } else if (alldata[modelkey].id == "mb") {
                         count = this.db.get("templates").filter({isDel: false}).size().value();
                     } else if (alldata[modelkey].id == "ljt") {
-                        count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").filter({isDel: true}).size().value();
+                        count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").
+                                        filter({isDel: true}).size().value();
                     }
                     alldata[modelkey].count = count;
                 }
@@ -1137,9 +1157,20 @@
                 jsonDirectoryString = "{directory:[" + directoryString + "]}";
                 labelsString = labelsString.substring(0, labelsString.length - 1);
                 jsonLabelsString = "{labels:[" + labelsString + "]}";
-                this.DProject = this.$JSON5.parse(jsonProjectstring);
+                //文件夹
                 this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
-                this.labels = this.$JSON5.parse(jsonLabelsString);
+                //分类下拉框国际化
+                var jsonlebals =this.$JSON5.parse(jsonLabelsString).labels;
+                for(var obj in jsonlebals){
+                    jsonlebals[obj].name=this.international(jsonlebals[obj].name);
+                }
+                this.labels ={labels:jsonlebals}
+                //目录国际化
+                var jsonProjects =  this.$JSON5.parse(jsonProjectstring).project;
+                for(var obj in jsonProjects){
+                    jsonProjects[obj].name=this.international(jsonProjects[obj].name);
+                }
+               this.DProject ={project:jsonProjects};
                 //类型名称
                 for (var index in  allProjects) {
                     var newArray = new Array();
@@ -1147,13 +1178,14 @@
                         var modelId = allProjects[index].modelsId[indexMode];
                         var model = this.db.get("models").find({id: modelId}).value();
                         if (model.id != "sy") {
-                            newArray.push(model.name);
+                            newArray.push(this.international(model.name));//项目分类国际化
                         }
                     }
                     allProjects[index].modelsName = newArray.toString();
                 }
                 this.projects = this.db.get("project").filter({isDel: false}).value();
-            }, addDirectoryOP() {
+            },
+            addDirectoryOP() {
                 this.dialogVisible2 = true;
             }, //提交添加目录
             submitForm(formName) {
@@ -1178,7 +1210,8 @@
                 this.db.set('version', new Date().valueOf()).write();
                 this.dialogVisible2 = false, this.getdirectory();
                 this.$refs[formName].resetFields();
-            }, projectclick(note, event) {
+            },
+            projectclick(note, event) {
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentProject = index;
@@ -1187,7 +1220,8 @@
                 this.delobj = note;
                 this.directoryClickId = note.id;
                 this.notesBytargeId(note);
-            }, directoryclick(note, event) {
+            },
+            directoryclick(note, event) {
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentDirectory = index;
@@ -1272,14 +1306,28 @@
                             let modelId = projects[index].modelsId[indexMode];
                             let model = this.db.get("models").find({id: modelId}).value();
                             if (model.id != "sy") {
-                                newArray.push(model.name);
+                                newArray.push(this.international(model.name));
                             }
                         }
                         projects[index].modelsName = newArray.toString();
                     }
                     projectArray = projects;
                 } else if (obj.id == "ljt") {
+                    //模板类别名称国际化
                     let delTemplate = this.db.get("templates").filter({isDel: true}).value();
+                    for (let index in  delTemplate) {
+                        let newArray = new Array();
+                        //插入类别名称
+                        for (let indexMode in delTemplate[index].modelsId) {
+                            let modelId = delTemplate[index].modelsId[indexMode];
+                            let model = this.db.get("models").find({id: modelId}).value();
+                            if (model.id != "sy") {
+                                newArray.push(this.international(model.name));
+                            }
+                        }
+                        delTemplate[index].modelsName = newArray.toString();
+                    }
+
                     let delProject = this.db.get("project").filter({isDel: true}).value();
                     projectArray = delTemplate.concat(delProject);
                 }
@@ -1309,7 +1357,7 @@
                         let profiles = {
                             name: loginObj.name, address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"' + this.$t('main.allProjects') + '","modelsType":"project","type":"model"}, {"id":"scj","name":"' + this.$t('main.favorites') + '","modelsType":"project","type":"model"}, {"id":"mm","name":"' + this.$t('main.password') + '","modelsType":"project","type":"model"}, {"id":"mb","name":"' + this.$t('main.template') + '","modelsType":"project","type":"model"}, {"id":"wbj","name":"' + this.$t('main.unmarked') + '","modelsType":"project","type":"model"},{"id":"ljt","name":"' + this.$t('main.trash') + '","modelsType":"project","type":"model"}, {"id":"06","name":"' + this.$t('main.familyAccount') + '","modelsType":"directory","type":"model"}, {"id":"07","name":"' + this.$t('main.privateAccount') + '","modelsType":"directory","type":"model"}]}');
+                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
                         await this.db.defaults(newdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
@@ -1406,7 +1454,8 @@
                 this.dialogVisibleTemplate = true;
                 this.selectlabels = "";
                 this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").value()));
-            }, projectlick(project, event) {
+            },
+            projectlick(project, event) {
                 let temp = this.db.get("templates").find({id: project.id}).value();
                 let target = event.currentTarget;
                 let index = Number(target.getAttribute("data-index"));
@@ -1550,6 +1599,7 @@
                 this.currentTemplate = -1;
                 this.templateEvent = ""
             }, openSetting() {
+                this.savePasswords=[{value: 'ask', label: this.$t('main.ask')}, {value: 'off', label: this.$t('main.shutDown')}, {value: 'automatically', label: this.$t('main.autofill')}];
                 this.dialogVisibleSetting = true;
             }, //清除数据库数据
             cleardb() {
@@ -1676,7 +1726,8 @@
                 this.language = setting.language;//语言选择
                 this.showPassword = setting.showPassword;//是否显示密码
                 this.savePassword = setting.savePassword;
-            }, //保存设置
+            },
+            //保存设置
             savesettings() {
                 try {
                     this.db.get("settings").set("systemlock", this.systemlock).write();
@@ -1689,16 +1740,8 @@
                 } catch (e) {
                     this.$message.error(this.$t('main.settingSaveFailed'));
                 }
-            }, //国际化
-            changeLang() {
-                if (this.$i18n.locale === 'zh-CN') {
-                    this.$i18n.locale = 'en-US';
-                } else {
-                    this.$i18n.locale = 'zh-CN';
-                }
-                // console.log(this.$JPassUtil.Mnemonic.createMnemonic(12, this.$i18n.locale));
-                localStorage.setItem('lang', this.$i18n.locale);
-            }, //搜索框
+            },
+            //搜索框
             search(temp){
                 this.projects = [];
                 let projectArray = [];
@@ -1766,7 +1809,8 @@
                     this.$message.error('上传头像图片大小不能超过 200KB!');
                 }
                 return isImage && isLt200K;
-            }, favorite(obj){
+            },
+            favorite(obj){
                 if (obj.isDel) {
                     return false;
                 }
@@ -1781,7 +1825,8 @@
                 this.db.set('version', new Date().valueOf()).write();
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
-            }, unfavorite(obj){
+            },
+            unfavorite(obj){
                 if (obj.isDel) {
                     return false;
                 }
@@ -1796,15 +1841,38 @@
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
-            }, passwordGenerator() {
+            },
+            passwordGenerator() {
                 this.dialogVisiblePasswordGenerator = true;
             },
+            //国际化(整体配置)
+            changeLang(lan) {
+                if (lan === "中文") {
+                    this.$i18n.locale = 'zh-CN';
+                } else if(lan === "English"){
+                    this.$i18n.locale = 'en-US';
+                }
+                this.getdirectory();
+                //国际化设置菜单中 保存用户和密码下来框
+                this.savePasswords=[{value: 'ask', label: this.$t('main.ask')}, {value: 'off', label: this.$t('main.shutDown')}, {value: 'automatically', label: this.$t('main.autofill')}];
+                 localStorage.setItem('lang', this.$i18n.locale);
+
+            },
+            //国际化（目录）
+            international(name){
+                var directory ={"allProjects":this.$t('main.allProjects'),"favorites":this.$t('main.favorites'),"password":this.$t('main.password'),
+                         "template":this.$t('main.template'),"unmarked":this.$t('main.unmarked'),"trash":this.$t('main.trash')};
+                 for(var index in directory){
+                    if(name==index){
+                        name = directory[index];
+                    }
+                 }
+                return name;
+            }
         }
     }
-
 </script>
 <style>
     @import './css/base.css';
     @import './css/sy.css';
-
 </style>
