@@ -201,7 +201,9 @@ export default {
         settingSavedSuccessfully: "Settings saved successfully！",
         settingSaveFailed: "Settings save failed！",
         PasswordGenerator:"Password generator",
-        fields:"Fields"
+        fields:"Fields",
+        recover:"Recover",
+        recovertitle:"Whether to restore deleted files?"
     },
     ...enLocale
 };

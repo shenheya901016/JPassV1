@@ -144,7 +144,9 @@ export default {
         settingSavedSuccessfully: "设置保存成功！",
         settingSaveFailed: "设置保存失败！",
         PasswordGenerator:"密码生成器",
-        fields:"字段"
+        fields:"字段",
+        recover:"恢复",
+        recovertitle:"是否要恢复删除的文件？"
     },
     lock: {
         unlockJpass: "解锁jpass",

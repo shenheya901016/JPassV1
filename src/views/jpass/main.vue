@@ -159,7 +159,7 @@
                            @click="editProject()" style="margin-left: 3%">
                     {{$t('main.modify')}}
                 </el-button>
-                <!--<el-button size="small" v-if="this.projectEvent!=''" @click="dialogVisibleAddProject = false">取 消</el-button>-->
+                <el-button v-if="this.projectEvent!=''&& this.projectEvent.isDel==true" size="small" @click="dialogRecover = true">{{$t('main.recover')}}</el-button>
             </el-form>
         </section>
         <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%"
@@ -196,6 +196,14 @@
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" type="primary" @click="removeData()">{{$t('main.okFormat')}}</el-button>
                 <el-button size="small" @click="dialogVisibledDirectory = false">{{$t('main.cancelFormat')}}</el-button>
+              </span>
+        </el-dialog>
+        <!--恢复文件夹弹出框-->
+        <el-dialog :title="$t('main.prompt')" :visible.sync="dialogRecover" width="30%">
+            <span>{{$t('main.recovertitle')}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" type="primary" @click="recover()">{{$t('main.okFormat')}}</el-button>
+                <el-button size="small" @click="dialogRecover = false">{{$t('main.cancelFormat')}}</el-button>
               </span>
         </el-dialog>
         <!--删除项目弹出框-->
@@ -384,8 +392,7 @@
                                         {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems"
-                                                          :command="item">{{item.key}}
+                                        <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
@@ -767,6 +774,7 @@
                 dialogVisibleTemplateEdit: false,//修改模板弹出框
                 dialogVisibleItemsEdit: false, //修改模板项弹出框
                 dialogMyInfo: false, //个人信息弹出框
+                dialogRecover:false,//恢复弹出框
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -1868,6 +1876,16 @@
                     }
                  }
                 return name;
+            },
+            //恢复
+            recover(){
+                if(this.projectEvent.type=="project"){
+                   this.db.get("project").find({id: this.projectEvent.id}).set("isDel", false).write();
+                }else if(this.projectEvent.type=="template"){
+                   this.db.get("templates").find({id: this.projectEvent.id}).set("isDel", false).write();
+                }
+              this.dialogRecover = false;
+              this.getdirectory();
             }
         }
     }
