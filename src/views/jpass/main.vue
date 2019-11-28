@@ -32,7 +32,7 @@
             </li>
             <li>
                 <el-button v-if="showTrash==true" style="border:0;padding: 10px 10px;" @click="dialogclearTrash = true"><img style="top:-2px;height: 25px;width: 25px;"
-                                                                                  src="./img/钥匙.svg" alt="">{{$t('main.cleartrash')}}
+                                                                                  src="./img/trash.svg" alt="">{{$t('main.cleartrash')}}
                 </el-button>
             </li>
             <li>
