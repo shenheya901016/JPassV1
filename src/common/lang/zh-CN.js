@@ -146,7 +146,9 @@ export default {
         PasswordGenerator:"密码生成器",
         fields:"字段",
         recover:"恢复",
-        recovertitle:"是否要恢复删除的文件？"
+        recovertitle:"是否要恢复删除的文件?",
+        cleartrash:"清空垃圾桶",
+        clearTashTitle:"是否清空垃圾桶",
     },
     lock: {
         unlockJpass: "解锁jpass",
@@ -183,8 +185,7 @@ export default {
         newKeystoreGeneratedError: "新keystore 生成错误！",
         localStorageFailed: "本地存储失败！",
         cancel:"取消",
-        clearTash:"是否清空垃圾箱",
-        trash:"清空垃圾箱"
+
     },
     keyImport: {
         walletKeyImport: "钱包密钥导入",

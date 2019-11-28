@@ -204,8 +204,8 @@ export default {
         fields:"Fields",
         recover:"Recover",
         recovertitle:"Whether to restore deleted files?",
-        clearTash:"Empty the trash?",
-        trash:"Empty trash"
+        clearTashTitle:"Empty the trash?",
+        cleartrash:"Empty trash"
     },
     ...enLocale
 };

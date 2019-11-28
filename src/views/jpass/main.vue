@@ -7,49 +7,50 @@
         </h1>
         <ul class="link">
             <li>
-                <el-button @click="addDirectoryOP" style="border:0"><img style="top:-2px;height: 25px;width: 25px;"
+                <el-button @click="addDirectoryOP" style="border:0;padding: 10px 10px;"><img style="top:-2px;height: 25px;width: 25px;"
                                                                          src="./img/tianjiawenjianjia.svg"
                                                                          alt="">{{$t('main.newFolder')}}
                 </el-button>
             </li>
             <li>
-                <el-button @click="addTemplate" style="border:0"><img style="top:-2px;height: 20px;width: 20px;"
+                <el-button @click="addTemplate" style="border:0;padding: 10px 10px;"><img style="top:-2px;height: 20px;width: 20px;"
                                                                       src="./img/moban.svg" alt="">{{$t('main.newTemplate')}}
                 </el-button>
             </li>
             <li>
-                <el-button @click="selectTemplate" style="border:0"><img style="top:-2px;height: 20px;width: 20px;"
+                <el-button @click="selectTemplate" style="border:0;padding: 10px 10px;"><img style="top:-2px;height: 20px;width: 20px;"
                                                                          src="./img/tianjiaxiangmu.svg"
                                                                          alt="">{{$t('main.newProject')}}
                 </el-button>
             </li>
 
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0"><img style="top:-2px;"
+                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0;padding: 10px 10px;"><img style="top:-2px;"
                                                                                                       src="./img/ICON-SC.svg"
                                                                                                       alt="">{{$t('main.delete')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
+                <el-button v-if="showTrash==true" style="border:0;padding: 10px 10px;" @click="dialogclearTrash = true"><img style="top:-2px;height: 25px;width: 25px;"
+                                                                                  src="./img/钥匙.svg" alt="">{{$t('main.cleartrash')}}
+                </el-button>
+            </li>
+            <li>
+                <el-button style="border:0;padding: 10px 10px;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
                 </el-button>
                 <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus"
                              :show-text="true" v-show="processShow"></el-progress>
             </li>
             <li>
-                <el-button style="border:0" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
+                <el-button style="border:0;padding: 10px 10px;" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;"
+                <el-button style="border:0;padding: 10px 10px;" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;"
                                                                               src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
                 </el-button>
             </li>
-            <li>
-                <el-button style="border:0" @click="dialogclearTrash = true"><img style="top:-2px;height: 25px;width: 25px;"
-                                                                                  src="./img/钥匙.svg" alt="">{{$t('main.trash')}}
-                </el-button>
-            </li>
+
             <!--<li>-->
             <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
             <!--</li>-->
@@ -221,7 +222,7 @@
         </el-dialog>
         <!--清空垃圾箱弹出框-->
         <el-dialog :title="$t('main.prompt')" :visible.sync="dialogclearTrash" width="30%">
-            <span>{{$t('main.clearTash')}}</span>
+            <span>{{$t('main.clearTashTitle')}}</span>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" type="primary" @click="clearTrash()">{{$t('main.okFormat')}}</el-button>
                 <el-button size="small" @click="dialogclearTrash = false">{{$t('main.cancelFormat')}}</el-button>
@@ -835,6 +836,7 @@
                 key: "",
                 myInfoKey: "",
                 directoryClickId: "",
+                showTrash:"false",
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1157,6 +1159,11 @@
                     } else if (alldata[modelkey].id == "ljt") {
                         count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").
                                         filter({isDel: true}).size().value();
+                        if(count>0){
+                           this.showTrash=true;
+                        }else{
+                            this.showTrash=false;
+                        }
                     }
                     alldata[modelkey].count = count;
                 }
