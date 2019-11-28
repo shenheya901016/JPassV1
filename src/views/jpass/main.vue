@@ -45,6 +45,11 @@
                                                                               src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
                 </el-button>
             </li>
+            <li>
+                <el-button style="border:0" @click="dialogclearTrash = true"><img style="top:-2px;height: 25px;width: 25px;"
+                                                                                  src="./img/钥匙.svg" alt="">{{$t('main.trash')}}
+                </el-button>
+            </li>
             <!--<li>-->
             <!--<el-button @click=""><img style="top:-2px;" src="./img/ICON-SCQ.svg" alt="">初始化钱包</el-button>-->
             <!--</li>-->
@@ -212,6 +217,14 @@
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" type="primary" @click="removeData()">{{$t('main.okFormat')}}</el-button>
                 <el-button size="small" @click="dialogVisibledProject = false">{{$t('main.cancelFormat')}}</el-button>
+              </span>
+        </el-dialog>
+        <!--清空垃圾箱弹出框-->
+        <el-dialog :title="$t('main.prompt')" :visible.sync="dialogclearTrash" width="30%">
+            <span>{{$t('main.clearTash')}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" type="primary" @click="clearTrash()">{{$t('main.okFormat')}}</el-button>
+                <el-button size="small" @click="dialogclearTrash = false">{{$t('main.cancelFormat')}}</el-button>
               </span>
         </el-dialog>
         <!--删除模板弹框-->
@@ -775,6 +788,7 @@
                 dialogVisibleItemsEdit: false, //修改模板项弹出框
                 dialogMyInfo: false, //个人信息弹出框
                 dialogRecover:false,//恢复弹出框
+                dialogclearTrash:false,//清空垃圾箱
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -1886,6 +1900,20 @@
                 }
               this.dialogRecover = false;
               this.getdirectory();
+            },
+
+            //清空垃圾箱
+            clearTrash(){
+                let delTemplate = this.db.get("templates").filter({isDel: true}).value();
+                for(var index in delTemplate){
+                    this.db.get("templates").remove({id: delTemplate[index].id}).write();
+                }
+                let delProject = this.db.get("project").filter({isDel: true}).value();
+                for(var index in delProject){
+                    this.db.get("project").remove({id: delProject[index].id}).write();
+                }
+                this.dialogclearTrash= false;
+                this.getdirectory();
             }
         }
     }

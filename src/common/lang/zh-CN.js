@@ -182,7 +182,9 @@ export default {
         theKeystoryFileOrPasswordIsIncorrectPleaseEnter: "keystory 文件或密码有误，请重新输入！",
         newKeystoreGeneratedError: "新keystore 生成错误！",
         localStorageFailed: "本地存储失败！",
-        cancel:"取消"
+        cancel:"取消",
+        clearTash:"是否清空垃圾箱",
+        trash:"清空垃圾箱"
     },
     keyImport: {
         walletKeyImport: "钱包密钥导入",

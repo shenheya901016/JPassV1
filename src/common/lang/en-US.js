@@ -203,7 +203,9 @@ export default {
         PasswordGenerator:"Password generator",
         fields:"Fields",
         recover:"Recover",
-        recovertitle:"Whether to restore deleted files?"
+        recovertitle:"Whether to restore deleted files?",
+        clearTash:"Empty the trash?",
+        trash:"Empty trash"
     },
     ...enLocale
 };
