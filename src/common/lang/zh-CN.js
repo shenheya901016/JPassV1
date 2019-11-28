@@ -143,7 +143,8 @@ export default {
         failToEdit: "修改失败！",
         settingSavedSuccessfully: "设置保存成功！",
         settingSaveFailed: "设置保存失败！",
-        PasswordGenerator:"密码生成器"
+        PasswordGenerator:"密码生成器",
+        fields:"字段"
     },
     lock: {
         unlockJpass: "解锁jpass",

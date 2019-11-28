@@ -200,7 +200,8 @@ export default {
         failToEdit: "Edit failure！",
         settingSavedSuccessfully: "Settings saved successfully！",
         settingSaveFailed: "Settings save failed！",
-        PasswordGenerator:"Password generator"
+        PasswordGenerator:"Password generator",
+        fields:"Fields"
     },
     ...enLocale
 };

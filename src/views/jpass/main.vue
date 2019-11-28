@@ -232,7 +232,7 @@
             <el-button size="small" @click="dialogVisibleTemplate = false">{{$t('main.cancelFormat')}}</el-button>
         </el-dialog>
         <!--增加项目弹出框-->
-        <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddProject" width="40%"
+        <el-dialog class="mb" :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="40%"
                    height="90%" :close-on-click-modal="false">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
@@ -249,7 +249,7 @@
             </div>
             <br>
             <el-tabs type="border-card">
-                <el-tab-pane label="添加项">
+                <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px"
                                  class="demo-ruleForm"
@@ -321,7 +321,7 @@
         </el-dialog>
 
         <!--修改项目-->
-        <el-dialog class="mb" title="修改项目" :visible.sync="dialogVisibleEdit" width="40%" height="90%"
+        <el-dialog class="mb" :title="$t('main.modifyTheProject')" :visible.sync="dialogVisibleEdit" width="40%" height="90%"
                    :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
@@ -337,7 +337,7 @@
             </div>
             <br>
             <el-tabs type="border-card">
-                <el-tab-pane label="添加项">
+                <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormProjectEdit" ref="ruleFormProjectEdit" label-width="100px"
                                  class="demo-ruleForm"
@@ -420,7 +420,7 @@
             </div>
             <br>
             <el-tabs type="border-card">
-                <el-tab-pane label="添加项">
+                <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px"
                                  class="demo-ruleForm"
@@ -493,7 +493,7 @@
             </div>
             <br>
             <el-tabs type="border-card">
-                <el-tab-pane label="添加项">
+                <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px"
                                  class="demo-ruleForm" style="width: 85%;margin: auto">
