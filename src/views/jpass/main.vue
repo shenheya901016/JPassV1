@@ -694,7 +694,7 @@
         <el-dialog title="" :visible.sync="dialogMyInfo" width="40%" :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="true">
             <img src="./img/tx.svg" alt="">
-            <el-form label-width="100px" class="demo-ruleForm">
+            <el-form label-width="110px" class="demo-ruleForm">
                 <el-form-item :label="$t('myInfo.name')" prop="username" style="margin-top: 5%">
                     <el-input type="text" v-model="username" style="width:100%;" readonly>{{username}}</el-input>
                 </el-form-item>

@@ -212,7 +212,7 @@ export default {
     myInfo: {
         name: "用户名",
         walletAddress: "钱包地址",
-        keystoreFile: "keystore文件",
+        keystoreFile: "keystore文件:",
         exportKeystoreFile: "keystore导出",
     },
     ...zhLocale

@@ -209,7 +209,7 @@ export default {
     },
     myInfo: {
         name: "Name",
-        walletAddress: "Wallet Address:",
+        walletAddress: "Wallet Address",
         keystoreFile: "Keystore File:",
         exportKeystoreFile: "Keystore Export",
     },
