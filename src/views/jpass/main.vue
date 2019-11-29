@@ -426,19 +426,37 @@
                    height="90%"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="true">
-            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
+            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;border: 1px solid black;">
                  <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw"
-                               class="myInput"/>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-                           :show-file-list="false"
-                           :on-success="handleAvatarSuccessAdd"
-                           :before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">
-                    <img v-if="imageBase64" :src="imageBase64" class="avatar"> <i v-else class="el-icon-plus"
-                                                                                  style="height: 6vh;line-height: 6vh;width:3.5vw "></i>
-                </el-upload>
+                </span>
+                <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw;" class="myInput"/>
+                <!--<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"-->
+                           <!--:show-file-list="false"-->
+                           <!--:on-success="handleAvatarSuccessAdd"-->
+                           <!--:before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;border: 1px solid black">-->
+                    <!--&lt;!&ndash;<img v-if="imageBase64" :src="imageBase64" class="avatar"> &ndash;&gt;-->
+                    <!--<i v-else class="el-icon-plus"style="height: 6vh;line-height: 6vh;width:3.5vw "></i>-->
+                <!--</el-upload>-->
+                <div style="height:7vh;width:4vw;margin-left:45%;" @click="test()"><el-avatar :size="50" src="./img/start.svg"></el-avatar></div>
+
             </div>
+            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" id="choosepic">
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="dialogSymbolOpen">图片库</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                    <span @click="test()">
+                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccessAdd"
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;" @click="test()">用户资源
+                          <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
+                          <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
+                          </el-upload>
+                    </span>
+                </li>
+            </ul>
             <br>
             <el-tabs type="border-card">
                 <el-tab-pane :label="$t('main.fields')">
@@ -734,6 +752,11 @@
             <el-button size="small" @click="dialogVisiblePasswordGenerator = false">{{$t('main.cancelFormat')}}
             </el-button>
         </el-dialog>
+        <!--密码生成器-->
+        <el-dialog title="Symbol" :visible.sync="dialogSymbol" width="35%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+
+
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -771,6 +794,7 @@
                 showpassword: "",
                 locktimedisabled: "",
                 showpass: "", //弹出框
+                dialogSymbol:"false",//图片库
                 dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
@@ -836,6 +860,9 @@
                 myInfoKey: "",
                 directoryClickId: "",
                 showTrash:"false",
+                activeIndex: '1',
+                activeIndex2: '1',
+                show:"none",
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1938,6 +1965,22 @@
                 }
                 this.dialogclearTrash= false;
                 this.getdirectory();
+            },
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            test(){
+                var ui =document.getElementById("choosepic");
+                if( ui.style.display=="none"){
+                    ui.style.display="";
+                }else{
+                    ui.style.display="none"
+                }
+            },
+            dialogSymbolOpen(){
+                this.dialogSymbol=true;
+                var ui =document.getElementById("choosepic");
+                ui.style.display="none"
             }
         }
     }
