@@ -695,15 +695,15 @@
                    :close-on-press-escape="false" :show-close="true">
             <img src="./img/tx.svg" alt="">
             <el-form label-width="100px" class="demo-ruleForm">
-                <el-form-item label="用户名" prop="username" style="margin-top: 5%">
+                <el-form-item :label="$t('myInfo.name')" prop="username" style="margin-top: 5%">
                     <el-input type="text" v-model="username" style="width:100%;" readonly>{{username}}</el-input>
                 </el-form-item>
-                <el-form-item label="钱包地址" prop="myInfoKey">
+                <el-form-item :label="$t('myInfo.walletAddress')" prop="myInfoKey">
                     <el-input type="text" v-model="myInfoKey" style="width:100%;" readonly>{{myInfoKey}}</el-input>
                 </el-form-item>
-                <el-form-item :label="$t('registersuccess.keystoreFile')">
+                <el-form-item :label="$t('myInfo.keystoreFile')">
                     <el-button type="primary" size="small" style="float: left" @click="exportkeystore">
-                        {{$t('registersuccess.exportKeystoreFile')}}
+                        {{$t('myInfo.exportKeystoreFile')}}
                     </el-button>
                 </el-form-item>
             </el-form>
@@ -754,7 +754,6 @@
                 });
             }
             this.initialize();
-
         }, data() {
             return {
                 //密码器
@@ -1014,8 +1013,26 @@
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}, {
                         min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'
                     }]
-                }
+                },
             };
+        },watch: {  //密码生成器自动生成
+            'value2': function(){
+                this.crypt = this.$createPassword.genCrypt(this.radio, 8 + this.value2 / 5);
+                this.level = this.$createPassword.cryptLevel(this.crypt);
+                if (this.level.indexOf("世纪") !== -1) {
+                    this.percentage = 100;
+                } else if (this.level.indexOf("年") !== -1) {
+                    this.percentage = 80;
+                } else if (this.level.indexOf("月") !== -1) {
+                    this.percentage = 60;
+                } else if (this.level.indexOf("周") !== -1) {
+                    this.percentage = 40;
+                } else if (this.level.indexOf("天") !== -1) {
+                    this.percentage = 20;
+                } else {
+                    this.percentage = 0;
+                }
+            }
         }, methods: {
             //密码
             module() {
@@ -1072,7 +1089,7 @@
                     this.currentSecond = 0;
                     this.mouse1 = this.mouse2;
                 }
-            }, async unlock() {
+            },async unlock() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(this.loginObj.name);
