@@ -209,5 +209,11 @@ export default {
         localStorageFailed: "本地存储失败！",
         cancel:"取消"
     },
+    myInfo: {
+        name: "用户名",
+        walletAddress: "钱包地址",
+        keystoreFile: "keystore文件",
+        exportKeystoreFile: "keystore导出",
+    },
     ...zhLocale
 };

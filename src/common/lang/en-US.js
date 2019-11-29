@@ -207,5 +207,11 @@ export default {
         clearTashTitle:"Empty the trash?",
         cleartrash:"Empty trash"
     },
+    myInfo: {
+        name: "Name",
+        walletAddress: "Wallet Address:",
+        keystoreFile: "Keystore File:",
+        exportKeystoreFile: "Keystore Export",
+    },
     ...enLocale
 };
