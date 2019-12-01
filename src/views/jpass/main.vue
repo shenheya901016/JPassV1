@@ -752,10 +752,47 @@
             <el-button size="small" @click="dialogVisiblePasswordGenerator = false">{{$t('main.cancelFormat')}}
             </el-button>
         </el-dialog>
-        <!--密码生成器-->
-        <el-dialog title="Symbol" :visible.sync="dialogSymbol" width="35%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <!--图片库-->
+        <el-dialog title="Symbol" :visible.sync="dialogSymbol" width="50%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <el-tabs type="border-card">
+                <el-tab-pane label="abc" style="text-align: left">
+                    <img src="./img/abc/la.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lb.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/lc.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/ld.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/le.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lf.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/lg.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/lh.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/li.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/lj.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/lk.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/ll.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
+                    <img src="./img/abc/lm.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/ln.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lo.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lp.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lq.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lr.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/ls.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lt.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lu.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lv.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lw.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lx.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/ly.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
+                    <img src="./img/abc/lz.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
 
 
+
+                </el-tab-pane>
+                <el-tab-pane label="finances">finances</el-tab-pane>
+                <el-tab-pane label="internet">internet</el-tab-pane>
+                <el-tab-pane label="misc">misc</el-tab-pane>
+                <el-tab-pane label="personal">personal</el-tab-pane>
+                <el-tab-pane label="technology">technology</el-tab-pane>
+                <el-tab-pane label="transport">transport</el-tab-pane>
+            </el-tabs>
         </el-dialog>
     </aside>
     </body>
@@ -794,7 +831,7 @@
                 showpassword: "",
                 locktimedisabled: "",
                 showpass: "", //弹出框
-                dialogSymbol:"false",//图片库
+                dialogSymbol:false,//图片库
                 dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
