@@ -149,6 +149,11 @@ export default {
         recovertitle:"是否要恢复删除的文件?",
         cleartrash:"清空垃圾桶",
         clearTashTitle:"是否清空垃圾桶",
+        selectSymbol:"选择标识",
+        selectColor:"选择颜色",
+        userIcon:"用户图标",
+        color:"颜色",
+        symbol:"标识"
     },
     lock: {
         unlockJpass: "解锁jpass",

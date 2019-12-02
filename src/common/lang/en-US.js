@@ -205,7 +205,12 @@ export default {
         recover:"Recover",
         recovertitle:"Whether to restore deleted files?",
         clearTashTitle:"Empty the trash?",
-        cleartrash:"Empty trash"
+        cleartrash:"Empty trash",
+        selectSymbol:"Select symbol",
+        selectColor:"Select color",
+        userIcon:"User Icon",
+        color:"Color",
+        symbol:"Symbol"
     },
     myInfo: {
         name: "Name",

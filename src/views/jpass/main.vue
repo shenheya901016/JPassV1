@@ -426,7 +426,8 @@
                    height="90%"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="true">
-            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;border: 1px solid black;">
+            <img src="./img/misc/lock.svg"  ref="icon_default"  style="display: none">
+            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                  <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
                 </span>
@@ -435,15 +436,21 @@
                            <!--:show-file-list="false"-->
                            <!--:on-success="handleAvatarSuccessAdd"-->
                            <!--:before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;border: 1px solid black">-->
-                    <!--&lt;!&ndash;<img v-if="imageBase64" :src="imageBase64" class="avatar"> &ndash;&gt;-->
+                    <!--<img v-if="imageBase64" :src="imageBase64" class="avatar">-->
                     <!--<i v-else class="el-icon-plus"style="height: 6vh;line-height: 6vh;width:3.5vw "></i>-->
                 <!--</el-upload>-->
-                <div style="height:7vh;width:4vw;margin-left:45%;" @click="test()"><el-avatar :size="50" src="./img/start.svg"></el-avatar></div>
+                <div style="height:7vh;width:4vw;margin-left:45%;" @click="test()">
+                    <img v-if="symbolPath!=''"  :src="symbolPath" class="avatar" :style="{background:color}">
+                    <img v-else   src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
+                </div>
 
             </div>
             <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" id="choosepic">
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="dialogSymbolOpen">图片库</span>
+                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
                     <span @click="test()">
@@ -753,47 +760,190 @@
             </el-button>
         </el-dialog>
         <!--图片库-->
-        <el-dialog title="Symbol" :visible.sync="dialogSymbol" width="50%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
-            <el-tabs type="border-card">
-                <el-tab-pane label="abc" style="text-align: left">
-                    <img src="./img/abc/la.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lb.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/lc.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/ld.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/le.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lf.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/lg.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/lh.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/li.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/lj.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/lk.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/ll.svg" style="background-color: #046BDA" alt=""  class="temlateSymbol">
-                    <img src="./img/abc/lm.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/ln.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lo.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lp.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lq.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lr.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/ls.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lt.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lu.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lv.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lw.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lx.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/ly.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-                    <img src="./img/abc/lz.svg" style="background-color: #046BDA" alt="" class="temlateSymbol">
-
-
-
+        <el-dialog  :title="$t('main.symbol')" :visible.sync="dialogSymbol" width="50%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <el-tabs type="border-card"  style="text-align: left">
+                <el-tab-pane label="abc">
+                    <img src="./img/abc/la.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/abc/lb.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lc.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/ld.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/abc/le.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/abc/lf.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lg.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lh.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/li.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lj.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lk.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/ll.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lm.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/ln.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lo.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lp.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lq.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lr.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/ls.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lt.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lu.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lv.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lw.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lx.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/ly.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
+                    <img src="./img/abc/lz.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="getSymbolPath($event)">
                 </el-tab-pane>
-                <el-tab-pane label="finances">finances</el-tab-pane>
-                <el-tab-pane label="internet">internet</el-tab-pane>
-                <el-tab-pane label="misc">misc</el-tab-pane>
-                <el-tab-pane label="personal">personal</el-tab-pane>
-                <el-tab-pane label="technology">technology</el-tab-pane>
-                <el-tab-pane label="transport">transport</el-tab-pane>
+                <el-tab-pane label="finances">
+                    <img src="./img/finances/amex.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/atm.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/bank.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/bitcoin.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/coins.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/credit_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/diners_club.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/dollar.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/euro.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/jcb.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/mastercard.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/meastro.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/money.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/paypal.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/piggy_bank.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/pound.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/ruble.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/rupee.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/visa.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/yen.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/finances/rupay.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                </el-tab-pane>
+                <el-tab-pane label="internet">
+                    <img src="./img/internet/amazon.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/at_sign.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/blog.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/community.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/download.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/ebay.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/email.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/f.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/g.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/in.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/instagram.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/joomla.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/mail_ru.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/pinterest.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/rss.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/s.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/t.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/v.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/vk.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/web_site.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/worldpress.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/y.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/internet/ya.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                </el-tab-pane>
+                <el-tab-pane label="misc">
+                    <img src="./img/misc/alarm.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/bag.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/box.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/default.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/door.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/key.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/lock.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/movie.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/music.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/network.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/note.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/picture.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/safe.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/sale.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/shopping_cart.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/misc/suitcase.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                </el-tab-pane>
+                <el-tab-pane label="personal">
+                    <img src="./img/personal/dental_insurance.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/eye.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/fitness.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/food.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/glasses.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/health_insurance.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/hospital.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/house.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/id.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/insurance.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/membership.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/passport.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/pets.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/prescription.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/shield.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/social_security.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/tshirt.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/user.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/personal/user2.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                </el-tab-pane>
+                <el-tab-pane label="technology">
+                    <img src="./img/technology/adobe.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/android.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/apple.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/calling_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/camera.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/cd.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/computer.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/gaming.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/hard_drive.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/laptop.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/phone.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/printer.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/router.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/sd_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/server.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/sim_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/smartphone.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/source_code.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/tablet.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/tv.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/ubuntu.png.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/video.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/voicemail.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/wifi.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/technology/windows.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                </el-tab-pane>
+                <el-tab-pane label="transport">
+                    <img src="./img/transport/airplane.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/bicycle.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/bus.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/car.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/garage.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/gas.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/helicopter.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/jeep.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/motorcycle.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/parking.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/scooter.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/ship.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/train.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                    <img src="./img/transport/truck.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="getSymbolPath($event)">
+                </el-tab-pane>
             </el-tabs>
         </el-dialog>
+        <!--颜色选择弹出框-->
+        <el-dialog  :title="$t('main.color')" :visible.sync="dialogSymbolcolor" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <div style="width:55%;border: 1px solid black;margin: auto;padding: 2% 1%;">
+            <img :src="symbolPath"  style="background:#F15723" alt="" class="temlateSymbol"   @click="setcolor('#F15723')">
+            <img :src="symbolPath"  style="background:#DC4437" alt="" class="temlateSymbol"   @click="setcolor('#DC4437')">
+            <img :src="symbolPath"  style="background:#F0851D" alt="" class="temlateSymbol"   @click="setcolor('#F0851D')">
+            <img :src="symbolPath"  style="background:#ECA402" alt="" class="temlateSymbol"   @click="setcolor('#ECA402')"><br>
+            <img :src="symbolPath"  style="background:#F0CA39" alt="" class="temlateSymbol"   @click="setcolor('#F0CA39')">
+            <img :src="symbolPath"  style="background:#C3D140" alt="" class="temlateSymbol"   @click="setcolor('#C3D140')">
+            <img :src="symbolPath"  style="background:#64B044" alt="" class="temlateSymbol"   @click="setcolor('#64B044')">
+            <img :src="symbolPath"  style="background:#109D59" alt="" class="temlateSymbol"   @click="setcolor('#109D59')"><br>
+            <img :src="symbolPath"  style="background:#11AACC" alt="" class="temlateSymbol"   @click="setcolor('#11AACC')">
+            <img :src="symbolPath"  style="background:#4385F5" alt="" class="temlateSymbol"   @click="setcolor('#4385F5')">
+            <img :src="symbolPath"  style="background:#3F5CA8" alt="" class="temlateSymbol"   @click="setcolor('#3F5CA8')">
+            <img :src="symbolPath"  style="background:#9E69AF" alt="" class="temlateSymbol"   @click="setcolor('#9E69AF')"><br>
+            <img :src="symbolPath"  style="background:#BC5779" alt="" class="temlateSymbol"   @click="setcolor('#BC5779')">
+            <img :src="symbolPath"  style="background:#89695E" alt="" class="temlateSymbol"   @click="setcolor('#89695E')">
+            <img :src="symbolPath"  style="background:#999999" alt="" class="temlateSymbol"   @click="setcolor('#999999')">
+            <img :src="symbolPath"  style="background:#333333" alt="" class="temlateSymbol"   @click="setcolor('#333333')">
+            </div>
+        </el-dialog>
+
     </aside>
     </body>
 </template>
@@ -831,6 +981,9 @@
                 showpassword: "",
                 locktimedisabled: "",
                 showpass: "", //弹出框
+                symbolPath:"",
+                color:"#999999",
+                dialogSymbolcolor:false,//图片库颜色
                 dialogSymbol:false,//图片库
                 dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
                 dialogVisible: false,//密码锁定弹出框
@@ -2003,9 +2156,6 @@
                 this.dialogclearTrash= false;
                 this.getdirectory();
             },
-            handleSelect(key, keyPath) {
-                console.log(key, keyPath);
-            },
             test(){
                 var ui =document.getElementById("choosepic");
                 if( ui.style.display=="none"){
@@ -2014,11 +2164,30 @@
                     ui.style.display="none"
                 }
             },
+            //打开图片选择菜单
             dialogSymbolOpen(){
                 this.dialogSymbol=true;
                 var ui =document.getElementById("choosepic");
                 ui.style.display="none"
+            },
+            //打开颜色选择框
+            opencolor(){
+                if(this.symbolPath==""){
+                    this.symbolPath=this.$refs.icon_default.src;
+                }
+                this.dialogSymbolcolor=true;
+
+            },
+            getSymbolPath(path){
+                this.symbolPath=path.target.currentSrc;
+                this.dialogSymbol=false;
+
+            },
+            setcolor(color){
+              this.color=color;
+              this.dialogSymbolcolor=false;
             }
+
         }
     }
 </script>
