@@ -2176,7 +2176,8 @@
                     this.symbolPath=this.$refs.icon_default.src;
                 }
                 this.dialogSymbolcolor=true;
-
+                var ui =document.getElementById("choosepic");
+                ui.style.display="none"
             },
             getSymbolPath(path){
                 this.symbolPath=path.target.currentSrc;
