@@ -256,20 +256,43 @@
         </el-dialog>
         <!--增加项目弹出框-->
         <el-dialog class="mb" :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="40%"
-                   height="90%" :close-on-click-modal="false">
+                   height="90%" :close-on-click-modal="false"  @closed="cleartype">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
                 </span> <input type="text" v-model="ruleFormAddProject.name" class="myInput"
                                style="width:35%;margin-left: 0.5vw"/>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-                           :show-file-list="false" :on-success="handleAvatarSuccessAddPro"
-                           :before-upload="beforeAvatarUpload"
-                           style="height:7vh;width:4vw;margin-left:45%;">
-                    <img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar">
-                    <i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>
-                </el-upload>
+                <!--<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"-->
+                           <!--:show-file-list="false" :on-success="handleAvatarSuccessAddPro"-->
+                           <!--:before-upload="beforeAvatarUpload"-->
+                           <!--style="height:7vh;width:4vw;margin-left:45%;">-->
+                    <!--<img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar">-->
+                    <!--<i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>-->
+                <!--</el-upload>-->
+                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
+                    <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64" class="avatar" :style="{background:templateEvent.bgcolor}">
+                    <img v-else  src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
+                </div>
             </div>
+            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                    <span>
+                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccessAddPro"
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
+                             <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
+                             <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
+                          </el-upload>
+                    </span>
+                </li>
+            </ul>
             <br>
             <el-tabs type="border-card">
                 <el-tab-pane :label="$t('main.fields')">
@@ -345,19 +368,39 @@
 
         <!--修改项目-->
         <el-dialog class="mb" :title="$t('main.modifyTheProject')" :visible.sync="dialogVisibleEdit" width="40%" height="90%"
-                   :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+                   :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true"   @closed="cleartype" >
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="editobject.name" class="myInput"
-                               style="width:35%;margin-left: 0.5vw"/>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-                           :show-file-list="false" :on-success="handleAvatarSuccessEdit"
-                           :before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">
-                    <img v-if="editobject.tempBase64" :src="editobject.tempBase64" class="avatar">
-                    <i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>
-                </el-upload>
+                </span> <input type="text" v-model="editobject.name" class="myInput" style="width:35%;margin-left: 0.5vw"/>
+                <!--<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"-->
+                           <!--:show-file-list="false" :on-success="handleAvatarSuccessEdit"-->
+                           <!--:before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">-->
+                <!--<img v-if="editobject.tempBase64" :src="editobject.tempBase64" class="avatar">-->
+                <!--</el-upload>-->
+                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
+                    <img  :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
+                </div>
             </div>
+            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                    <span>
+                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccessEdit"
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
+                             <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
+                             <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
+                          </el-upload>
+                    </span>
+                </li>
+            </ul>
             <br>
             <el-tabs type="border-card">
                 <el-tab-pane :label="$t('main.fields')">
@@ -1751,6 +1794,7 @@
                 } else {
                     this.dialogVisibleTemplate = false;
                     this.dialogVisibleAddProject = true;
+                    this.operationType="project_add";
                 }
             }, //数据提交
             submitproject() {
@@ -1779,7 +1823,7 @@
                     "dateTime": new Date().valueOf(),
                     "tempBase64": formData.tempBase64,
                     "imgHash": "",
-                    "bgcolor":this.color
+                    "bgcolor":formData.bgcolor
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
@@ -1820,7 +1864,6 @@
             },
             //修改页面
             editProject() {
-                this.operationType="edit";
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
                 if (this.editobject.type == "project") {
                     let modelsId = this.editobject.modelsId;
@@ -1832,6 +1875,7 @@
                     }
                     this.selectlabels = models;
                     this.dialogVisibleEdit = true;
+                    this.operationType="project_edit";
                 } else if (this.editobject.type == "template") {
                     var modelsId = this.editobject.modelsId;
                     var models = [];
@@ -1842,6 +1886,7 @@
                     }
                     this.selectlabels = models;
                     this.dialogVisibleTemplateEdit = true;
+                    this.operationType="template_edit";
                 }
             }, //修改project
             editDo() {
@@ -1892,6 +1937,7 @@
             }, addTemplate() {
                 this.selectlabels = [];
                 this.dialogVisibleAddTemplate = true;
+                this.operationType="template_add";
             }, selectFiledTemplate(command) {
                 this.dialogVisibleAddTempItems = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
@@ -2204,23 +2250,35 @@
             setImageBase64(path){
                 //进行修改操作时插入图片
                 console.log(this.operationType);
-                if(this.operationType=="edit"){
+                if(this.operationType=="template_edit"){
                       this.editobject.tempBase64=path.target.currentSrc;
                       this.dialogSymbol=false;
-                }else{
+                }else if(this.operationType=="template_add"){
                     //进行新建操作时插入图片
                     this.imageBase64=path.target.currentSrc;
+                    this.dialogSymbol=false;
+                }else if(this.operationType=="project_add"){
+                    this.templateEvent.tempBase64=path.target.currentSrc;
+                    this.dialogSymbol=false;
+                }else if(this.operationType=="project_edit"){
+                    this.editobject.tempBase64=path.target.currentSrc;
                     this.dialogSymbol=false;
                 }
 
             },
             setcolor(color){
                 console.log(this.operationType);
-                if(this.operationType=="edit"){
+                if(this.operationType=="template_edit"){
                     this.editobject.bgcolor=color;
                     this.dialogSymbolcolor=false;
-                }else{
+                }else if(this.operationType=="template_add"){
                     this.color=color;
+                    this.dialogSymbolcolor=false;
+                }else if(this.operationType=="project_add"){
+                    this.templateEvent.bgcolor=color;
+                    this.dialogSymbolcolor=false;
+                }else if(this.operationType=="project_edit"){
+                    this.editobject.bgcolor=color;
                     this.dialogSymbolcolor=false;
                 }
             },
