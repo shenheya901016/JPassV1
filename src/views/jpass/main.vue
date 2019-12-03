@@ -245,9 +245,8 @@
             <ul style="border:1px solid #9E9E9E;padding: 2px;height: 40vh;overflow-y:auto;">
                 <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)"
                     :data-index="index"
-                    :class="index == currentTemplate?click:disclick" style="height:5vh;border: 0;text-align: left;">
-                    <img :src="project.tempBase64"
-                         style="display:inline-block;height:5vh;width:5vh;margin-left:2px;line-height:5vh;vertical-align:middle;text-align:center"/>
+                    :class="index == currentTemplate?click:disclick" style="height:5vh;border: 0;text-align: left;margin-top: 2px">
+                    <img :src="project.tempBase64" class="template_select_img" :style="{background:project.bgcolor}"/>
                     <span style="margin-left: 3%;font-size: 15px">{{project.name}}</span>
                 </li>
             </ul>
@@ -753,7 +752,7 @@
             </el-button>
         </el-dialog>
         <!--图片库-->
-        <el-dialog  :title="$t('main.symbol')" :visible.sync="dialogSymbol" width="50%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog  :title="$t('main.symbol')" :visible.sync="dialogSymbol" width="41%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-tabs type="border-card"  style="text-align: left">
                 <el-tab-pane label="abc">
                     <img src="./img/abc/la.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
@@ -916,8 +915,8 @@
             </el-tabs>
         </el-dialog>
         <!--颜色选择弹出框-->
-        <el-dialog  :title="$t('main.color')" :visible.sync="dialogSymbolcolor" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
-            <div style="width:55%;border: 1px solid black;margin: auto;padding: 2% 1%;">
+        <el-dialog  :title="$t('main.color')" :visible.sync="dialogSymbolcolor" width="20%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+            <div style="width:70%;border: 1px solid #9A9A9A;margin: auto;padding: 2% 1%;">
             <img :src="imageBase64"  style="background:#F15723" alt="" class="temlateSymbol"   @click="setcolor('#F15723')">
             <img :src="imageBase64"  style="background:#DC4437" alt="" class="temlateSymbol"   @click="setcolor('#DC4437')">
             <img :src="imageBase64"  style="background:#F0851D" alt="" class="temlateSymbol"   @click="setcolor('#F0851D')">
@@ -1711,7 +1710,7 @@
             }, selectTemplate() {
                 this.dialogVisibleTemplate = true;
                 this.selectlabels = "";
-                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").value()));
+                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").filter({isDel: false}).value()));
             },
             projectlick(project, event) {
                 let temp = this.db.get("templates").find({id: project.id}).value();

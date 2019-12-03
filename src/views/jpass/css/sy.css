@@ -640,5 +640,15 @@
 	background:#999999;
 	width:2vw;
 }
+.template_select_img{
+	display:inline-block;
+	height:5vh;
+	width:5vh;
+	margin-left:2px;
+	line-height:5vh;
+	vertical-align:middle;
+	text-align:center;
+	background:#999999;
+}
 
 
