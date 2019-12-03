@@ -279,7 +279,7 @@
                     <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
+                    <span @click="opencolor(templateEvent)">{{$t('main.selectColor')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
                     <span>
@@ -287,8 +287,6 @@
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAddPro"
                                     :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
-                             <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
-                             <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
                           </el-upload>
                     </span>
                 </li>
@@ -300,9 +298,6 @@
                         <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px"
                                  class="demo-ruleForm"
                                  style="width: 95%;margin: auto;">
-                            <!--<el-form-item :label="$t('main.name')" style="width:90%;margin-bottom: -6%" prop="name">-->
-
-                            <!--</el-form-item>-->
                             <template v-for="(data, index) in this.templateEvent.datas">
                                 <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey"
                                               :prop="data.tempkey"
@@ -387,7 +382,7 @@
                     <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
+                    <span @click="opencolor(editobject)">{{$t('main.selectColor')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
                     <span>
@@ -485,7 +480,7 @@
                     <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
+                    <span @click="opencolor(tempTemplate)">{{$t('main.selectColor')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
                     <span>
@@ -574,7 +569,7 @@
                     <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
+                    <span @click="opencolor(editobject)">{{$t('main.selectColor')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
                     <span>
@@ -2239,13 +2234,23 @@
                 // ui.style.display="none"
             },
             //打开颜色选择框
-            opencolor(){
-                if(this.imageBase64==""){
+            opencolor(obj){
+                console.log(this.operationType);
+                if(this.operationType=="prject_add"){
+                    this.imageBase64=obj.tempBase64;
+                    console.log(obj);
+                }else if(this.operationType=="prject_edit"){
+                    this.imageBase64=obj.tempBase64;
+                }else if(this.operationType=="template_add"){
+                    //新建模板，给默认图片
                     this.imageBase64=this.$refs.icon_default.src;
+                }else if(this.operationType=="template_edit"){
+                    this.imageBase64=obj.tempBase64;
                 }
+                // if(this.imageBase64==""){
+                //     this.imageBase64=this.$refs.icon_default.src;
+                // }
                 this.dialogSymbolcolor=true;
-                // var ui =document.getElementById("choosepic");
-                // ui.style.display="none"
             },
             setImageBase64(path){
                 //进行修改操作时插入图片
