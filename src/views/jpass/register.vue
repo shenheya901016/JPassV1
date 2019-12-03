@@ -14,7 +14,8 @@
                     <el-input v-model="ruleForm.name" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('register.password')" prop="password">
-                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength" style="width:65%;float: left" show-password></el-input>
+                    <el-input v-model="ruleForm.password" type="password" @input="pwdLength" style="width:75%;float: left"
+                              oncopy="return false" onpaste="return false" show-password></el-input>
                     <el-button style="border:0" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;" src="./img/钥匙.svg" alt="">
                     </el-button>
                 </el-form-item>
@@ -22,7 +23,8 @@
                     <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('register.duplicatePassword')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left" show-password></el-input>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"
+                              oncopy="return false" onpaste="return false" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="password">
                     <el-button type="primary" size="small" style="width:35%;" @click="submitForm('ruleForm')">{{$t('register.register')}}

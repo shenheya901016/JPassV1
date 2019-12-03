@@ -25,13 +25,17 @@
                     <el-input type="text" v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="newPassword">
-                    <el-input type="password" v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')"
+                              oncopy="return false" onpaste="return false" style="width:75%;float: left" show-password></el-input>
+                    <el-button style="border:0" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;" src="./img/钥匙.svg" alt="">
+                    </el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;"></el-progress>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.passwordRepetition')" prop="repassword">
-                    <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"
+                              oncopy="return false" onpaste="return false" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
                     <el-button type="primary"  size="small"  style="width:40%" @click="submitForm('ruleForm')">{{$t('keystoreImport.importWallet')}}</el-button>
@@ -43,6 +47,33 @@
             </el-form>
         </div>
         <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
+
+        <!--密码生成器-->
+        <el-dialog title="密码生成器" :visible.sync="dialogVisiblePasswordGenerator" width="40%"
+                   :close-on-click-modal="false"
+                   :close-on-press-escape="false" :show-close="true">
+            <el-input v-model="crypt"></el-input>
+            <el-progress :text-inside="true" :stroke-width="20" :percentage="percentage"></el-progress>
+            <el-tag type="danger">{{level}}</el-tag>
+            <el-slider
+                    :format-tooltip="formatTooltip"
+                    :step="5"
+                    show-stops
+                    v-model="value2">
+            </el-slider>
+            <el-radio-group v-model="radio">
+                <el-radio :label="1">便于记忆</el-radio>
+                <el-radio :label="2">仅字母和数字</el-radio>
+                <el-radio :label="3">完全随机</el-radio>
+                <el-radio :label="4">仅允许数字</el-radio>
+            </el-radio-group>
+            <br>
+            <el-button style="margin-top: 5%" size="small" type="primary" @click="module()">
+                {{$t('main.okFormat')}}
+            </el-button>
+            <el-button size="small" @click="dialogVisiblePasswordGenerator = false">{{$t('main.cancelFormat')}}
+            </el-button>
+        </el-dialog>
     </div>
 </template>
 
@@ -78,6 +109,13 @@
                 }
             };
             return {
+                //密码器
+                crypt: "",
+                level: "",
+                radio: 3,
+                value2: 0, //系统设置配置项
+                dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
+
                 percentage: 0,
                 dialogVisible: false,
                 keystorefile: {},
@@ -109,6 +147,24 @@
                     ],
                 }
             };
+        },watch: {  //密码生成器自动生成
+            'value2': function(){
+                this.crypt = this.$createPassword.genCrypt(this.radio, 8 + this.value2 / 5);
+                this.level = this.$createPassword.cryptLevel(this.crypt);
+                if (this.level.indexOf("世纪") !== -1) {
+                    this.percentage = 100;
+                } else if (this.level.indexOf("年") !== -1) {
+                    this.percentage = 80;
+                } else if (this.level.indexOf("月") !== -1) {
+                    this.percentage = 60;
+                } else if (this.level.indexOf("周") !== -1) {
+                    this.percentage = 40;
+                } else if (this.level.indexOf("天") !== -1) {
+                    this.percentage = 20;
+                } else {
+                    this.percentage = 0;
+                }
+            }
         },
         methods: {
             toLoginPage(){
@@ -220,6 +276,17 @@
                     localStorage.setItem("name_string", nameString);
                     localStorage.setItem(name, this.$JSON5.stringify(keystore));
                 }
+            },
+            //密码
+            module() {
+                this.ruleForm.newPassword = this.crypt;
+                this.ruleForm.repassword = this.crypt;
+                this.crypt = "";
+                this.dialogVisiblePasswordGenerator = false;
+            },passwordGenerator() {
+                this.dialogVisiblePasswordGenerator = true;
+            },formatTooltip(val) {
+                return 8 + Math.floor(val / 5);
             }
         },
     }
