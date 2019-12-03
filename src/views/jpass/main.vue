@@ -464,7 +464,7 @@
         <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%"
                    height="90%"
                    :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true">
+                   :close-on-press-escape="false" :show-close="true"   @closed="cleartype" >
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                  <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
@@ -804,7 +804,7 @@
             </el-button>
         </el-dialog>
         <!--图片库-->
-        <el-dialog  :title="$t('main.symbol')" :visible.sync="dialogSymbol" width="41%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog  :title="$t('main.symbol')" :visible.sync="dialogSymbol" width="45%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
             <el-tabs type="border-card"  style="text-align: left">
                 <el-tab-pane label="abc">
                     <img src="./img/abc/la.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
@@ -2236,14 +2236,15 @@
             //打开颜色选择框
             opencolor(obj){
                 console.log(this.operationType);
-                if(this.operationType=="prject_add"){
+                if(this.operationType=="project_add"){
                     this.imageBase64=obj.tempBase64;
-                    console.log(obj);
-                }else if(this.operationType=="prject_edit"){
+                }else if(this.operationType=="project_edit"){
                     this.imageBase64=obj.tempBase64;
                 }else if(this.operationType=="template_add"){
                     //新建模板，给默认图片
-                    this.imageBase64=this.$refs.icon_default.src;
+                    if(this.imageBase64==''){
+                        this.imageBase64=this.$refs.icon_default.src;
+                    }
                 }else if(this.operationType=="template_edit"){
                     this.imageBase64=obj.tempBase64;
                 }
@@ -2298,6 +2299,8 @@
             },
             cleartype(){
                 this.operationType="";
+                this.imageBase64="";
+                this.color="";
             }
 
         }
