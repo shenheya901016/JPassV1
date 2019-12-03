@@ -622,11 +622,22 @@
 	height: 6vh;
 	display: block;
 	border: 0;
+	background:#999999;
 }
-
 .temlateSymbol{
 	margin: 1% 1%;
 	width: 40px;
+
+}
+.detail_icon{
+	width: 4vw;
+	height: 8vh;
+	display: inline-block;
+	position:absolute;
+}
+.list_icon{
+	background:#999999;
+	width:2vw;
 }
 
 
