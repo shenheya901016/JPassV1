@@ -515,7 +515,8 @@
         <!--修改模板弹出框-->
         <el-dialog :title="$t('main.modifyTemplate')" class="mb" :visible.sync="dialogVisibleTemplateEdit" width="40%"
                    :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true" >
+                   :close-on-press-escape="false" :show-close="true"
+                   @closed="cleartype">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                    <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
@@ -2231,6 +2232,9 @@
                         uils[i].style.display = "none";
                     }
                 }
+            },
+            cleartype(){
+                this.operationType="";
             }
 
         }
