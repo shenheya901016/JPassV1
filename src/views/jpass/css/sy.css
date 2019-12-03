@@ -651,4 +651,16 @@
 	background:#999999;
 }
 
+#menu{
+	display: none;
+	width: 50px;
+	border: solid black;
+	position: absolute;
+	background-color: aqua;
+	z-index: 1;
+}
+#list{
+	width: 50px;
+}
+
 

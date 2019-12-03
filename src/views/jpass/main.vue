@@ -432,12 +432,12 @@
                     {{$t('main.name')}}
                 </span>
                 <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw;" class="myInput"/>
-                <div style="height:7vh;width:4vw;margin-left:45%;" @click="test()">
+                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
                     <img v-if="imageBase64!=''"  :src="imageBase64" class="avatar" :style="{background:color}">
                     <img v-else  src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
                 </div>
             </div>
-            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" id="choosepic">
+            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
                     <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
                 </li>
@@ -445,11 +445,11 @@
                     <span @click="opencolor">{{$t('main.selectColor')}}</span>
                 </li>
                 <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
-                    <span @click="test()">
+                    <span>
                          <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAdd"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;" @click="test()">用户资源
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
                           <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
                           <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
                           </el-upload>
@@ -515,20 +515,33 @@
         <!--修改模板弹出框-->
         <el-dialog :title="$t('main.modifyTemplate')" class="mb" :visible.sync="dialogVisibleTemplateEdit" width="40%"
                    :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true">
+                   :close-on-press-escape="false" :show-close="true" >
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                    <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="editobject.name" style="width:35%;margin-left: 0.5vw"
-                               class="myInput"/>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-                           :show-file-list="false"
-                           :on-success="handleAvatarSuccessEdit"
-                           :before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">
-                    <img v-if="editobject.tempBase64" :src="editobject.tempBase64" class="avatar">
-                    <i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>
-                </el-upload>
+                </span>
+                <input type="text" v-model="editobject.name" style="width:35%;margin-left: 0.5vw" class="myInput"/>
+                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
+                    <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
+                </div>
             </div>
+            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
+                    <span @click="opencolor">{{$t('main.selectColor')}}</span>
+                </li>
+                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                    <span>
+                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccessAdd"
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
+                          </el-upload>
+                    </span>
+                </li>
+            </ul>
             <br>
             <el-tabs type="border-card">
                 <el-tab-pane :label="$t('main.fields')">
@@ -945,6 +958,8 @@
     import password from '../../password.js';
     export default {
         mounted: function () {
+            //阻止浏览器右击菜单
+            window.oncontextmenu = function(){return false;}
             if (window.IpcRenderer) {
                 window.IpcRenderer.removeAllListeners("closeEditorWarning");
                 window.IpcRenderer.on("closeEditorWarning", event => {
@@ -956,6 +971,7 @@
                 });
             }
             this.initialize();
+            this.unshow();
         }, data() {
             return {
                 //密码器
@@ -1045,6 +1061,7 @@
                 activeIndex: '1',
                 activeIndex2: '1',
                 show:"none",
+                operationType:"",//symbol 新建或修改对象类型
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1799,8 +1816,10 @@
                 this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
                 this.filedName = "";
                 this.filed = "";
-            }, //修改页面
+            },
+            //修改页面
             editProject() {
+                this.operationType="edit";
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
                 if (this.editobject.type == "project") {
                     let modelsId = this.editobject.modelsId;
@@ -2043,7 +2062,6 @@
                 reader.readAsDataURL(file.raw);
                 reader.onload = async function (e) {
                     temp.imageBase64 = this.result;
-                    console.log(temp.imageBase64);
                 }
             }, //图片处理（修改模板）
             handleAvatarSuccessEdit(res, file) {
@@ -2161,19 +2179,17 @@
                 this.dialogclearTrash= false;
                 this.getdirectory();
             },
-            test(){
-                var ui =document.getElementById("choosepic");
-                if( ui.style.display=="none"){
-                    ui.style.display="";
-                }else{
-                    ui.style.display="none"
+            showIconMenu(){
+                var uils = document.getElementsByClassName("choosepic")
+                for (var i = 0; i < uils.length; i++) {
+                    uils[i].style.display = "block";
                 }
             },
             //打开图片选择菜单
             dialogSymbolOpen(){
                 this.dialogSymbol=true;
-                var ui =document.getElementById("choosepic");
-                ui.style.display="none"
+                // var ui =document.getElementById("choosepic");
+                // ui.style.display="none"
             },
             //打开颜色选择框
             opencolor(){
@@ -2181,17 +2197,40 @@
                     this.imageBase64=this.$refs.icon_default.src;
                 }
                 this.dialogSymbolcolor=true;
-                var ui =document.getElementById("choosepic");
-                ui.style.display="none"
+                // var ui =document.getElementById("choosepic");
+                // ui.style.display="none"
             },
             setImageBase64(path){
-                this.imageBase64=path.target.currentSrc;
-                this.dialogSymbol=false;
+                //进行修改操作时插入图片
+                console.log(this.operationType);
+                if(this.operationType=="edit"){
+                      this.editobject.tempBase64=path.target.currentSrc;
+                      this.dialogSymbol=false;
+                }else{
+                    //进行新建操作时插入图片
+                    this.imageBase64=path.target.currentSrc;
+                    this.dialogSymbol=false;
+                }
 
             },
             setcolor(color){
-              this.color=color;
-              this.dialogSymbolcolor=false;
+                console.log(this.operationType);
+                if(this.operationType=="edit"){
+                    this.editobject.bgcolor=color;
+                    this.dialogSymbolcolor=false;
+                }else{
+                    this.color=color;
+                    this.dialogSymbolcolor=false;
+                }
+            },
+            unshow(){
+                document.onclick = function(e){
+                    var e = e || window.event;
+                    var uils = document.getElementsByClassName("choosepic")
+                    for (var i = 0; i < uils.length; i++) {
+                        uils[i].style.display = "none";
+                    }
+                }
             }
 
         }
