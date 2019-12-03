@@ -1095,7 +1095,7 @@
                 username: "",
                 key: "",
                 myInfoKey: "",
-                directoryClickId: "",
+                directoryClickId: "sy",
                 showTrash:"false",
                 activeIndex: '1',
                 activeIndex2: '1',
