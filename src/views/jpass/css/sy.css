@@ -163,6 +163,8 @@
 .aside .nav ul.dh li span{
 	float: left;
 	color: #333;
+    text-align: left;
+    width: 13.5vw;
 }
 .aside .nav ul.dh li i{
 	float: right;
@@ -268,16 +270,18 @@
 .aside .nav ul.dhwjj li span{
 	float: left;
 	color: #333;
+    text-align: left;
+    width: 13.5vw;
 }
 .aside .nav ul.dhwjj li i{
-	float: right;
-	color: #A8B1C6;
-	width: 47px;
-	height: 23px;
-	text-align: center;
-	border-radius: 11.5px;
-	line-height: 23px;
-	margin-top: 6px;
+    float: right;
+    color: #A8B1C6;
+    width: 47px;
+    height: 23px;
+    text-align: center;
+    border-radius: 11.5px;
+    line-height: 23px;
+    margin-top: 7px;
 }
 .aside .nav ul.dhwjj li:nth-child(4n+1){
 	background: url(../img/aside_wjj01.svg) no-repeat left 40%;
@@ -662,5 +666,22 @@
 #list{
 	width: 50px;
 }
+.menu{
+	border:1px solid black;
+	width: 15vw;
+	height:26vh;
+	position:absolute;
+	display: none;
+	z-index: 2;
+	float: left;
+}
+ .menu li{
+	 border:1px solid black;
+	 float: left;
+	 height: 5vh;
+	 width: 15vw;
+ }
+
+
 
 

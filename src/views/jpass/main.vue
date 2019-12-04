@@ -79,19 +79,26 @@
                 <li v-for="(project,index) in DProject.project" @click="projectclick(project,$event)"
                     :data-index="index"
                     :class="index == currentProject?click:disclick">
-                    <span>{{project.name}}</span> <i>{{project.count}}</i>
+                    <span>{{project.name}} <i>{{project.count}}</i></span>
                 </li>
             </ul>
             <h3>{{$t('main.folder')}}</h3>
             <ul class="dhwjj" id="DirUL">
-                <li v-for="(project,index) in DDirectory.directory" @click="directoryclick(project,$event)"
+                <li v-for="(project,index) in DDirectory.directory"
                     :data-index="index"
-                    :class="index == currentDirectory?click:disclick">
-                    <span>{{project.name}}</span> <i>{{project.count}}</i>
+                    :class="index == currentDirectory?click:disclick" @click.right="openMenu_1($event)">
+                    <span>{{project.name}} <i>{{project.count}}</i></span>
                 </li>
             </ul>
-            <!--<a href="#" class="jh" @click="addDirectoryOP">+</a>-->
         </nav>
+        <ul id="menu_1" class="menu">
+            <li>列表1</li>
+            <li>添加文件夹</li>
+            <li>删除</li>
+            <li>清空垃圾桶</li>
+            <li>列表5</li>
+        </ul>
+
         <!-- 副导航栏 -->
         <article class="article">
             <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')"
@@ -987,8 +994,15 @@
             <img :src="imageBase64"  style="background:#333333" alt="" class="temlateSymbol"   @click="setcolor('#333333')">
             </div>
         </el-dialog>
-
     </aside>
+
+    <ul style="border:1px solid red;display: none" id="menu_2">
+        <li>增加项目</li>
+        <li>增加模板</li>
+        <li>修改</li>
+        <li>删除</li>
+        <li>恢复</li>
+    </ul>
     </body>
 </template>
 <script type="es6">
@@ -2288,21 +2302,36 @@
                     this.dialogSymbolcolor=false;
                 }
             },
+            //隐藏菜单
             unshow(){
+                console.log(222);
                 document.onclick = function(e){
                     var e = e || window.event;
                     var uils = document.getElementsByClassName("choosepic")
                     for (var i = 0; i < uils.length; i++) {
                         uils[i].style.display = "none";
                     }
+                    //隐藏右击菜单1
+                    document.getElementById("menu_1").style.display = "none";
                 }
+
             },
             cleartype(){
                 this.operationType="";
                 this.imageBase64="";
                 this.color="";
+            },
+            openMenu_1(obj){
+                var menu = document.getElementById("menu_1");
+                var position=obj.target.getBoundingClientRect();//获取点击元素的位置
+                menu.style.display = "block";
+                menu.style.left = position.right + 10 +"px";
+                if(document.body.clientHeight>menu.clientHeight+position.bottom){
+                    menu.style.top =position.top + position.height + 10 +"px"
+                }else{
+                    menu.style.top =position.top - menu.clientHeight -10 + "px"
+                }
             }
-
         }
     }
 </script>
