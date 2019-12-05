@@ -92,12 +92,26 @@
             </ul>
         </nav>
         <ul id="menu_1" class="menu">
-            <li ref="addDir" :class="addDirClasses" @click="addDirectoryOP">新建文件夹</li>
-            <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">新建模板</li>
-            <li ref="addPro" :class="addProjectClasses"  @click="selectTemplate">新建项目</li>
-            <li ref="delete" :class="deleteClasses"  @click="remove">删除</li>
-            <li ref="recover" :class="recoverClass"  @click="dialogRecover = true" >还原</li>
-            <li ref="emptyTrash" :class="emptyTrashClasses" @click="dialogclearTrash = true">清空垃圾桶</li>
+            <li ref="addDir" :class="addDirClasses" @click="addDirectoryOP">
+                <img  src="./img/tianjiawenjianjia.svg" style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                新建文件夹
+            </li>
+            <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
+                <img  src="./img/moban.svg" alt="">
+                新建模板
+            </li>
+            <li ref="addPro" :class="addProjectClasses"  @click="selectTemplate">
+                <img src="./img/tianjiaxiangmu.svg" alt="">
+                新建项目
+            </li>
+            <li ref="delete" :class="deleteClasses"  @click="remove">
+                <img style="margin-right: 0.6vw" src="./img/ICON-SC.svg" alt="">删除
+            </li>
+            <li ref="recover" :class="recoverClass"  @click="dialogRecover = true" >
+                <img  src="./img/recover.png" alt="">还原</li>
+            <li ref="emptyTrash" :class="emptyTrashClasses" @click="dialogclearTrash = true">
+                <img src="./img/trash.svg" alt="">
+                清空垃圾桶</li>
         </ul>
 
         <!-- 副导航栏 -->

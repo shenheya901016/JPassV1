@@ -668,23 +668,39 @@
 }
 .menu{
 	border:1px solid black;
-	width: 15vw;
+	width: 13vw;
 	position:absolute;
 	display: none;
 	z-index: 2;
 	float: left;
+	border-top: 0px;
 }
  .menu li{
 	 border:1px solid black;
 	 float: left;
-	 height: 5vh;
-	 width: 15vw;
+	 height: 4vh;
+	 width: 13vw;
 	 cursor: pointer;
+	 line-height: 4vh;
+	 vertical-align: middle;
+	 text-align: left;
+	 border-bottom: 0px;
+	 border-left: 0px;
+	 border-right: 0px;
+	 font-weight: bolder;
+	 color: black;
+	 font-size: 14px;
+ }
+
+ .menu img {
+	 width: 1.5vw;
+	 margin-left: 0.7vw;
+	 margin-right: 0.2vw;
  }
  .unuse{
 	 pointer-events: none;
-	 background-color:red;
 	 font-weight: bolder;
+	 color:#999999;
  }
 
 
