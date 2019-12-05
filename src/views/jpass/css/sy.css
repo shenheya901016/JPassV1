@@ -669,7 +669,6 @@
 .menu{
 	border:1px solid black;
 	width: 15vw;
-	height:26vh;
 	position:absolute;
 	display: none;
 	z-index: 2;
@@ -680,6 +679,12 @@
 	 float: left;
 	 height: 5vh;
 	 width: 15vw;
+	 cursor: pointer;
+ }
+ .unuse{
+	 pointer-events: none;
+	 background-color:red;
+	 font-weight: bolder;
  }
 
 

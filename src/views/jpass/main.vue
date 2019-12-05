@@ -27,7 +27,7 @@
             </li>
 
             <li>
-                <el-button :disabled="isDisabled" @click="remove()" id="delbtn" style="border:0;padding: 10px 10px;"><img style="top:-2px;"
+                <el-button :disabled="isDisabled" @click="remove" id="delbtn" style="border:0;padding: 10px 10px;"><img style="top:-2px;"
                                                                                                       src="./img/ICON-SC.svg"
                                                                                                       alt="">{{$t('main.delete')}}
                 </el-button>
@@ -84,19 +84,20 @@
             </ul>
             <h3>{{$t('main.folder')}}</h3>
             <ul class="dhwjj" id="DirUL">
-                <li v-for="(project,index) in DDirectory.directory"
+                <li v-for="(project,index) in DDirectory.directory" @click.left="directoryclick(project,$event)"
                     :data-index="index"
-                    :class="index == currentDirectory?click:disclick" @click.right="openMenu_1($event)">
+                    :class="index == currentDirectory?click:disclick" @click.right="openMenu_1(project,$event)">
                     <span>{{project.name}} <i>{{project.count}}</i></span>
                 </li>
             </ul>
         </nav>
         <ul id="menu_1" class="menu">
-            <li>列表1</li>
-            <li>添加文件夹</li>
-            <li>删除</li>
-            <li>清空垃圾桶</li>
-            <li>列表5</li>
+            <li ref="addDir" :class="addDirClasses" @click="addDirectoryOP">新建文件夹</li>
+            <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">新建模板</li>
+            <li ref="addPro" :class="addProjectClasses"  @click="selectTemplate">新建项目</li>
+            <li ref="delete" :class="deleteClasses"  @click="remove">删除</li>
+            <li ref="recover" :class="recoverClass"  @click="dialogRecover = true" >还原</li>
+            <li ref="emptyTrash" :class="emptyTrashClasses" @click="dialogclearTrash = true">清空垃圾桶</li>
         </ul>
 
         <!-- 副导航栏 -->
@@ -104,8 +105,8 @@
             <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')"
                    @input="search(searchTemp)">
             <ul class="list">
-                <li v-for="(project,index) in projects" @click="noteslick(project,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick" style="margin-top: 5px;">
+                <li v-for="(project,index) in projects" @click.left="noteslick(project,$event)" :data-index="index"
+                    :class="index == currentNote?click:disclick" style="margin-top: 5px;" @click.right="openMenu_1(project,$event)">
                     <span>
                          <img :src="project.tempBase64" :style="{background:project.bgcolor }" class="list_icon">
                     </span>
@@ -123,6 +124,7 @@
                 </li>
             </ul>
         </article>
+        <!--明细-->
         <section class="section">
             <el-form :model="ruleFormProjectDetail" ref="ruleFormProjectDetail" label-width="100px"
                      class="demo-ruleForm" label-position="top"
@@ -1115,6 +1117,13 @@
                 activeIndex2: '1',
                 show:"none",
                 operationType:"",//symbol 新建或修改对象类型
+                //menu 右击菜单
+                addDirClasses:[],//新建文件夹样式表
+                addProjectClasses:[],//新建项目样式表
+                addTemplateClasses:[],//新建模板样式表
+                emptyTrashClasses:[],//清空垃圾样式表
+                deleteClasses:[],//删除样式表
+                recoverClass:[],//恢复样式表
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1435,6 +1444,8 @@
             getdirectory() {
                 var alldata = this.db.get("models").value();
                 var allProjects = this.db.get("project").value();
+                console.log(alldata);
+                console.log(allProjects);
                 var projectstring = ""
                 var directoryString = ""
                 var jsonProjectstring = ""
@@ -1554,7 +1565,6 @@
                 this.currentDirectory = index;
                 this.currentProject = -1;
                 this.delobj = note;
-                // console.log(note);
                 this.isDisabled = false;
                 this.directoryClickId = note.id;
                 this.notesBytargeId(note);
@@ -2304,7 +2314,6 @@
             },
             //隐藏菜单
             unshow(){
-                console.log(222);
                 document.onclick = function(e){
                     var e = e || window.event;
                     var uils = document.getElementsByClassName("choosepic")
@@ -2314,14 +2323,19 @@
                     //隐藏右击菜单1
                     document.getElementById("menu_1").style.display = "none";
                 }
-
             },
             cleartype(){
                 this.operationType="";
                 this.imageBase64="";
                 this.color="";
             },
-            openMenu_1(obj){
+            openMenu_1(project,obj){
+                this.isDisabled = false;//启用删除
+                this.delobj = project;//赋值删除对象
+                console.log(project);
+                if(project.type!="model"){//indexof undefind 问题
+                    this.projectEvent =project;
+                }
                 var menu = document.getElementById("menu_1");
                 var position=obj.target.getBoundingClientRect();//获取点击元素的位置
                 menu.style.display = "block";
@@ -2331,6 +2345,25 @@
                 }else{
                     menu.style.top =position.top - menu.clientHeight -10 + "px"
                 }
+                 this.menulistchange(project);
+            },
+            menulistchange(obj){
+                this.addProjectClasses=[];
+                this.addTemplateClasses=[];
+                this.emptyTrashClasses=[];
+                this.deleteClasses=[];
+                this.recoverClass=["unuse"];
+                if(obj.modelsType=="directory"){
+                    this.emptyTrashClasses.push("unuse");
+                }
+                if(this.showTrash!=true){
+                    this.emptyTrashClasses.push("unuse");
+                }
+                if(obj.isDel){
+                    this.recoverClass=[];
+                    this.deleteClasses=["unuse"];
+                }
+
             }
         }
     }
