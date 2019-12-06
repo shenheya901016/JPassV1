@@ -658,7 +658,7 @@
 #menu{
 	display: none;
 	width: 50px;
-	border: solid black;
+	border: 1px solid #409EFF;
 	position: absolute;
 	background-color: aqua;
 	z-index: 1;
@@ -667,16 +667,16 @@
 	width: 50px;
 }
 .menu{
-	border:1px solid black;
+	border:1px solid #999999;
+	border-radius: 5px;
 	width: 13vw;
 	position:absolute;
 	display: none;
 	z-index: 2;
 	float: left;
-	border-top: 0px;
 }
  .menu li{
-	 border:1px solid black;
+	 border:0;
 	 float: left;
 	 height: 4vh;
 	 width: 13vw;
@@ -684,12 +684,11 @@
 	 line-height: 4vh;
 	 vertical-align: middle;
 	 text-align: left;
-	 border-bottom: 0px;
-	 border-left: 0px;
-	 border-right: 0px;
-	 font-weight: bolder;
+	 font-weight:bold;
 	 color: black;
-	 font-size: 14px;
+	 font-size: 10px;
+	 background-color: white;
+
  }
 
  .menu img {
@@ -697,10 +696,15 @@
 	 margin-left: 0.7vw;
 	 margin-right: 0.2vw;
  }
+.menu li:hover{
+	color: #046BDA;
+	border: 1px solid #409EFF;
+	background-color: #DCEDFF;
+}
+
  .unuse{
 	 pointer-events: none;
-	 font-weight: bolder;
-	 color:#999999;
+	 color:#999999 !important;
  }
 
 

@@ -3,53 +3,61 @@
     <!-- 头部 -->
     <header class="header">
         <!-- 全局隐藏域 -->
-        <img src="./img/misc/lock.svg"  ref="icon_default"  style="display: none">
+        <img src="./img/misc/lock.svg" ref="icon_default" style="display: none">
         <h1 style="margin-left: 40px;">
             <a href="#"> <img src="./img/Logo-4.svg" alt=""> </a>
         </h1>
         <ul class="link">
             <li>
-                <el-button @click="addDirectoryOP" style="border:0;padding: 10px 10px;"><img style="top:-2px;height: 25px;width: 25px;"
-                                                                         src="./img/tianjiawenjianjia.svg"
-                                                                         alt="">{{$t('main.newFolder')}}
+                <el-button @click="addDirectoryOP" style="border:0;padding: 10px 10px;"><img
+                        style="top:-2px;height: 25px;width: 25px;"
+                        src="./img/tianjiawenjianjia.svg"
+                        alt="">{{$t('main.newFolder')}}
                 </el-button>
             </li>
             <li>
-                <el-button @click="addTemplate" style="border:0;padding: 10px 10px;"><img style="top:-2px;height: 20px;width: 20px;"
-                                                                      src="./img/moban.svg" alt="">{{$t('main.newTemplate')}}
+                <el-button @click="addTemplate" style="border:0;padding: 10px 10px;"><img
+                        style="top:-2px;height: 20px;width: 20px;"
+                        src="./img/moban.svg" alt="">{{$t('main.newTemplate')}}
                 </el-button>
             </li>
             <li>
-                <el-button @click="selectTemplate" style="border:0;padding: 10px 10px;"><img style="top:-2px;height: 20px;width: 20px;"
-                                                                         src="./img/tianjiaxiangmu.svg"
-                                                                         alt="">{{$t('main.newProject')}}
+                <el-button @click="selectTemplate" style="border:0;padding: 10px 10px;"><img
+                        style="top:-2px;height: 20px;width: 20px;"
+                        src="./img/tianjiaxiangmu.svg"
+                        alt="">{{$t('main.newProject')}}
                 </el-button>
             </li>
 
             <li>
-                <el-button :disabled="isDisabled" @click="remove" id="delbtn" style="border:0;padding: 10px 10px;"><img style="top:-2px;"
-                                                                                                      src="./img/ICON-SC.svg"
-                                                                                                      alt="">{{$t('main.delete')}}
+                <el-button :disabled="isDisabled" @click="remove" id="delbtn" style="border:0;padding: 10px 10px;"><img
+                        style="top:-2px;"
+                        src="./img/ICON-SC.svg"
+                        alt="">{{$t('main.delete')}}
                 </el-button>
             </li>
             <li>
-                <el-button v-if="showTrash==true" style="border:0;padding: 10px 10px;" @click="dialogclearTrash = true"><img style="top:-2px;height: 25px;width: 25px;"
-                                                                                  src="./img/trash.svg" alt="">{{$t('main.cleartrash')}}
+                <el-button v-if="showTrash==true" style="border:0;padding: 10px 10px;" @click="dialogclearTrash = true">
+                    <img style="top:-2px;height: 25px;width: 25px;"
+                         src="./img/trash.svg" alt="">{{$t('main.cleartrash')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;padding: 10px 10px;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
+                <el-button style="border:0;padding: 10px 10px;" @click="synchronization()"><img style="top:-2px;"
+                                                                                                src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
                 </el-button>
                 <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus"
                              :show-text="true" v-show="processShow"></el-progress>
             </li>
             <li>
-                <el-button style="border:0;padding: 10px 10px;" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
+                <el-button style="border:0;padding: 10px 10px;" @click="lock()"><img style="top:-2px;"
+                                                                                     src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;padding: 10px 10px;" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;"
-                                                                              src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
+                <el-button style="border:0;padding: 10px 10px;" @click="passwordGenerator()"><img
+                        style="top:-2px;height: 25px;width: 25px;"
+                        src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
                 </el-button>
             </li>
 
@@ -78,7 +86,7 @@
             <ul class="dh" id="projectUL" style="">
                 <li v-for="(project,index) in DProject.project" @click="projectclick(project,$event)"
                     :data-index="index"
-                    :class="index == currentProject?click:disclick">
+                    :class="index == currentProject?click:disclick" @contextmenu.prevent="openMenu_1(project,$event)">
                     <span>{{project.name}} <i>{{project.count}}</i></span>
                 </li>
             </ul>
@@ -86,41 +94,45 @@
             <ul class="dhwjj" id="DirUL">
                 <li v-for="(project,index) in DDirectory.directory" @click.left="directoryclick(project,$event)"
                     :data-index="index"
-                    :class="index == currentDirectory?click:disclick" @click.right="openMenu_1(project,$event)">
+                    :class="index == currentDirectory?click:disclick" @contextmenu.prevent="openMenu_1(project,$event)">
                     <span>{{project.name}} <i>{{project.count}}</i></span>
                 </li>
             </ul>
         </nav>
         <ul id="menu_1" class="menu">
             <li ref="addDir" :class="addDirClasses" @click="addDirectoryOP">
-                <img  src="./img/tianjiawenjianjia.svg" style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                <img src="./img/tianjiawenjianjia.svg" style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;"
+                     alt="">
                 新建文件夹
             </li>
             <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
-                <img  src="./img/moban.svg" alt="">
+                <img src="./img/moban.svg" alt="">
                 新建模板
             </li>
-            <li ref="addPro" :class="addProjectClasses"  @click="selectTemplate">
+            <li ref="addPro" :class="addProjectClasses" @click="selectTemplate">
                 <img src="./img/tianjiaxiangmu.svg" alt="">
                 新建项目
             </li>
-            <li ref="delete" :class="deleteClasses"  @click="remove">
+            <li ref="delete" :class="deleteClasses" @click="remove">
                 <img style="margin-right: 0.6vw" src="./img/ICON-SC.svg" alt="">删除
             </li>
-            <li ref="recover" :class="recoverClass"  @click="dialogRecover = true" >
-                <img  src="./img/recover.png" alt="">还原</li>
+            <li ref="recover" :class="recoverClass" @click="dialogRecover = true">
+                <img src="./img/recover.png" alt="">还原
+            </li>
             <li ref="emptyTrash" :class="emptyTrashClasses" @click="dialogclearTrash = true">
                 <img src="./img/trash.svg" alt="">
-                清空垃圾桶</li>
+                清空垃圾桶
+            </li>
         </ul>
 
         <!-- 副导航栏 -->
-        <article class="article">
+        <article class="article" @click.right="openMenu_empty($event)">
             <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')"
                    @input="search(searchTemp)">
             <ul class="list">
                 <li v-for="(project,index) in projects" @click.left="noteslick(project,$event)" :data-index="index"
-                    :class="index == currentNote?click:disclick" style="margin-top: 5px;" @click.right="openMenu_1(project,$event)">
+                    :class="index == currentNote?click:disclick" style="margin-top: 5px;"
+                    @contextmenu.prevent="openMenu_1(project,$event)">
                     <span>
                          <img :src="project.tempBase64" :style="{background:project.bgcolor }" class="list_icon">
                     </span>
@@ -134,7 +146,6 @@
                          <img v-if="project.modelsId.indexOf('scj')!= -1" src="./img/start_sc.svg"
                               @click="unfavorite(project)">
                     </span>
-
                 </li>
             </ul>
         </article>
@@ -145,8 +156,10 @@
                      style="width:80%;height:95%;margin: auto;text-align: left;margin-top:3%;">
                 <el-form-item v-if="this.projectEvent!=''" style="margin-bottom: 5vh;margin-top: 5vh;" prop="name">
                     <div style="display: inline-block;width:80%;height:8vh; ">
-                        <img v-if="projectEvent.bgcolor!=''" :src="projectEvent.tempBase64" :style="{background:projectEvent.bgcolor}" class="detail_icon">
-                        <img v-else="projectEvent.bgcolor==''" :src="projectEvent.tempBase64" style="background:#999999" class="detail_icon">
+                        <img v-if="projectEvent.bgcolor!=''" :src="projectEvent.tempBase64"
+                             :style="{background:projectEvent.bgcolor}" class="detail_icon">
+                        <img v-else="projectEvent.bgcolor==''" :src="projectEvent.tempBase64" style="background:#999999"
+                             class="detail_icon">
                         <ul style="display: inline-block;margin-top: 20px;height:8vh;margin-left:15%">
                             <li style="font-size: 25px;font-weight: bolder;">{{projectEvent.name}}</li>
                             <li style="margin-top: 1vh">{{projectEvent.modelsName}}</li>
@@ -190,7 +203,9 @@
                            @click="editProject()" style="margin-left: 3%">
                     {{$t('main.modify')}}
                 </el-button>
-                <el-button v-if="this.projectEvent!=''&& this.projectEvent.isDel==true" size="small" @click="dialogRecover = true">{{$t('main.recover')}}</el-button>
+                <el-button v-if="this.projectEvent!=''&& this.projectEvent.isDel==true" size="small"
+                           @click="dialogRecover = true">{{$t('main.recover')}}
+                </el-button>
             </el-form>
         </section>
         <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%"
@@ -268,7 +283,8 @@
             <ul style="border:1px solid #9E9E9E;padding: 2px;height: 40vh;overflow-y:auto;">
                 <li v-for="(project,index) in this.operateTemplates" @click="projectlick(project,$event)"
                     :data-index="index"
-                    :class="index == currentTemplate?click:disclick" style="height:5vh;border: 0;text-align: left;margin-top: 2px">
+                    :class="index == currentTemplate?click:disclick"
+                    style="height:5vh;border: 0;text-align: left;margin-top: 2px">
                     <img :src="project.tempBase64" class="template_select_img" :style="{background:project.bgcolor}"/>
                     <span style="margin-left: 3%;font-size: 15px">{{project.name}}</span>
                 </li>
@@ -279,32 +295,35 @@
         </el-dialog>
         <!--增加项目弹出框-->
         <el-dialog class="mb" :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="40%"
-                   height="90%" :close-on-click-modal="false"  @closed="cleartype">
+                   height="90%" :close-on-click-modal="false" @closed="cleartype">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
                 </span> <input type="text" v-model="ruleFormAddProject.name" class="myInput"
                                style="width:35%;margin-left: 0.5vw"/>
                 <!--<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"-->
-                           <!--:show-file-list="false" :on-success="handleAvatarSuccessAddPro"-->
-                           <!--:before-upload="beforeAvatarUpload"-->
-                           <!--style="height:7vh;width:4vw;margin-left:45%;">-->
-                    <!--<img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar">-->
-                    <!--<i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>-->
+                <!--:show-file-list="false" :on-success="handleAvatarSuccessAddPro"-->
+                <!--:before-upload="beforeAvatarUpload"-->
+                <!--style="height:7vh;width:4vw;margin-left:45%;">-->
+                <!--<img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar">-->
+                <!--<i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>-->
                 <!--</el-upload>-->
                 <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
-                    <img v-if="templateEvent.tempBase64"  :src="templateEvent.tempBase64" class="avatar" :style="{background:templateEvent.bgcolor}">
-                    <img v-else  src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
+                    <img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar"
+                         :style="{background:templateEvent.bgcolor}">
+                    <img v-else src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
                 </div>
             </div>
-            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+                <li @click="dialogSymbolOpen">
+                    <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span>{{$t('main.selectSymbol')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor(templateEvent)">{{$t('main.selectColor')}}</span>
+                <li @click="opencolor(templateEvent)">
+                    <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span>{{$t('main.selectColor')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                <li>
                     <span>
                          <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
@@ -385,29 +404,33 @@
         </el-dialog>
 
         <!--修改项目-->
-        <el-dialog class="mb" :title="$t('main.modifyTheProject')" :visible.sync="dialogVisibleEdit" width="40%" height="90%"
-                   :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true"   @closed="cleartype" >
+        <el-dialog class="mb" :title="$t('main.modifyTheProject')" :visible.sync="dialogVisibleEdit" width="40%"
+                   height="90%"
+                   :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true" @closed="cleartype">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="editobject.name" class="myInput" style="width:35%;margin-left: 0.5vw"/>
+                </span> <input type="text" v-model="editobject.name" class="myInput"
+                               style="width:35%;margin-left: 0.5vw"/>
                 <!--<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"-->
-                           <!--:show-file-list="false" :on-success="handleAvatarSuccessEdit"-->
-                           <!--:before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">-->
+                <!--:show-file-list="false" :on-success="handleAvatarSuccessEdit"-->
+                <!--:before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">-->
                 <!--<img v-if="editobject.tempBase64" :src="editobject.tempBase64" class="avatar">-->
                 <!--</el-upload>-->
                 <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
-                    <img  :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
+                    <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
                 </div>
             </div>
-            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+                <li @click="dialogSymbolOpen">
+                    <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span >{{$t('main.selectSymbol')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor(editobject)">{{$t('main.selectColor')}}</span>
+                <li @click="opencolor(editobject)">
+                    <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span >{{$t('main.selectColor')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                <li>
                     <span>
                          <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
@@ -468,7 +491,8 @@
                                         {{$t('main.addOtherItems')}}<i class="el-icon-arrow-down el-icon--right"></i>
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems" :command="item">{{item.key}}
+                                        <el-dropdown-item v-for="(item,index) in this.templateItemsTemp.templateItems"
+                                                          :command="item">{{item.key}}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
@@ -487,32 +511,36 @@
         <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%"
                    height="90%"
                    :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true"   @closed="cleartype" >
+                   :close-on-press-escape="false" :show-close="true" @closed="cleartype">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                  <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
                 </span>
-                <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw;" class="myInput"/>
+                <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw;"
+                       class="myInput"/>
                 <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
-                    <img v-if="imageBase64!=''"  :src="imageBase64" class="avatar" :style="{background:color}">
-                    <img v-else  src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
+                    <img v-if="imageBase64!=''" :src="imageBase64" class="avatar" :style="{background:color}">
+                    <img v-else src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
                 </div>
             </div>
-            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+                <li @click="dialogSymbolOpen">
+                    <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span >{{$t('main.selectSymbol')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor(tempTemplate)">{{$t('main.selectColor')}}</span>
+                <li @click="opencolor(tempTemplate)">
+                    <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span >{{$t('main.selectColor')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                <li>
+                    <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>
                          <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAdd"
                                     :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
-                          <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
-                          <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
+                             <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
+                             <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
                           </el-upload>
                     </span>
                 </li>
@@ -587,14 +615,16 @@
                     <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
                 </div>
             </div>
-            <ul style="margin-left:52.5%;position: absolute;z-index: 10;border-radius: 5px;display: none" class="choosepic">
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="dialogSymbolOpen">{{$t('main.selectSymbol')}}</span>
+            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+                <li @click="dialogSymbolOpen">
+                    <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span >{{$t('main.selectSymbol')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px;">
-                    <span @click="opencolor(editobject)">{{$t('main.selectColor')}}</span>
+                <li  @click="opencolor(editobject)">
+                     <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                    <span>{{$t('main.selectColor')}}</span>
                 </li>
-                <li  style="width: 5vw;border: 1px solid black;height:3vh;background: red;border-bottom:0;border-radius:4px">
+                <li>
                     <span>
                          <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
@@ -747,8 +777,10 @@
                             {{$t('main.language')}}
                         </legend>
                         <span style="margin-left: 2vw">
-                            <el-select v-model="language" :placeholder="$t('main.languageSelection')" @change="changeLang(language)">
-                               <el-option v-for="item in this.languages" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            <el-select v-model="language" :placeholder="$t('main.languageSelection')"
+                                       @change="changeLang(language)">
+                               <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
+                                          :value="item.value"></el-option>
                             </el-select>
                         </span>
                     </fieldset>
@@ -827,198 +859,352 @@
             </el-button>
         </el-dialog>
         <!--图片库-->
-        <el-dialog  :title="$t('main.symbol')" :visible.sync="dialogSymbol" width="45%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
-            <el-tabs type="border-card"  style="text-align: left">
+        <el-dialog :title="$t('main.symbol')" :visible.sync="dialogSymbol" width="45%" :close-on-click-modal="false"
+                   :close-on-press-escape="false" :show-close="true">
+            <el-tabs type="border-card" style="text-align: left">
                 <el-tab-pane label="abc">
-                    <img src="./img/abc/la.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/abc/lb.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lc.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/ld.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/abc/le.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/abc/lf.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lg.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lh.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/li.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lj.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lk.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/ll.svg" :style="{background:color}" alt=""  class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lm.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/ln.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lo.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lp.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lq.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lr.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/ls.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lt.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lu.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lv.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lw.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lx.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/ly.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
-                    <img src="./img/abc/lz.svg" :style="{background:color}" alt="" class="temlateSymbol"  @click="setImageBase64($event)">
+                    <img src="./img/abc/la.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lb.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lc.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/ld.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/le.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lf.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lg.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lh.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/li.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lj.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lk.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/ll.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lm.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/ln.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lo.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lp.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lq.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lr.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/ls.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lt.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lu.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lv.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lw.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lx.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/ly.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/abc/lz.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
                 </el-tab-pane>
                 <el-tab-pane label="finances">
-                    <img src="./img/finances/amex.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/atm.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/bank.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/bitcoin.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/coins.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/credit_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/diners_club.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/dollar.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/euro.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/jcb.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/mastercard.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/meastro.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/money.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/paypal.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/piggy_bank.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/pound.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/ruble.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/rupee.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/visa.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/yen.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/finances/rupay.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
+                    <img src="./img/finances/amex.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/atm.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/bank.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/bitcoin.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/coins.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/credit_card.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/diners_club.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/dollar.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/euro.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/jcb.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/mastercard.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/meastro.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/money.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/paypal.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/piggy_bank.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/pound.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/ruble.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/rupee.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/visa.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/yen.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/finances/rupay.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
                 </el-tab-pane>
                 <el-tab-pane label="internet">
-                    <img src="./img/internet/amazon.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/at_sign.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/blog.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/community.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/download.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/ebay.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/email.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/f.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/g.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/in.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/instagram.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/joomla.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/mail_ru.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/pinterest.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/rss.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/s.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/t.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/v.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/vk.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/web_site.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/worldpress.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/y.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/internet/ya.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
+                    <img src="./img/internet/amazon.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/at_sign.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/blog.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/community.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/download.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/ebay.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/email.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/f.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/g.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/in.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/instagram.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/joomla.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/mail_ru.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/pinterest.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/rss.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/s.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/t.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/v.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/vk.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/web_site.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/worldpress.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/y.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/internet/ya.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
                 </el-tab-pane>
                 <el-tab-pane label="misc">
-                    <img src="./img/misc/alarm.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/bag.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/box.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/default.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/door.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/key.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/lock.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/movie.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/music.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/network.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/note.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/picture.svg" :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/safe.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/sale.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/shopping_cart.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/misc/suitcase.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
+                    <img src="./img/misc/alarm.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/bag.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/box.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/default.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/door.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/key.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/lock.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/movie.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/music.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/network.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/note.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/picture.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/safe.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/sale.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/shopping_cart.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/misc/suitcase.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
                 </el-tab-pane>
                 <el-tab-pane label="personal">
-                    <img src="./img/personal/dental_insurance.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/eye.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/fitness.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/food.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/glasses.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/health_insurance.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/hospital.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/house.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/id.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/insurance.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/membership.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/passport.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/pets.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/prescription.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/shield.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/social_security.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/tshirt.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/user.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/personal/user2.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
+                    <img src="./img/personal/dental_insurance.svg" :style="{background:color}" alt=""
+                         class="temlateSymbol" @click="setImageBase64($event)">
+                    <img src="./img/personal/eye.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/fitness.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/food.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/glasses.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/health_insurance.svg" :style="{background:color}" alt=""
+                         class="temlateSymbol" @click="setImageBase64($event)">
+                    <img src="./img/personal/hospital.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/house.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/id.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/insurance.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/membership.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/passport.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/pets.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/prescription.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/shield.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/social_security.svg" :style="{background:color}" alt=""
+                         class="temlateSymbol" @click="setImageBase64($event)">
+                    <img src="./img/personal/tshirt.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/user.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/personal/user2.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
                 </el-tab-pane>
                 <el-tab-pane label="technology">
-                    <img src="./img/technology/adobe.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/android.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/apple.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/calling_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/camera.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/cd.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/computer.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/gaming.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/hard_drive.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/laptop.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/phone.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/printer.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/router.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/sd_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/server.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/sim_card.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/smartphone.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/source_code.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/tablet.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/tv.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/ubuntu.png.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/video.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/voicemail.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/wifi.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/technology/windows.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
+                    <img src="./img/technology/adobe.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/android.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/apple.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/calling_card.svg" :style="{background:color}" alt=""
+                         class="temlateSymbol" @click="setImageBase64($event)">
+                    <img src="./img/technology/camera.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/cd.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/computer.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/gaming.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/hard_drive.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/laptop.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/phone.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/printer.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/router.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/sd_card.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/server.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/sim_card.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/smartphone.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/source_code.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/tablet.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/tv.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/ubuntu.png.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/video.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/voicemail.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/wifi.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/technology/windows.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
                 </el-tab-pane>
                 <el-tab-pane label="transport">
-                    <img src="./img/transport/airplane.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/bicycle.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/bus.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/car.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/garage.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/gas.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/helicopter.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/jeep.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/motorcycle.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/parking.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/scooter.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/ship.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/train.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
-                    <img src="./img/transport/truck.svg"  :style="{background:color}" alt="" class="temlateSymbol"   @click="setImageBase64($event)">
+                    <img src="./img/transport/airplane.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/bicycle.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/bus.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/car.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/garage.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/gas.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/helicopter.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/jeep.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/motorcycle.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/parking.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/scooter.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/ship.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/train.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
+                    <img src="./img/transport/truck.svg" :style="{background:color}" alt="" class="temlateSymbol"
+                         @click="setImageBase64($event)">
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
         <!--颜色选择弹出框-->
-        <el-dialog  :title="$t('main.color')" :visible.sync="dialogSymbolcolor" width="20%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true">
+        <el-dialog :title="$t('main.color')" :visible.sync="dialogSymbolcolor" width="20%" :close-on-click-modal="false"
+                   :close-on-press-escape="false" :show-close="true">
             <div style="width:70%;border: 1px solid #9A9A9A;margin: auto;padding: 2% 1%;">
-            <img :src="imageBase64"  style="background:#F15723" alt="" class="temlateSymbol"   @click="setcolor('#F15723')">
-            <img :src="imageBase64"  style="background:#DC4437" alt="" class="temlateSymbol"   @click="setcolor('#DC4437')">
-            <img :src="imageBase64"  style="background:#F0851D" alt="" class="temlateSymbol"   @click="setcolor('#F0851D')">
-            <img :src="imageBase64"  style="background:#ECA402" alt="" class="temlateSymbol"   @click="setcolor('#ECA402')"><br>
-            <img :src="imageBase64"  style="background:#F0CA39" alt="" class="temlateSymbol"   @click="setcolor('#F0CA39')">
-            <img :src="imageBase64"  style="background:#C3D140" alt="" class="temlateSymbol"   @click="setcolor('#C3D140')">
-            <img :src="imageBase64"  style="background:#64B044" alt="" class="temlateSymbol"   @click="setcolor('#64B044')">
-            <img :src="imageBase64"  style="background:#109D59" alt="" class="temlateSymbol"   @click="setcolor('#109D59')"><br>
-            <img :src="imageBase64"  style="background:#11AACC" alt="" class="temlateSymbol"   @click="setcolor('#11AACC')">
-            <img :src="imageBase64"  style="background:#4385F5" alt="" class="temlateSymbol"   @click="setcolor('#4385F5')">
-            <img :src="imageBase64"  style="background:#3F5CA8" alt="" class="temlateSymbol"   @click="setcolor('#3F5CA8')">
-            <img :src="imageBase64"  style="background:#9E69AF" alt="" class="temlateSymbol"   @click="setcolor('#9E69AF')"><br>
-            <img :src="imageBase64"  style="background:#BC5779" alt="" class="temlateSymbol"   @click="setcolor('#BC5779')">
-            <img :src="imageBase64"  style="background:#89695E" alt="" class="temlateSymbol"   @click="setcolor('#89695E')">
-            <img :src="imageBase64"  style="background:#999999" alt="" class="temlateSymbol"   @click="setcolor('#999999')">
-            <img :src="imageBase64"  style="background:#333333" alt="" class="temlateSymbol"   @click="setcolor('#333333')">
+                <img :src="imageBase64" style="background:#F15723" alt="" class="temlateSymbol"
+                     @click="setcolor('#F15723')">
+                <img :src="imageBase64" style="background:#DC4437" alt="" class="temlateSymbol"
+                     @click="setcolor('#DC4437')">
+                <img :src="imageBase64" style="background:#F0851D" alt="" class="temlateSymbol"
+                     @click="setcolor('#F0851D')">
+                <img :src="imageBase64" style="background:#ECA402" alt="" class="temlateSymbol"
+                     @click="setcolor('#ECA402')"><br>
+                <img :src="imageBase64" style="background:#F0CA39" alt="" class="temlateSymbol"
+                     @click="setcolor('#F0CA39')">
+                <img :src="imageBase64" style="background:#C3D140" alt="" class="temlateSymbol"
+                     @click="setcolor('#C3D140')">
+                <img :src="imageBase64" style="background:#64B044" alt="" class="temlateSymbol"
+                     @click="setcolor('#64B044')">
+                <img :src="imageBase64" style="background:#109D59" alt="" class="temlateSymbol"
+                     @click="setcolor('#109D59')"><br>
+                <img :src="imageBase64" style="background:#11AACC" alt="" class="temlateSymbol"
+                     @click="setcolor('#11AACC')">
+                <img :src="imageBase64" style="background:#4385F5" alt="" class="temlateSymbol"
+                     @click="setcolor('#4385F5')">
+                <img :src="imageBase64" style="background:#3F5CA8" alt="" class="temlateSymbol"
+                     @click="setcolor('#3F5CA8')">
+                <img :src="imageBase64" style="background:#9E69AF" alt="" class="temlateSymbol"
+                     @click="setcolor('#9E69AF')"><br>
+                <img :src="imageBase64" style="background:#BC5779" alt="" class="temlateSymbol"
+                     @click="setcolor('#BC5779')">
+                <img :src="imageBase64" style="background:#89695E" alt="" class="temlateSymbol"
+                     @click="setcolor('#89695E')">
+                <img :src="imageBase64" style="background:#999999" alt="" class="temlateSymbol"
+                     @click="setcolor('#999999')">
+                <img :src="imageBase64" style="background:#333333" alt="" class="temlateSymbol"
+                     @click="setcolor('#333333')">
             </div>
         </el-dialog>
     </aside>
-
-    <ul style="border:1px solid red;display: none" id="menu_2">
-        <li>增加项目</li>
-        <li>增加模板</li>
-        <li>修改</li>
-        <li>删除</li>
-        <li>恢复</li>
-    </ul>
     </body>
 </template>
 <script type="es6">
@@ -1028,7 +1214,9 @@
     export default {
         mounted: function () {
             //阻止浏览器右击菜单
-            window.oncontextmenu = function(){return false;}
+            window.oncontextmenu = function () {
+                return false;
+            }
             if (window.IpcRenderer) {
                 window.IpcRenderer.removeAllListeners("closeEditorWarning");
                 window.IpcRenderer.on("closeEditorWarning", event => {
@@ -1058,10 +1246,10 @@
                 showpassword: "",
                 locktimedisabled: "",
                 showpass: "", //弹出框
-                ImageBase64:"",
-                color:"#999999",
-                dialogSymbolcolor:false,//图片库颜色
-                dialogSymbol:false,//图片库
+                ImageBase64: "",
+                color: "#999999",
+                dialogSymbolcolor: false,//图片库颜色
+                dialogSymbol: false,//图片库
                 dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
@@ -1078,8 +1266,8 @@
                 dialogVisibleTemplateEdit: false,//修改模板弹出框
                 dialogVisibleItemsEdit: false, //修改模板项弹出框
                 dialogMyInfo: false, //个人信息弹出框
-                dialogRecover:false,//恢复弹出框
-                dialogclearTrash:false,//清空垃圾箱
+                dialogRecover: false,//恢复弹出框
+                dialogclearTrash: false,//清空垃圾箱
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -1126,18 +1314,18 @@
                 key: "",
                 myInfoKey: "",
                 directoryClickId: "sy",
-                showTrash:"false",
+                showTrash: "false",
                 activeIndex: '1',
                 activeIndex2: '1',
-                show:"none",
-                operationType:"",//symbol 新建或修改对象类型
+                show: "none",
+                operationType: "",//symbol 新建或修改对象类型
                 //menu 右击菜单
-                addDirClasses:[],//新建文件夹样式表
-                addProjectClasses:[],//新建项目样式表
-                addTemplateClasses:[],//新建模板样式表
-                emptyTrashClasses:[],//清空垃圾样式表
-                deleteClasses:[],//删除样式表
-                recoverClass:[],//恢复样式表
+                addDirClasses: [],//新建文件夹样式表
+                addProjectClasses: [],//新建项目样式表
+                addTemplateClasses: [],//新建模板样式表
+                emptyTrashClasses: [],//清空垃圾样式表
+                deleteClasses: [],//删除样式表
+                recoverClass: [],//恢复样式表
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1149,7 +1337,7 @@
                     "tempBase64": "",
                     "imgHash": "",
                     "isDel": false,
-                    "bgcolor":""
+                    "bgcolor": ""
                 },
                 newTemplate: {
                     "id": "",
@@ -1161,7 +1349,7 @@
                     "tempBase64": "",
                     "imgHash": "",
                     "isDel": false,
-                    "bgcolor":""
+                    "bgcolor": ""
                 },
                 templates: {
                     "templates": [{
@@ -1319,8 +1507,8 @@
                     }]
                 },
             };
-        },watch: {  //密码生成器自动生成
-            'value2': function(){
+        }, watch: {  //密码生成器自动生成
+            'value2': function () {
                 this.crypt = this.$createPassword.genCrypt(this.radio, 8 + this.value2 / 5);
                 this.level = this.$createPassword.cryptLevel(this.crypt);
                 if (this.level.indexOf("世纪") !== -1) {
@@ -1393,7 +1581,7 @@
                     this.currentSecond = 0;
                     this.mouse1 = this.mouse2;
                 }
-            },async unlock() {
+            }, async unlock() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(this.loginObj.name);
@@ -1482,10 +1670,10 @@
                     } else if (alldata[modelkey].id == "ljt") {
                         count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").
                                         filter({isDel: true}).size().value();
-                        if(count>0){
-                           this.showTrash=true;
-                        }else{
-                            this.showTrash=false;
+                        if (count > 0) {
+                            this.showTrash = true;
+                        } else {
+                            this.showTrash = false;
                         }
                     }
                     alldata[modelkey].count = count;
@@ -1512,17 +1700,17 @@
                 //文件夹
                 this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
                 //分类下拉框国际化
-                var jsonlebals =this.$JSON5.parse(jsonLabelsString).labels;
-                for(var obj in jsonlebals){
-                    jsonlebals[obj].name=this.international(jsonlebals[obj].name);
+                var jsonlebals = this.$JSON5.parse(jsonLabelsString).labels;
+                for (var obj in jsonlebals) {
+                    jsonlebals[obj].name = this.international(jsonlebals[obj].name);
                 }
-                this.labels ={labels:jsonlebals}
+                this.labels = {labels: jsonlebals}
                 //目录国际化
-                var jsonProjects =  this.$JSON5.parse(jsonProjectstring).project;
-                for(var obj in jsonProjects){
-                    jsonProjects[obj].name=this.international(jsonProjects[obj].name);
+                var jsonProjects = this.$JSON5.parse(jsonProjectstring).project;
+                for (var obj in jsonProjects) {
+                    jsonProjects[obj].name = this.international(jsonProjects[obj].name);
                 }
-               this.DProject ={project:jsonProjects};
+                this.DProject = {project: jsonProjects};
                 //类型名称
                 for (var index in  allProjects) {
                     var newArray = new Array();
@@ -1804,7 +1992,8 @@
             }, selectTemplate() {
                 this.dialogVisibleTemplate = true;
                 this.selectlabels = "";
-                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").filter({isDel: false}).value()));
+                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").
+                        filter({isDel: false}).value()));
             },
             projectlick(project, event) {
                 let temp = this.db.get("templates").find({id: project.id}).value();
@@ -1827,7 +2016,7 @@
                 } else {
                     this.dialogVisibleTemplate = false;
                     this.dialogVisibleAddProject = true;
-                    this.operationType="project_add";
+                    this.operationType = "project_add";
                 }
             }, //数据提交
             submitproject() {
@@ -1856,7 +2045,7 @@
                     "dateTime": new Date().valueOf(),
                     "tempBase64": formData.tempBase64,
                     "imgHash": "",
-                    "bgcolor":formData.bgcolor
+                    "bgcolor": formData.bgcolor
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
@@ -1866,7 +2055,7 @@
                 this.dialogVisibleAddProject = false;
                 this.templateEvent = "";
                 this.ruleFormAddProject.name = "";
-                this.color="";
+                this.color = "";
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
             }, //增加选中项
@@ -1908,7 +2097,7 @@
                     }
                     this.selectlabels = models;
                     this.dialogVisibleEdit = true;
-                    this.operationType="project_edit";
+                    this.operationType = "project_edit";
                 } else if (this.editobject.type == "template") {
                     var modelsId = this.editobject.modelsId;
                     var models = [];
@@ -1919,7 +2108,7 @@
                     }
                     this.selectlabels = models;
                     this.dialogVisibleTemplateEdit = true;
-                    this.operationType="template_edit";
+                    this.operationType = "template_edit";
                 }
             }, //修改project
             editDo() {
@@ -1947,7 +2136,7 @@
                     this.imageBase64 = "";
                     this.editobject = "";
                     this.selectlabels = "";
-                    this.color="";
+                    this.color = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                 } catch (e) {
@@ -1957,7 +2146,10 @@
                 this.currentTemplate = -1;
                 this.templateEvent = ""
             }, openSetting() {
-                this.savePasswords=[{value: 'ask', label: this.$t('main.ask')}, {value: 'off', label: this.$t('main.shutDown')}, {value: 'automatically', label: this.$t('main.autofill')}];
+                this.savePasswords = [{value: 'ask', label: this.$t('main.ask')}, {
+                    value: 'off',
+                    label: this.$t('main.shutDown')
+                }, {value: 'automatically', label: this.$t('main.autofill')}];
                 this.dialogVisibleSetting = true;
             }, //清除数据库数据
             cleardb() {
@@ -1970,7 +2162,7 @@
             }, addTemplate() {
                 this.selectlabels = [];
                 this.dialogVisibleAddTemplate = true;
-                this.operationType="template_add";
+                this.operationType = "template_add";
             }, selectFiledTemplate(command) {
                 this.dialogVisibleAddTempItems = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
@@ -1992,8 +2184,8 @@
                     this.selectlabels.push("mb");//必须增加模板分类
                 }
                 //图片处理
-                if(this.imageBase64==''){
-                    this.imageBase64=this.$refs.icon_default.src;
+                if (this.imageBase64 == '') {
+                    this.imageBase64 = this.$refs.icon_default.src;
                 }
                 let data = '{"base64":"' + this.imageBase64 + '"}';
                 // this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
@@ -2007,19 +2199,19 @@
                     "datas": this.tempTemplate,
                     "tempBase64": this.imageBase64,
                     "imgHash": this.imgHash,
-                    "bgcolor":this.color
+                    "bgcolor": this.color
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
                 console.log(this.newTemplate);
                 //清空变量
                 this.ruleFormAddTemplate.name = "",
-                this.imgHash = "";
+                        this.imgHash = "";
                 this.newTemplate = "";
-                this.color="";
+                this.color = "";
                 this.tempTemplate = [];
                 this.selectlabels = "";
                 this.dialogVisibleAddTemplate = false;
-                this.imageBase64="";
+                this.imageBase64 = "";
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
             }, //修改模板
@@ -2038,8 +2230,8 @@
                     this.editobject = "";
                     this.imageBase64 = "";
                     this.selectlabels = "",
-                    this.getdirectory();
-                    this.color="";
+                            this.getdirectory();
+                    this.color = "";
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                 } catch (e) {
                     this.$message.error(this.$t('main.failToEdit'));
@@ -2215,48 +2407,57 @@
             changeLang(lan) {
                 if (lan === "中文") {
                     this.$i18n.locale = 'zh-CN';
-                } else if(lan === "English"){
+                } else if (lan === "English") {
                     this.$i18n.locale = 'en-US';
                 }
                 this.getdirectory();
                 //国际化设置菜单中 保存用户和密码下来框
-                this.savePasswords=[{value: 'ask', label: this.$t('main.ask')}, {value: 'off', label: this.$t('main.shutDown')}, {value: 'automatically', label: this.$t('main.autofill')}];
-                 localStorage.setItem('lang', this.$i18n.locale);
+                this.savePasswords = [{value: 'ask', label: this.$t('main.ask')}, {
+                    value: 'off',
+                    label: this.$t('main.shutDown')
+                }, {value: 'automatically', label: this.$t('main.autofill')}];
+                localStorage.setItem('lang', this.$i18n.locale);
 
             },
             //国际化（目录）
             international(name){
-                var directory ={"allProjects":this.$t('main.allProjects'),"favorites":this.$t('main.favorites'),"password":this.$t('main.password'),
-                         "template":this.$t('main.template'),"unmarked":this.$t('main.unmarked'),"trash":this.$t('main.trash')};
-                 for(var index in directory){
-                    if(name==index){
+                var directory = {
+                    "allProjects": this.$t('main.allProjects'),
+                    "favorites": this.$t('main.favorites'),
+                    "password": this.$t('main.password'),
+                    "template": this.$t('main.template'),
+                    "unmarked": this.$t('main.unmarked'),
+                    "trash": this.$t('main.trash')
+                };
+                for (var index in directory) {
+                    if (name == index) {
                         name = directory[index];
                     }
-                 }
+                }
                 return name;
             },
             //恢复
             recover(){
-                if(this.projectEvent.type=="project"){
-                   this.db.get("project").find({id: this.projectEvent.id}).set("isDel", false).write();
-                }else if(this.projectEvent.type=="template"){
-                   this.db.get("templates").find({id: this.projectEvent.id}).set("isDel", false).write();
+                if (this.projectEvent.type == "project") {
+                    this.db.get("project").find({id: this.projectEvent.id}).set("isDel", false).write();
+                } else if (this.projectEvent.type == "template") {
+                    this.db.get("templates").find({id: this.projectEvent.id}).set("isDel", false).write();
                 }
-              this.dialogRecover = false;
-              this.getdirectory();
+                this.dialogRecover = false;
+                this.getdirectory();
             },
 
             //清空垃圾箱
             clearTrash(){
                 let delTemplate = this.db.get("templates").filter({isDel: true}).value();
-                for(var index in delTemplate){
+                for (var index in delTemplate) {
                     this.db.get("templates").remove({id: delTemplate[index].id}).write();
                 }
                 let delProject = this.db.get("project").filter({isDel: true}).value();
-                for(var index in delProject){
+                for (var index in delProject) {
                     this.db.get("project").remove({id: delProject[index].id}).write();
                 }
-                this.dialogclearTrash= false;
+                this.dialogclearTrash = false;
                 this.getdirectory();
             },
             showIconMenu(){
@@ -2267,68 +2468,68 @@
             },
             //打开图片选择菜单
             dialogSymbolOpen(){
-                this.dialogSymbol=true;
+                this.dialogSymbol = true;
                 // var ui =document.getElementById("choosepic");
                 // ui.style.display="none"
             },
             //打开颜色选择框
             opencolor(obj){
                 console.log(this.operationType);
-                if(this.operationType=="project_add"){
-                    this.imageBase64=obj.tempBase64;
-                }else if(this.operationType=="project_edit"){
-                    this.imageBase64=obj.tempBase64;
-                }else if(this.operationType=="template_add"){
+                if (this.operationType == "project_add") {
+                    this.imageBase64 = obj.tempBase64;
+                } else if (this.operationType == "project_edit") {
+                    this.imageBase64 = obj.tempBase64;
+                } else if (this.operationType == "template_add") {
                     //新建模板，给默认图片
-                    if(this.imageBase64==''){
-                        this.imageBase64=this.$refs.icon_default.src;
+                    if (this.imageBase64 == '') {
+                        this.imageBase64 = this.$refs.icon_default.src;
                     }
-                }else if(this.operationType=="template_edit"){
-                    this.imageBase64=obj.tempBase64;
+                } else if (this.operationType == "template_edit") {
+                    this.imageBase64 = obj.tempBase64;
                 }
                 // if(this.imageBase64==""){
                 //     this.imageBase64=this.$refs.icon_default.src;
                 // }
-                this.dialogSymbolcolor=true;
+                this.dialogSymbolcolor = true;
             },
             setImageBase64(path){
                 //进行修改操作时插入图片
                 console.log(this.operationType);
-                if(this.operationType=="template_edit"){
-                      this.editobject.tempBase64=path.target.currentSrc;
-                      this.dialogSymbol=false;
-                }else if(this.operationType=="template_add"){
+                if (this.operationType == "template_edit") {
+                    this.editobject.tempBase64 = path.target.currentSrc;
+                    this.dialogSymbol = false;
+                } else if (this.operationType == "template_add") {
                     //进行新建操作时插入图片
-                    this.imageBase64=path.target.currentSrc;
-                    this.dialogSymbol=false;
-                }else if(this.operationType=="project_add"){
-                    this.templateEvent.tempBase64=path.target.currentSrc;
-                    this.dialogSymbol=false;
-                }else if(this.operationType=="project_edit"){
-                    this.editobject.tempBase64=path.target.currentSrc;
-                    this.dialogSymbol=false;
+                    this.imageBase64 = path.target.currentSrc;
+                    this.dialogSymbol = false;
+                } else if (this.operationType == "project_add") {
+                    this.templateEvent.tempBase64 = path.target.currentSrc;
+                    this.dialogSymbol = false;
+                } else if (this.operationType == "project_edit") {
+                    this.editobject.tempBase64 = path.target.currentSrc;
+                    this.dialogSymbol = false;
                 }
 
             },
             setcolor(color){
                 console.log(this.operationType);
-                if(this.operationType=="template_edit"){
-                    this.editobject.bgcolor=color;
-                    this.dialogSymbolcolor=false;
-                }else if(this.operationType=="template_add"){
-                    this.color=color;
-                    this.dialogSymbolcolor=false;
-                }else if(this.operationType=="project_add"){
-                    this.templateEvent.bgcolor=color;
-                    this.dialogSymbolcolor=false;
-                }else if(this.operationType=="project_edit"){
-                    this.editobject.bgcolor=color;
-                    this.dialogSymbolcolor=false;
+                if (this.operationType == "template_edit") {
+                    this.editobject.bgcolor = color;
+                    this.dialogSymbolcolor = false;
+                } else if (this.operationType == "template_add") {
+                    this.color = color;
+                    this.dialogSymbolcolor = false;
+                } else if (this.operationType == "project_add") {
+                    this.templateEvent.bgcolor = color;
+                    this.dialogSymbolcolor = false;
+                } else if (this.operationType == "project_edit") {
+                    this.editobject.bgcolor = color;
+                    this.dialogSymbolcolor = false;
                 }
             },
             //隐藏菜单
             unshow(){
-                document.onclick = function(e){
+                document.onclick = function (e) {
                     var e = e || window.event;
                     var uils = document.getElementsByClassName("choosepic")
                     for (var i = 0; i < uils.length; i++) {
@@ -2339,45 +2540,92 @@
                 }
             },
             cleartype(){
-                this.operationType="";
-                this.imageBase64="";
-                this.color="";
+                this.operationType = "";
+                this.imageBase64 = "";
+                this.color = "";
             },
-            openMenu_1(project,obj){
+
+            openMenu_1(project, obj){
                 this.isDisabled = false;//启用删除
                 this.delobj = project;//赋值删除对象
                 console.log(project);
-                if(project.type!="model"){//indexof undefind 问题
-                    this.projectEvent =project;
+                if (project.type != "model") {//indexof undefind 问题
+                    this.projectEvent = project;
                 }
                 var menu = document.getElementById("menu_1");
-                var position=obj.target.getBoundingClientRect();//获取点击元素的位置
+                var position = obj.target.getBoundingClientRect();//获取点击元素的位置
                 menu.style.display = "block";
-                menu.style.left = position.right + 10 +"px";
-                if(document.body.clientHeight>menu.clientHeight+position.bottom){
-                    menu.style.top =position.top + position.height + 10 +"px"
-                }else{
-                    menu.style.top =position.top - menu.clientHeight -10 + "px"
+                menu.style.left = position.right + 10 + "px";
+                if (document.body.clientHeight > menu.clientHeight + position.bottom) {
+                    menu.style.top = position.top + position.height + 10 + "px"
+                } else {
+                    menu.style.top = position.top - menu.clientHeight - 10 + "px"
                 }
-                 this.menulistchange(project);
+                this.menulistchange(project);
+                this.stopPropagation(obj);
             },
+            //阻止冒泡
+            stopPropagation(e) {
+                e = e || window.event;
+                if (e.stopPropagation) { //W3C阻止冒泡方法
+                    e.stopPropagation();
+                } else {
+                    e.cancelBubble = true; //IE阻止冒泡方法
+                }
+            },
+            //点击空白地区显示菜单
+            openMenu_empty(obj){
+                console.log(11123);
+                this.addDirClasses = [];
+                this.addProjectClasses = [];
+                this.addTemplateClasses = [];
+                this.emptyTrashClasses = [];
+                this.deleteClasses = [];
+                this.recoverClass = ["unuse"];
+                var menu = document.getElementById("menu_1");
+                var e = e || window.event;
+                var x = e.clientX;
+                var y = e.clientY;
+                menu.style.display = "block";
+                menu.style.left = x + "px";
+                menu.style.top = y + "px"
+                this.deleteClasses.push("unuse");
+                this.recoverClass.push("unuse");
+                this.addDirClasses.push("unuse");
+            },
+            //菜单变化
             menulistchange(obj){
-                this.addProjectClasses=[];
-                this.addTemplateClasses=[];
-                this.emptyTrashClasses=[];
-                this.deleteClasses=[];
-                this.recoverClass=["unuse"];
-                if(obj.modelsType=="directory"){
+                this.addDirClasses = [];
+                this.addProjectClasses = [];
+                this.addTemplateClasses = [];
+                this.emptyTrashClasses = [];
+                this.deleteClasses = [];
+                this.recoverClass = ["unuse"];
+                if (obj.modelsType == "directory") {
+                    this.emptyTrashClasses.push("unuse");
+                    this.addProjectClasses.push("unuse");
+                    this.addTemplateClasses.push("unuse");
+                    this.emptyTrashClasses.push("unuse");
+                } else if (obj.modelsType == "project") {
+                    this.emptyTrashClasses.push("unuse");
+                    this.addProjectClasses.push("unuse");
+                    this.addTemplateClasses.push("unuse");
+                    this.emptyTrashClasses.push("unuse");
+                    this.deleteClasses.push("unuse");
+                }
+                if (this.showTrash != true) {
                     this.emptyTrashClasses.push("unuse");
                 }
-                if(this.showTrash!=true){
-                    this.emptyTrashClasses.push("unuse");
+                if (obj.isDel) {
+                    this.recoverClass = [];
+                    this.deleteClasses = ["unuse"];
                 }
-                if(obj.isDel){
-                    this.recoverClass=[];
-                    this.deleteClasses=["unuse"];
+                if (obj.type != "model") {
+                    this.addDirClasses.push("unuse");
                 }
-
+                if (obj.id == "ljt" && this.showTrash == true) {
+                    this.emptyTrashClasses = [];
+                }
             }
         }
     }
