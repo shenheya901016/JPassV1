@@ -324,11 +324,12 @@
                     <span>{{$t('main.selectColor')}}</span>
                 </li>
                 <li>
-                    <span>
-                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                    <span style="display:inline-block">
+                        <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                         <el-upload  action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAddPro"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
                           </el-upload>
                     </span>
                 </li>
@@ -431,11 +432,12 @@
                     <span >{{$t('main.selectColor')}}</span>
                 </li>
                 <li>
-                    <span>
-                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                    <span style="display: inline-block">
+                         <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                         <el-upload action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessEdit"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
                              <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
                              <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
                           </el-upload>
@@ -533,14 +535,12 @@
                     <span >{{$t('main.selectColor')}}</span>
                 </li>
                 <li>
-                    <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                    <span>
-                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                    <span style="display:inline-block">
+                        <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                         <el-upload  action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAdd"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
-                             <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
-                             <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
+                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
                           </el-upload>
                     </span>
                 </li>
@@ -625,13 +625,14 @@
                     <span>{{$t('main.selectColor')}}</span>
                 </li>
                 <li>
-                    <span>
-                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccessAdd"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;">用户资源
+                      <span style="display:inline-block">
+                        <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                         <el-upload  action="https://jsonplaceholder.typicode.com/posts/"
+                                     :show-file-list="false"
+                                     :on-success="handleAvatarSuccessAdd"
+                                     :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
                           </el-upload>
-                    </span>
+                      </span>
                 </li>
             </ul>
             <br>

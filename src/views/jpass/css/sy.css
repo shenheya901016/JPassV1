@@ -707,6 +707,10 @@
 	 color:#999999 !important;
  }
 
+.avatar-uploader .el-upload {
+/*清空css*/
+}
+
 
 
 
