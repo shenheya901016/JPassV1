@@ -42,16 +42,16 @@ describe("test Ipfs", async function () {
             }
         });
         it('判断同步是否完成', async function () {
-            let writeResult = await myIpfs.write(type, '{"version":"0"}', userJID, userSecret, operatorJID, operatorSecret);
+            let writeResult = await myIpfs.write(type, '{"version":"3"}', userJID, userSecret, operatorJID, operatorSecret);
             let result = await myIpfs.getTransactionStat(writeResult.result[0].transaction);
-            if (result.status === "success") {
+            if (result === "success") {
                 console.log("该账号同步完成！");
             } else {
                 console.log("该账号同步失败！");
             }
         });
         it('向IPFS中写入数据', async function () {
-            let result = await myIpfs.write(type, '{"version":"0"}', userJID, userSecret, operatorJID, operatorSecret);
+            let result = await myIpfs.write(type, '{"version":"1"}', userJID, userSecret, operatorJID, operatorSecret);
             if (result.status === "success") {
                 console.log("该账号向IPFS中写入数据成功！");
             } else {
