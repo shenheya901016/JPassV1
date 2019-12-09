@@ -1718,7 +1718,8 @@
                     for (var indexMode in allProjects[index].modelsId) {
                         var modelId = allProjects[index].modelsId[indexMode];
                         var model = this.db.get("models").find({id: modelId}).value();
-                        if (model.id != "sy") {
+                        console.log(model);
+                        if (model != undefined && model.id != "sy") {
                             newArray.push(this.international(model.name));//项目分类国际化
                         }
                     }
@@ -1801,6 +1802,22 @@
                         if (index > -1) {
                             //删除modelsId数组中指定位置的项
                             projects[project].modelsId.splice(index, 1);
+                            this.selectlabels=  projects[project].modelsId;
+                            //处理分类
+                            if (this.selectlabels.indexOf("sy") == -1) {
+                                this.selectlabels.push("sy");//所有项必须有
+                            }
+                            if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                                this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                            }
+                            if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                                //大于2项，包含所有项和为标记项时删除为标记项
+                                this.selectlabels = this.selectlabels.filter(function (item) {
+                                    return item !== "wbj"
+                                })
+                            }
+                            projects[project].modelsId= this.$JSON5.parse(this.$JSON5.stringify(this.selectlabels));
+                            this.selectlabels="";
                         }
                     }
                     this.isDisabled = true;
