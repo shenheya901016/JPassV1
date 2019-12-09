@@ -92,7 +92,7 @@
 }
 .header .link li{
 	float: left;
-	margin-right: 10px;
+	margin-right: 1px;
 }
 .header .link li img{
 	margin-right: 4px;
@@ -163,6 +163,8 @@
 .aside .nav ul.dh li span{
 	float: left;
 	color: #333;
+    text-align: left;
+    width: 13.5vw;
 }
 .aside .nav ul.dh li i{
 	float: right;
@@ -268,16 +270,18 @@
 .aside .nav ul.dhwjj li span{
 	float: left;
 	color: #333;
+    text-align: left;
+    width: 13.5vw;
 }
 .aside .nav ul.dhwjj li i{
-	float: right;
-	color: #A8B1C6;
-	width: 47px;
-	height: 23px;
-	text-align: center;
-	border-radius: 11.5px;
-	line-height: 23px;
-	margin-top: 6px;
+    float: right;
+    color: #A8B1C6;
+    width: 47px;
+    height: 23px;
+    text-align: center;
+    border-radius: 11.5px;
+    line-height: 23px;
+    margin-top: 7px;
 }
 .aside .nav ul.dhwjj li:nth-child(4n+1){
 	background: url(../img/aside_wjj01.svg) no-repeat left 40%;
@@ -622,6 +626,91 @@
 	height: 6vh;
 	display: block;
 	border: 0;
+	background:#999999;
 }
+.temlateSymbol{
+	margin: 1% 1%;
+	width: 40px;
+	background:#999999;
+
+}
+.detail_icon{
+	width: 4vw;
+	height: 8vh;
+	display: inline-block;
+	position:absolute;
+}
+.list_icon{
+	background:#999999;
+	width:2vw;
+}
+.template_select_img{
+	display:inline-block;
+	height:5vh;
+	width:5vh;
+	margin-left:2px;
+	line-height:5vh;
+	vertical-align:middle;
+	text-align:center;
+	background:#999999;
+}
+
+#menu{
+	display: none;
+	width: 50px;
+	border: 1px solid #409EFF;
+	position: absolute;
+	background-color: aqua;
+	z-index: 1;
+}
+#list{
+	width: 50px;
+}
+.menu{
+	border:1px solid #999999;
+	border-radius: 5px;
+	width: 13vw;
+	position:absolute;
+	display: none;
+	z-index: 2;
+	float: left;
+}
+ .menu li{
+	 border:0;
+	 float: left;
+	 height: 4vh;
+	 width: 13vw;
+	 cursor: pointer;
+	 line-height: 4vh;
+	 vertical-align: middle;
+	 text-align: left;
+	 font-weight:bold;
+	 color: black;
+	 font-size: 10px;
+	 background-color: white;
+
+ }
+
+ .menu img {
+	 width: 1.5vw;
+	 margin-left: 0.7vw;
+	 margin-right: 0.2vw;
+ }
+.menu li:hover{
+	color: #046BDA;
+	border: 1px solid #409EFF;
+	background-color: #DCEDFF;
+}
+
+ .unuse{
+	 pointer-events: none;
+	 color:#999999 !important;
+ }
+
+.avatar-uploader .el-upload {
+/*清空css*/
+}
+
+
 
 

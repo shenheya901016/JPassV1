@@ -87,7 +87,7 @@ export default {
         passwordUnlock: "密码解锁",
         loginPassword: "登录密码",
         unlock: "解锁",
-        addDirectory: "增加目录",
+        addDirectory: "增加文件夹",
         ok: "确定",
         cancel: "取消",
         prompt: "提示",
@@ -98,7 +98,6 @@ export default {
         doYouWantToDeleteTheTemplate: "是否删除模板？",
         selectTemplate: "选择模板",
         addItem: "新增项目",
-
         chooseCategory: "选择分类",
         addOtherItems: "添加其他项",
         additionalItem: "新增项",
@@ -143,7 +142,18 @@ export default {
         successfullyModified: "修改成功！",
         failToEdit: "修改失败！",
         settingSavedSuccessfully: "设置保存成功！",
-        settingSaveFailed: "设置保存失败！"
+        settingSaveFailed: "设置保存失败！",
+        PasswordGenerator:"密码生成器",
+        fields:"字段",
+        recover:"恢复",
+        recovertitle:"是否要恢复删除的文件?",
+        cleartrash:"清空垃圾桶",
+        clearTashTitle:"是否清空垃圾桶",
+        selectSymbol:"选择标识",
+        selectColor:"选择颜色",
+        userIcon:"用户图标",
+        color:"颜色",
+        symbol:"标识"
     },
     lock: {
         unlockJpass: "解锁jpass",
@@ -179,7 +189,8 @@ export default {
         theKeystoryFileOrPasswordIsIncorrectPleaseEnter: "keystory 文件或密码有误，请重新输入！",
         newKeystoreGeneratedError: "新keystore 生成错误！",
         localStorageFailed: "本地存储失败！",
-        cancel:"取消"
+        cancel:"取消",
+
     },
     keyImport: {
         walletKeyImport: "钱包密钥导入",
@@ -202,6 +213,12 @@ export default {
         keyIsWrongPleaseEnter: "密钥错误，请重新输入！",
         localStorageFailed: "本地存储失败！",
         cancel:"取消"
+    },
+    myInfo: {
+        name: "用户名",
+        walletAddress: "钱包地址",
+        keystoreFile: "keystore文件:",
+        exportKeystoreFile: "keystore导出",
     },
     ...zhLocale
 };
