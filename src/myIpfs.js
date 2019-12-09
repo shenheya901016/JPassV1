@@ -114,7 +114,7 @@ let myIpfs = {
     async init(type, userJID, userSecret, operatorJID, operatorSecret) {
         let jt_issueToken = await this.getIssueToken(userJID, userSecret, operatorJID, operatorSecret, type);
         if (jt_issueToken.status === "success") {
-            if (await this.tra(jt_issueToken.result[0].transaction) === "success") {
+            if (await this.getTransactionStat(jt_issueToken.result[0].transaction) === "success") {
                 let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
                 //使用公钥加密数据
                 let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, "{'version':'0'}");
@@ -161,13 +161,14 @@ let myIpfs = {
             '                ]\n' +
             '            }\n' +
             '        }';
+        console.log(createToken);
         let jt_createToken = await remote.CreateToken([JSON.parse(createToken)]);
         return jt_createToken;
     },
     async initTest(userJID, userSecret, operatorJID, operatorSecret, type) {
         let jt_issueToken = await this.getIssueToken(userJID, userSecret, operatorJID, operatorSecret, type);
         if (jt_issueToken.status === "success") {
-            if (await this.tra(jt_issueToken.result[0].transaction) === "success") {
+            if (await this.getTransactionStat(jt_issueToken.result[0].transaction) === "success") {
                 let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
                 //使用公钥加密数据
                 let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, "{'base64':''}");
