@@ -2,11 +2,16 @@ import {IpfsRemote} from "ipfslib";
 import myIpfs from '../src/myIpfs';
 
 const fs = require("fs")
-let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]})
+let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]});
+//用户钱包地址
 let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
+//用户钱包私钥
 let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
+//运营商钱包地址
 let operatorJID = "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS";
+//运营商钱包私钥
 let operatorSecret = "ssxWidEVcs6bCtsVbfd7gMXUoRfMW";
+//数据类型（data、file）
 let type = "data";
 
 describe("test Ipfs", async function () {
