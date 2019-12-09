@@ -1797,29 +1797,45 @@
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
                     this.db.set('version', new Date().valueOf()).write();
-                    for (var project in projects) {
-                        var index = projects[project].modelsId.indexOf(id);
-                        if (index > -1) {
-                            //删除modelsId数组中指定位置的项
-                            projects[project].modelsId.splice(index, 1);
-                            this.selectlabels=  projects[project].modelsId;
-                            //处理分类
-                            if (this.selectlabels.indexOf("sy") == -1) {
-                                this.selectlabels.push("sy");//所有项必须有
+                    if(projects.length >0){
+                        console.log(projects.length);
+                        for (var project in projects) {
+                            var index = projects[project].modelsId.indexOf(id);
+                            if (index > -1) {
+                                //删除modelsId数组中指定位置的项
+                                projects[project].modelsId.splice(index, 1);
+                                this.selectlabels=  projects[project].modelsId;
+                                //处理分类
+                                if (this.selectlabels.indexOf("sy") == -1) {
+                                    this.selectlabels.push("sy");//所有项必须有
+                                }
+                                if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                                    this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                                }
+                                if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                                    //大于2项，包含所有项和为标记项时删除为标记项
+                                    this.selectlabels = this.selectlabels.filter(function (item) {
+                                        return item !== "wbj"
+                                    })
+                                }
+                                projects[project].modelsId= this.$JSON5.parse(this.$JSON5.stringify(this.selectlabels));
                             }
-                            if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                                this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                            }
-                            if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                                //大于2项，包含所有项和为标记项时删除为标记项
-                                this.selectlabels = this.selectlabels.filter(function (item) {
-                                    return item !== "wbj"
-                                })
-                            }
-                            projects[project].modelsId= this.$JSON5.parse(this.$JSON5.stringify(this.selectlabels));
-                            this.selectlabels="";
                         }
+                        //更新project中的类别
+                        this.db.get('project').find({ id: projects[project].id }).assign({ modelsId: this.selectlabels}).write();
+                        this.selectlabels="";
                     }
+                            //更新template中的类别
+                            var templates = this.db.get("templates").value();
+                             if(templates.length >0){
+                                 for (var template in templates) {
+                                     var index = templates[template].modelsId.indexOf(id);
+                                     if(index>-1){
+                                         templates[template].modelsId.splice(index, 1);
+                                     }
+                                     this.db.get('templates').find({ id:  templates[template].id }).assign({ modelsId: templates[template].modelsId}).write();
+                                 }
+                             }
                     this.isDisabled = true;
                     this.dialogVisibledDirectory = false;
                     this.getdirectory();
