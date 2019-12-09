@@ -3,6 +3,7 @@ import myIpfs from '../src/myIpfs';
 
 const fs = require("fs")
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]});
+let JPassUtil = require("jpass-util");
 //用户钱包地址
 let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
 //用户钱包私钥
@@ -41,16 +42,16 @@ describe("test Ipfs", async function () {
             }
         });
         it('判断同步是否完成', async function () {
-            let initResult = await myIpfs.init(type, userJID, userSecret, operatorJID, operatorSecret);
-            let result = await myIpfs.getTransactionStat(initResult.result[0].transaction);
-            if (result.status === "success") {
+            let writeResult = await myIpfs.write(type, '{"version":"3"}', userJID, userSecret, operatorJID, operatorSecret);
+            let result = await myIpfs.getTransactionStat(writeResult.result[0].transaction);
+            if (result === "success") {
                 console.log("该账号同步完成！");
             } else {
                 console.log("该账号同步失败！");
             }
         });
         it('向IPFS中写入数据', async function () {
-            let result = await myIpfs.write(type, "自己填写", userJID, userSecret, operatorJID, operatorSecret);
+            let result = await myIpfs.write(type, '{"version":"1"}', userJID, userSecret, operatorJID, operatorSecret);
             if (result.status === "success") {
                 console.log("该账号向IPFS中写入数据成功！");
             } else {
@@ -59,19 +60,30 @@ describe("test Ipfs", async function () {
         });
         it('从IPFS中读取所有data类型数据', async function () {
             let result = await myIpfs.read(userJID, userSecret);
-            if (result.status === "success") {
-                console.log("该账号保存在IPFS中的数据为：" + result.result.Items[0].Value);
+            if (result != null) {
+                console.log("该账号保存在IPFS中的数据为：" + result);
             } else {
                 console.log("获取该账号保存在IPFS中的数据失败！");
             }
         });
-        it('根据Hash从IPFS中读取数据，一般用于读取file数据',async function () {
-            let writeResult = await myIpfs.write("file", "自己填写", userJID, userSecret, operatorJID, operatorSecret);
-            let result=await myIpfs.readByHash(result.result.hash,userSecret);
-            if (result.status === "success") {
-                console.log("该账号保存在IPFS中的数据为：" + result.result.Items[0].Value);
+        it('根据Hash从IPFS中读取数据，一般用于读取file数据', async function () {
+            let writeResult = await myIpfs.write("file", '{"version":"0"}', userJID, userSecret, operatorJID, operatorSecret);
+            let result = await myIpfs.readByHash(writeResult.result.hash, userSecret);
+            if (result != null) {
+                console.log("该账号保存在IPFS中的数据为：" + result);
             } else {
                 console.log("获取该账号保存在IPFS中的数据失败！");
+            }
+        });
+        it('如果init中途失败，报错already exists（一般不需要测试）', async function () {
+            let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+            //使用公钥加密数据
+            let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(key.publicKey, '{"version":"0"}');
+            let result = await myIpfs.getCreateToken(userJID, userSecret, operatorJID, operatorSecret, type, "175BCBCB9F97C49D1F0AA827580F4DF3CFE7D5A9DC69B9E88914D70AA72C1AAE", JSON.stringify(encryptData));
+            if (result.status === "success") {
+                console.log("该账号向IPFS中写入数据成功！");
+            } else {
+                console.log("该账号向IPFS中写入数据失败！");
             }
         });
     });
