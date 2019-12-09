@@ -145,7 +145,7 @@ export default {
         settingSaveFailed: "设置保存失败！",
         PasswordGenerator:"密码生成器",
         fields:"字段",
-        recover:"恢复",
+        recover:"还原",
         recovertitle:"是否要恢复删除的文件?",
         cleartrash:"清空垃圾桶",
         clearTashTitle:"是否清空垃圾桶",
