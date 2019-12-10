@@ -101,27 +101,26 @@
         </nav>
         <ul id="menu_1" class="menu">
             <li ref="addDir" :class="addDirClasses" @click="addDirectoryOP">
-                <img src="./img/tianjiawenjianjia.svg" style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;"
-                     alt="">
-                新建文件夹
+                <img src="./img/tianjiawenjianjia.svg" style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                {{$t('main.newFolder')}}
             </li>
             <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
                 <img src="./img/moban.svg" alt="">
-                新建模板
+                {{$t('main.newTemplate')}}
             </li>
             <li ref="addPro" :class="addProjectClasses" @click="selectTemplate">
                 <img src="./img/tianjiaxiangmu.svg" alt="">
-                新建项目
+                {{$t('main.newProject')}}
             </li>
             <li ref="delete" :class="deleteClasses" @click="remove">
-                <img style="margin-right: 0.6vw" src="./img/ICON-SC.svg" alt="">删除
+                <img style="margin-right: 0.6vw" src="./img/ICON-SC.svg" alt=""> {{$t('main.delete')}}
             </li>
             <li ref="recover" :class="recoverClass" @click="dialogRecover = true">
-                <img src="./img/recover.png" alt="">还原
+                <img src="./img/recover.png" alt="">{{$t('main.recover')}}
             </li>
             <li ref="emptyTrash" :class="emptyTrashClasses" @click="dialogclearTrash = true">
                 <img src="./img/trash.svg" alt="">
-                清空垃圾桶
+                {{$t('main.cleartrash')}}
             </li>
         </ul>
 
@@ -326,10 +325,11 @@
                 <li>
                     <span style="display:inline-block">
                         <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                         <el-upload  action="https://jsonplaceholder.typicode.com/posts/"
+                         <el-upload action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAddPro"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                                    :before-upload="beforeAvatarUpload"
+                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
                           </el-upload>
                     </span>
                 </li>
@@ -425,11 +425,11 @@
             <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                    <span >{{$t('main.selectSymbol')}}</span>
+                    <span>{{$t('main.selectSymbol')}}</span>
                 </li>
                 <li @click="opencolor(editobject)">
                     <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                    <span >{{$t('main.selectColor')}}</span>
+                    <span>{{$t('main.selectColor')}}</span>
                 </li>
                 <li>
                     <span style="display: inline-block">
@@ -437,7 +437,8 @@
                          <el-upload action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessEdit"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                                    :before-upload="beforeAvatarUpload"
+                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
                              <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
                              <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
                           </el-upload>
@@ -528,19 +529,20 @@
             <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                    <span >{{$t('main.selectSymbol')}}</span>
+                    <span>{{$t('main.selectSymbol')}}</span>
                 </li>
                 <li @click="opencolor(tempTemplate)">
                     <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                    <span >{{$t('main.selectColor')}}</span>
+                    <span>{{$t('main.selectColor')}}</span>
                 </li>
                 <li>
                     <span style="display:inline-block">
                         <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                         <el-upload  action="https://jsonplaceholder.typicode.com/posts/"
+                         <el-upload action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAdd"
-                                    :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                                    :before-upload="beforeAvatarUpload"
+                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
                           </el-upload>
                     </span>
                 </li>
@@ -618,19 +620,20 @@
             <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                    <span >{{$t('main.selectSymbol')}}</span>
+                    <span>{{$t('main.selectSymbol')}}</span>
                 </li>
-                <li  @click="opencolor(editobject)">
-                     <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                <li @click="opencolor(editobject)">
+                    <img src="./img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>{{$t('main.selectColor')}}</span>
                 </li>
                 <li>
                       <span style="display:inline-block">
                         <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
-                         <el-upload  action="https://jsonplaceholder.typicode.com/posts/"
-                                     :show-file-list="false"
-                                     :on-success="handleAvatarSuccessAdd"
-                                     :before-upload="beforeAvatarUpload" style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                         <el-upload action="https://jsonplaceholder.typicode.com/posts/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccessAdd"
+                                    :before-upload="beforeAvatarUpload"
+                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
                           </el-upload>
                       </span>
                 </li>
@@ -1797,27 +1800,45 @@
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
                     this.db.set('version', new Date().valueOf()).write();
-                    for (var project in projects) {
-                        var index = projects[project].modelsId.indexOf(id);
-                        if (index > -1) {
-                            //删除modelsId数组中指定位置的项
-                            projects[project].modelsId.splice(index, 1);
-                            this.selectlabels=  projects[project].modelsId;
-                            //处理分类
-                            if (this.selectlabels.indexOf("sy") == -1) {
-                                this.selectlabels.push("sy");//所有项必须有
+                    if (projects.length > 0) {
+                        console.log(projects.length);
+                        for (var project in projects) {
+                            var index = projects[project].modelsId.indexOf(id);
+                            if (index > -1) {
+                                //删除modelsId数组中指定位置的项
+                                projects[project].modelsId.splice(index, 1);
+                                this.selectlabels = projects[project].modelsId;
+                                //处理分类
+                                if (this.selectlabels.indexOf("sy") == -1) {
+                                    this.selectlabels.push("sy");//所有项必须有
+                                }
+                                if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                                    this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                                }
+                                if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                                    //大于2项，包含所有项和为标记项时删除为标记项
+                                    this.selectlabels = this.selectlabels.filter(function (item) {
+                                        return item !== "wbj"
+                                    })
+                                }
+                                projects[project].modelsId = this.$JSON5.parse(this.$JSON5.stringify(this.selectlabels));
                             }
-                            if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                                this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                        }
+                        //更新project中的类别
+                        this.db.get('project').find({id: projects[project].id}).assign({modelsId: this.selectlabels}).
+                                write();
+                        this.selectlabels = "";
+                    }
+                    //更新template中的类别
+                    var templates = this.db.get("templates").value();
+                    if (templates.length > 0) {
+                        for (var template in templates) {
+                            var index = templates[template].modelsId.indexOf(id);
+                            if (index > -1) {
+                                templates[template].modelsId.splice(index, 1);
                             }
-                            if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                                //大于2项，包含所有项和为标记项时删除为标记项
-                                this.selectlabels = this.selectlabels.filter(function (item) {
-                                    return item !== "wbj"
-                                })
-                            }
-                            projects[project].modelsId= this.$JSON5.parse(this.$JSON5.stringify(this.selectlabels));
-                            this.selectlabels="";
+                            this.db.get('templates').find({id: templates[template].id}).
+                                    assign({modelsId: templates[template].modelsId}).write();
                         }
                     }
                     this.isDisabled = true;
