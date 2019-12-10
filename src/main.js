@@ -11,6 +11,7 @@ import JPassUtil from "jpass-util";
 import myIpfs from './myIpfs';
 import Lowdb from "lowdb";
 import IndexDB from "./indexDB";
+import fileIndexDB from "./fileIndexDB";
 let test=require("./assets/test");
 import createPassword from '../src/createPassword'
 window.myIpfs=myIpfs;
@@ -44,6 +45,7 @@ Vue.prototype.$Uuidv1 = require('uuid/v1');
 Vue.prototype.$myIpfs = myIpfs;
 Vue.prototype.$test = test;
 Vue.prototype.$Lowdb = source => Lowdb(new IndexDB(source));
+//Vue.prototype.$fileLowdb = source => Lowdb(new fileIndexDB(source));
 if (typeof window.require === 'function') {
     window.IpcRenderer = window.require('electron').ipcRenderer;
     Vue.prototype.$IpcRenderer = window.IpcRenderer;

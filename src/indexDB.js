@@ -1,7 +1,7 @@
 import Base from 'lowdb/adapters/Base';
 import Dexie from 'dexie';
 
-const db = new Dexie("JPassDatabase");
+let db = new Dexie("JPassDatabase");
 db.version(1).stores({t_data: "key,value"});
 
 class indexDB extends Base {
@@ -18,6 +18,7 @@ class indexDB extends Base {
     write(data) {
         return db.t_data.put({key: this.source, value: data});
     }
+
 }
 
 export default indexDB;
