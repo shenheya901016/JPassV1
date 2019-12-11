@@ -100,7 +100,7 @@ let myIpfs = {
         if (getTransaction.status === "success") {
             return getTransaction.status
         } else {
-            return await this.tra(transaction)
+            return await this.getTransactionStat(transaction)
         }
     },
     /**

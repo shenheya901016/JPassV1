@@ -96,7 +96,7 @@
                 } else {
                     callback();
                 }
-            }
+            };
             return {
                 //密码器
                 crypt: "",

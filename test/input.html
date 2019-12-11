@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="page_container">
+    <!--密码输入框-->
+    <div class="input_block">
+        <img id="demo_img" οnclick="hideShowPsw()" src="visible.png">
+        <input type="password" id="demo_input" placeholder="Password"/>
+    </div>
+
+    <button οnclick="">Login</button>
+</div>
+<script>
+    var demoImg = document.getElementById("demo_img");
+    var demoInput = document.getElementById("demo_input");
+    function hideShowPsw(){
+        if (demoInput.type == "password") {
+            demoInput.type = "text";
+            demo_img.src = "invisible.png";
+        }else {
+            demoInput.type = "password";
+            demo_img.src = "visible.png";
+        }
+    }
+</script>
+</body>
+</html>

@@ -43,7 +43,6 @@
 
     //为list添加右击事件
     list.oncontextmenu = function(e){
-        alert("获取id："+e.target.id);
         var e = e || window.event;
         var x = e.clientX;
         var y = e.clientY;
@@ -61,13 +60,13 @@
     }
 
     //点击菜单时取消冒泡事件
-    /*menu.onclick = function(e){
+    menu.onclick = function(e){
         var e = e || window.event;
         //IE中取消冒泡事件
         //e.cancelBubble = true;
         //其他浏览器取消冒泡事件
         e.stopPropagation();
-    }*/
+    }
 </script>
 </body>
 
