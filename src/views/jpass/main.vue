@@ -207,6 +207,15 @@
                 </el-button>
             </el-form>
         </section>
+        <!--数据同步弹出框-->
+        <el-dialog :title="$t('main.prompt')" :visible.sync="dialogSynchronization " width="30%">
+            <span>{{$t('main.synchronizationInfo')}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" type="primary" @click="localToIpfs()">{{$t('main.localToIpfs')}}</el-button>
+                <el-button size="small" type="primary" @click="ipfsToLocal()">{{$t('main.ipfsToLocal')}}</el-button>
+                <el-button size="small" @click="dialogSynchronization = false">{{$t('main.cancelFormat')}}</el-button>
+              </span>
+        </el-dialog>
         <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="false">
@@ -1272,6 +1281,7 @@
                 dialogMyInfo: false, //个人信息弹出框
                 dialogRecover: false,//恢复弹出框
                 dialogclearTrash: false,//清空垃圾箱
+                dialogSynchronization:false,//同步数据提示
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -1511,7 +1521,8 @@
                     }]
                 },
             };
-        }, watch: {  //密码生成器自动生成
+        },
+        watch: {  //密码生成器自动生成
             'value2': function () {
                 this.crypt = this.$createPassword.genCrypt(this.radio, 8 + this.value2 / 5);
                 this.level = this.$createPassword.cryptLevel(this.crypt);
@@ -1529,7 +1540,8 @@
                     this.percentage = 0;
                 }
             }
-        }, methods: {
+        },
+        methods: {
             //密码
             module() {
                 console.log(8 + this.value2 / 5);
@@ -1551,12 +1563,15 @@
                 }
                 console.log(this.crypt);
                 console.log(this.level);
-            }, formatTooltip(val) {
+            },
+            formatTooltip(val) {
                 return 8 + Math.floor(val / 5);
-            }, logOut() {
+            },
+            logOut() {
                 sessionStorage.removeItem("userkeyObj");
                 this.$router.push("/jpass/login");
-            }, //密码显示控制
+            },
+            //密码显示控制
             changePass(e) {
                 if (e.currentTarget.previousElementSibling.getAttribute('type') == "password") {
                     e.currentTarget.previousElementSibling.setAttribute("type", "text");
@@ -1585,7 +1600,8 @@
                     this.currentSecond = 0;
                     this.mouse1 = this.mouse2;
                 }
-            }, async unlock() {
+            },
+            async unlock() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(this.loginObj.name);
@@ -1650,8 +1666,8 @@
             getdirectory() {
                 var alldata = this.db.get("models").value();
                 var allProjects = this.db.get("project").value();
-                console.log(alldata);
-                console.log(allProjects);
+                // console.log(alldata);
+                // console.log(allProjects);
                 var projectstring = ""
                 var directoryString = ""
                 var jsonProjectstring = ""
@@ -1911,6 +1927,64 @@
                 }
                 this.projects = projectArray;
             }, //启动加载
+            // async initialize() {
+            //     let letoperatorJID = this.operatorJID;//运营商钱包地址
+            //     let operatorSecret = this.operatorSecret; //运营商密钥
+            //     var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+            //     var address = loginObj.address;
+            //     this.myInfoKey = address;
+            //     this.username = loginObj.name;
+            //     var db_name = "db_" + address;
+            //     this.db = await this.$Lowdb(db_name);
+            //     let version = await this.db.get("version").value();
+            //     // let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
+            //     let ipfsData = {"version": 0};
+            //     let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
+            //     console.log("本地version:" + version);
+            //     console.log("ipfsversion:" + tempipfsData.version);
+            //     this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+            //     if (!version || version.length <= 0) {  //判断version是否undefind 或者version.length<0
+            //         if (tempipfsData.version == 0) {
+            //             console.log("初始化");
+            //             //初始化新数据
+            //             var newversion = new Date().valueOf();
+            //             let profiles = {
+            //                 name: loginObj.name, address: address,
+            //             }
+            //             var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
+            //             await this.db.defaults(newdata).write();
+            //             this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+            //             await this.db.set("templates", this.operateTemplates.templates).write();
+            //             await this.db.set('settings', this.settings).write();
+            //             this.getdirectory();
+            //         } else if (tempipfsData.version > 0) {
+            //             await this.db.defaults(tempipfsData).write();
+            //             this.getdirectory();
+            //             // console.log(JSON.stringify(this.db));
+            //         }
+            //     } else if (version > tempipfsData.version) {
+            //         console.log("本机覆盖ipfs");
+            //         this.getdirectory();
+            //         // let transaction = await this.$myIpfs.write(JSON.stringify(this.db), address,loginObj.secret, letoperatorJID, operatorSecret);
+            //     } else if (version < tempipfsData.version) {
+            //         console.log("ipfs覆盖本机");
+            //         this.cleardb();
+            //         await this.db.defaults(tempipfsData).write();
+            //     } else {
+            //         this.getdirectory();
+            //     }
+            //     this.updatesetting();
+            //     this.locksystem();
+            //     //先删除
+            //     //this.db.unset("project").write();
+            //     //this.db.unset("models").write();
+            //     //localStorage.removeItem(db_name);
+            //     //console.log(localStorage.getItem(db_name));
+            //     //console.log(localStorage.getItem(db_name));
+            //     // this.db.get("project").remove().write();
+            //     // this.db.get("models").remove().write();
+            // }, //手动同步。
+
             async initialize() {
                 let letoperatorJID = this.operatorJID;//运营商钱包地址
                 let operatorSecret = this.operatorSecret; //运营商密钥
@@ -1920,54 +1994,40 @@
                 this.username = loginObj.name;
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
-                let version = await this.db.get("version").value();
                 // let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
-                let ipfsData = {"version": 0};
-                let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
-                console.log("本地version:" + version);
-                console.log("ipfsversion:" + tempipfsData.version);
-                this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
-                if (!version || version.length <= 0) {  //判断version是否undefind 或者version.length<0
-                    if (tempipfsData.version == 0) {
+                // let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
+                var tempipfsData={machineId:"werewrewrwsaq"};
+               this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+                if (this.db.get("machineId").value() == undefined) {  //判断machineId是否undefind
+                    if (tempipfsData.machineId== undefined) {
                         console.log("初始化");
                         //初始化新数据
                         var newversion = new Date().valueOf();
                         let profiles = {
                             name: loginObj.name, address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"version":"' + newversion + '","profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
+                        var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
                         await this.db.defaults(newdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
                         await this.db.set('settings', this.settings).write();
+                        await this.db.set('machineId', this.$Uuidv1()).write();
                         this.getdirectory();
-                    } else if (tempipfsData.version > 0) {
-                        await this.db.defaults(tempipfsData).write();
+                    } else {
+                        await this.db.defaults(tempipfsData).write();//取ipfs数据
+                        await this.db.set('machineId',this.$Uuidv1()).write();//初始化本机机器随机码
                         this.getdirectory();
-                        // console.log(JSON.stringify(this.db));
                     }
-                } else if (version > tempipfsData.version) {
-                    console.log("本机覆盖ipfs");
+            }else if(this.db.get("machineId")!=tempipfsData.machineId){
                     this.getdirectory();
-                    // let transaction = await this.$myIpfs.write(JSON.stringify(this.db), address,loginObj.secret, letoperatorJID, operatorSecret);
-                } else if (version < tempipfsData.version) {
-                    console.log("ipfs覆盖本机");
-                    this.cleardb();
-                    await this.db.defaults(tempipfsData).write();
-                } else {
+                    this.dialogSynchronization=true;
+                   console.log("机器码不同");
+             }else if(this.db.get("machineId")==tempipfsData.machineId){
                     this.getdirectory();
+                    this.dialogSynchronization=true;
+                    console.log("机器码相同");
                 }
-                this.updatesetting();
-                this.locksystem();
-                //先删除
-                //this.db.unset("project").write();
-                //this.db.unset("models").write();
-                //localStorage.removeItem(db_name);
-                //console.log(localStorage.getItem(db_name));
-                //console.log(localStorage.getItem(db_name));
-                // this.db.get("project").remove().write();
-                // this.db.get("models").remove().write();
-            }, //手动同步。
+            },
             async synchronization() {
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var userJID = loginObj.address;
@@ -2007,7 +2067,8 @@
                         console.log("ipfs版本等于本地版本");
                     }
                 }
-            }, // pwdLength(pwd) {
+            },
+            // pwdLength(pwd) {
             //     password.pwStrength(pwd);
             //     this.percentageTemplate = password.percentage;
             //     this.tempPercentage= password.percentage;

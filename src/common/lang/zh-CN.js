@@ -153,7 +153,10 @@ export default {
         selectColor:"选择颜色",
         userIcon:"用户图标",
         color:"颜色",
-        symbol:"标识"
+        symbol:"标识",
+        synchronizationInfo:"系统检测到你上次同步操作不在本机中操作，为保证数据完整性，请先确保上次操作数据已经成功同步，请慎重选择同步方式！",
+        localToIpfs:"本地同步到ipfs",
+        ipfsToLocal:"ipfs同步到本地"
     },
     lock: {
         unlockJpass: "解锁jpass",
