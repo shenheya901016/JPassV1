@@ -109,6 +109,7 @@ export default {
         newKeystoreGeneratedError: "Error generating new keystore file!",
         localStorageFailed: "Local storage failure!",
         cancel:"Cancel",
+        login:"Direct login"
     },
     keyImport: {
         walletKeyImport: "Secret Import",

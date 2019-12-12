@@ -17,7 +17,7 @@
                 <el-form-item :label="$t('registersuccess.mnemonic')">
                     <el-input style="width:95%;float: left;" v-model="ruleForm.mnemonic" readonly="readonly" oncut="return false"
                               onpaste="return false"
-                              oncopy="return false">>
+                              oncopy="return false">
                     </el-input>
 
                 </el-form-item>

@@ -193,6 +193,7 @@ export default {
         newKeystoreGeneratedError: "新keystore 生成错误！",
         localStorageFailed: "本地存储失败！",
         cancel:"取消",
+        login:"直接登录"
 
     },
     keyImport: {
