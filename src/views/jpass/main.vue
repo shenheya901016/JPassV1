@@ -216,6 +216,7 @@
                 <el-button size="small" @click="dialogSynchronization = false">{{$t('main.cancelFormat')}}</el-button>
               </span>
         </el-dialog>
+        <!--锁定框-->
         <el-dialog :title="$t('main.passwordUnlock')" :visible.sync="dialogVisible" width="30%"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="false">
@@ -228,9 +229,10 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+        <!--增加文件夹-->
         <el-dialog :title="$t('main.addDirectory')" :visible.sync="dialogVisible2" width="30%"
-                   :close-on-click-modal="false" :show-close="false">
-            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;">
+                   :close-on-click-modal="false" :show-close="false" >
+            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;" :rules="rules">
                 <!--<el-form-item label="类型选择" prop="modelsType">-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit">目录</el-radio>-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit">文件夹</el-radio>-->
@@ -1751,15 +1753,15 @@
                 this.dialogVisible2 = true;
             }, //提交添加目录
             submitForm(formName) {
-                // this.$refs[formName].validate((valid) => {
-                //     if (valid) {
-                //         this.addDirectory(formName);
-                //     } else {
-                //         console.log(this.$t('main.theInputIsIncorrectPleaseConfirmItAndSubmitItAgain'));
-                //         return false;
-                //     }
-                // });
-                this.addDirectory(formName);
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.addDirectory(formName);
+                    } else {
+                        console.log(this.$t('main.theInputIsIncorrectPleaseConfirmItAndSubmitItAgain'));
+                        return false;
+                    }
+                });
+                //this.addDirectory(formName);
             }, cancel(formName) {
                 this.$refs[formName].resetFields();
                 this.dialogVisible2 = false;
