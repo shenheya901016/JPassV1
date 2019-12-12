@@ -187,7 +187,7 @@ export default {
         pleaseEnterAUserPassword: "请输入用户密码",
         theLengthIsBetween4And20Characters: "长度在 4 到 20 个字符",
         pleaseEnterTheUserPasswordAgain: "请再次输入用户密码",
-        theCurrentLimitSelects1FileThisTimeSelectedFiles: "当前限制选择 1个文件，本次选择了 {0} 个文件",
+        theCurrentLimitSelects1FileThisTimeSelectedFiles: "当前限制上传 1个文件",
         importedKeystoryFilePFailed: "keystory 文件未导入或文件解析失败，请重新输入！",
         theKeystoryFileOrPasswordIsIncorrectPleaseEnter: "keystory 文件或密码有误，请重新输入！",
         newKeystoreGeneratedError: "新keystore 生成错误！",

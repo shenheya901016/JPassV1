@@ -103,7 +103,7 @@ export default {
         pleaseEnterAUserPassword: " Please enter your password!",
         theLengthIsBetween4And20Characters: "The length is between 4 and 20 characters!",
         pleaseEnterTheUserPasswordAgain: "Please enter the user password again!",
-        theCurrentLimitSelects1FileThisTimeSelectedFiles: "Currently restricted select 1 file, this time select {0} files",
+        theCurrentLimitSelects1FileThisTimeSelectedFiles: "Currently restricted uploading 1 file",
         importedKeystoryFilePFailed: "Keystory File not imported or file parsing failed, please enter again!",
         theKeystoryFileOrPasswordIsIncorrectPleaseEnter: "Keystory Wrong file or password, please enter again!",
         newKeystoreGeneratedError: "Error generating new keystore file!",

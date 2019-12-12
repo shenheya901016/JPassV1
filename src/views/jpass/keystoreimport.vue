@@ -13,7 +13,7 @@
                 <el-form-item :label="$t('keystoreImport.keystoreFile')" prop="">
                     <el-upload class="upload-demo" style="text-align: left;"
                                action="https://jsonplaceholder.typicode.com/posts/"
-                               multiple:limit="1" :on-exceed="handleExceed" accept="text/plain"
+                               :limit="1" :on-exceed="handleExceed" accept="text/plain"
                                :on-change="getkeystore" >
                         <el-button type="primary" size="small" style="float: left">{{$t('keystoreImport.uploadKeystore')}}</el-button>
                     </el-upload>
@@ -181,8 +181,9 @@
             },
             handleExceed(files, fileList) {
                 let msg =this.$t('keystoreImport.theCurrentLimitSelects1FileThisTimeSelectedFiles');
-               msg.replace("{0}",files.length);
-               this.$message.warning(msg);
+                // let filenum=files.length+fileList.length;
+                // msg.replace("{0}",filenum);
+                this.$message.warning(msg);
             },
             //获取keystore文件
             getkeystore(file){
