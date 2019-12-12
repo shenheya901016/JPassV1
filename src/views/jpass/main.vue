@@ -303,7 +303,7 @@
         </el-dialog>
         <!--增加项目弹出框-->
         <el-dialog class="mb" :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="40%"
-                   height="90%" :close-on-click-modal="false" @closed="cleartype">
+                   height="90%" :close-on-click-modal="false" @closed="cleartype" @close="clearDataProject">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
@@ -523,7 +523,7 @@
         <el-dialog class="mb" :title="$t('main.addTemplate')" :visible.sync="dialogVisibleAddTemplate" width="40%"
                    height="90%"
                    :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true" @closed="cleartype">
+                   :close-on-press-escape="false" :show-close="true" @closed="cleartype" @close="clearDataTemplate">
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                  <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
@@ -1340,6 +1340,7 @@
                 emptyTrashClasses: [],//清空垃圾样式表
                 deleteClasses: [],//删除样式表
                 recoverClass: [],//恢复样式表
+                tempipfsData:"", //ipfs 数据
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1996,10 +1997,10 @@
                 this.db = await this.$Lowdb(db_name);
                 // let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
                 // let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
-                var tempipfsData={machineId:"werewrewrwsaq"};
+                this.tempipfsData={"machineId":""};
                this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
                 if (this.db.get("machineId").value() == undefined) {  //判断machineId是否undefind
-                    if (tempipfsData.machineId== undefined) {
+                    if (this.tempipfsData.machineId=="") {
                         console.log("初始化");
                         //初始化新数据
                         var newversion = new Date().valueOf();
@@ -2014,15 +2015,16 @@
                         await this.db.set('machineId', this.$Uuidv1()).write();
                         this.getdirectory();
                     } else {
-                        await this.db.defaults(tempipfsData).write();//取ipfs数据
+                        await this.db.defaults(this.tempipfsData).write();//取ipfs数据
                         await this.db.set('machineId',this.$Uuidv1()).write();//初始化本机机器随机码
                         this.getdirectory();
                     }
-            }else if(this.db.get("machineId")!=tempipfsData.machineId){
+            }else if(this.db.get("machineId")!=this.tempipfsData.machineId){
                     this.getdirectory();
                     this.dialogSynchronization=true;
-                   console.log("机器码不同");
-             }else if(this.db.get("machineId")==tempipfsData.machineId){
+
+                    console.log("机器码不同");
+             }else if(this.db.get("machineId")==this.tempipfsData.machineId){
                     this.getdirectory();
                     this.dialogSynchronization=true;
                     console.log("机器码相同");
@@ -2639,11 +2641,23 @@
                     document.getElementById("menu_1").style.display = "none";
                 }
             },
+            //关闭添加模板框
             cleartype(){
                 this.operationType = "";
                 this.imageBase64 = "";
                 this.color = "";
             },
+            //关闭添加模板框，清空数据
+            clearDataTemplate(){
+                this.ruleFormAddTemplate.name="";
+                this.tempTemplate=[];
+            },
+            //关闭添加项目框，清空数据
+            clearDataProject(){
+                this.ruleFormAddProject.name="";
+                this.tempTemplate=[];
+            },
+
 
             openMenu_1(project, obj){
                 this.isDisabled = false;//启用删除
@@ -2726,7 +2740,18 @@
                 if (obj.id == "ljt" && this.showTrash == true) {
                     this.emptyTrashClasses = [];
                 }
-            }
+            },
+            //ipfs 覆盖本地
+            async ipfsToLocal(){
+                var machineId = this.db.get("machineId").value();
+                this.tempipfsData.machineId=machineId;
+                await this.db.defaults(this.tempipfsData).write();//取ipfs数据
+
+            },
+            //本地覆盖ipfs
+            localToIpfs(){
+
+           },
         }
     }
 </script>
