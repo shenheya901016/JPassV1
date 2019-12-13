@@ -95,7 +95,7 @@
                 <li v-for="(project,index) in DDirectory.directory" @click.left="directoryclick(project,$event)"
                     :data-index="index"
                     :class="index == currentDirectory?click:disclick" @contextmenu.prevent="openMenu_1(project,$event)">
-                    <span>{{project.name}} <i>{{project.count}}</i></span>
+                    <span :title="project.name">{{project.name.length>10? project.name.substring(0,10)+"...":project.name}}<i>{{project.count}}</i></span>
                 </li>
             </ul>
         </nav>
@@ -136,8 +136,8 @@
                          <img :src="project.tempBase64" :style="{background:project.bgcolor }" class="list_icon">
                     </span>
                     <div style="width: 70%;text-align: left;">
-                        <h5>{{project.name}}</h5>
-                        <span>{{project.modelsName.length>12? project.modelsName.substring(0,12)+"...":project.modelsName}}</span>
+                        <h5 :title="project.name">{{project.name.length>13?project.name.substring(0,13)+"...":project.name}}</h5>
+                        <span :title="project.modelsName">{{project.modelsName.length>12? project.modelsName.substring(0,12)+"...":project.modelsName}}</span>
                     </div>
                     <span style="float: right;height:5.5vh;">
                         <img v-if="project.modelsId.indexOf('scj')== -1" src="./img/start.svg"
@@ -160,8 +160,8 @@
                         <img v-else="projectEvent.bgcolor==''" :src="projectEvent.tempBase64" style="background:#999999"
                              class="detail_icon">
                         <ul style="display: inline-block;margin-top: 20px;height:8vh;margin-left:15%">
-                            <li style="font-size: 25px;font-weight: bolder;">{{projectEvent.name}}</li>
-                            <li style="margin-top: 1vh">{{projectEvent.modelsName}}</li>
+                            <li style="font-size: 25px;font-weight: bolder;" :title="projectEvent.name">{{projectEvent.name.length>15?projectEvent.name.substring(0,12)+"...":projectEvent.name}}</li>
+                            <li style="margin-top: 1vh" :title="projectEvent.modelsName">{{projectEvent.modelsName.length>15?projectEvent.modelsName.substring(0,12)+"...":projectEvent.modelsName}}</li>
                         </ul>
                     </div>
                     <img v-if="projectEvent.modelsId.indexOf('scj')== -1" src="./img/start.svg"
@@ -309,15 +309,8 @@
             <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="ruleFormAddProject.name" class="myInput"
-                               style="width:35%;margin-left: 0.5vw"/>
-                <!--<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"-->
-                <!--:show-file-list="false" :on-success="handleAvatarSuccessAddPro"-->
-                <!--:before-upload="beforeAvatarUpload"-->
-                <!--style="height:7vh;width:4vw;margin-left:45%;">-->
-                <!--<img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar">-->
-                <!--<i v-else class="el-icon-plus" style="height: 6vh;line-height: 6vh;width:3.5vw "></i>-->
-                <!--</el-upload>-->
+                </span>
+                <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:35%;margin-left: 0.5vw"/>
                 <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
                     <img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar"
                          :style="{background:templateEvent.bgcolor}">
@@ -349,9 +342,8 @@
             <el-tabs type="border-card">
                 <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
-                        <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px"
-                                 class="demo-ruleForm"
-                                 style="width: 95%;margin: auto;">
+                        <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm"
+                                 style="width: 95%;margin: auto;text-align: left" label-position="top">
                             <template v-for="(data, index) in this.templateEvent.datas">
                                 <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey"
                                               :prop="data.tempkey"
@@ -462,10 +454,7 @@
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormProjectEdit" ref="ruleFormProjectEdit" label-width="100px"
                                  class="demo-ruleForm"
-                                 style="width: 95%;margin: auto">
-                            <!--<el-form-item label="名称" style="width: 90%;margin-bottom: -6%" prop="name">-->
-
-                            <!--</el-form-item>-->
+                                 style="width: 95%;margin: auto;text-align:left" label-position="top">
                             <template v-for="(data, index) in this.editobject.datas">
                                 <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey"
                                               :prop="data.tempkey" style="width: 90%;margin-bottom: 0">
@@ -564,10 +553,7 @@
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormAddTemplate" ref="ruleFormAddTemplate" label-width="100px"
                                  class="demo-ruleForm"
-                                 style="width: 80%;margin: auto">
-                            <!--<el-form-item :label="$t('main.templateName')" style="width: 90%;margin-bottom: -6%" prop="name">-->
-                            <!---->
-                            <!--</el-form-item>-->
+                                 style="width: 80%;margin: auto;text-align: left" label-position="top">
                             <template v-for="(data, index) in this.tempTemplate">
                                 <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey"
                                               style="width: 90%;margin-bottom:0">
@@ -654,10 +640,7 @@
                 <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px"
-                                 class="demo-ruleForm" style="width: 85%;margin: auto">
-                            <!--<el-form-item :label="$t('main.name')" style="width: 90%;margin-bottom: -6%" prop="name">-->
-                            <!---->
-                            <!--</el-form-item>-->
+                                 class="demo-ruleForm" style="width: 85%;margin: auto;text-align: left" label-position="top">
                             <template v-for="(data, index) in this.editobject.datas">
                                 <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey"
                                               style="width: 90%;margin-bottom: 0">
@@ -1518,10 +1501,9 @@
                 },
                 ruleFormTemplateEdit: {},
                 rules: {
-                    modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'},],
-                    pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}, {
-                        min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'
-                    }]
+                    modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
+                    pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
+                        {min:1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}]
                 },
             };
         },

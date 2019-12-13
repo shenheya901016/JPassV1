@@ -565,7 +565,6 @@
 	border: 1px solid #C0C4CC;
 	height: 4vh;
 	float: left;
-	margin-top: 2%;
 }
 
 .section .el-form--label-top .el-form-item__label {
@@ -706,6 +705,11 @@
 	 pointer-events: none;
 	 color:#999999 !important;
  }
+.el-form-item__content {
+	position: relative;
+	font-size: 14px;
+	line-height: 4.5vh;
+}
 
 .avatar-uploader .el-upload {
 /*清空css*/
