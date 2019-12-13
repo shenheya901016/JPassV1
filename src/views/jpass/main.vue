@@ -306,16 +306,18 @@
         <!--增加项目弹出框-->
         <el-dialog class="mb" :title="$t('main.addItem')" :visible.sync="dialogVisibleAddProject" width="40%"
                    height="90%" :close-on-click-modal="false" @closed="cleartype" @close="clearDataProject">
-            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
-                <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
+            <div class="titleDiv">
+                <span class="titleNameDiv">
                     {{$t('main.name')}}
                 </span>
-                <input type="text" v-model="ruleFormAddProject.name" class="myInput" style="width:35%;margin-left: 0.5vw"/>
-                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
+                <span  class="titleInputSpan">
+                     <input type="text" v-model="ruleFormAddProject.name" class="myInputTitle"/>
+                </span>
+                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
                     <img v-if="templateEvent.tempBase64" :src="templateEvent.tempBase64" class="avatar"
                          :style="{background:templateEvent.bgcolor}">
                     <img v-else src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
-                </div>
+                </span>
             </div>
             <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
@@ -411,19 +413,16 @@
         <el-dialog class="mb" :title="$t('main.modifyTheProject')" :visible.sync="dialogVisibleEdit" width="40%"
                    height="90%"
                    :close-on-click-modal="false" :close-on-press-escape="false" :show-close="true" @closed="cleartype">
-            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
-                <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
+            <div class="titleDiv">
+                <span class="titleNameDiv">
                     {{$t('main.name')}}
-                </span> <input type="text" v-model="editobject.name" class="myInput"
-                               style="width:35%;margin-left: 0.5vw"/>
-                <!--<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"-->
-                <!--:show-file-list="false" :on-success="handleAvatarSuccessEdit"-->
-                <!--:before-upload="beforeAvatarUpload" style="height:7vh;width:4vw;margin-left:45%;">-->
-                <!--<img v-if="editobject.tempBase64" :src="editobject.tempBase64" class="avatar">-->
-                <!--</el-upload>-->
-                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
+                </span>
+                <span class="titleInputSpan">
+                    <input type="text" v-model="editobject.name" class="myInputTitle"/>
+                </span>
+                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
                     <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
-                </div>
+                </span>
             </div>
             <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
@@ -442,8 +441,6 @@
                                     :on-success="handleAvatarSuccessEdit"
                                     :before-upload="beforeAvatarUpload"
                                     style="height:2.5vh;width:4vw;display: inline-block">用户资源
-                             <!--<img v-if="imageBase64" :src="imageBase64" class="avatar"> -->
-                             <!--<i style="height: 3vh;line-height: 3vh;width:3.5vw "></i>-->
                           </el-upload>
                     </span>
                 </li>
@@ -515,16 +512,15 @@
                    height="90%"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="true" @closed="cleartype" @close="clearDataTemplate">
-            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
-                 <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
-                    {{$t('main.name')}}
+            <div class="titleDiv">
+                <span class="titleNameDiv">{{$t('main.name')}}</span>
+                <span class="titleInputSpan">
+                     <input type="text" v-model="ruleFormAddTemplate.name" class="myInputTitle"/>
                 </span>
-                <input type="text" v-model="ruleFormAddTemplate.name" style="width:35%;margin-left: 0.5vw;"
-                       class="myInput"/>
-                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
+                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
                     <img v-if="imageBase64!=''" :src="imageBase64" class="avatar" :style="{background:color}">
                     <img v-else src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
-                </div>
+                </span>
             </div>
             <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
@@ -605,14 +601,14 @@
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="true"
                    @closed="cleartype">
-            <div style="height: 20%;margin-top: -3vh;margin-bottom: -2vh;">
-                   <span style="margin-left: 0px;display: inline-block;float: left;height: 7vh;line-height: 7vh;color: #409EFF;font-weight: bold">
-                    {{$t('main.name')}}
-                </span>
-                <input type="text" v-model="editobject.name" style="width:35%;margin-left: 0.5vw" class="myInput"/>
-                <div style="height:7vh;width:4vw;margin-left:45%;" @click.right="showIconMenu()">
+            <div class="titleDiv">
+                <span class="titleNameDiv">{{$t('main.name')}}</span>
+                  <span class="titleInputSpan">
+                    <input type="text" v-model="editobject.name" class="myInputTitle"/>
+                 </span>
+                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
                     <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
-                </div>
+                </span>
             </div>
             <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
@@ -2742,4 +2738,13 @@
 <style>
     @import './css/base.css';
     @import './css/sy.css';
+    .mb .el-form--label-top .el-form-item__label {
+        float: none;
+        display: inline-block;
+        text-align: left;
+        padding: 0 0 0 0;
+        line-height: 15px;
+        font-weight: bold;
+        font-size: 10px;
+    }
 </style>

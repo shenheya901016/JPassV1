@@ -566,6 +566,31 @@
 	height: 4vh;
 	float: left;
 }
+.myInputTitle {
+	width:90%;
+	border-radius:4px;
+	border: 1px solid #C0C4CC;
+	height: 4vh;
+}
+.titleDiv{
+	height: 20%;
+	margin-top: -3vh;
+	margin-bottom: -2vh;
+	text-align: left
+}
+.titleNameDiv{
+	margin-left: 1vw;
+	display: inline-block;
+	height: 7vh;
+	line-height: 7vh;
+	color: #409EFF;
+}
+.titleInputSpan{
+	line-height: 7vh;
+	width: 60%;
+	display: inline-block;
+	text-align: center;
+}
 
 .section .el-form--label-top .el-form-item__label {
 	float: none;
@@ -623,7 +648,7 @@
 .avatar {
 	width: 3vw;
 	height: 6vh;
-	display: block;
+	display: inline-block;
 	border: 0;
 	background:#999999;
 }
@@ -714,6 +739,7 @@
 .avatar-uploader .el-upload {
 /*清空css*/
 }
+
 
 
 
