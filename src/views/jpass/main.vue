@@ -1777,7 +1777,9 @@
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
                 this.delobj = project;
-                this.isDisabled = false;
+                if(this.delobj.isDel!=true){
+                    this.isDisabled = false;
+                }
                 this.projectEvent = project;
             }, remove() {
                 var type = this.delobj.type;
@@ -2640,9 +2642,10 @@
 
 
             openMenu_1(project, obj){
-                this.isDisabled = false;//启用删除
+                if(project.isDel!=true){
+                    this.isDisabled = false;//启用删除
+                }
                 this.delobj = project;//赋值删除对象
-                console.log(project);
                 if (project.type != "model") {//indexof undefind 问题
                     this.projectEvent = project;
                 }
