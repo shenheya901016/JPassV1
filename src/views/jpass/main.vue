@@ -319,7 +319,7 @@
                     <img v-else src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
                 </span>
             </div>
-            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+            <ul style="margin-left:71.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>{{$t('main.selectSymbol')}}</span>
@@ -424,7 +424,7 @@
                     <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
                 </span>
             </div>
-            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+            <ul style="margin-left:71.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>{{$t('main.selectSymbol')}}</span>
@@ -522,7 +522,7 @@
                     <img v-else src="./img/misc/lock.svg" class="avatar" :style="{background:color}">
                 </span>
             </div>
-            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+            <ul style="margin-left:71.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>{{$t('main.selectSymbol')}}</span>
@@ -610,7 +610,7 @@
                     <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
                 </span>
             </div>
-            <ul style="margin-left:52.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
+            <ul style="margin-left:71.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
                 <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>{{$t('main.selectSymbol')}}</span>
