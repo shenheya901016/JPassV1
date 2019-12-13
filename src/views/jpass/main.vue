@@ -789,14 +789,13 @@
                             <el-switch v-model="showPassword" active-color="#13ce66"
                                        inactive-color="#ff4949"></el-switch>
                         </div>
-
-                        <div style="margin-left: 2vw">
-                            {{$t('main.newUserAndPasswordAreAutomaticallySaved')}}
-                            <el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">
-                                <el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label"
-                                           :value="item.value"></el-option>
-                            </el-select>
-                        </div>
+                        <!--<div style="margin-left: 2vw">-->
+                            <!--{{$t('main.newUserAndPasswordAreAutomaticallySaved')}}-->
+                            <!--<el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">-->
+                                <!--<el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label"-->
+                                           <!--:value="item.value"></el-option>-->
+                            <!--</el-select>-->
+                        <!--</div>-->
 
                     </fieldset>
                 </el-form-item>
