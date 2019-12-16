@@ -331,7 +331,7 @@
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAddPro"
                                     :before-upload="beforeAvatarUpload"
-                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                                    style="height:2.5vh;width:8vw;display: inline-block">{{$t('main.userResource')}}
                           </el-upload>
                     </span>
                 </li>
@@ -436,7 +436,7 @@
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessEdit"
                                     :before-upload="beforeAvatarUpload"
-                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                                    style="height:2.5vh;width:8vw;display: inline-block">{{$t('main.userResource')}}
                           </el-upload>
                     </span>
                 </li>
@@ -534,7 +534,7 @@
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAdd"
                                     :before-upload="beforeAvatarUpload"
-                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                                    style="height:2.5vh;width:8vw;display: inline-block">{{$t('main.userResource')}}
                           </el-upload>
                     </span>
                 </li>
@@ -622,7 +622,7 @@
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccessAdd"
                                     :before-upload="beforeAvatarUpload"
-                                    style="height:2.5vh;width:4vw;display: inline-block">用户资源
+                                    style="height:2.5vh;width:8vw;display: inline-block">{{$t('main.userResource')}}
                           </el-upload>
                       </span>
                 </li>
