@@ -20,7 +20,7 @@
                     <el-input type="password" v-model="ruleForm.password" style="width:100%;" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary" style="width:90%;"  size="small" @click="submitForm('ruleForm')">{{$t('login.login')}}</el-button>
+                    <el-button type="primary" style="width:90%;" native-type="submit"   size="small" @click="submitForm('ruleForm')">{{$t('login.login')}}</el-button>
                 </el-form-item>
             </el-form>
             <div style="margin-bottom:4%;">

@@ -9,20 +9,20 @@
         </h1>
         <ul class="link">
             <li>
-                <el-button @click="addDirectoryOP" style="border:0;padding: 10px 10px;"><img
+                <el-button @click="addDirectoryOP" style="border:0;padding: 5px 5px;"><img
                         style="top:-2px;height: 25px;width: 25px;"
                         src="./img/tianjiawenjianjia.svg"
                         alt="">{{$t('main.newFolder')}}
                 </el-button>
             </li>
             <li>
-                <el-button @click="addTemplate" style="border:0;padding: 10px 10px;"><img
+                <el-button @click="addTemplate" style="border:0;padding: 5px 5px;"><img
                         style="top:-2px;height: 20px;width: 20px;"
                         src="./img/moban.svg" alt="">{{$t('main.newTemplate')}}
                 </el-button>
             </li>
             <li>
-                <el-button @click="selectTemplate" style="border:0;padding: 10px 10px;"><img
+                <el-button @click="selectTemplate" style="border:0;padding: 5px 5px;"><img
                         style="top:-2px;height: 20px;width: 20px;"
                         src="./img/tianjiaxiangmu.svg"
                         alt="">{{$t('main.newProject')}}
@@ -30,34 +30,30 @@
             </li>
 
             <li>
-                <el-button :disabled="isDisabled" @click="remove" id="delbtn" style="border:0;padding: 10px 10px;"><img
+                <el-button :disabled="isDisabled" @click="remove" id="delbtn" style="border:0;padding: 5px 5px;"><img
                         style="top:-2px;"
                         src="./img/ICON-SC.svg"
                         alt="">{{$t('main.delete')}}
                 </el-button>
             </li>
             <li>
-                <el-button v-if="showTrash==true" style="border:0;padding: 10px 10px;" @click="dialogclearTrash = true">
+                <el-button v-if="showTrash==true" style="border:0;padding: 5px 5px;" @click="dialogclearTrash = true">
                     <img style="top:-2px;height: 25px;width: 25px;"
                          src="./img/trash.svg" alt="">{{$t('main.cleartrash')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;padding: 10px 10px;" @click="synchronization()"><img style="top:-2px;"
-                                                                                                src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
+                <el-button style="border:0;padding:5px 5px;" @click="synchronization()"><img style="top:-2px;"src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
                 </el-button>
                 <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus"
                              :show-text="true" v-show="processShow"></el-progress>
             </li>
             <li>
-                <el-button style="border:0;padding: 10px 10px;" @click="lock()"><img style="top:-2px;"
-                                                                                     src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
+                <el-button style="border:0;padding: 5px 5px;" @click="lock()"><img style="top:-2px;"src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;padding: 10px 10px;" @click="passwordGenerator()"><img
-                        style="top:-2px;height: 25px;width: 25px;"
-                        src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
+                <el-button style="border:0;padding: 5px 5px;" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;" src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
                 </el-button>
             </li>
 
@@ -161,7 +157,7 @@
                              class="detail_icon">
                         <ul style="display: inline-block;margin-top: 20px;height:8vh;margin-left:15%">
                             <li style="font-size: 25px;font-weight: bolder;" :title="projectEvent.name">{{projectEvent.name.length>15?projectEvent.name.substring(0,12)+"...":projectEvent.name}}</li>
-                            <li style="margin-top: 1vh" :title="projectEvent.modelsName">{{projectEvent.modelsName.length>15?projectEvent.modelsName.substring(0,12)+"...":projectEvent.modelsName}}</li>
+                            <li style="margin-top: 1vh" :title="projectEvent.modelsName">{{projectEvent.modelsName}}</li>
                         </ul>
                     </div>
                     <img v-if="projectEvent.modelsId.indexOf('scj')== -1" src="./img/start.svg"
@@ -225,7 +221,7 @@
                     <el-input type="password" v-model="password" style="width:90%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-bottom: 7%;margin-top: 10%">
-                    <el-button type="primary" size="small" @click="unlock()">{{$t('main.unlock')}}</el-button>
+                    <el-button type="primary" size="small" @click="unlock()"  native-type="submit">{{$t('main.unlock')}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
