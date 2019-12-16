@@ -2612,10 +2612,14 @@
                     var e = e || window.event;
                     var uils = document.getElementsByClassName("choosepic")
                     for (var i = 0; i < uils.length; i++) {
-                        uils[i].style.display = "none";
+                        if(uils[i].style.display =="block"){
+                            uils[i].style.display = "none";
+                        }
                     }
                     //隐藏右击菜单1
-                    document.getElementById("menu_1").style.display = "none";
+                    if(document.getElementById("menu_1").style.display =="block" && e.target!=document.getElementById("menu_1")){
+                       document.getElementById("menu_1").style.display = "none";
+                    }
                 }
             },
             //关闭添加模板框
@@ -2667,7 +2671,6 @@
             },
             //点击空白地区显示菜单
             openMenu_empty(obj){
-                console.log(11123);
                 this.addDirClasses = [];
                 this.addProjectClasses = [];
                 this.addTemplateClasses = [];
