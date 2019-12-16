@@ -602,12 +602,12 @@
                   <span class="titleInputSpan">
                     <input type="text" v-model="editobject.name" class="myInputTitle"/>
                  </span>
-                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
+                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
                     <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
                 </span>
             </div>
             <ul style="margin-left:71.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
-                <li @click="dialogSymbolOpen">
+                <li @click.right="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>{{$t('main.selectSymbol')}}</span>
                 </li>
