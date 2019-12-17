@@ -1281,6 +1281,7 @@
                 synStatus: "exception",//同步进度条状态
                 templateStatus: "exception",
                 db: '',
+                localdb: '',
                 projects: [],
                 operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",//运营商钱包地址
                 operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",//运营商密钥
@@ -1299,6 +1300,8 @@
                 searchTemp: "",
                 imageBase64: "",
                 imgHash: "",
+                imgtype:"",
+                imgurl:"",
                 searchTemp: "",
                 username: "",
                 key: "",
@@ -1327,6 +1330,8 @@
                     "dateTime": "",
                     "tempBase64": "",
                     "imgHash": "",
+                    "imgtype":"",
+                    "imgurl":"",
                     "isDel": false,
                     "bgcolor": ""
                 },
@@ -1339,6 +1344,8 @@
                     "datas": [],
                     "tempBase64": "",
                     "imgHash": "",
+                    "imgtype":"",
+                    "imgurl":"",
                     "isDel": false,
                     "bgcolor": ""
                 },
@@ -1869,6 +1876,19 @@
                             projectArray.push(projects[key]);
                         }
                     }
+                    //图片载入
+                    for(var index in projectArray){
+                       if(projectArray[index].imgtype=="url"){
+                           projectArray[index].tempBase64=projectArray[index].imgurl;
+                       }else if(projectArray[index].imgtype=="base64"){
+                           if(projectArray[index].imgHash!=""){
+                               let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
+                               projectArray[index].tempBase64=img.value;
+                           }else{
+                               projectArray[index].tempBase64="";
+                           }
+                       }
+                    }
                 } else if (obj.id == "mb") {
                     let projects = this.db.get("templates").filter({isDel: false}).value();
                     for (let index in  projects) {
@@ -1884,6 +1904,19 @@
                         projects[index].modelsName = newArray.toString();
                     }
                     projectArray = projects;
+                    //图片载入
+                    for(var index in projectArray){
+                        if(projectArray[index].imgtype=="url"){
+                            projectArray[index].tempBase64=projectArray[index].imgurl;
+                        }else if(projectArray[index].imgtype=="base64"){
+                            if(projectArray[index].imgHash!=""){
+                                let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
+                                projectArray[index].tempBase64=img.value;
+                            }else{
+                                projectArray[index].tempBase64="";
+                            }
+                        }
+                    }
                 } else if (obj.id == "ljt") {
                     //模板类别名称国际化
                     let delTemplate = this.db.get("templates").filter({isDel: true}).value();
@@ -1902,6 +1935,19 @@
 
                     let delProject = this.db.get("project").filter({isDel: true}).value();
                     projectArray = delTemplate.concat(delProject);
+                    //图片载入
+                    for(var index in projectArray){
+                        if(projectArray[index].imgtype=="url"){
+                            projectArray[index].tempBase64=projectArray[index].imgurl;
+                        }else if(projectArray[index].imgtype=="base64"){
+                            if(projectArray[index].imgHash!=""){
+                                let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
+                                projectArray[index].tempBase64=img.value;
+                            }else{
+                                projectArray[index].tempBase64="";
+                            }
+                        }
+                    }
                 }
                 this.projects = projectArray;
             }, //启动加载
@@ -1972,6 +2018,7 @@
                 this.username = loginObj.name;
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
+                this.localdb=await this.$Lowdb(db_name+"_local");
                 // let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
                 // let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
                 this.tempipfsData={"machineId":""};
@@ -1986,6 +2033,8 @@
                         }
                         var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
                         await this.db.defaults(newdata).write();
+                        let imgdata={"img":[]};
+                        await this.localdb.defaults(imgdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
                         await this.db.set('settings', this.settings).write();
@@ -2264,10 +2313,17 @@
                 }
                 //图片处理
                 if (this.imageBase64 == '') {
+                    //默认图片
                     this.imageBase64 = this.$refs.icon_default.src;
+                    this.imgtype="url";
                 }
-                let data = '{"base64":"' + this.imageBase64 + '"}';
-                // this.imgHash = await this.$myIpfs.writeTest('file', data,  address,loginObj.secret, letoperatorJID, operatorSecret);
+
+                if(this.imgtype=="url"){
+                   this.imgHash="";
+                   this.imgurl=this.imageBase64;
+                }else if(this.imgtype=="base64"){
+                    this.imgurl=""
+                }
                 this.newTemplate = {
                     "id": this.$Uuidv1(),
                     "name": this.ruleFormAddTemplate.name,
@@ -2276,23 +2332,30 @@
                     "isDel": false,
                     "type": "template",
                     "datas": this.tempTemplate,
-                    "tempBase64": this.imageBase64,
+                    "tempBase64":"",
                     "imgHash": this.imgHash,
+                    "imgtype":this.imgtype,
+                    "imgurl":this.imgurl,
                     "bgcolor": this.color
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
                 console.log(this.newTemplate);
                 //清空变量
                 this.ruleFormAddTemplate.name = "",
-                        this.imgHash = "";
-                this.newTemplate = "";
                 this.color = "";
                 this.tempTemplate = [];
                 this.selectlabels = "";
                 this.dialogVisibleAddTemplate = false;
-                this.imageBase64 = "";
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                if(this.imgtype=="base64"){
+                    this.uploadImg(this.imageBase64,this.newTemplate.type,this.newTemplate.id);
+                }
+                //二次刷新
+                this.getdirectory();
+                this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                this.imageBase64 = "";
+                this.newTemplate = "";
             }, //修改模板
             editTemplate() {
                 if (this.selectlabels.indexOf("mb") == -1) {
@@ -2414,6 +2477,7 @@
                 reader.onload = async function (e) {
                     temp.imageBase64 = this.result;
                 }
+                this.imgtype="base64";
             }, //图片处理（修改模板）
             handleAvatarSuccessEdit(res, file) {
                 let temp = this;
@@ -2424,6 +2488,7 @@
                     temp.imageBase64 = this.result;
                     temp.editobject.tempBase64 = this.result;
                 }
+                this.imgtype="base64";
             }, //图片处理（增加项目）
             handleAvatarSuccessAddPro(res, file){
                 let temp = this;
@@ -2434,6 +2499,7 @@
                     temp.imageBase64 = this.result;
                     temp.templateEvent.tempBase64 = this.result;
                 }
+                this.imgtype="base64";
             }, //图片大小验证
             beforeAvatarUpload(file) {
                 let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png', 'image/svg'];
@@ -2573,22 +2639,24 @@
             },
             setImageBase64(path){
                 //进行修改操作时插入图片
-                console.log(this.operationType);
                 if (this.operationType == "template_edit") {
                     this.editobject.tempBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
+                    this.imgtype="url"
                 } else if (this.operationType == "template_add") {
                     //进行新建操作时插入图片
                     this.imageBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
+                    this.imgtype="url"
                 } else if (this.operationType == "project_add") {
                     this.templateEvent.tempBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
+                    this.imgtype="url"
                 } else if (this.operationType == "project_edit") {
                     this.editobject.tempBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
+                    this.imgtype="url"
                 }
-
             },
             setcolor(color){
                 console.log(this.operationType);
@@ -2733,7 +2801,21 @@
             localToIpfs(){
 
            },
+            //图片上传ipfs
+            uploadImg(value,type,id){
+             if(type=="project"){
+                 let imgHash =this.$Uuidv1();
+                 this.db.get("project").find({id: id}).set("imgHash", imgHash).write();
+                 let img = {"id":imgHash,"value":value};
+                 this.localdb.get("img").push(img).write();
+             }else if(type=="template"){
+                 let imgHash =this.$Uuidv1();
+                 this.db.get("templates").find({id: id}).set("imgHash", imgHash).write();
+                 let img = {"id":imgHash,"value":value};
+                 this.localdb.get("img").push(img).write();
+             }
         }
+      }
     }
 </script>
 <style>
