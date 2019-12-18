@@ -602,12 +602,12 @@
                   <span class="titleInputSpan">
                     <input type="text" v-model="editobject.name" class="myInputTitle"/>
                  </span>
-                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
+                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
                     <img :src="editobject.tempBase64" class="avatar" :style="{background:editobject.bgcolor}">
                 </span>
             </div>
             <ul style="margin-left:71.5%;z-index: 10;border-radius: 5px;" class="choosepic menu">
-                <li @click.right="dialogSymbolOpen">
+                <li @click="dialogSymbolOpen">
                     <img src="./img/tp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                     <span>{{$t('main.selectSymbol')}}</span>
                 </li>
@@ -620,7 +620,7 @@
                         <img src="./img/zy.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
                          <el-upload action="https://jsonplaceholder.typicode.com/posts/"
                                     :show-file-list="false"
-                                    :on-success="handleAvatarSuccessAdd"
+                                    :on-success="handleAvatarSuccessEdit"
                                     :before-upload="beforeAvatarUpload"
                                     style="height:2.5vh;width:8vw;display: inline-block">{{$t('main.userResource')}}
                           </el-upload>
@@ -1727,7 +1727,27 @@
                     }
                     allProjects[index].modelsName = newArray.toString();
                 }
-                this.projects = this.db.get("project").filter({isDel: false}).value();
+                var projectArray = this.db.get("project").filter({isDel: false}).value();
+                projectArray=this.$JSON5.parse(this.$JSON5.stringify(projectArray));
+                //图片载入
+                for(var index in projectArray){
+                    if(projectArray[index].imgtype=="url"){
+                        projectArray[index].tempBase64=projectArray[index].imgurl;
+                    }else if(projectArray[index].imgtype=="base64"){
+                        if(projectArray[index].imgHash!=""){
+                            let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
+                            if(img!=undefined){
+                                projectArray[index].tempBase64=img.value;
+                            }else{
+                                console.log("从ipfs 取数据！");
+                                projectArray[index].tempBase64="";
+                            }
+                        }else{
+                            projectArray[index].tempBase64="";
+                        }
+                    }
+                }
+                this.projects=projectArray;
             },
             addDirectoryOP() {
                 this.dialogVisible2 = true;
@@ -1847,7 +1867,8 @@
                     this.getdirectory();
                 } else if (type == "project") {
                     // this.db.get("project").remove({id: id}).write();
-                    this.delobj.isDel = true;
+                    // this.delobj.isDel = true;
+                    this.db.get("project").find({id: this.delobj.id}).set('isDel',true).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
@@ -1855,7 +1876,8 @@
                     this.getdirectory();
                 } else if (type == "template") {
                     // this.db.get("templates").remove({id: id}).write();
-                    this.delobj.isDel = true;
+                    //this.delobj.isDel = true;
+                    this.db.get("templates").find({id: this.delobj.id}).set('isDel',true).write();
                     this.db.set('version', new Date().valueOf()).write();
                     //更新template 在project中显示
                     this.projects = this.db.get("templates").value();
@@ -1870,6 +1892,7 @@
                 let projectArray = new Array();
                 if (obj.id != "mb" && obj.id != "ljt") {
                     let projects = this.db.get("project").value();
+                     projects=this.$JSON5.parse(this.$JSON5.stringify(projects));
                     for (let key in projects) {
                         let models = projects[key].modelsId;
                         if (models.indexOf(id) != -1 && projects[key].isDel != true) {
@@ -1878,19 +1901,25 @@
                     }
                     //图片载入
                     for(var index in projectArray){
-                       if(projectArray[index].imgtype=="url"){
-                           projectArray[index].tempBase64=projectArray[index].imgurl;
-                       }else if(projectArray[index].imgtype=="base64"){
-                           if(projectArray[index].imgHash!=""){
-                               let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                               projectArray[index].tempBase64=img.value;
-                           }else{
-                               projectArray[index].tempBase64="";
-                           }
-                       }
+                        if(projectArray[index].imgtype=="url"){
+                            projectArray[index].tempBase64=projectArray[index].imgurl;
+                        }else if(projectArray[index].imgtype=="base64"){
+                            if(projectArray[index].imgHash!=""){
+                                let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
+                                if(img!=undefined){
+                                    projectArray[index].tempBase64=img.value;
+                                }else{
+                                    console.log("从ipfs 取数据！");
+                                    projectArray[index].tempBase64="";
+                                }
+                            }else{
+                                projectArray[index].tempBase64="";
+                            }
+                        }
                     }
                 } else if (obj.id == "mb") {
                     let projects = this.db.get("templates").filter({isDel: false}).value();
+                    projects=this.$JSON5.parse(this.$JSON5.stringify(projects));
                     for (let index in  projects) {
                         let newArray = new Array();
                         //插入类别名称
@@ -1911,7 +1940,12 @@
                         }else if(projectArray[index].imgtype=="base64"){
                             if(projectArray[index].imgHash!=""){
                                 let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                                projectArray[index].tempBase64=img.value;
+                                if(img!=undefined){
+                                    projectArray[index].tempBase64=img.value;
+                                }else{
+                                    console.log("从ipfs 取数据！");
+                                    projectArray[index].tempBase64="";
+                                }
                             }else{
                                 projectArray[index].tempBase64="";
                             }
@@ -1920,6 +1954,7 @@
                 } else if (obj.id == "ljt") {
                     //模板类别名称国际化
                     let delTemplate = this.db.get("templates").filter({isDel: true}).value();
+                       delTemplate=this.$JSON5.parse(this.$JSON5.stringify(delTemplate));
                     for (let index in  delTemplate) {
                         let newArray = new Array();
                         //插入类别名称
@@ -1942,7 +1977,12 @@
                         }else if(projectArray[index].imgtype=="base64"){
                             if(projectArray[index].imgHash!=""){
                                 let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                                projectArray[index].tempBase64=img.value;
+                                if(img!=undefined){
+                                    projectArray[index].tempBase64=img.value;
+                                }else{
+                                    console.log("从ipfs 取数据！");
+                                    projectArray[index].tempBase64="";
+                                }
                             }else{
                                 projectArray[index].tempBase64="";
                             }
@@ -2048,7 +2088,6 @@
             }else if(this.db.get("machineId")!=this.tempipfsData.machineId){
                     this.getdirectory();
                     this.dialogSynchronization=true;
-
                     console.log("机器码不同");
              }else if(this.db.get("machineId")==this.tempipfsData.machineId){
                     this.getdirectory();
@@ -2150,7 +2189,9 @@
             submitproject() {
                 let projectName = this.ruleFormAddProject.name;
                 let formData = this.templateEvent;
-                var newProject = ""
+                let newProject = ""
+                let imgtype=""
+                let img=formData.tempBase64;
                 if (this.selectlabels.indexOf("sy") == -1) {
                     this.selectlabels.push("sy");//所有项必须有
                 }
@@ -2163,6 +2204,17 @@
                         return item !== "wbj"
                     })
                 }
+                //图片
+                if(this.imgtype=="url"){
+                    imgtype="url";
+                    formData.imgHash="";
+                }else if(this.imgtype=="base64"){
+                    formData.imgurl=""
+                    imgtype="base64";
+                }else{
+                    //继承模板图片
+                    imgtype=formData.imgtype;
+                }
                 this.newProject = {
                     "id": this.$Uuidv1(),
                     "name": projectName,
@@ -2171,21 +2223,28 @@
                     "type": "project",
                     "datas": formData.datas,
                     "dateTime": new Date().valueOf(),
-                    "tempBase64": formData.tempBase64,
-                    "imgHash": "",
+                    "tempBase64":"",
+                    "imgHash": formData.imgHash,
+                    "imgtype":imgtype,
+                    "imgurl":formData.tempBase64,
                     "bgcolor": formData.bgcolor
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
-                // console.log(this.db.get("version").value())
                 this.db.set('version', new Date().valueOf()).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
-                this.templateEvent = "";
                 this.ruleFormAddProject.name = "";
                 this.color = "";
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                if(imgtype=="base64"){
+                    this.uploadImg(img,this.newProject.type,this.newProject.id);
+                }
+                //二次刷新
+                this.getdirectory();
+                this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                this.templateEvent = "";
             }, //增加选中项
             selectFiled(command) {
                 this.dialogVisibleItems = true;
@@ -2242,6 +2301,7 @@
             editDo() {
                 try {
                     this.db.get("project").remove({id: this.editobject.id}).write();
+                    var img=this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                     if (this.selectlabels.indexOf("sy") == -1) {
                         this.selectlabels.push("sy");//所有项必须有
                     }
@@ -2255,19 +2315,42 @@
                         })
                     }
                     this.editobject.modelsId = this.selectlabels;
-                    // this.editobject.modelsName=newArray.toString();
+                  //图片处理
+                    if(this.imgtype=="url"){
+                        this.imgHash="";
+                        this.editobject.imgtype="url";
+                        this.editobject.imgurl=this.editobject.tempBase64;
+                    }else if(this.imgtype=="base64"){
+                        this.editobject.imgurl=""
+                        this.editobject.tempBase64="";//先删除tempBase64
+                        this.editobject.imgtype="base64";
+                    }
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit = false
+                    this.editobject.tempBase64=img;
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.projectEvent = this.editobject;
-                    this.imageBase64 = "";
-                    this.editobject = "";
                     this.selectlabels = "";
                     this.color = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                    if(this.imgtype=="base64"){
+                        if(this.editobject.imgHash!=""){//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
+                            let imgBase64 = this.localdb.get("img").find({id:this.editobject.imgHash}).value();
+                            if(imgBase64==undefined || imgBase64.value != this.editobject.tempBase64){
+                                this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                            }
+                        }else{
+                            this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                        }
+                    }
+                    //二次刷新
+                    this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                    this.editobject = "";
                 } catch (e) {
+                    console.log(e);
                     this.$message.error(this.$t('main.failToEdit'));
                 }
             }, openDialogTemplate() {
@@ -2339,7 +2422,6 @@
                     "bgcolor": this.color
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
-                console.log(this.newTemplate);
                 //清空变量
                 this.ruleFormAddTemplate.name = "",
                 this.color = "";
@@ -2358,8 +2440,18 @@
                 this.newTemplate = "";
             }, //修改模板
             editTemplate() {
+                var img=this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
+                }
+                if(this.imgtype=="url"){
+                    this.imgHash="";
+                    this.editobject.imgtype="url";
+                    this.editobject.imgurl=this.editobject.tempBase64;
+                }else if(this.imgtype=="base64"){
+                    this.editobject.imgurl=""
+                    this.editobject.tempBase64="";//先删除tempBase64
+                    this.editobject.imgtype="base64";
                 }
                 try {
                     this.db.get("templates").remove({id: this.editobject.id}).write();
@@ -2368,14 +2460,29 @@
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleTemplateEdit = false
                     this.$message.success(this.$t('main.successfullyModified'));
+                    this.editobject.tempBase64=img;
                     this.projectEvent = this.editobject;
-                    this.editobject = "";
-                    this.imageBase64 = "";
                     this.selectlabels = "",
-                            this.getdirectory();
+                    this.getdirectory();
                     this.color = "";
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                    if(this.imgtype=="base64"){
+                        if(this.editobject.imgHash!=""){//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
+                            let imgBase64 = this.localdb.get("img").find({id:this.editobject.imgHash}).value();
+                            if(imgBase64==undefined || imgBase64.value != this.editobject.tempBase64){
+                                 this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                            }
+                           }else{
+                            this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                        }
+                    }
+                    //二次刷新
+                    this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                    this.editobject = "";
+
                 } catch (e) {
+                    console.log(e);
                     this.$message.error(this.$t('main.failToEdit'));
                 }
             }, //删除项(修改模板，项目)
