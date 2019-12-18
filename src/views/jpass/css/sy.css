@@ -663,6 +663,7 @@
 	height: 8vh;
 	display: inline-block;
 	position:absolute;
+	background-color:#999999 ;
 }
 .list_icon{
 	background:#999999;

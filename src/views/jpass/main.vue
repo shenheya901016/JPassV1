@@ -1544,8 +1544,6 @@
                 } else {
                     this.percentage = 0;
                 }
-                console.log(this.crypt);
-                console.log(this.level);
             },
             formatTooltip(val) {
                 return 8 + Math.floor(val / 5);
@@ -1720,7 +1718,6 @@
                     for (var indexMode in allProjects[index].modelsId) {
                         var modelId = allProjects[index].modelsId[indexMode];
                         var model = this.db.get("models").find({id: modelId}).value();
-                        console.log(model);
                         if (model != undefined && model.id != "sy") {
                             newArray.push(this.international(model.name));//项目分类国际化
                         }
@@ -1822,7 +1819,6 @@
                     this.db.get("models").remove({id: id}).write();
                     this.db.set('version', new Date().valueOf()).write();
                     if (projects.length > 0) {
-                        console.log(projects.length);
                         for (var project in projects) {
                             var index = projects[project].modelsId.indexOf(id);
                             if (index > -1) {
@@ -2113,8 +2109,6 @@
                     //读取IPFS中数据
                     let ipfsData = await this.$myIpfs.read(userJID, userSecret);
                     let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
-                    console.log(tempipfsData.version);
-                    console.log(this.db.get("version").value());
                     if (tempipfsData.version > this.db.get("version").value()) {//version越大 内容越新
                         console.log("ipfs版本大于本地版本");
                         this.db = tempipfsData;
@@ -2159,14 +2153,47 @@
             }, selectTemplate() {
                 this.dialogVisibleTemplate = true;
                 this.selectlabels = "";
-                this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").
-                        filter({isDel: false}).value()));
+                 var projectArray = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").filter({isDel: false}).value()));
+                //图片载入
+                for(var index in projectArray){
+                    if(projectArray[index].imgtype=="url"){
+                        projectArray[index].tempBase64=projectArray[index].imgurl;
+                    }else if(projectArray[index].imgtype=="base64"){
+                        if(projectArray[index].imgHash!=""){
+                            let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
+                            if(img!=undefined){
+                                projectArray[index].tempBase64=img.value;
+                            }else{
+                                console.log("从ipfs 取数据！");
+                                projectArray[index].tempBase64="";
+                            }
+                        }else{
+                            projectArray[index].tempBase64="";
+                        }
+                    }
+                }
+                this.operateTemplates=projectArray;
             },
             projectlick(project, event) {
                 let temp = this.db.get("templates").find({id: project.id}).value();
                 let target = event.currentTarget;
                 let index = Number(target.getAttribute("data-index"));
                 this.currentTemplate = index;
+                //图片继承
+                if(temp.imgtype=="url"){
+                    temp.tempBase64=temp.imgurl;
+                }else if(temp.imgtype=="base64"){
+                    console.log(1111);
+                    if(temp.imgHash!=""){
+                        let img = this.localdb.get("img").find({id:temp.imgHash}).value();
+                        if(img!=undefined){
+                            temp.tempBase64=img.value;
+                        }else{
+                            console.log("从ipfs 取数据！");
+                            temp.tempBase64="";
+                        }
+                    }
+                }
                 this.templateEvent = this.$JSON5.parse(this.$JSON5.stringify(temp));
                 let modelsId = temp.modelsId;
                 let models = [];
@@ -2177,6 +2204,7 @@
                 }
                 this.selectlabels = models;
             }, addproject() {
+                console.log(this.templateEvent);
                 if (this.templateEvent == "") {
                     this.$message.error(this.$t('main.pleaseChooseATemplate'));
                     return false;
@@ -2496,7 +2524,6 @@
             }, //删除项(增加模板)
             addTemplageRemoveItem(itemsId) {
                 let itemArray = this.tempTemplate;
-                console.log(itemArray);
                 for (var i = 0; i < itemArray.length; i++) {
                     if (itemArray[i].id === itemsId) {
                         itemArray.splice(i, 1);
@@ -2624,7 +2651,6 @@
                 if (obj.isDel) {
                     return false;
                 }
-                console.log(obj);
                 console.log("收藏");
                 obj.modelsId.push("scj");
                 if (obj.modelsId.indexOf("wbj") != -1) {//有未标记项，删除
@@ -2726,7 +2752,6 @@
             },
             //打开颜色选择框
             opencolor(obj){
-                console.log(this.operationType);
                 if (this.operationType == "project_add") {
                     this.imageBase64 = obj.tempBase64;
                 } else if (this.operationType == "project_edit") {
@@ -2766,7 +2791,6 @@
                 }
             },
             setcolor(color){
-                console.log(this.operationType);
                 if (this.operationType == "template_edit") {
                     this.editobject.bgcolor = color;
                     this.dialogSymbolcolor = false;
