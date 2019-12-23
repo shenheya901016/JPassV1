@@ -2658,6 +2658,13 @@
                         return item !== "wbj"
                     })
                 }
+                if(obj.type=="project"){
+                    this.db.get("project").remove({id:obj.id}).write();
+                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
+                }else if(obj.type =="template"){
+                    this.db.get("templates").remove({id:obj.id}).write();
+                    this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
+                }
                 this.db.set('version', new Date().valueOf()).write();
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
@@ -2673,6 +2680,13 @@
                 })
                 if (obj.modelsId.length == 1 && obj.modelsId.indexOf("sy") != -1) {
                     obj.modelsId.push("wbj");//只有所有项，增加未标记项
+                }
+                if(obj.type=="project"){
+                    this.db.get("project").remove({id:obj.id}).write();
+                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
+                }else if(obj.type=="template"){
+                    this.db.get("templates").remove({id:obj.id}).write();
+                    this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 }
                 this.db.set('version', new Date().valueOf()).write()
                 this.getdirectory();
