@@ -161,7 +161,7 @@
                     this.status="success";
                 } else if (this.level.indexOf("年") !== -1) {
                     this.percentage = 80;
-                    this.status="success";
+                    this.status="";
                 } else if (this.level.indexOf("月") !== -1) {
                     this.percentage = 60;
                     this.status="warning"

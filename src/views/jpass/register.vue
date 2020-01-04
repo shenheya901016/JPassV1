@@ -136,7 +136,7 @@
                     this.status="success";
                 } else if (this.level.indexOf("年") !== -1) {
                     this.percentage = 80;
-                    this.status="success";
+                    this.status="";
                 } else if (this.level.indexOf("月") !== -1) {
                     this.percentage = 60;
                     this.status="warning"
@@ -250,9 +250,7 @@
                 this.dialogVisiblePasswordGenerator = true;
                 this.percentage = 0;
             },
-            // formatTooltip(val) {
-            //     return 8 + Math.floor(val / 5);
-            // },
+
             clearPass(){
                this.value2=0;
                 this.level="";
