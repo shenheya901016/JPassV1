@@ -9,10 +9,8 @@
         </h1>
         <ul class="link">
             <li>
-                <el-button @click="addDirectoryOP" style="border:0;padding: 5px 5px;"><img
-                        style="top:-2px;height: 25px;width: 25px;"
-                        src="./img/tianjiawenjianjia.svg"
-                        alt="">{{$t('main.newFolder')}}
+                <el-button @click="addDirectoryOP" style="border:0;padding: 5px 5px;"><img style="top:-2px;height: 25px;width: 25px;" src="./img/tianjiawenjianjia.svg"
+                                                                                           alt="">{{$t('main.newFolder')}}
                 </el-button>
             </li>
             <li>
@@ -43,17 +41,18 @@
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;padding:5px 5px;" @click="synchronization()"><img style="top:-2px;"src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
+                <el-button style="border:0;padding:5px 5px;" @click="synchronization()"><img style="top:-2px;" src="./img/ICON-TB.svg">{{$t('main.synchronize')}}
                 </el-button>
                 <el-progress :percentage="percentage" :stroke-width="4" :color="customColor" :status="synStatus"
                              :show-text="true" v-show="processShow"></el-progress>
             </li>
             <li>
-                <el-button style="border:0;padding: 5px 5px;" @click="lock()"><img style="top:-2px;"src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
+                <el-button style="border:0;padding: 5px 5px;" @click="lock()"><img style="top:-2px;" src="./img/ICON-SD.svg" alt="">{{$t('main.locking')}}
                 </el-button>
             </li>
             <li>
-                <el-button style="border:0;padding: 5px 5px;" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;" src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
+                <el-button style="border:0;padding: 5px 5px;" @click="passwordGenerator()"><img
+                        style="top:-2px;height: 25px;width: 25px;" src="./img/钥匙.svg" alt="">{{$t('main.PasswordGenerator')}}
                 </el-button>
             </li>
 
@@ -97,7 +96,8 @@
         </nav>
         <ul id="menu_1" class="menu">
             <li ref="addDir" :class="addDirClasses" @click="addDirectoryOP">
-                <img src="./img/tianjiawenjianjia.svg" style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;" alt="">
+                <img src="./img/tianjiawenjianjia.svg" style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;"
+                     alt="">
                 {{$t('main.newFolder')}}
             </li>
             <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
@@ -132,7 +132,8 @@
                          <img :src="project.tempBase64" :style="{background:project.bgcolor }" class="list_icon">
                     </span>
                     <div style="width: 70%;text-align: left;">
-                        <h5 :title="project.name">{{project.name.length>13?project.name.substring(0,13)+"...":project.name}}</h5>
+                        <h5 :title="project.name">
+                            {{project.name.length>13?project.name.substring(0,13)+"...":project.name}}</h5>
                         <span :title="project.modelsName">{{project.modelsName.length>12? project.modelsName.substring(0,12)+"...":project.modelsName}}</span>
                     </div>
                     <span style="float: right;height:5.5vh;">
@@ -156,8 +157,11 @@
                         <img v-else="projectEvent.bgcolor==''" :src="projectEvent.tempBase64" style="background:#999999"
                              class="detail_icon">
                         <ul style="display: inline-block;margin-top: 20px;height:8vh;margin-left:15%">
-                            <li style="font-size: 25px;font-weight: bolder;" :title="projectEvent.name">{{projectEvent.name.length>15?projectEvent.name.substring(0,12)+"...":projectEvent.name}}</li>
-                            <li style="margin-top: 1vh" :title="projectEvent.modelsName">{{projectEvent.modelsName}}</li>
+                            <li style="font-size: 25px;font-weight: bolder;" :title="projectEvent.name">
+                                {{projectEvent.name.length>15?projectEvent.name.substring(0,12)+"...":projectEvent.name}}
+                            </li>
+                            <li style="margin-top: 1vh" :title="projectEvent.modelsName">{{projectEvent.modelsName}}
+                            </li>
                         </ul>
                     </div>
                     <img v-if="projectEvent.modelsId.indexOf('scj')== -1" src="./img/start.svg"
@@ -221,14 +225,17 @@
                     <el-input type="password" v-model="password" style="width:90%;"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-bottom: 7%;margin-top: 10%">
-                    <el-button type="primary" size="small" @click="unlock()"  native-type="submit">{{$t('main.unlock')}}</el-button>
+                    <el-button type="primary" size="small" @click="unlock()" native-type="submit">
+                        {{$t('main.unlock')}}
+                    </el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
         <!--增加文件夹-->
         <el-dialog :title="$t('main.addDirectory')" :visible.sync="dialogVisible2" width="30%"
-                   :close-on-click-modal="false" :show-close="false" >
-            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;" :rules="rules">
+                   :close-on-click-modal="false" :show-close="false">
+            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 80%;"
+                     :rules="rules">
                 <!--<el-form-item label="类型选择" prop="modelsType">-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit">目录</el-radio>-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit">文件夹</el-radio>-->
@@ -306,7 +313,7 @@
                 <span class="titleNameDiv">
                     {{$t('main.name')}}
                 </span>
-                <span  class="titleInputSpan">
+                <span class="titleInputSpan">
                      <input type="text" v-model="ruleFormAddProject.name" class="myInputTitle"/>
                 </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
@@ -340,7 +347,8 @@
             <el-tabs type="border-card">
                 <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
-                        <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px" class="demo-ruleForm"
+                        <el-form :model="ruleFormAddProject" ref="ruleFormAddProject" label-width="100px"
+                                 class="demo-ruleForm"
                                  style="width: 95%;margin: auto;text-align: left" label-position="top">
                             <template v-for="(data, index) in this.templateEvent.datas">
                                 <el-form-item v-if="data.type==='password' && !showPassword" :label="data.tempkey"
@@ -632,7 +640,8 @@
                 <el-tab-pane :label="$t('main.fields')">
                     <div style="height:45vh;overflow: auto;">
                         <el-form :model="ruleFormTemplateEdit" ref="ruleFormTemplateEdit" label-width="100px"
-                                 class="demo-ruleForm" style="width: 85%;margin: auto;text-align: left" label-position="top">
+                                 class="demo-ruleForm" style="width: 85%;margin: auto;text-align: left"
+                                 label-position="top">
                             <template v-for="(data, index) in this.editobject.datas">
                                 <el-form-item v-if="data.type==='password'" :label="data.tempkey" :prop="data.tempkey"
                                               style="width: 90%;margin-bottom: 0">
@@ -776,7 +785,7 @@
                     </fieldset>
                 </el-form-item>
                 <el-form-item prop="">
-                    <fieldset style="width: 80%;height: 23vh;margin: auto;border: 1px solid #6C6C6C">
+                    <fieldset style="width: 80%;height: 19vh;margin: auto;border: 1px solid #6C6C6C">
                         <legend style="margin-left: 1%">
                             {{$t('main.passwordService')}}
                         </legend>
@@ -786,11 +795,11 @@
                                        inactive-color="#ff4949"></el-switch>
                         </div>
                         <!--<div style="margin-left: 2vw">-->
-                            <!--{{$t('main.newUserAndPasswordAreAutomaticallySaved')}}-->
-                            <!--<el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">-->
-                                <!--<el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label"-->
-                                           <!--:value="item.value"></el-option>-->
-                            <!--</el-select>-->
+                        <!--{{$t('main.newUserAndPasswordAreAutomaticallySaved')}}-->
+                        <!--<el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">-->
+                        <!--<el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label"-->
+                        <!--:value="item.value"></el-option>-->
+                        <!--</el-select>-->
                         <!--</div>-->
 
                     </fieldset>
@@ -1257,7 +1266,7 @@
                 dialogMyInfo: false, //个人信息弹出框
                 dialogRecover: false,//恢复弹出框
                 dialogclearTrash: false,//清空垃圾箱
-                dialogSynchronization:false,//同步数据提示
+                dialogSynchronization: false,//同步数据提示
                 mouse1: '',
                 mouse2: '',
                 eventID: '',
@@ -1300,8 +1309,8 @@
                 searchTemp: "",
                 imageBase64: "",
                 imgHash: "",
-                imgtype:"",
-                imgurl:"",
+                imgtype: "",
+                imgurl: "",
                 searchTemp: "",
                 username: "",
                 key: "",
@@ -1319,7 +1328,7 @@
                 emptyTrashClasses: [],//清空垃圾样式表
                 deleteClasses: [],//删除样式表
                 recoverClass: [],//恢复样式表
-                tempipfsData:"", //ipfs 数据
+                tempipfsData: "", //ipfs 数据
                 newProject: {
                     "id": "",
                     "name": "",
@@ -1330,8 +1339,8 @@
                     "dateTime": "",
                     "tempBase64": "",
                     "imgHash": "",
-                    "imgtype":"",
-                    "imgurl":"",
+                    "imgtype": "",
+                    "imgurl": "",
                     "isDel": false,
                     "bgcolor": ""
                 },
@@ -1344,8 +1353,8 @@
                     "datas": [],
                     "tempBase64": "",
                     "imgHash": "",
-                    "imgtype":"",
-                    "imgurl":"",
+                    "imgtype": "",
+                    "imgurl": "",
                     "isDel": false,
                     "bgcolor": ""
                 },
@@ -1501,7 +1510,7 @@
                 rules: {
                     modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
-                        {min:1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}]
+                        {min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}]
                 },
             };
         },
@@ -1559,13 +1568,15 @@
                 } else {
                     e.currentTarget.previousElementSibling.setAttribute("type", "password");
                 }
-            }, GetXYPosition() {
+            },
+            GetXYPosition() {
                 var x, y;
                 var e = window.event;
                 x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                 y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
                 this.mouse2 = x + ',' + y;
-            }, CheckTime() {
+            },
+            CheckTime() {
                 let timeout = this.locktime * 60 * 1000;//设定超时时间，单位毫秒
                 if (this.mouse1 == this.mouse2) {
                     this.currentSecond = this.currentSecond + 1000;
@@ -1669,8 +1680,7 @@
                     } else if (alldata[modelkey].id == "mb") {
                         count = this.db.get("templates").filter({isDel: false}).size().value();
                     } else if (alldata[modelkey].id == "ljt") {
-                        count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").
-                                        filter({isDel: true}).size().value();
+                        count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").filter({isDel: true}).size().value();
                         if (count > 0) {
                             this.showTrash = true;
                         } else {
@@ -1725,26 +1735,26 @@
                     allProjects[index].modelsName = newArray.toString();
                 }
                 var projectArray = this.db.get("project").filter({isDel: false}).value();
-                projectArray=this.$JSON5.parse(this.$JSON5.stringify(projectArray));
+                projectArray = this.$JSON5.parse(this.$JSON5.stringify(projectArray));
                 //图片载入
-                for(var index in projectArray){
-                    if(projectArray[index].imgtype=="url"){
-                        projectArray[index].tempBase64=projectArray[index].imgurl;
-                    }else if(projectArray[index].imgtype=="base64"){
-                        if(projectArray[index].imgHash!=""){
-                            let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                            if(img!=undefined){
-                                projectArray[index].tempBase64=img.value;
-                            }else{
+                for (var index in projectArray) {
+                    if (projectArray[index].imgtype == "url") {
+                        projectArray[index].tempBase64 = projectArray[index].imgurl;
+                    } else if (projectArray[index].imgtype == "base64") {
+                        if (projectArray[index].imgHash != "") {
+                            let img = this.localdb.get("img").find({id: projectArray[index].imgHash}).value();
+                            if (img != undefined) {
+                                projectArray[index].tempBase64 = img.value;
+                            } else {
                                 console.log("从ipfs 取数据！");
-                                projectArray[index].tempBase64="";
+                                projectArray[index].tempBase64 = "";
                             }
-                        }else{
-                            projectArray[index].tempBase64="";
+                        } else {
+                            projectArray[index].tempBase64 = "";
                         }
                     }
                 }
-                this.projects=projectArray;
+                this.projects = projectArray;
             },
             addDirectoryOP() {
                 this.dialogVisible2 = true;
@@ -1796,7 +1806,7 @@
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
                 this.delobj = project;
-                if(this.delobj.isDel!=true){
+                if (this.delobj.isDel != true) {
                     this.isDisabled = false;
                 }
                 this.projectEvent = project;
@@ -1842,8 +1852,7 @@
                             }
                         }
                         //更新project中的类别
-                        this.db.get('project').find({id: projects[project].id}).assign({modelsId: this.selectlabels}).
-                                write();
+                        this.db.get('project').find({id: projects[project].id}).assign({modelsId: this.selectlabels}).write();
                         this.selectlabels = "";
                     }
                     //更新template中的类别
@@ -1854,8 +1863,7 @@
                             if (index > -1) {
                                 templates[template].modelsId.splice(index, 1);
                             }
-                            this.db.get('templates').find({id: templates[template].id}).
-                                    assign({modelsId: templates[template].modelsId}).write();
+                            this.db.get('templates').find({id: templates[template].id}).assign({modelsId: templates[template].modelsId}).write();
                         }
                     }
                     this.isDisabled = true;
@@ -1864,7 +1872,7 @@
                 } else if (type == "project") {
                     // this.db.get("project").remove({id: id}).write();
                     // this.delobj.isDel = true;
-                    this.db.get("project").find({id: this.delobj.id}).set('isDel',true).write();
+                    this.db.get("project").find({id: this.delobj.id}).set('isDel', true).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
@@ -1873,7 +1881,7 @@
                 } else if (type == "template") {
                     // this.db.get("templates").remove({id: id}).write();
                     //this.delobj.isDel = true;
-                    this.db.get("templates").find({id: this.delobj.id}).set('isDel',true).write();
+                    this.db.get("templates").find({id: this.delobj.id}).set('isDel', true).write();
                     this.db.set('version', new Date().valueOf()).write();
                     //更新template 在project中显示
                     this.projects = this.db.get("templates").value();
@@ -1888,7 +1896,7 @@
                 let projectArray = new Array();
                 if (obj.id != "mb" && obj.id != "ljt") {
                     let projects = this.db.get("project").value();
-                     projects=this.$JSON5.parse(this.$JSON5.stringify(projects));
+                    projects = this.$JSON5.parse(this.$JSON5.stringify(projects));
                     for (let key in projects) {
                         let models = projects[key].modelsId;
                         if (models.indexOf(id) != -1 && projects[key].isDel != true) {
@@ -1896,26 +1904,26 @@
                         }
                     }
                     //图片载入
-                    for(var index in projectArray){
-                        if(projectArray[index].imgtype=="url"){
-                            projectArray[index].tempBase64=projectArray[index].imgurl;
-                        }else if(projectArray[index].imgtype=="base64"){
-                            if(projectArray[index].imgHash!=""){
-                                let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                                if(img!=undefined){
-                                    projectArray[index].tempBase64=img.value;
-                                }else{
+                    for (var index in projectArray) {
+                        if (projectArray[index].imgtype == "url") {
+                            projectArray[index].tempBase64 = projectArray[index].imgurl;
+                        } else if (projectArray[index].imgtype == "base64") {
+                            if (projectArray[index].imgHash != "") {
+                                let img = this.localdb.get("img").find({id: projectArray[index].imgHash}).value();
+                                if (img != undefined) {
+                                    projectArray[index].tempBase64 = img.value;
+                                } else {
                                     console.log("从ipfs 取数据！");
-                                    projectArray[index].tempBase64="";
+                                    projectArray[index].tempBase64 = "";
                                 }
-                            }else{
-                                projectArray[index].tempBase64="";
+                            } else {
+                                projectArray[index].tempBase64 = "";
                             }
                         }
                     }
                 } else if (obj.id == "mb") {
                     let projects = this.db.get("templates").filter({isDel: false}).value();
-                    projects=this.$JSON5.parse(this.$JSON5.stringify(projects));
+                    projects = this.$JSON5.parse(this.$JSON5.stringify(projects));
                     for (let index in  projects) {
                         let newArray = new Array();
                         //插入类别名称
@@ -1930,27 +1938,27 @@
                     }
                     projectArray = projects;
                     //图片载入
-                    for(var index in projectArray){
-                        if(projectArray[index].imgtype=="url"){
-                            projectArray[index].tempBase64=projectArray[index].imgurl;
-                        }else if(projectArray[index].imgtype=="base64"){
-                            if(projectArray[index].imgHash!=""){
-                                let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                                if(img!=undefined){
-                                    projectArray[index].tempBase64=img.value;
-                                }else{
+                    for (var index in projectArray) {
+                        if (projectArray[index].imgtype == "url") {
+                            projectArray[index].tempBase64 = projectArray[index].imgurl;
+                        } else if (projectArray[index].imgtype == "base64") {
+                            if (projectArray[index].imgHash != "") {
+                                let img = this.localdb.get("img").find({id: projectArray[index].imgHash}).value();
+                                if (img != undefined) {
+                                    projectArray[index].tempBase64 = img.value;
+                                } else {
                                     console.log("从ipfs 取数据！");
-                                    projectArray[index].tempBase64="";
+                                    projectArray[index].tempBase64 = "";
                                 }
-                            }else{
-                                projectArray[index].tempBase64="";
+                            } else {
+                                projectArray[index].tempBase64 = "";
                             }
                         }
                     }
                 } else if (obj.id == "ljt") {
                     //模板类别名称国际化
                     let delTemplate = this.db.get("templates").filter({isDel: true}).value();
-                       delTemplate=this.$JSON5.parse(this.$JSON5.stringify(delTemplate));
+                    delTemplate = this.$JSON5.parse(this.$JSON5.stringify(delTemplate));
                     for (let index in  delTemplate) {
                         let newArray = new Array();
                         //插入类别名称
@@ -1963,24 +1971,23 @@
                         }
                         delTemplate[index].modelsName = newArray.toString();
                     }
-
                     let delProject = this.db.get("project").filter({isDel: true}).value();
                     projectArray = delTemplate.concat(delProject);
                     //图片载入
-                    for(var index in projectArray){
-                        if(projectArray[index].imgtype=="url"){
-                            projectArray[index].tempBase64=projectArray[index].imgurl;
-                        }else if(projectArray[index].imgtype=="base64"){
-                            if(projectArray[index].imgHash!=""){
-                                let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                                if(img!=undefined){
-                                    projectArray[index].tempBase64=img.value;
-                                }else{
+                    for (var index in projectArray) {
+                        if (projectArray[index].imgtype == "url") {
+                            projectArray[index].tempBase64 = projectArray[index].imgurl;
+                        } else if (projectArray[index].imgtype == "base64") {
+                            if (projectArray[index].imgHash != "") {
+                                let img = this.localdb.get("img").find({id: projectArray[index].imgHash}).value();
+                                if (img != undefined) {
+                                    projectArray[index].tempBase64 = img.value;
+                                } else {
                                     console.log("从ipfs 取数据！");
-                                    projectArray[index].tempBase64="";
+                                    projectArray[index].tempBase64 = "";
                                 }
-                            }else{
-                                projectArray[index].tempBase64="";
+                            } else {
+                                projectArray[index].tempBase64 = "";
                             }
                         }
                     }
@@ -2044,7 +2051,6 @@
             //     // this.db.get("project").remove().write();
             //     // this.db.get("models").remove().write();
             // }, //手动同步。
-
             async initialize() {
                 let letoperatorJID = this.operatorJID;//运营商钱包地址
                 let operatorSecret = this.operatorSecret; //运营商密钥
@@ -2054,13 +2060,13 @@
                 this.username = loginObj.name;
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
-                this.localdb=await this.$Lowdb(db_name+"_local");
+                this.localdb = await this.$Lowdb(db_name + "_local");
                 // let ipfsData = await this.$myIpfs.read(address, loginObj.secret);
                 // let tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));
-                this.tempipfsData={"machineId":""};
-               this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+                this.tempipfsData = {"machineId": ""};
+                this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
                 if (this.db.get("machineId").value() == undefined) {  //判断machineId是否undefind
-                    if (this.tempipfsData.machineId=="") {
+                    if (this.tempipfsData.machineId == "") {
                         console.log("初始化");
                         //初始化新数据
                         var newversion = new Date().valueOf();
@@ -2069,7 +2075,7 @@
                         }
                         var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
                         await this.db.defaults(newdata).write();
-                        let imgdata={"img":[]};
+                        let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
@@ -2078,16 +2084,16 @@
                         this.getdirectory();
                     } else {
                         await this.db.defaults(this.tempipfsData).write();//取ipfs数据
-                        await this.db.set('machineId',this.$Uuidv1()).write();//初始化本机机器随机码
+                        await this.db.set('machineId', this.$Uuidv1()).write();//初始化本机机器随机码
                         this.getdirectory();
                     }
-            }else if(this.db.get("machineId")!=this.tempipfsData.machineId){
+                } else if (this.db.get("machineId") != this.tempipfsData.machineId) {
                     this.getdirectory();
-                    this.dialogSynchronization=true;
+                    this.dialogSynchronization = true;
                     console.log("机器码不同");
-             }else if(this.db.get("machineId")==this.tempipfsData.machineId){
+                } else if (this.db.get("machineId") == this.tempipfsData.machineId) {
                     this.getdirectory();
-                    this.dialogSynchronization=true;
+                    this.dialogSynchronization = true;
                     console.log("机器码相同");
                 }
             },
@@ -2153,26 +2159,26 @@
             }, selectTemplate() {
                 this.dialogVisibleTemplate = true;
                 this.selectlabels = "";
-                 var projectArray = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").filter({isDel: false}).value()));
+                var projectArray = this.$JSON5.parse(this.$JSON5.stringify(this.db.get("templates").filter({isDel: false}).value()));
                 //图片载入
-                for(var index in projectArray){
-                    if(projectArray[index].imgtype=="url"){
-                        projectArray[index].tempBase64=projectArray[index].imgurl;
-                    }else if(projectArray[index].imgtype=="base64"){
-                        if(projectArray[index].imgHash!=""){
-                            let img = this.localdb.get("img").find({id:projectArray[index].imgHash}).value();
-                            if(img!=undefined){
-                                projectArray[index].tempBase64=img.value;
-                            }else{
+                for (var index in projectArray) {
+                    if (projectArray[index].imgtype == "url") {
+                        projectArray[index].tempBase64 = projectArray[index].imgurl;
+                    } else if (projectArray[index].imgtype == "base64") {
+                        if (projectArray[index].imgHash != "") {
+                            let img = this.localdb.get("img").find({id: projectArray[index].imgHash}).value();
+                            if (img != undefined) {
+                                projectArray[index].tempBase64 = img.value;
+                            } else {
                                 console.log("从ipfs 取数据！");
-                                projectArray[index].tempBase64="";
+                                projectArray[index].tempBase64 = "";
                             }
-                        }else{
-                            projectArray[index].tempBase64="";
+                        } else {
+                            projectArray[index].tempBase64 = "";
                         }
                     }
                 }
-                this.operateTemplates=projectArray;
+                this.operateTemplates = projectArray;
             },
             projectlick(project, event) {
                 let temp = this.db.get("templates").find({id: project.id}).value();
@@ -2180,17 +2186,16 @@
                 let index = Number(target.getAttribute("data-index"));
                 this.currentTemplate = index;
                 //图片继承
-                if(temp.imgtype=="url"){
-                    temp.tempBase64=temp.imgurl;
-                }else if(temp.imgtype=="base64"){
-                    console.log(1111);
-                    if(temp.imgHash!=""){
-                        let img = this.localdb.get("img").find({id:temp.imgHash}).value();
-                        if(img!=undefined){
-                            temp.tempBase64=img.value;
-                        }else{
+                if (temp.imgtype == "url") {
+                    temp.tempBase64 = temp.imgurl;
+                } else if (temp.imgtype == "base64") {
+                    if (temp.imgHash != "") {
+                        let img = this.localdb.get("img").find({id: temp.imgHash}).value();
+                        if (img != undefined) {
+                            temp.tempBase64 = img.value;
+                        } else {
                             console.log("从ipfs 取数据！");
-                            temp.tempBase64="";
+                            temp.tempBase64 = "";
                         }
                     }
                 }
@@ -2203,7 +2208,8 @@
                     }
                 }
                 this.selectlabels = models;
-            }, addproject() {
+            },
+            addproject() {
                 console.log(this.templateEvent);
                 if (this.templateEvent == "") {
                     this.$message.error(this.$t('main.pleaseChooseATemplate'));
@@ -2218,8 +2224,8 @@
                 let projectName = this.ruleFormAddProject.name;
                 let formData = this.templateEvent;
                 let newProject = ""
-                let imgtype=""
-                let img=formData.tempBase64;
+                let imgtype = ""
+                let img = formData.tempBase64;
                 if (this.selectlabels.indexOf("sy") == -1) {
                     this.selectlabels.push("sy");//所有项必须有
                 }
@@ -2233,15 +2239,15 @@
                     })
                 }
                 //图片
-                if(this.imgtype=="url"){
-                    imgtype="url";
-                    formData.imgHash="";
-                }else if(this.imgtype=="base64"){
-                    formData.imgurl=""
-                    imgtype="base64";
-                }else{
+                if (this.imgtype == "url") {
+                    imgtype = "url";
+                    formData.imgHash = "";
+                } else if (this.imgtype == "base64") {
+                    formData.imgurl = ""
+                    imgtype = "base64";
+                } else {
                     //继承模板图片
-                    imgtype=formData.imgtype;
+                    imgtype = formData.imgtype;
                 }
                 this.newProject = {
                     "id": this.$Uuidv1(),
@@ -2251,10 +2257,10 @@
                     "type": "project",
                     "datas": formData.datas,
                     "dateTime": new Date().valueOf(),
-                    "tempBase64":"",
+                    "tempBase64": "",
                     "imgHash": formData.imgHash,
-                    "imgtype":imgtype,
-                    "imgurl":formData.tempBase64,
+                    "imgtype": imgtype,
+                    "imgurl": formData.tempBase64,
                     "bgcolor": formData.bgcolor
                 };
                 //db project 追加数据
@@ -2266,8 +2272,8 @@
                 this.color = "";
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
-                if(imgtype=="base64"){
-                    this.uploadImg(img,this.newProject.type,this.newProject.id);
+                if (imgtype == "base64") {
+                    this.uploadImg(img, this.newProject.type, this.newProject.id);
                 }
                 //二次刷新
                 this.getdirectory();
@@ -2329,7 +2335,7 @@
             editDo() {
                 try {
                     this.db.get("project").remove({id: this.editobject.id}).write();
-                    var img=this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
+                    var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                     if (this.selectlabels.indexOf("sy") == -1) {
                         this.selectlabels.push("sy");//所有项必须有
                     }
@@ -2343,34 +2349,34 @@
                         })
                     }
                     this.editobject.modelsId = this.selectlabels;
-                  //图片处理
-                    if(this.imgtype=="url"){
-                        this.imgHash="";
-                        this.editobject.imgtype="url";
-                        this.editobject.imgurl=this.editobject.tempBase64;
-                    }else if(this.imgtype=="base64"){
-                        this.editobject.imgurl=""
-                        this.editobject.tempBase64="";//先删除tempBase64
-                        this.editobject.imgtype="base64";
+                    //图片处理
+                    if (this.imgtype == "url") {
+                        this.imgHash = "";
+                        this.editobject.imgtype = "url";
+                        this.editobject.imgurl = this.editobject.tempBase64;
+                    } else if (this.imgtype == "base64") {
+                        this.editobject.imgurl = ""
+                        this.editobject.tempBase64 = "";//先删除tempBase64
+                        this.editobject.imgtype = "base64";
                     }
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleEdit = false
-                    this.editobject.tempBase64=img;
+                    this.editobject.tempBase64 = img;
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.projectEvent = this.editobject;
                     this.selectlabels = "";
                     this.color = "";
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
-                    if(this.imgtype=="base64"){
-                        if(this.editobject.imgHash!=""){//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
-                            let imgBase64 = this.localdb.get("img").find({id:this.editobject.imgHash}).value();
-                            if(imgBase64==undefined || imgBase64.value != this.editobject.tempBase64){
-                                this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                    if (this.imgtype == "base64") {
+                        if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
+                            let imgBase64 = this.localdb.get("img").find({id: this.editobject.imgHash}).value();
+                            if (imgBase64 == undefined || imgBase64.value != this.editobject.tempBase64) {
+                                this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
                             }
-                        }else{
-                            this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                        } else {
+                            this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
                         }
                     }
                     //二次刷新
@@ -2406,7 +2412,8 @@
                 this.dialogVisibleAddTempItems = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
-            }, addFiledTemplate() {
+            },
+            addFiledTemplate() {
                 this.dialogVisibleAddTempItems = false;
                 this.filed.tempkey = this.filedName;
                 this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
@@ -2426,14 +2433,13 @@
                 if (this.imageBase64 == '') {
                     //默认图片
                     this.imageBase64 = this.$refs.icon_default.src;
-                    this.imgtype="url";
+                    this.imgtype = "url";
                 }
-
-                if(this.imgtype=="url"){
-                   this.imgHash="";
-                   this.imgurl=this.imageBase64;
-                }else if(this.imgtype=="base64"){
-                    this.imgurl=""
+                if (this.imgtype == "url") {
+                    this.imgHash = "";
+                    this.imgurl = this.imageBase64;
+                } else if (this.imgtype == "base64") {
+                    this.imgurl = ""
                 }
                 this.newTemplate = {
                     "id": this.$Uuidv1(),
@@ -2443,23 +2449,23 @@
                     "isDel": false,
                     "type": "template",
                     "datas": this.tempTemplate,
-                    "tempBase64":"",
+                    "tempBase64": "",
                     "imgHash": this.imgHash,
-                    "imgtype":this.imgtype,
-                    "imgurl":this.imgurl,
+                    "imgtype": this.imgtype,
+                    "imgurl": this.imgurl,
                     "bgcolor": this.color
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
                 //清空变量
-                this.ruleFormAddTemplate.name = "",
+                this.ruleFormAddTemplate.name = "";
                 this.color = "";
                 this.tempTemplate = [];
                 this.selectlabels = "";
                 this.dialogVisibleAddTemplate = false;
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
-                if(this.imgtype=="base64"){
-                    this.uploadImg(this.imageBase64,this.newTemplate.type,this.newTemplate.id);
+                if (this.imgtype == "base64") {
+                    this.uploadImg(this.imageBase64, this.newTemplate.type, this.newTemplate.id);
                 }
                 //二次刷新
                 this.getdirectory();
@@ -2468,18 +2474,18 @@
                 this.newTemplate = "";
             }, //修改模板
             editTemplate() {
-                var img=this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
+                var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
                 }
-                if(this.imgtype=="url"){
-                    this.imgHash="";
-                    this.editobject.imgtype="url";
-                    this.editobject.imgurl=this.editobject.tempBase64;
-                }else if(this.imgtype=="base64"){
-                    this.editobject.imgurl=""
-                    this.editobject.tempBase64="";//先删除tempBase64
-                    this.editobject.imgtype="base64";
+                if (this.imgtype == "url") {
+                    this.imgHash = "";
+                    this.editobject.imgtype = "url";
+                    this.editobject.imgurl = this.editobject.tempBase64;
+                } else if (this.imgtype == "base64") {
+                    this.editobject.imgurl = ""
+                    this.editobject.tempBase64 = "";//先删除tempBase64
+                    this.editobject.imgtype = "base64";
                 }
                 try {
                     this.db.get("templates").remove({id: this.editobject.id}).write();
@@ -2488,27 +2494,26 @@
                     this.db.set('version', new Date().valueOf()).write();
                     this.dialogVisibleTemplateEdit = false
                     this.$message.success(this.$t('main.successfullyModified'));
-                    this.editobject.tempBase64=img;
+                    this.editobject.tempBase64 = img;
                     this.projectEvent = this.editobject;
-                    this.selectlabels = "",
+                    this.selectlabels = "";
                     this.getdirectory();
                     this.color = "";
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
-                    if(this.imgtype=="base64"){
-                        if(this.editobject.imgHash!=""){//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
-                            let imgBase64 = this.localdb.get("img").find({id:this.editobject.imgHash}).value();
-                            if(imgBase64==undefined || imgBase64.value != this.editobject.tempBase64){
-                                 this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                    if (this.imgtype == "base64") {
+                        if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
+                            let imgBase64 = this.localdb.get("img").find({id: this.editobject.imgHash}).value();
+                            if (imgBase64 == undefined || imgBase64.value != this.editobject.tempBase64) {
+                                this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
                             }
-                           }else{
-                            this.uploadImg(this.editobject.tempBase64,this.editobject.type,this.editobject.id);
+                        } else {
+                            this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
                         }
                     }
                     //二次刷新
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                     this.editobject = "";
-
                 } catch (e) {
                     console.log(e);
                     this.$message.error(this.$t('main.failToEdit'));
@@ -2611,7 +2616,7 @@
                 reader.onload = async function (e) {
                     temp.imageBase64 = this.result;
                 }
-                this.imgtype="base64";
+                this.imgtype = "base64";
             }, //图片处理（修改模板）
             handleAvatarSuccessEdit(res, file) {
                 let temp = this;
@@ -2622,7 +2627,7 @@
                     temp.imageBase64 = this.result;
                     temp.editobject.tempBase64 = this.result;
                 }
-                this.imgtype="base64";
+                this.imgtype = "base64";
             }, //图片处理（增加项目）
             handleAvatarSuccessAddPro(res, file){
                 let temp = this;
@@ -2633,7 +2638,7 @@
                     temp.imageBase64 = this.result;
                     temp.templateEvent.tempBase64 = this.result;
                 }
-                this.imgtype="base64";
+                this.imgtype = "base64";
             }, //图片大小验证
             beforeAvatarUpload(file) {
                 let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png', 'image/svg'];
@@ -2658,11 +2663,11 @@
                         return item !== "wbj"
                     })
                 }
-                if(obj.type=="project"){
-                    this.db.get("project").remove({id:obj.id}).write();
+                if (obj.type == "project") {
+                    this.db.get("project").remove({id: obj.id}).write();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
-                }else if(obj.type =="template"){
-                    this.db.get("templates").remove({id:obj.id}).write();
+                } else if (obj.type == "template") {
+                    this.db.get("templates").remove({id: obj.id}).write();
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 }
                 this.db.set('version', new Date().valueOf()).write();
@@ -2681,11 +2686,11 @@
                 if (obj.modelsId.length == 1 && obj.modelsId.indexOf("sy") != -1) {
                     obj.modelsId.push("wbj");//只有所有项，增加未标记项
                 }
-                if(obj.type=="project"){
-                    this.db.get("project").remove({id:obj.id}).write();
+                if (obj.type == "project") {
+                    this.db.get("project").remove({id: obj.id}).write();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
-                }else if(obj.type=="template"){
-                    this.db.get("templates").remove({id:obj.id}).write();
+                } else if (obj.type == "template") {
+                    this.db.get("templates").remove({id: obj.id}).write();
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 }
                 this.db.set('version', new Date().valueOf()).write()
@@ -2709,7 +2714,6 @@
                     label: this.$t('main.shutDown')
                 }, {value: 'automatically', label: this.$t('main.autofill')}];
                 localStorage.setItem('lang', this.$i18n.locale);
-
             },
             //国际化（目录）
             international(name){
@@ -2738,7 +2742,6 @@
                 this.dialogRecover = false;
                 this.getdirectory();
             },
-
             //清空垃圾箱
             clearTrash(){
                 let delTemplate = this.db.get("templates").filter({isDel: true}).value();
@@ -2788,20 +2791,20 @@
                 if (this.operationType == "template_edit") {
                     this.editobject.tempBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
-                    this.imgtype="url"
+                    this.imgtype = "url"
                 } else if (this.operationType == "template_add") {
                     //进行新建操作时插入图片
                     this.imageBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
-                    this.imgtype="url"
+                    this.imgtype = "url"
                 } else if (this.operationType == "project_add") {
                     this.templateEvent.tempBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
-                    this.imgtype="url"
+                    this.imgtype = "url"
                 } else if (this.operationType == "project_edit") {
                     this.editobject.tempBase64 = path.target.currentSrc;
                     this.dialogSymbol = false;
-                    this.imgtype="url"
+                    this.imgtype = "url"
                 }
             },
             setcolor(color){
@@ -2825,13 +2828,13 @@
                     var e = e || window.event;
                     var uils = document.getElementsByClassName("choosepic")
                     for (var i = 0; i < uils.length; i++) {
-                        if(uils[i].style.display =="block"){
+                        if (uils[i].style.display == "block") {
                             uils[i].style.display = "none";
                         }
                     }
                     //隐藏右击菜单1
-                    if(document.getElementById("menu_1").style.display =="block" && e.target!=document.getElementById("menu_1")){
-                       document.getElementById("menu_1").style.display = "none";
+                    if (document.getElementById("menu_1").style.display == "block" && e.target != document.getElementById("menu_1")) {
+                        document.getElementById("menu_1").style.display = "none";
                     }
                 }
             },
@@ -2843,18 +2846,16 @@
             },
             //关闭添加模板框，清空数据
             clearDataTemplate(){
-                this.ruleFormAddTemplate.name="";
-                this.tempTemplate=[];
+                this.ruleFormAddTemplate.name = "";
+                this.tempTemplate = [];
             },
             //关闭添加项目框，清空数据
             clearDataProject(){
-                this.ruleFormAddProject.name="";
-                this.tempTemplate=[];
+                this.ruleFormAddProject.name = "";
+                this.tempTemplate = [];
             },
-
-
             openMenu_1(project, obj){
-                if(project.isDel!=true){
+                if (project.isDel != true) {
                     this.isDisabled = false;//启用删除
                 }
                 this.delobj = project;//赋值删除对象
@@ -2938,34 +2939,33 @@
             //ipfs 覆盖本地
             async ipfsToLocal(){
                 var machineId = this.db.get("machineId").value();
-                this.tempipfsData.machineId=machineId;
+                this.tempipfsData.machineId = machineId;
                 await this.db.defaults(this.tempipfsData).write();//取ipfs数据
-
             },
             //本地覆盖ipfs
             localToIpfs(){
-
-           },
+            },
             //图片上传ipfs
-            uploadImg(value,type,id){
-             if(type=="project"){
-                 let imgHash =this.$Uuidv1();
-                 this.db.get("project").find({id: id}).set("imgHash", imgHash).write();
-                 let img = {"id":imgHash,"value":value};
-                 this.localdb.get("img").push(img).write();
-             }else if(type=="template"){
-                 let imgHash =this.$Uuidv1();
-                 this.db.get("templates").find({id: id}).set("imgHash", imgHash).write();
-                 let img = {"id":imgHash,"value":value};
-                 this.localdb.get("img").push(img).write();
-             }
+            uploadImg(value, type, id){
+                if (type == "project") {
+                    let imgHash = this.$Uuidv1();
+                    this.db.get("project").find({id: id}).set("imgHash", imgHash).write();
+                    let img = {"id": imgHash, "value": value};
+                    this.localdb.get("img").push(img).write();
+                } else if (type == "template") {
+                    let imgHash = this.$Uuidv1();
+                    this.db.get("templates").find({id: id}).set("imgHash", imgHash).write();
+                    let img = {"id": imgHash, "value": value};
+                    this.localdb.get("img").push(img).write();
+                }
+            }
         }
-      }
     }
 </script>
 <style>
     @import './css/base.css';
     @import './css/sy.css';
+
     .mb .el-form--label-top .el-form-item__label {
         float: none;
         display: inline-block;

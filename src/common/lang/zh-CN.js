@@ -34,7 +34,7 @@ export default {
         ruleuserLength: "长度在 3 到 20 个字符！",
 
         pleaseEnterUserPassword: "请输入用户密码",
-        lengthCharacters: "长度在 4 到 20 个字符",
+        lengthCharacters: "长度大于4个字符",
         pleaseEnterUserPasswordAgain: "请再次输入用户密码",
         no: "无",
         walletGenerationFailed: "钱包生成失败！",
@@ -186,7 +186,7 @@ export default {
         pleaseEnterANewUsername: "请输入新用户名",
         pleaseEnterYourPassword: "请输入密码",
         pleaseEnterAUserPassword: "请输入用户密码",
-        theLengthIsBetween4And20Characters: "长度在 4 到 20 个字符",
+        theLengthIsBetween4And20Characters: "长度大于4个字符",
         pleaseEnterTheUserPasswordAgain: "请再次输入用户密码",
         theCurrentLimitSelects1FileThisTimeSelectedFiles: "当前限制上传 1个文件",
         importedKeystoryFilePFailed: "keystory 文件未导入或文件解析失败，请重新输入！",

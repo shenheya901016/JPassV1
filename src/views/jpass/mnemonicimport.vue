@@ -18,10 +18,9 @@
                     <el-input v-model="ruleForm.name" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('mnemonicimport.newPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" id="password" @input="pwdLength" style="width:75%;float: left"
+                    <el-input type="password" v-model="ruleForm.password" id="password" @input="pwdLength" style="width:95%;float: left"
                               oncopy="return false" onpaste="return false" show-password></el-input>
-                    <el-button style="border:0" @click="passwordGenerator()"><img style="top:-2px;height: 25px;width: 25px;" src="./img/钥匙.svg" alt="">
-                    </el-button>
+                    <img @click="passwordGenerator()" style="width: 5%;" src="./img/钥匙.svg" alt="">
                 </el-form-item>
                 <el-form-item>
                     <el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:90%;"></el-progress>
@@ -49,16 +48,11 @@
         <!--密码生成器-->
         <el-dialog title="密码生成器" :visible.sync="dialogVisiblePasswordGenerator" width="40%"
                    :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true">
+                   :close-on-press-escape="false" :show-close="true" @closed="clearPass">
             <el-input v-model="crypt"></el-input>
-            <el-progress :text-inside="true" :stroke-width="20" :percentage="percentage"></el-progress>
-            <el-tag type="danger">{{level}}</el-tag>
-            <el-slider
-                    :format-tooltip="formatTooltip"
-                    :step="5"
-                    show-stops
-                    v-model="value2">
-            </el-slider>
+            <el-progress  :show-text="false" :stroke-width="5" :percentage="percentage" style="margin-top: 1%;" :status="status"></el-progress>
+            <div style="display: block;height:3vh;">{{level}}</div>
+            <el-slider  :step="1" :max="20" show-stops v-model="value2"></el-slider>
             <el-radio-group v-model="radio">
                 <el-radio :label="1">便于记忆</el-radio>
                 <el-radio :label="2">仅字母和数字</el-radio>
@@ -160,20 +154,29 @@
             };
         },watch: {  //密码生成器自动生成
             'value2': function(){
-                this.crypt = this.$createPassword.genCrypt(this.radio, 8 + this.value2 / 5);
+                this.crypt = this.$createPassword.genCrypt(this.radio, this.value2);
                 this.level = this.$createPassword.cryptLevel(this.crypt);
                 if (this.level.indexOf("世纪") !== -1) {
                     this.percentage = 100;
+                    this.status="success";
                 } else if (this.level.indexOf("年") !== -1) {
                     this.percentage = 80;
+                    this.status="success";
                 } else if (this.level.indexOf("月") !== -1) {
                     this.percentage = 60;
+                    this.status="warning"
                 } else if (this.level.indexOf("周") !== -1) {
                     this.percentage = 40;
-                } else if (this.level.indexOf("天") !== -1) {
+                    this.status="warning"
+                } else if (this.level.indexOf("天") !== -1 ||this.level.indexOf("分") !== -1 || this.level.indexOf("秒") !== -1) {
                     this.percentage = 20;
-                } else {
-                    this.percentage = 0;
+                    this.status="exception"
+                } else if(this.level.indexOf("瞬间") !== -1 && this.value2!=""){
+                    this.percentage =10;
+                    this.status="exception";
+                }else{
+                    this.percentage =0;
+                    this.level="";
                 }
             }
         },
@@ -258,9 +261,8 @@
                 this.crypt = "";
                 this.dialogVisiblePasswordGenerator = false;
             },passwordGenerator() {
+                this.percentage = 0;
                 this.dialogVisiblePasswordGenerator = true;
-            },formatTooltip(val) {
-                return 8 + Math.floor(val / 5);
             },
             async toMainPage() {
                 let secret = "";
@@ -304,6 +306,10 @@
                     this.$message.error(this.$t('login.loginerror'));
                 }
             },
+            clearPass(){
+                this.value2=0;
+                this.level="";
+            }
         }
     }
 </script>
