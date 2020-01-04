@@ -45,7 +45,7 @@
                    :close-on-click-modal="false"
                    :close-on-press-escape="false" :show-close="true"  @closed="clearPass">
             <el-input v-model="crypt"></el-input>
-            <el-progress  :show-text="false" :stroke-width="5" :percentage="percentage" style="margin-top: 1%;" :status="status"></el-progress>
+            <el-progress  :show-text="false" :stroke-width="5" :percentage="percentage" style="margin-top: 1%;" :color="color"></el-progress>
             <div style="display: block;height:3vh;">{{level}}</div>
             <el-slider  :step="1" :max="20" show-stops v-model="value2"></el-slider>
             <el-radio-group v-model="radio">
@@ -134,34 +134,36 @@
                     ],
                 }
             };
-        },watch: {  //密码生成器自动生成
+        },
+        watch: {  //密码生成器自动生成
             'value2': function(){
                 this.crypt = this.$createPassword.genCrypt(this.radio, this.value2);
                 this.level = this.$createPassword.cryptLevel(this.crypt);
                 if (this.level.indexOf("世纪") !== -1) {
                     this.percentage = 100;
-                    this.status="success";
+                    this.color="#67C23A";
                 } else if (this.level.indexOf("年") !== -1) {
                     this.percentage = 80;
-                    this.status="";
+                    this.color="#409EFF";
                 } else if (this.level.indexOf("月") !== -1) {
                     this.percentage = 60;
-                    this.status="warning"
+                    this.color="#E6A23C"
                 } else if (this.level.indexOf("周") !== -1) {
                     this.percentage = 40;
-                    this.status="warning"
+                    this.color="#E6A23C"
                 } else if (this.level.indexOf("天") !== -1 ||this.level.indexOf("分") !== -1 || this.level.indexOf("秒") !== -1) {
                     this.percentage = 20;
-                    this.status="exception"
+                    this.color="#F56C6C"
                 } else if(this.level.indexOf("瞬间") !== -1 && this.value2!=""){
                     this.percentage =10;
-                    this.status="exception";
+                    this.color="#F56C6C";
                 }else{
                     this.percentage =0;
                     this.level="";
                 }
             }
-        },  methods: {
+        },
+        methods: {
             toLoginPage(){
                 this.$router.push('/jpass/login');
             },
