@@ -18,14 +18,14 @@
                         <el-button type="primary" size="small" style="float: left">{{$t('keystoreImport.uploadKeystore')}}</el-button>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :label="$t('keystoreImport.oldLoginPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
+                <el-form-item :label="$t('keystoreImport.oldLoginPassword')" prop="oldPassword">
+                    <el-input type="password" v-model="ruleForm.oldPassword" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                  </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newUserName')" prop="name">
                     <el-input type="text" v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                 </el-form-item>
-                <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="newPassword">
-                    <el-input type="password" v-model="ruleForm.newPassword " @input="pwdLength" :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')"
+                <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="password">
+                    <el-input type="password" v-model="ruleForm.password " :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')"
                               oncopy="return false" onpaste="return false" style="width:95%;float: left" show-password></el-input>
                     <img @click="passwordGenerator()" style="width: 5%;" src="./img/钥匙.svg" alt="">
                 </el-form-item>
@@ -47,39 +47,13 @@
             </el-form>
         </div>
         <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
-
-        <!--密码生成器-->
-        <el-dialog title="密码生成器" :visible.sync="dialogVisiblePasswordGenerator" width="40%"
-                   :close-on-click-modal="false"
-                   :close-on-press-escape="false" :show-close="true"  @closed="clearPass">
-            <el-input v-model="crypt"></el-input>
-            <el-progress  :show-text="false" :stroke-width="5" :percentage="percentage" style="margin-top: 1%;" :color="color"></el-progress>
-            <div style="display: block;height:3vh;">{{level}}</div>
-            <el-slider  :step="1" :max="20" show-stops v-model="value2"></el-slider>
-            <el-radio-group v-model="radio">
-                <el-radio :label="1">便于记忆</el-radio>
-                <el-radio :label="2">仅字母和数字</el-radio>
-                <el-radio :label="3">完全随机</el-radio>
-                <el-radio :label="4">仅允许数字</el-radio>
-            </el-radio-group>
-            <br>
-            <el-button style="margin-top: 5%" size="small" type="primary" @click="module()">
-                {{$t('main.okFormat')}}
-            </el-button>
-            <el-button size="small" @click="dialogVisiblePasswordGenerator = false">{{$t('main.cancelFormat')}}
-            </el-button>
-        </el-dialog>
+		<passwordGenerator :dialogopen="dialogPasswordGenerator" @dialogPasswordGeneratorclose="closedialog"
+		@transpassword="getPassword" :dialogclose="dialogclose"  @recoverdialogtag="recovertag"></passwordGenerator>
     </div>
 </template>
 
 <script type="es6">
-    import vueCanvasNest from 'vue-canvas-nest';
-    import password from '../../password.js';
-
     export default {
-        components: {
-            vueCanvasNest
-        },
         data() {
             var validateName = (rule, value, callback) => {
                 var nameString = localStorage.getItem("name_string");
@@ -97,29 +71,23 @@
             var validateRepassword = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error(this.$t('keystoreImport.pleaseEnterYourPasswordAgain')));
-                } else if (value !== this.ruleForm.newPassword) {
+                } else if (value !== this.ruleForm.password) {
                     callback(new Error(this.$t('keystoreImport.twoPasswordsAreInconsistent')));
                 } else {
                     callback();
                 }
             };
             return {
-                //密码器
-                crypt: "",
-                level: "",
-                radio: 3,
-                value2: 0, //系统设置配置项
-                dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
+                dialogPasswordGenerator: false,// 密码生成器弹出框
+                dialogclose:false,//关闭密码器指示
 
-                percentage: 0,
                 dialogVisible: false,
                 keystorefile: {},
-                status: "exception",
                 ruleForm: {
                     mnemonicAddress: '',
                     mnemonicSecret: '',
+                    oldPassword: '',
                     password: '',
-                    newPassword: '',
                     secret: '',
                     repassword: '',
                 },
@@ -128,11 +96,11 @@
                         {required: true, message: this.$t('keystoreImport.pleaseEnterANewUsername'), trigger: 'blur'},
                         {validator: validateName, trigger: 'blur'}
                     ],
-                    password: [
+                    oldPassword: [
                         {required: true, message: this.$t('keystoreImport.pleaseEnterYourPassword'), trigger: 'blur'},
 
                     ],
-                    newPassword: [
+                    password: [
                         {required: true, message: this.$t('keystoreImport.pleaseEnterAUserPassword'), trigger: 'blur'},
                         {min: 4, max: 20, message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'), trigger: 'blur'}
                     ],
@@ -143,34 +111,7 @@
                 }
             };
         },
-        watch: {  //密码生成器自动生成
-            'value2': function(){
-                this.crypt = this.$createPassword.genCrypt(this.radio, this.value2);
-                this.level = this.$createPassword.cryptLevel(this.crypt);
-                if (this.level.indexOf("世纪") !== -1) {
-                    this.percentage = 100;
-                    this.color="#67C23A";
-                } else if (this.level.indexOf("年") !== -1) {
-                    this.percentage = 80;
-                    this.color="#409EFF";
-                } else if (this.level.indexOf("月") !== -1) {
-                    this.percentage = 60;
-                    this.color="#E6A23C"
-                } else if (this.level.indexOf("周") !== -1) {
-                    this.percentage = 40;
-                    this.color="#E6A23C"
-                } else if (this.level.indexOf("天") !== -1 ||this.level.indexOf("分") !== -1 || this.level.indexOf("秒") !== -1) {
-                    this.percentage = 20;
-                    this.color="#F56C6C"
-                } else if(this.level.indexOf("瞬间") !== -1 && this.value2!=""){
-                    this.percentage =10;
-                    this.color="#F56C6C";
-                }else{
-                    this.percentage =0;
-                    this.level="";
-                }
-            }
-        },
+        
         methods: {
             toLoginPage(){
                 this.$router.push('/jpass/login');
@@ -220,7 +161,7 @@
                 //生成钱包
                 try {
                     var address = keyStoreObj.wallets[0].address;
-                    var password = this.ruleForm.password;
+                    var password = this.ruleForm.oldPassword;
                     wallet.setJingchangWallet(keyStoreObj);
                     var secret = wallet.getSecretWithAddress(password, address);
                     await secret.then(function (value) {
@@ -238,7 +179,7 @@
             async generateWallet() {
                 var keystore = "";
                 try {
-                    var jingchuangWallet = this.$JCCWallet.JingchangWallet.generate(this.ruleForm.newPassword, this.ruleForm.secret);
+                    var jingchuangWallet = this.$JCCWallet.JingchangWallet.generate(this.ruleForm.password, this.ruleForm.secret);
                     await jingchuangWallet.then(function (value) {
                         keystore = value;
                     });
@@ -255,12 +196,7 @@
                     return false;
                 }
             },
-            pwdLength() {
-                var pwd = this.ruleForm.newPassword;
-                password.pwStrength(pwd);
-                this.percentage = password.percentage;
-                this.status = password.status;
-            },
+           
             //导出keystore 文件
             exportkeystore() {
                 var content = this.ruleForm.keystore;
@@ -283,17 +219,6 @@
                     localStorage.setItem(name, this.$JSON5.stringify(keystore));
                 }
             },
-            //密码
-            module() {
-                this.ruleForm.newPassword = this.crypt;
-                this.ruleForm.repassword = this.crypt;
-                this.crypt = "";
-                this.dialogVisiblePasswordGenerator = false;
-            },passwordGenerator() {
-                this.percentage = 0;
-                this.dialogVisiblePasswordGenerator = true;
-            },
-
             async toMainPage() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
@@ -306,7 +231,7 @@
                         //钱包生成密钥
                         wallet.setJingchangWallet(objKeyStore);
                         var address = objKeyStore.wallets[0].address;
-                        keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
+                        keystring = wallet.getSecretWithAddress(this.ruleForm.oldPassword, address);
                         await keystring.then(function (value) {
                             secret = value;
                         });
@@ -336,11 +261,27 @@
                     this.$message.error(this.$t('login.loginerror'));
                 }
             },
-            clearPass(){
-                this.value2=0;
-                this.level="";
-            }
-        },
+			
+			//打开密码生成器
+			passwordGenerator() {
+			   this.dialogPasswordGenerator = true;
+			   this.percentage = 0;
+			},
+			//子组件关闭后还原dialogPasswordGenerator为false
+			closedialog(data){
+				this.dialogPasswordGenerator=data;
+			},
+			//密码器赋值
+			getPassword(data){
+				this.ruleForm.password = data;
+				this.ruleForm.repassword= data;
+				this.dialogclose=true;
+			},
+			//子组件关闭后还原dialogclose值为false
+			recovertag(data){
+				this.dialogclose=data;
+			}
+        }
     }
 </script>
 

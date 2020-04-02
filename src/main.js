@@ -14,12 +14,19 @@ import IndexDB from "./indexDB";
 import fileIndexDB from "./fileIndexDB";
 let test=require("./assets/test");
 import createPassword from '../src/createPassword'
+import vueCanvasNest from 'vue-canvas-nest';
+import passwordGenerator from "@/components/PasswordGenerator";
+	
+	
 window.myIpfs=myIpfs;
-
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
 //https://element.eleme.cn/#/zh-CN/component/quickstart
 Vue.use(ElementUI);
+
+//components
+Vue.component("vueCanvasNest",vueCanvasNest)
+Vue.component("passwordGenerator",passwordGenerator)
 
 
 //实例化vue-i18n
@@ -50,6 +57,9 @@ if (typeof window.require === 'function') {
     window.IpcRenderer = window.require('electron').ipcRenderer;
     Vue.prototype.$IpcRenderer = window.IpcRenderer;
 }
+
+
+
 
 new Vue({
     i18n,
