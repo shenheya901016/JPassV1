@@ -2102,6 +2102,9 @@ const words = [
 ];
 
 let createPassword = {
+	percentage:0,
+	status:"exception",
+	level:"",
     /**
      * 密码生成器 genCrypt( type)   return  密码  。参数 type : 1.便于记忆 2.仅字母数字 ，3.完全随机 ，4，仅允许数字
      * @param type
@@ -2135,7 +2138,7 @@ let createPassword = {
                 password += chars[Math.floor(Math.random() * 10)];
             }
         }
-        console.log(password);
+        // console.log(password);
         return password;
     },
     /**
@@ -2190,7 +2193,43 @@ let createPassword = {
         let num = Math.pow(pwdNum, p.length);
         level = /*'密码长度:' + p.length + ' 强度:' + pwdNum +*/ '预计破解用时:' + formatTime(num / (1024 * 1024 * 1024 * 2.4 * 2));
         return level;
-    }
+    },
+	
+	/**
+	 * 获取进度条百分比
+	 * @param pwd
+	 * @return {string}
+	 */
+	getPercentage(pwd){
+	    let level=this.cryptLevel(pwd);
+		if (level.indexOf("世纪") !== -1) {
+		    this.percentage = 100;
+			this.status="success"
+		} else if (level.indexOf("年") !== -1) {
+		    this.percentage = 80;
+		    this.status="success"
+		} else if (level.indexOf("月") !== -1) {
+		    this.status="success"
+			this.percentage = 60;
+		} else if (level.indexOf("周") !== -1) {
+		    this.percentage = 40;
+		    this.status="warning"
+		} else if (level.indexOf("天") !== -1 ||level.indexOf("分") !== -1 ||level.indexOf("秒") !== -1) {
+		    this.percentage = 20;
+		    this.status="exception"
+		} else if(level.indexOf("瞬间") !== -1 && pwd!=""){
+		    this.percentage =10;
+		    this.status="exception"
+		}else{
+		    this.percentage =0;
+			this.status="exception"
+		    this.level="";
+		}
+		// console.log("percentage:"+this.percentage);
+		// console.log("status:"+this.status);
+		
+	}
+	
 };
 
 //console.log(cryptLevel(genCrypt(1, 8)));
