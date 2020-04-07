@@ -4532,13 +4532,11 @@ import low from 'lowdb';
 		
 		//主密码器
 		passwordGeneratorMain(){
-			console.log(2222);
             this.dialogPasswordGeneratorMain = true;
 		    this.percentage = 0;
        },  
 	   //子组件关闭后还原dialogPasswordGenerator为false
 	   closedialogMain(data){
-		console.log(data+111);
 	   	this.dialogPasswordGeneratorMain=data;
 	   },
 
