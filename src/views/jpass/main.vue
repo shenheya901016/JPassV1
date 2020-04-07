@@ -87,7 +87,7 @@
         <li>
           <el-button
             style="border:0;padding: 5px 5px;"
-            @click="passwordGenerator()"
+            @click="passwordGeneratorMain()"
             ><img
               style="top:-2px;height: 25px;width: 25px;"
               src="./img/钥匙.svg"
@@ -1630,6 +1630,12 @@
         :dialogclose="dialogclose"
         @recoverdialogtag="recovertag"
       ></passwordGenerator>
+	  <!--主密码生成器-->
+	  <passwordGeneratorMain
+	    :dialogopenMain="dialogPasswordGeneratorMain"
+	    @dialogPasswordGeneratorcloseMain="closedialogMain"
+		:dialogcloseMain="dialogcloseMain"
+	  ></passwordGeneratorMain>
       <!--图片库-->
       <el-dialog
         :title="$t('main.symbol')"
@@ -2819,7 +2825,9 @@ import low from 'lowdb';
            return {
 			temppassword:"",
 			dialogPasswordGenerator: false,// 密码生成器弹出框
+			dialogPasswordGeneratorMain: false,//主密码生成器弹出框
 			dialogclose:false,//关闭密码器指示
+			dialogcloseMain:false,//关闭密码器指示
                // //密码器
                // crypt: "",
                // level: "",
@@ -2839,7 +2847,7 @@ import low from 'lowdb';
                color: "#999999",
                dialogSymbolcolor: false,//图片库颜色
                dialogSymbol: false,//图片库
-               dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
+               // dialogVisiblePasswordGenerator: false,// 密码生成器弹出框
                dialogVisible: false,//密码锁定弹出框
                dialogVisible2: false,//增加文件夹弹出框
                dialogVisibledDirectory: false,//删除文件夹弹出框
@@ -4521,9 +4529,20 @@ import low from 'lowdb';
 		recovertag(data){
 			this.dialogclose=data;
 		}, 
-
 		
-       }
+		//主密码器
+		passwordGeneratorMain(){
+			console.log(2222);
+            this.dialogPasswordGeneratorMain = true;
+		    this.percentage = 0;
+       },  
+	   //子组件关闭后还原dialogPasswordGenerator为false
+	   closedialogMain(data){
+		console.log(data+111);
+	   	this.dialogPasswordGeneratorMain=data;
+	   },
+
+	  }
    }
 </script>
 <style>
