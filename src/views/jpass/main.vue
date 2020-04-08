@@ -2819,6 +2819,7 @@ import low from 'lowdb';
                    }
                });
            }
+
            this.initialize();
            this.unshow();
        }, data() {
@@ -2835,7 +2836,7 @@ import low from 'lowdb';
                showPassword: "",//是否显示密码
                savePassword: "",
                savePasswords: [],
-               showpassword: "",
+               // showpassword: "",
                locktimedisabled: "",
                showpass: "", //弹出框
                ImageBase64: "",
@@ -3427,7 +3428,7 @@ import low from 'lowdb';
                    this.dialogVisibledDirectory = false;
                    this.getdirectory();
                } else if (type == "project") {
-				 
+				   var projects = this.db.get("project").value();
                    this.db.get("project").find({id: this.delobj.id}).set('isDel', true).write();
                    this.db.set('version', new Date().valueOf()).write();
 				   this.currentNote=-1;
@@ -3656,6 +3657,7 @@ import low from 'lowdb';
                    this.dialogSynchronization = true;
                    console.log("机器码相同");
                }
+			    this.updatesetting();
            },
            async synchronization() {
                var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -4101,6 +4103,7 @@ import low from 'lowdb';
            }, //启动初始化设置参数
            updatesetting() {
                var setting = this.db.get("settings").value();
+			   	console.log(setting);
                this.systemlock = setting.systemlock;
                if (this.systemlock) {
                    this.locktimedisabled = false;
@@ -4561,3 +4564,4 @@ import low from 'lowdb';
 	font-size: 10px;
 }
 </style>
+<!--  -->
