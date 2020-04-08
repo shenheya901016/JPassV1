@@ -2828,11 +2828,6 @@ import low from 'lowdb';
 			dialogPasswordGeneratorMain: false,//主密码生成器弹出框
 			dialogclose:false,//关闭密码器指示
 			dialogcloseMain:false,//关闭密码器指示
-               // //密码器
-               // crypt: "",
-               // level: "",
-               // radio: 3,
-               // value2: 0, //系统设置配置项
                systemlock: "",//锁定开关
                locktime: "",//自动锁定时间
                languages: [{value: '中文', label: '中文'}, {value: 'English', label: 'English'}],
@@ -2874,7 +2869,7 @@ import low from 'lowdb';
                loginObj: this.$JSON5.parse(sessionStorage.getItem("userkeyObj")),
                currentProject: -1,//大于li 总数量，如果初始为""，默认选择第0个元素
                currentDirectory: -1,
-               currentNote: -1,
+               currentNote:-1,
                currentTemplate: -1,
                DProject: '',
                DDirectory: '',
@@ -3432,14 +3427,15 @@ import low from 'lowdb';
                    this.dialogVisibledDirectory = false;
                    this.getdirectory();
                } else if (type == "project") {
-                   // this.db.get("project").remove({id: id}).write();
-                   // this.delobj.isDel = true;
+				 
                    this.db.get("project").find({id: this.delobj.id}).set('isDel', true).write();
                    this.db.set('version', new Date().valueOf()).write();
+				   this.currentNote=-1;
                    this.isDisabled = true;
                    this.dialogVisibledProject = false;
                    this.projectEvent = "";
-                   this.getdirectory();
+				   this.getdirectory();
+                   this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                } else if (type == "template") {
                    // this.db.get("templates").remove({id: id}).write();
                    //this.delobj.isDel = true;
@@ -3449,8 +3445,10 @@ import low from 'lowdb';
                    this.projects = this.db.get("templates").value();
                    this.dialogVisibledTemplate = false;
                    this.projectEvent = "";
+				   this.isDisabled = true;
                    this.getdirectory();
                    this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
+				   this.currentNote=-1;
                }
            }, //点击目录生成projects列表
            notesBytargeId(obj) {
@@ -4203,7 +4201,6 @@ import low from 'lowdb';
                if (obj.isDel) {
                    return false;
                }
-               console.log("收藏");
                obj.modelsId.push("scj");
                if (obj.modelsId.indexOf("wbj") != -1) {//有未标记项，删除
                    obj.modelsId = obj.modelsId.filter(function (item) {
@@ -4225,7 +4222,6 @@ import low from 'lowdb';
                if (obj.isDel) {
                    return false;
                }
-               console.log("取消收藏");
                //删除指定项
                obj.modelsId = obj.modelsId.filter(function (item) {
                    return item !== "scj"
@@ -4288,6 +4284,8 @@ import low from 'lowdb';
                }
                this.dialogRecover = false;
                this.getdirectory();
+			   this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+			   this.currentNote=-1;
            },
            //清空垃圾箱
            clearTrash(){
