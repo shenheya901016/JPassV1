@@ -15,7 +15,7 @@
     "file-saver": "^2.0.2",
     "ipfslib": "file:./lib/ipfslib-1.0.0.tgz",
     "jcc_wallet": "^1.0.3",
-    "jpass-util": "file:lib/jpass-util-1.0.1.tgz",
+    "jpass-util": "file:./lib/jpass-util-1.0.2.tgz",
     "jquery": "^2.2.3",
     "js-md5": "^0.7.3",
     "json5": "^2.1.0",
