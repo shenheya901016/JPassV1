@@ -138,7 +138,7 @@
                              </tr>
                              <tr>
                                  <td colspan="3">
-                                     <button type="button" @click="add('models')">增加</button>
+                                     <button type="button" @click="jcc_ipfs('models')">增加</button>
                                  </td>
                              </tr>-->
                              </tbody>
@@ -168,10 +168,10 @@
             return {all, model};
         },
         methods: {
-            add(type) {
+            jcc_ipfs(type) {
                 console.log(type);
                 console.log(JSON.stringify(model));
-                this.$ipfs.Ipfs.add(JSON.stringify(model), type);
+                this.$ipfs.Ipfs.jcc_ipfs(JSON.stringify(model), type);
             }
         }
     };

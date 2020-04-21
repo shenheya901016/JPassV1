@@ -1,5 +1,6 @@
 import {IpfsRemote} from "ipfslib";
 import myIpfs from '../src/myIpfs';
+import axios from "axios"
 
 const fs = require("fs")
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]});
@@ -85,6 +86,19 @@ describe("test Ipfs", async function () {
             } else {
                 console.log("该账号向IPFS中写入数据失败！");
             }
+        });
+        it('根据钱包地址得到公钥', function () {
+            let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
+            console.log(key.publicKey)
+        });
+
+        it('http请求',async function () {
+            let result;
+            await axios.get("http://127.0.0.1:1337/api/v0/read?filePath=/asdasd.txt&address=j4M4AoSi522XxNpywfyBahmjzQihc4EegL").
+            then((response) => {
+                result = response.data
+            })
+            console.log(result)
         });
     });
     /*describe("test get tokens", function () {

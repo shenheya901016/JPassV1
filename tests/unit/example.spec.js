@@ -1,6 +1,6 @@
-import { expect } from "chai";
-import { shallowMount } from "@vue/test-utils";
-import HelloWorld from "@/components/HelloWorld.vue";
+let  expect = require('chai').expect;;
+let  shallowMount = require('@vue/test-utils').expect;
+let  HelloWorld = require('@/components/HelloWorld.vue').expect;
 
 describe("HelloWorld.vue", () => {
   it("renders props.msg when passed", () => {

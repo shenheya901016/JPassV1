@@ -105,6 +105,7 @@ let myIpfs = {
     },
     /**
      * 初始化用户数据
+     * @param type
      * @param {string} userJID 用户钱包地址
      * @param userSecret 用户钱包秘钥
      * @param operatorJID 运营商钱包地址

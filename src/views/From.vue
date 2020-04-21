@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <div>
-            <input type="button" value="+" @click="add">
+            <input type="button" value="+" @click="jcc_ipfs">
             <input type="button" value="-" v-on:click="sub">
         </div>
         <div style="margin-top: 10px" v-for="(item,index) in list">
@@ -29,7 +29,7 @@
         },
         components: {},
         methods: {
-            add() {
+            jcc_ipfs() {
                 let id = this.list[this.list.length-1].id;
 
                 this.list.push({id: id+1, name: 'zs' + id});
