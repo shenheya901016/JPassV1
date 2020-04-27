@@ -188,9 +188,6 @@
                     this.$router.push("/jpass/mnemonicimport");
                 }
             },
-            login() {
-                this.$router.push("/index");
-            },
             async login() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();

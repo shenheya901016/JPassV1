@@ -8,7 +8,7 @@ import VueI18n from 'vue-i18n';
 import ElementLocale from 'element-ui/lib/locale';
 //const JPassUtil = require("./JPassUtil");
 import JPassUtil from "jpass-util";
-import myIpfs from './myIpfs';
+import myIpfs from '@/jcc_ipfs.js';
 import Lowdb from "lowdb";
 import IndexDB from "./indexDB";
 import fileIndexDB from "./fileIndexDB";
