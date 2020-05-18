@@ -17,6 +17,8 @@ function strlen(str) {
     return len;
 }
 
+const util = require('util');
+
 let jcc_ipfs = {
     Ipfs: {
         /**
@@ -51,11 +53,13 @@ let jcc_ipfs = {
                 }  //req.body
                 // body: filedata   // bin data
             };
+            let a = 11;
             request.post(options, function (error, response, body) {
                 //console.info('response:' + JSON.stringify(response));
                 //console.info("statusCode:" + response.statusCode)
-                console.info(body);
+                console.info("statusCode:" + response.body)
             });
+            console.info(a);
         },
         /**
          * 删除文件
@@ -120,6 +124,31 @@ let jcc_ipfs = {
                 //console.info("statusCode:" + response.statusCode)
                 console.info(body);
             });
+        },
+        async writeTest(secret, data, filePath) {
+            let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
+            let privateKey = deriveKeyPair.privateKey;
+            let publicKey = deriveKeyPair.publicKey;
+            let size = strlen(data);
+            let md5 = "md5";
+            let timestamp = new Date().getTime()
+            let sign = JPassUtil.Wallet.sign(privateKey, md5 + size + filePath + timestamp)
+            var url = "http://localhost:1337/api/v0/write";
+            const getPromise = util.promisify(request.post);
+            let result = await getPromise(url, {
+                form: {
+                    data: data,
+                    size: size,
+                    timestamp: timestamp,
+                    md5: md5,
+                    filePath: filePath,
+                    publicKey: publicKey,
+                    sign: sign,
+                }
+            });
+            // 可以加入 try catch 捕获异常  也可以加 .catch()
+            console.log(JSON.parse(result.body).status);
+            return JSON.parse(result.body).status;
         }
     }
 }

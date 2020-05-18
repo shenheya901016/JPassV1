@@ -54,6 +54,10 @@ Vue.prototype.$Uuidv1 = require('uuid/v1');
 Vue.prototype.$myIpfs = myIpfs;
 Vue.prototype.$test = test;
 Vue.prototype.$Lowdb = source => Lowdb(new IndexDB(source));
+
+import Jcc_ipfs from './jcc_ipfs'
+
+Vue.prototype.$Ipfs =Jcc_ipfs;
 //Vue.prototype.$fileLowdb = source => Lowdb(new fileIndexDB(source));
 if (typeof window.require === 'function') {
     window.IpcRenderer = window.require('electron').ipcRenderer;

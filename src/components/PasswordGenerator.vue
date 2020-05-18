@@ -57,31 +57,6 @@
 				this.$createPassword.getPercentage(this.crypt);
 				this.percentage = this.$createPassword.percentage;
 				this.status = this.$createPassword.status;
-				// console.log(this.percentage);
-				// console.log(this.status);
-		   //      if (this.level.indexOf("世纪") !== -1) {
-		   //          this.percentage = 100;
-					// this.status="success"
-		   //      } else if (this.level.indexOf("年") !== -1) {
-		   //          this.percentage = 80;
-		   //          this.status="success"
-		   //      } else if (this.level.indexOf("月") !== -1) {
-		   //          this.status="success"
-					// this.percentage = 60;
-		   //      } else if (this.level.indexOf("周") !== -1) {
-		   //          this.percentage = 40;
-		   //          this.status="warning"
-		   //      } else if (this.level.indexOf("天") !== -1 ||this.level.indexOf("分") !== -1 || this.level.indexOf("秒") !== -1) {
-		   //          this.percentage = 20;
-		   //          this.status="exception"
-		   //      } else if(this.level.indexOf("瞬间") !== -1 && this.value2!=""){
-		   //          this.percentage =10;
-		   //          this.status="exception"
-		   //      }else{
-		   //          this.percentage =0;
-					// this.status="exception"
-		   //          this.level="";
-		   //      }
 		    },
 			dialogopen: function(data){ 
 				this.dialogVisiblePasswordGenerator=data
@@ -94,7 +69,6 @@
 				}
 			}
 		},
-
 	};
 </script>
 

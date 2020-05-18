@@ -1,6 +1,5 @@
 let JPassUtil = require("jpass-util");
 let request = require("request");
-const util = require('util');
 
 /*计算输入的字节*/
 function strlen(str) {
@@ -18,6 +17,8 @@ function strlen(str) {
     return len;
 }
 
+const util = require('util');
+
 let jcc_ipfs = {
     Ipfs: {
         /**
@@ -28,17 +29,20 @@ let jcc_ipfs = {
          * @param filePath  上传路径
          * @param timestamp 时间戳
          */
-       async write(secret, data, filePath) {
+        write(secret, data, filePath) {
             let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
             let privateKey = deriveKeyPair.privateKey;
             let publicKey = deriveKeyPair.publicKey;
             let size = strlen(data);
             let md5 = "md5";
             let timestamp = new Date().getTime()
-            let sign = JPassUtil.Wallet.sign(privateKey, md5 + size + filePath + timestamp);
-			let url = "http://localhost:8080/ipfs/api/v0/write";
-			const getPromise = util.promisify(request.post);
-			let result = await getPromise(url, {'form':{// form-data
+            let sign = JPassUtil.Wallet.sign(privateKey, md5 + size + filePath + timestamp)
+            let options = {
+                url: "http://localhost:1337/api/v0/write",
+                qs: {//query
+                },
+                headers: {},//req.headers
+                form: {// form-data
                     data: data,
                     size: size,
                     timestamp: timestamp,
@@ -46,58 +50,107 @@ let jcc_ipfs = {
                     filePath: filePath,
                     publicKey: publicKey,
                     sign: sign,
-                 }});  //req.body);
-			    // 可以加入 try catch 捕获异常  也可以加 .catch()
-			    // console.log("result" , result.body);
-				return result.body
+                }  //req.body
+                // body: filedata   // bin data
+            };
+            let a = 11;
+            request.post(options, function (error, response, body) {
+                //console.info('response:' + JSON.stringify(response));
+                //console.info("statusCode:" + response.statusCode)
+                console.info("statusCode:" + response.body)
+            });
+            console.info(a);
         },
         /**
          * 删除文件
          * @param secret 密钥
          * @param filePath 文件路径
          */
-        async remove(secret, filePath) {
+        remove(secret, filePath) {
             let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
             let privateKey = deriveKeyPair.privateKey;
             let publicKey = deriveKeyPair.publicKey;
             let timestamp = new Date().getTime();
-            let sign = JPassUtil.Wallet.sign(privateKey, '' + '' + filePath + timestamp);
-			const getPromise = util.promisify(request.post);
-			let url = "http://localhost:8080/ipfs/api/v0/remove";
-			let result = await getPromise(url, {form: {
+            let sign = JPassUtil.Wallet.sign(privateKey, '' + '' + filePath + timestamp)
+            let options = {
+                url: 'http://localhost:1337/api/v0/remove',
+                headers: {},
+                form: {
                     filePath: filePath,
                     timestamp: timestamp,
                     sign: sign,
                     publicKey: publicKey
-                }});
-			    // 可以加入 try catch 捕获异常  也可以加 .catch()
-			    console.log("result" , result.body);
+                }//req.body
+            };
+
+            request.post(options, function (error, response, body) {
+                //console.info('response:' + JSON.stringify(response));
+                //console.info("statusCode:" + response.statusCode)
+                console.info(body);
+            });
         },
         /**
          * 读取文件
          * @param filePath 文件路径
          * @param address 钱包地址
          */
-        async read(filePath, address) {
-			const getPromise = util.promisify(request.get);
-            let url= 'http://localhost:8080/ipfs/api/v0/read?filePath=' + filePath + '&address=' + address;
-			let result = await getPromise(url);
-			return result.body;
+        read(filePath, address) {
+            let options = {
+                url: 'http://localhost:1337/api/v0/read?filePath=' + filePath + '&address=' + address
+            };
+            request.get(options, function (err, response, body) {
+                console.info(body);
+            });
         },
         /**
          * 列出path下目录文件
          * @param path 路径 可以为空
          * @param address 钱包地址
          */
-       async list(path, address) {
-			const getPromise = util.promisify(request.post);
-			let url ="http://localhost:8080/ipfs/api/v0/list";
-			let result=await getPromise(url, {form: {
+        list(path, address) {
+            let options = {
+                url: "http://localhost:1337/api/v0/list",
+                qs: {//query
+                },
+                headers: {},//req.headers
+                form: {// form-data
                     address: address,
                     path: path
-                }});
-            console.log("result" , result.body); 
+                }  //req.body
+                // body: filedata   // bin data
+            };
+            request.post(options, function (error, response, body) {
+                //console.info('response:' + JSON.stringify(response));
+                //console.info("statusCode:" + response.statusCode)
+                console.info(body);
+            });
         },
+        async writeTest(secret, data, filePath) {
+            let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
+            let privateKey = deriveKeyPair.privateKey;
+            let publicKey = deriveKeyPair.publicKey;
+            let size = strlen(data);
+            let md5 = "md5";
+            let timestamp = new Date().getTime()
+            let sign = JPassUtil.Wallet.sign(privateKey, md5 + size + filePath + timestamp)
+            let url = "http://localhost:8081/ipfs/write";
+            const getPromise = util.promisify(request.post);
+            let result = await getPromise(url, {
+                form: {
+                    data: data,
+                    size: size,
+                    timestamp: timestamp,
+                    md5: md5,
+                    filePath: filePath,
+                    publicKey: publicKey,
+                    sign: sign,
+                }
+            });
+            console.log(result);
+            // 可以加入 try catch 捕获异常  也可以加 .catch()
+            console.log(JSON.parse(result.body).status);
+            return JSON.parse(result.body).status;
+        }
     }
 }
-module.exports = jcc_ipfs;
+export default jcc_ipfs;

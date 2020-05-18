@@ -13,13 +13,13 @@ module.exports = {
     },
     devServer: {
         /*proxy: { // 配置跨域
-            '/jsonrpc': {
+            '/ipfs': {
                 //要访问的跨域的api的域名
-                target: 'http://139.198.191.254:8545/v1/jsonrpc',
+                target: 'http://localhost:1337/api/v0',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {
-                    '^/jsonrpc': ''
+                    '^/ipfs': ''
                 }
             }
         }*/
@@ -43,7 +43,16 @@ module.exports = {
 		        pathRewrite: {
 		            '^/ipfs':'/' 
 		        }
-		    }
+		    },
+            '/pay': {
+                //要访问的跨域的api的域名
+                target: 'http://localhost:8080/pay2',
+                ws: true,
+                changOrigin: true,
+                pathRewrite: {
+                    '^/pay':'/'
+                }
+            }
 		}
     }
 };
