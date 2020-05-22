@@ -17,6 +17,7 @@ import createPassword from '../src/createPassword'
 import vueCanvasNest from 'vue-canvas-nest';
 import passwordGenerator from "@/components/PasswordGenerator";
 import passwordGeneratorMain from "@/components/PasswordGeneratorMain";
+import pay from "@/components/Pay";
 	
 	
 window.myIpfs=myIpfs;
@@ -29,6 +30,7 @@ Vue.use(ElementUI);
 Vue.component("vueCanvasNest",vueCanvasNest)
 Vue.component("passwordGenerator",passwordGenerator)
 Vue.component("passwordGeneratorMain",passwordGeneratorMain)
+Vue.component("pay",pay)
 
 
 //实例化vue-i18n
