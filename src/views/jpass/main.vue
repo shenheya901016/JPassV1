@@ -95,7 +95,7 @@
             <li>
                 <el-button
                         style="border:0;padding: 5px 5px;"
-                        @click="dialogVisiblePay=true"
+                        @click="openpay()"
                 ><img
                         style="top:-2px;height: 25px;width: 25px;"
                         src="./img/ICON-SCQ.svg"
@@ -1648,6 +1648,40 @@
                 @dialogPasswordGeneratorcloseMain="closedialogMain"
                 :dialogcloseMain="dialogcloseMain"
         ></passwordGeneratorMain>
+
+
+    <!--支付-->
+        <pay :dialogopen="dialogPayGenerator"
+             @dialogPayGeneratorclose="closedialogPay">
+
+        </pay>
+         <el-dialog  :visible.sync="dialogVisiblePay">
+            <el-tabs type="border-card">
+                <el-tab-pane label="购买JPassword">
+                    <el-container>
+                        <!-- <el-header>购买JPassword</el-header> -->
+                        <el-main>
+                            <el-row :gutter="20">
+                                <el-col :span="6" style="border:1px solid black;height:25vh">
+                                    <div style="border:1px solid black;height:5vh">
+                                        订阅版
+                                    </div>
+                                    <div id="1" class="" @click="chooseProduct(1)">
+                                        购买商品信息
+                                    </div>
+                                </el-col>
+
+                            </el-row>
+                        </el-main>
+                        <el-footer>
+                            <el-button @click="pay" type="danger">立即付款</el-button>
+                        </el-footer>
+                    </el-container>
+                </el-tab-pane>
+            </el-tabs>
+        </el-dialog> 
+
+
         <!--图片库-->
         <el-dialog
                 :title="$t('main.symbol')"
@@ -2808,38 +2842,7 @@
                 />
             </div>
         </el-dialog>
-        <!--支付-->
-        <el-dialog title="支付" :visible.sync="dialogVisiblePay">
-            <el-tabs type="border-card">
-                <el-tab-pane label="支付宝">
-                    <el-container>
-                        <el-header>购买Jpassword</el-header>
-                        <el-main>
-                            <el-row :gutter="20">
-                                <el-col :span="6">
-                                    <div id="1" class="grid-content bg-purple" @click="chooseProduct(1)">
-                                        购买商品信息
-                                    </div>
-                                </el-col>
-                                <el-col :span="6">
-                                    <div class="grid-content bg-purple"></div>
-                                </el-col>
-                                <el-col :span="6">
-                                    <div class="grid-content bg-purple"></div>
-                                </el-col>
-                                <el-col :span="6">
-                                    <div class="grid-content bg-purple"></div>
-                                </el-col>
-                            </el-row>
-                        </el-main>
-                        <el-footer>
-                            <el-button @click="pay" type="danger">立即付款</el-button>
-                        </el-footer>
-                    </el-container>
-                </el-tab-pane>
-                <el-tab-pane label="微信">角色管理</el-tab-pane>
-            </el-tabs>
-        </el-dialog>
+      
     </aside>
     </body>
 </template>
@@ -2872,6 +2875,7 @@
         },
         data() {
             return {
+                dialogPayGenerator:false,//支付页面弹出框
                 product: "product",
                 dialogVisiblePay: false,
                 temppassword: "",
@@ -4641,6 +4645,19 @@
             },
 
 
+            //打开支付页面
+             openpay(){
+                this.dialogPayGenerator=true;
+
+             },
+            //子组件关闭后还原dialogPayGenerator为false
+            closedialogPay(data) {
+                this.dialogPayGenerator = data;
+            },
+
+
+
+
         },
     }
 </script>
@@ -4701,11 +4718,10 @@
     .el-row {
         margin-bottom: 20px;
 
-    &
-    :last-child {
-        margin-bottom: 0;
     }
 
+    :last-child {
+        margin-bottom: 0;
     }
 
     .el-col {
@@ -4733,5 +4749,7 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
+
+
+  
 </style>
-<!--  -->
