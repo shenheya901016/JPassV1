@@ -7,7 +7,7 @@ let request = require("request");
 
 describe('jcc_ipfs测试', async function () {
     it('写文件', async function () {
-        await Jcc_ipfs.Ipfs.writeTest("sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h", "测试数据", "/mian.txt");
+        await Jcc_ipfs.Ipfs.write("sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h", "测试数据", "/mian.txt");
     });
     it('读文件内容', function () {
         Jcc_ipfs.Ipfs.read("/test.txt", "j4M4AoSi522XxNpywfyBahmjzQihc4EegL");

@@ -41,12 +41,12 @@ module.exports = {
 		        ws: true,
 		        changOrigin: true,
 		        pathRewrite: {
-		            '^/ipfs':'/' 
+		            '^/ipfs':'/'
 		        }
 		    },
             '/pay': {
                 //要访问的跨域的api的域名
-                target: 'http://localhost:8080/pay2',
+                target: 'http://47.103.65.5:9527/pay',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {
