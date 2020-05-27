@@ -1650,38 +1650,10 @@
         ></passwordGeneratorMain>
 
 
-    <!--支付-->
+        <!--支付-->
         <pay :dialogopen="dialogPayGenerator"
              @dialogPayGeneratorclose="closedialogPay">
-
         </pay>
-         <el-dialog  :visible.sync="dialogVisiblePay">
-            <el-tabs type="border-card">
-                <el-tab-pane label="购买JPassword">
-                    <el-container>
-                        <!-- <el-header>购买JPassword</el-header> -->
-                        <el-main>
-                            <el-row :gutter="20">
-                                <el-col :span="6" style="border:1px solid black;height:25vh">
-                                    <div style="border:1px solid black;height:5vh">
-                                        订阅版
-                                    </div>
-                                    <div id="1" class="" @click="chooseProduct(1)">
-                                        购买商品信息
-                                    </div>
-                                </el-col>
-
-                            </el-row>
-                        </el-main>
-                        <el-footer>
-                            <el-button @click="pay" type="danger">立即付款</el-button>
-                        </el-footer>
-                    </el-container>
-                </el-tab-pane>
-            </el-tabs>
-        </el-dialog> 
-
-
         <!--图片库-->
         <el-dialog
                 :title="$t('main.symbol')"
@@ -2842,7 +2814,7 @@
                 />
             </div>
         </el-dialog>
-      
+
     </aside>
     </body>
 </template>
@@ -2851,6 +2823,7 @@
     import LocalStorage from 'lowdb/adapters/LocalStorage';
     import password from '../../password.js';
     import ipfs from '@/jcc_ipfs.js'
+
     let request = require("request");
 
     export default {
@@ -2875,7 +2848,7 @@
         },
         data() {
             return {
-                dialogPayGenerator:false,//支付页面弹出框
+                dialogPayGenerator: false,//支付页面弹出框
                 product: "product",
                 dialogVisiblePay: false,
                 temppassword: "",
@@ -3171,7 +3144,7 @@
                 }
 
             },
-            pay(){
+            pay() {
                 let options = {
                     url: "http://localhost:8081/pay",
                     form: {// form-data
@@ -4646,16 +4619,14 @@
 
 
             //打开支付页面
-             openpay(){
-                this.dialogPayGenerator=true;
+            openpay() {
+                this.dialogPayGenerator = true;
 
-             },
+            },
             //子组件关闭后还原dialogPayGenerator为false
             closedialogPay(data) {
                 this.dialogPayGenerator = data;
             },
-
-
 
 
         },
@@ -4751,5 +4722,4 @@
     }
 
 
-  
 </style>
