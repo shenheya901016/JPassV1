@@ -148,9 +148,6 @@
 </script>
 <style scoped>
 
-    @import "/views/jpass/css/base.css";
-    @import "/views/jpass/css/css/sy.css";
-
     .paybox {
         height: 23vh;
         width: 10vw;
