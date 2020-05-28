@@ -91,7 +91,6 @@
                 />{{ $t("main.PasswordGenerator") }}
                 </el-button>
             </li>
-
             <li>
                 <el-button
                         style="border:0;padding: 5px 5px;"
@@ -104,22 +103,16 @@
                 </el-button>
             </li>
         </ul>
-        <div class="hr" style="margin-left: 80%;position: absolute;width: 18%">
-            <a style="margin:0;width: 30%;" class="mr4w" @click="openSetting">
-                <img src="./img/icon_sz.svg" alt=""/>
+        <div class="hr" style="width: 40%;">
+            <a style="width: 50px;" @click="openSetting">
+                <img style="height:30px;" src="./img/icon_sz.svg" alt=""/>
             </a>
-            <div class="touxiang" style="margin:0;">
-                <img src="./img/tx.svg" @click="myInfo"/>
-                <!--<div>-->
-                <!--<a @click="myInfo">{{username}}</a>-->
-                <!--</div>-->
+            <div>
+                <img style="height:50px;" src="./img/tx.svg" @click="myInfo" alt=""/>
             </div>
-            <el-button style="border:0;height: 50px;margin: auto 0" @click="logOut"
-            ><img
-                    style="top:-2px;height: 25px;width: 25px;"
-                    src="./img/退出登录.svg"
-                    alt=""
-            /></el-button>
+            <el-button style="border:0;height: 50px;margin: auto 0;" @click="logOut">
+                <img style="top:-2px;height: 25px;width: 25px;" src="./img/退出登录.svg" alt=""/>
+            </el-button>
         </div>
     </header>
     <!-- 侧边栏 -->

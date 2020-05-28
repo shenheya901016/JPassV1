@@ -5,9 +5,9 @@ module.exports = {
     configureWebpack: {
         plugins: [
             new webpack.ProvidePlugin({
-                $:"jquery",
-                jQuery:"jquery",
-                "windows.jQuery":"jquery"
+                $: "jquery",
+                jQuery: "jquery",
+                "windows.jQuery": "jquery"
             })
         ]
     },
@@ -34,25 +34,26 @@ module.exports = {
         //         }
         //     }
         // },
-		proxy: { // 配置跨域
-		    '/ipfs': {
-		        //要访问的跨域的api的域名
-		        target: 'http://localhost:1337',
-		        ws: true,
-		        changOrigin: true,
-		        pathRewrite: {
-		            '^/ipfs':'/'
-		        }
-		    },
-            '/pay': {
+        proxy: { // 配置跨域
+            '/ipfs': {
                 //要访问的跨域的api的域名
-                target: 'http://47.103.65.5:9527/pay',
+                target: 'http://localhost:1337',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {
-                    '^/pay':'/'
+                    '^/ipfs': '/'
+                }
+            },
+            '/alipay': {
+                //要访问的跨域的api的域名
+                target: 'http://47.103.65.5:9527/',
+                //target: 'http://127.0.0.1:9527/',
+                ws: true,
+                changOrigin: true,
+                pathRewrite: {
+                    '^/alipay': '/'
                 }
             }
-		}
+        }
     }
 };

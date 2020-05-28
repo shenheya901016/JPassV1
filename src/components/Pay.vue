@@ -81,23 +81,54 @@
                 this.content = paytemplate.content;
                 this.pay = paytemplate.pay;
             },
-            doPay(){
+            doPay() {
                 const loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 const address = loginObj.address;
                 let options = {
-                    url: "http://localhost:8080/pay",
+                    url: "http://localhost:8080/alipay/pay",
                     form: {
                         price: this.pay,
-                        user_wallet_address:address
+                        user_wallet_address: address
                     }
                 };
+                let out_trade_no;
+                let _this = this;
                 request.post(options, function (error, response, body) {
-                    const form = response.body;
+                    let form = response.body.split("#")[0];
+                    out_trade_no = response.body.split("#")[1];
+                    console.log(out_trade_no)
+                    const target = "target='_blank' ";
+                    let newFrom = form.slice(0, 6) + target + form.slice(6)
                     const div = document.createElement('div')
                     div.id = 'alipay'
-                    div.innerHTML = form
+                    div.innerHTML = newFrom
                     document.body.appendChild(div)
                     document.querySelector('#alipay').children[0].submit()
+                    _this.query(out_trade_no)
+                });
+            },
+            query(out_trade_no) {
+                let status;
+                let options = {
+                    url: "http://localhost:8080/alipay/query",
+                    form: {
+                        out_trade_no: out_trade_no,
+                    }
+                };
+                let _this = this;
+                request.post(options, function (error, response, body) {
+                    console.log(response.body)
+                    status = response.body;
+                    if (status==="TRADE_SUCCESS") {
+                        this.dialogVisiblePay=false;
+                        alert("充值成功！");
+                    } else{
+                        console.log("充值失败！")
+                        setTimeout(function () {
+                            let _out_trade_no = out_trade_no;
+                            _this.query(_out_trade_no)
+                        }, 5000);
+                    }
                 });
             }
         },
