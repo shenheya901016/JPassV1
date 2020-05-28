@@ -37,6 +37,11 @@
 </template>
 <script>
     const request = require("request");
+    let baserpcurl = "http://47.103.65.5:9527/";
+    //判断是否为开发者模式
+    if (process.env.NODE_ENV === "development") {
+        baserpcurl = '/alipay';
+    }
 
     export default {
         props: ["dialogopen", "dialogclose"],
@@ -85,7 +90,7 @@
                 const loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 const address = loginObj.address;
                 let options = {
-                    url: "http://localhost:8080/alipay/pay",
+                    url: baserpcurl + "pay",
                     form: {
                         price: this.pay,
                         user_wallet_address: address
@@ -110,7 +115,7 @@
             query(out_trade_no) {
                 let status;
                 let options = {
-                    url: "http://localhost:8080/alipay/query",
+                    url: baserpcurl + "query",
                     form: {
                         out_trade_no: out_trade_no,
                     }
@@ -119,10 +124,10 @@
                 request.post(options, function (error, response, body) {
                     console.log(response.body)
                     status = response.body;
-                    if (status==="TRADE_SUCCESS") {
-                        this.dialogVisiblePay=false;
+                    if (status === "TRADE_SUCCESS") {
+                        this.dialogVisiblePay = false;
                         alert("充值成功！");
-                    } else{
+                    } else {
                         console.log("充值失败！")
                         setTimeout(function () {
                             let _out_trade_no = out_trade_no;

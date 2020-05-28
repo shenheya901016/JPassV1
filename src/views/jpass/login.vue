@@ -161,8 +161,6 @@
                     return {value: item, label: item};
                 });
             }
-            let a = await this.$Ipfs.Ipfs.write("sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h", "测试数据", "/mian.txt")
-            console.log(a)
         },
         methods: {
             submitForm(formName) {

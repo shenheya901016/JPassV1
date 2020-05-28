@@ -2,6 +2,12 @@ let JPassUtil = require("jpass-util");
 let request = require("request");
 const util = require('util');
 
+let baserpcurl = "http://localhost:1337";
+//判断是否为开发者模式
+if (process.env.NODE_ENV === "development") {
+    baserpcurl = 'http://localhost:8080/ipfs';
+}
+
 /*计算输入的字节*/
 function strlen(str) {
     let len = 0;
@@ -36,7 +42,7 @@ let jcc_ipfs = {
     let md5 = "md5";
     let timestamp = new Date().getTime()
     let sign = JPassUtil.Wallet.sign(privateKey, md5 + size + filePath + timestamp);
-    let url = "http://localhost:8080/ipfs/api/v0/write";
+    let url = baserpcurl+"/api/v0/write";
     const getPromise = util.promisify(request.post);
     let result = await getPromise(url, {'form':{// form-data
         data: data,
@@ -80,7 +86,7 @@ async remove(secret, filePath) {
  */
 async read(filePath, address) {
     const getPromise = util.promisify(request.get);
-    let url= 'http://localhost:8080/ipfs/api/v0/read?filePath=' + filePath + '&address=' + address;
+    let url= baserpcurl+'/api/v0/read?filePath=' + filePath + '&address=' + address;
     let result = await getPromise(url);
     return result.body;
 },
@@ -91,7 +97,7 @@ async read(filePath, address) {
  */
 async list(path, address) {
     const getPromise = util.promisify(request.post);
-    let url ="http://localhost:8080/ipfs/api/v0/list";
+    let url =baserpcurl+"/api/v0/list";
     let result=await getPromise(url, {form: {
         address: address,
         path: path
