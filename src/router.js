@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import From from "./views/From.vue";
-import Register from "./views/register.vue";
+// import Register from "./views/register.vue";
 import Register1 from "./views/jpass/register.vue";
 import Mnemonicfind from "./views/jpass/mnemonicfind.vue";
 import Keystorefind from "./views/jpass/keystorefind.vue";
@@ -36,11 +36,11 @@ export default new Router({
             name: "from",
             component: From
         },
-        {
-            path: "/register",
-            name: "register",
-            component: Register
-        },
+        // {
+        //     path: "/register",
+        //     name: "register",
+        //     component: Register
+        // },
         {
             path: "/jpass/register",
             name: "register",
