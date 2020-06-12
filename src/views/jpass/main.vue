@@ -3057,11 +3057,19 @@
                         "isDel": false,
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
-                            "key": "Email",
+                            "key": "Website",
                             "type": "text",
                             "val": "",
-                            "tempkey": "Email"
-                        }, {
+                            "tempkey": "Website"
+                        }, 
+                        {
+                            "id": "fdbce150-fec4-18e9-bd32-854c67bf088b",
+                            "key": "Name",
+                            "type": "text",
+                            "val": "",
+                            "tempkey": "Name"
+                        },
+                        {
                             "id": "fdbce150-feb9-11e9-bd32-854c67bf088b",
                             "key": "Password",
                             "type": "password",
@@ -3160,6 +3168,7 @@
             },
             logOut() {
                 sessionStorage.removeItem("userkeyObj");
+                localStorage.removeItem("userkeyObj");
                 this.$router.push("/jpass/login");
             },
             //密码显示控制

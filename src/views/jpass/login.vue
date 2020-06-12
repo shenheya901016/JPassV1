@@ -227,6 +227,7 @@
                         bal: bal
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
+                    localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     //this.$message.success("用户登录成功！");
                     this.$router.push("/jpass/main");
                 } else {
