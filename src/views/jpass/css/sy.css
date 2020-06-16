@@ -164,7 +164,7 @@
 	float: left;
 	color: #333;
     text-align: left;
-    width: 13.5vw;
+    width: 200px;
 }
 .aside .nav ul.dh li i{
 	float: right;
@@ -174,7 +174,9 @@
 	text-align: center;
 	border-radius: 11.5px;
 	line-height: 23px;
-	margin-top: 7px;
+    margin-top: 7px;
+    position: absolute;
+    right: 2vw;
 }
 .aside .nav ul.dh li:nth-child(1){
 	background: url(../img/aside_icon1.svg) no-repeat left center;
@@ -213,6 +215,7 @@
 	border:1px solid #50A4FF !important;
 }
 .aside .nav ul.dh li:hover span{
+    width: 200px;
 	color: #046BDA;
 }
 .aside .nav ul.dh li:hover i{
@@ -271,7 +274,7 @@
 	float: left;
 	color: #333;
     text-align: left;
-    width: 13.5vw;
+    width: 200px;
 }
 .aside .nav ul.dhwjj li i{
     float: right;
@@ -282,6 +285,8 @@
     border-radius: 11.5px;
     line-height: 23px;
     margin-top: 7px;
+    position: absolute;
+    right: 2vw;
 }
 .aside .nav ul.dhwjj li:nth-child(4n+1){
 	background: url(../img/aside_wjj01.svg) no-repeat left 40%;
@@ -299,13 +304,13 @@
 	background: url(../img/aside_wjj04.svg) no-repeat left 40%;
 	background-size: 23px 23px;
 }
-.aside .nav ul.dhwjj li:hover span{
+/* .aside .nav ul.dhwjj li:hover span{
 	color: #046BDA;
 	background-color:#DCEDFF;
-}
+} */
 .aside .nav ul.dhwjj li:hover i{
 	color: #5F768B;
-	background-color: #DCEDFF;
+	/* background-color: #DCEDFF; */
 }
 .aside .nav ul.dhwjj li:hover{
 	color: #5F768B;
