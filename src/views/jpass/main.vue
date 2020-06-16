@@ -450,7 +450,7 @@
                 <!--<el-radio v-model="ruleForm.modelsType" label="directory" style="float:left;line-height: inherit">文件夹</el-radio>-->
                 <!--</el-form-item>-->
                 <el-form-item :label="$t('main.name')" prop="pName" style="">
-                    <el-input v-model="ruleForm.pName" style="width:100%;"></el-input>
+                    <el-input v-model.trim="ruleForm.pName" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item
                         label=""
@@ -611,7 +611,7 @@
             <input
                     type="text"
                     v-model="ruleFormAddProject.name"
-                    class="myInputTitle"
+                    class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"
             />
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
@@ -800,7 +800,7 @@
                         style="display: inline-block;"
                         type="primary"
                         size="small"
-                        @click="submitproject()"
+                        @click="submitproject()" :disabled="templatedisable"
                 >
                     {{ $t("main.okFormat") }}
                 </el-button>
@@ -830,7 +830,7 @@
             {{ $t("main.name") }}
           </span>
                 <span class="titleInputSpan">
-            <input type="text" v-model="editobject.name" class="myInputTitle"/>
+            <input type="text" v-model="editobject.name" class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1014,7 +1014,7 @@
                 </el-tab-pane>
             </el-tabs>
             <div style="margin-top:1vh;text-align: center">
-                <el-button size="small" type="primary" @click="editDo">{{
+                <el-button size="small" type="primary" :disabled="templatedisable" @click="editDo">{{
                     $t("main.submit")
                     }}
                 </el-button>
@@ -1040,11 +1040,7 @@
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
                 <span class="titleInputSpan">
-            <input
-                    type="text"
-                    v-model="ruleFormAddTemplate.name"
-                    class="myInputTitle"
-            />
+            <input v-model="ruleFormAddTemplate.name" class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')" />
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1196,7 +1192,7 @@
                 </el-tab-pane>
             </el-tabs>
             <div style="margin-top:1vh;text-align: center">
-                <el-button size="small" type="primary" @click="saveTemplate"
+                <el-button size="small" type="primary" @click="saveTemplate" :disabled="templatedisable"
                 >提交
                 </el-button
                 >
@@ -1220,7 +1216,7 @@
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
                 <span class="titleInputSpan">
-            <input type="text" v-model="editobject.name" class="myInputTitle"/>
+            <input type="text" v-model="editobject.name" class="myInputTitle"  onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1362,7 +1358,7 @@
                 </el-tab-pane>
             </el-tabs>
             <div style="margin-top:1vh;text-align: center">
-                <el-button size="small" type="primary" @click="editTemplate">{{
+                <el-button size="small" type="primary" :disabled="templatedisable" @click="editTemplate">{{
                     $t("main.submit")
                     }}
                 </el-button>
@@ -1420,7 +1416,7 @@
                 <el-form-item label="name" prop="name" style="margin-top:10%">
                     <el-input
                             type="text"
-                            v-model="filedName"
+                            v-model.trim="filedName"
                             style="width:100%;"
                     ></el-input>
                 </el-form-item>
@@ -1452,11 +1448,11 @@
                 :close-on-press-escape="false"
                 :show-close="true"
         >
-            <el-form label-width="100px" class="demo-ruleForm">
-                <el-form-item label="name" prop="name" style="margin-top:10%">
+            <el-form label-width="100px" class="demo-ruleForm"  ref="ruleForm1"  :rules="rules" :model="ruleForm1" >
+                <el-form-item label="name" prop="filedName" style="margin-top:10%" >
                     <el-input
                             type="text"
-                            v-model="filedName"
+                            v-model="ruleForm1.filedName"
                             style="width:100%;"
                     ></el-input>
                 </el-form-item>
@@ -1465,7 +1461,7 @@
                             type="primary"
                             size="small"
                             style="width:35%;float:left;"
-                            @click="addFiledTemplate"
+                            @click="addFiledTemplate('ruleForm1')"
                     >
                         {{ $t("main.ok") }}
                     </el-button>
@@ -2841,6 +2837,7 @@
         },
         data() {
             return {
+                templatedisable:true,
                 dialogPayGenerator: false,//支付页面弹出框
                 product: "product",
                 dialogVisiblePay: false,
@@ -3129,12 +3126,22 @@
                 ruleFormAddTemplate: {
                     name: ""
                 },
+                ruleForm1:{
+                    filedName:""
+                },
                 ruleFormTemplateEdit: {},
                 rules: {
                     modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
-                        {min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}]
+                        {min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}],
+                    filedName:  [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}], 
+                   
                 },
+                // rules:{
+                //    filedName:  [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],     
+                // },
+
+
             };
         },
         methods: {
@@ -3408,6 +3415,7 @@
                 this.delobj = note;
                 this.directoryClickId = note.id;
                 this.notesBytargeId(note);
+                this.searchTemp="";//清空搜索框
             },
             directoryclick(note, event) {
                 var target = event.currentTarget;
@@ -3417,6 +3425,7 @@
                 this.delobj = note;
                 this.isDisabled = false;
                 this.directoryClickId = note.id;
+                this.searchTemp="";//清空搜索框
                 this.notesBytargeId(note);
             }, noteslick(project, event) {
                 var target = event.currentTarget;
@@ -4014,12 +4023,28 @@
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
             },
-            addFiledTemplate() {
-                this.dialogVisibleAddTempItems = false;
-                this.filed.tempkey = this.filedName;
-                this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
-                this.filed = "";
-                this.filedName = "";
+            addFiledTemplate(formName) {
+                // this.dialogVisibleAddTempItems = false;
+                // this.filed.tempkey = this.filedName;
+                // this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
+                // this.filed = "";
+                // this.filedName = "";
+                console.log(formName);
+                this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.dialogVisibleAddTempItems = false;
+                    this.filed.tempkey = this.ruleForm1.filedName;
+                    this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
+                    this.filed = "";
+                    this.ruleForm1.filedName= "";
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+            
+
+
             }, //增加模板
             async saveTemplate() {
                 let letoperatorJID = this.operatorJID;//运营商钱包地址
@@ -4185,6 +4210,7 @@
             },
             //搜索框
             search(temp) {
+                console.log(temp);
                 this.projects = [];
                 let projectArray = [];
                 let templateArray = [];
@@ -4207,8 +4233,9 @@
                             tempTemplates.push(templateArray[templateIndex]);
                         }
                         this.projects = tempTemplates;
-                    }
+                    } 
                 }
+
             }, //图片处理(增加模板)
             handleAvatarSuccessAdd(res, file) {
                 let temp = this;
@@ -4632,6 +4659,32 @@
 
 
         },
+        	watch: {  //密码生成器自动生成
+		    'ruleFormAddTemplate.name': function(){
+                if( this.ruleFormAddTemplate.name.trim().length>0){
+                     this.templatedisable=false
+                }else{
+                     this.templatedisable=true
+                }
+             },
+
+             'editobject.name': function(){
+                if( this.editobject.name.trim().length>0){
+                     this.templatedisable=false
+                }else{
+                     this.templatedisable=true
+                }
+             },
+
+             'ruleFormAddProject.name':function(){
+                if( this.ruleFormAddProject.name.trim().length>0){
+                     this.templatedisable=false
+                }else{
+                     this.templatedisable=true
+                }
+             },
+
+            }
     }
 </script>
 <style scoped>
