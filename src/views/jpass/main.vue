@@ -1193,11 +1193,11 @@
             </el-tabs>
             <div style="margin-top:1vh;text-align: center">
                 <el-button size="small" type="primary" @click="saveTemplate" :disabled="templatedisable"
-                >提交
+                >{{$t('main.submit')}}
                 </el-button
                 >
                 <el-button size="small" @click="dialogVisibleAddTemplate = false"
-                >取 消
+                >{{$t('keystoreImport.cancel')}}
                 </el-button
                 >
             </div>
@@ -1376,11 +1376,11 @@
                 :close-on-press-escape="false"
                 :show-close="true"
         >
-            <el-form label-width="100px" class="demo-ruleForm">
-                <el-form-item label="name" prop="name" style="margin-top:10%">
+            <el-form label-width="100px" class="demo-ruleForm" ref="ruleFormAddPro" :rules="rules"   :model="ruleFormAddPro">
+                <el-form-item :label="$t('main.name')" prop="filedName" style="margin-top:10%">
                     <el-input
                             type="text"
-                            v-model="filedName"
+                            v-model="ruleFormAddPro.filedName"
                             style="width:100%;"
                     ></el-input>
                 </el-form-item>
@@ -1389,7 +1389,7 @@
                             type="primary"
                             size="small"
                             style="width:35%;float:left;"
-                            @click="addFiled"
+                            @click="addFiled('ruleFormAddPro')"
                     >
                         {{ $t("main.ok") }}
                     </el-button>
@@ -1412,11 +1412,11 @@
                 :close-on-press-escape="false"
                 :show-close="true"
         >
-            <el-form label-width="100px" class="demo-ruleForm">
-                <el-form-item label="name" prop="name" style="margin-top:10%">
+            <el-form label-width="100px" class="demo-ruleForm" ref="ruleFormAddTEdit" :rules="rules"   :model="ruleFormAddTEdit">
+                <el-form-item :label="$t('main.name')"  prop="filedName"  style="margin-top:10%"  >
                     <el-input
                             type="text"
-                            v-model.trim="filedName"
+                            v-model.trim="ruleFormAddTEdit.filedName"
                             style="width:100%;"
                     ></el-input>
                 </el-form-item>
@@ -1425,7 +1425,7 @@
                             type="primary"
                             size="small"
                             style="width:35%;float:left;"
-                            @click="editAddFiled"
+                            @click="editAddFiled('ruleFormAddTEdit')"
                     >
                         {{ $t("main.ok") }}
                     </el-button>
@@ -1448,11 +1448,11 @@
                 :close-on-press-escape="false"
                 :show-close="true"
         >
-            <el-form label-width="100px" class="demo-ruleForm"  ref="ruleForm1"  :rules="rules" :model="ruleForm1" >
-                <el-form-item label="name" prop="filedName" style="margin-top:10%" >
+            <el-form label-width="100px" class="demo-ruleForm"  ref="ruleFormAddTtemp"  :rules="rules" :model="ruleFormAddTtemp" >
+                <el-form-item :label="$t('main.name')"  prop="filedName" style="margin-top:10%" >
                     <el-input
                             type="text"
-                            v-model="ruleForm1.filedName"
+                            v-model="ruleFormAddTtemp.filedName"
                             style="width:100%;"
                     ></el-input>
                 </el-form-item>
@@ -1461,7 +1461,7 @@
                             type="primary"
                             size="small"
                             style="width:35%;float:left;"
-                            @click="addFiledTemplate('ruleForm1')"
+                            @click="addFiledTemplate('ruleFormAddTtemp')"
                     >
                         {{ $t("main.ok") }}
                     </el-button>
@@ -3126,7 +3126,13 @@
                 ruleFormAddTemplate: {
                     name: ""
                 },
-                ruleForm1:{
+                ruleFormAddTtemp:{
+                    filedName:""
+                },
+                ruleFormAddTEdit:{
+                      filedName:""
+                },
+                ruleFormAddPro:{
                     filedName:""
                 },
                 ruleFormTemplateEdit: {},
@@ -3894,26 +3900,54 @@
                 this.dialogVisibleItems = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key
+                this.ruleFormAddPro.filedName = command.key
             }, //添加项目，模板增加项
-            addFiled() {
-                this.dialogVisibleItems = false;
-                this.filed.tempkey = this.filedName;
-                this.filed.id = this.$Uuidv1();
-                this.templateEvent.datas.push(this.filed);
-                this.filed = "";
-                this.filedName = "";
+            addFiled(formName) {
+                console.log(formName);
+                // this.dialogVisibleItems = false;
+                // this.filed.tempkey = this.filedName;
+                // this.filed.id = this.$Uuidv1();
+                // this.templateEvent.datas.push(this.filed);
+                // this.filed = "";
+                // this.filedName = "";
+                 this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.dialogVisibleItems = false;
+                    this.filed.tempkey = this.ruleFormAddPro.filedName;
+                    this.filed.id = this.$Uuidv1(),
+                    this.templateEvent.datas.push(this.filed);
+                    this.filed = "";
+                    this.ruleFormAddPro.filedName= "";
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
             }, //修改选中项
             editSelectFiled(command) {
                 this.dialogVisibleItemsEdit = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
-                this.filedName = command.key
+                this.filedName = command.key;
+                this.ruleFormAddTEdit.filedName=command.key;
             }, //修改项目，模板增加项
-            editAddFiled() {
-                this.dialogVisibleItemsEdit = false;
-                this.filed.tempkey = this.filedName;
-                this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
-                this.filedName = "";
-                this.filed = "";
+            editAddFiled(formName) {
+                // this.dialogVisibleItemsEdit = false;
+                // this.filed.tempkey = this.filedName;
+                // this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
+                // this.filedName = "";
+                // this.filed = "";
+                this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.dialogVisibleItemsEdit = false;
+                    this.filed.tempkey = this.ruleFormAddTEdit.filedName;
+                    this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
+                    this.filed = "";
+                    this.ruleFormAddTEdit.filedName= "";
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
             },
             //修改页面
             editProject() {
@@ -4022,6 +4056,7 @@
                 this.dialogVisibleAddTempItems = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
+                this.ruleFormAddTtemp.filedName = command.key;
             },
             addFiledTemplate(formName) {
                 // this.dialogVisibleAddTempItems = false;
@@ -4029,14 +4064,13 @@
                 // this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
                 // this.filed = "";
                 // this.filedName = "";
-                console.log(formName);
                 this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.dialogVisibleAddTempItems = false;
-                    this.filed.tempkey = this.ruleForm1.filedName;
+                    this.filed.tempkey = this.ruleFormAddTtemp.filedName;
                     this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
                     this.filed = "";
-                    this.ruleForm1.filedName= "";
+                    this.ruleFormAddTtemp.filedName= "";
                 } else {
                     console.log('error submit!!');
                     return false;
