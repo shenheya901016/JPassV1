@@ -6,7 +6,7 @@
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:40%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
+        <div style="width:45%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
             <div style="width:100%;border-radius:10px 10px 0 0; font-size:18px;margin-top:50px; color: #66B1FF;text-align: left">
                 <div v-html="$t('registersuccess.title')"></div>
 
@@ -15,18 +15,18 @@
             </div>
             <el-form :model="ruleForm" ref="ruleForm" label-width="10vw" class="demo-ruleForm" style="width:80%; margin:10% 20% 10% 10%;">
                 <el-form-item :label="$t('registersuccess.mnemonic')">
-                    <el-input style="width:95%;float: left;" v-model="ruleForm.mnemonic" readonly="readonly" oncut="return false"
+                    <el-input style="width:95%;float: left;" v-model="ruleForm.mnemonic" readonly="readonly" oncut="return false" disabled
                               onpaste="return false"
                               oncopy="return false">
                     </el-input>
 
                 </el-form-item>
                 <el-form-item :label="$t('registersuccess.walletAddress')">
-                    <el-input style="width:95%;float: left;" v-model="ruleForm.address" readonly="readonly"></el-input>
+                    <el-input style="width:95%;float: left;" v-model="ruleForm.address" readonly="readonly" disabled></el-input>
 
                 </el-form-item>
                 <el-form-item :label="$t('registersuccess.secret')">
-                    <el-input style="width:95%;float: left;" v-model="ruleForm.secret" readonly="readonly" oncut="return false"
+                    <el-input style="width:95%;float: left;" v-model="ruleForm.secret" readonly="readonly" oncut="return false" disabled
                               onpaste="return false"
                               oncopy="return false"></el-input>
                 </el-form-item>
