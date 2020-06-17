@@ -90,13 +90,18 @@ let jcc_ipfs = {
          * @param filePath 文件路径
          * @param address 钱包地址
          */
-        async read(secret,filePath, address) {
+        async read(secret, filePath, address) {
             let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
             let privateKey = deriveKeyPair.privateKey;
             const getPromise = util.promisify(request.get);
             let url = baserpcurl + '/api/v0/read?filePath=' + filePath + '&address=' + address;
             let result = await getPromise(url);
-            return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, JSON.parse(result.body));
+            let msg = result.body;
+            if (msg.split("error")) {
+                return msg;
+            } else {
+                return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, JSON.parse(msg));
+            }
         },
         /**
          * 列出path下目录文件
