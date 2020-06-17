@@ -3132,8 +3132,8 @@
                 ruleFormAddTEdit:{
                       filedName:""
                 },
-                ruleFormAddPro:{
-                    filedName:""
+                 ruleFormAddPro:{
+                      filedName:""
                 },
                 ruleFormTemplateEdit: {},
                 rules: {
@@ -3914,7 +3914,7 @@
                 if (valid) {
                     this.dialogVisibleItems = false;
                     this.filed.tempkey = this.ruleFormAddPro.filedName;
-                    this.filed.id = this.$Uuidv1(),
+                    this.filed.id = this.$Uuidv1(), 
                     this.templateEvent.datas.push(this.filed);
                     this.filed = "";
                     this.ruleFormAddPro.filedName= "";
@@ -4204,6 +4204,7 @@
                 }
             }, //lock定时器启动
             locksystem() {
+                console.log("lock定时器启动");
                 if (this.loginObj.lock) {
                     this.dialogVisible = true;
                 } else if (this.systemlock) {
