@@ -1,3 +1,5 @@
+import myIpfs from "./myIpfs";
+
 let JPassUtil = require("jpass-util");
 let request = require("request");
 const util = require('util');
@@ -36,13 +38,13 @@ let jcc_ipfs = {
             let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
             let privateKey = deriveKeyPair.privateKey;
             let publicKey = deriveKeyPair.publicKey;
-            let size = strlen(data);
+            let encryptData = JSON.stringify(JPassUtil.ECCCrypto.encryptWithPublicKey(publicKey, data));
+            let size = strlen(encryptData);
             let md5 = "md5";
             let timestamp = new Date().getTime()
             let sign = JPassUtil.Wallet.sign(privateKey, md5 + size + filePath + timestamp);
             let url = baserpcurl + "/api/v0/write";
             const getPromise = util.promisify(request.post);
-            let encryptData = JPassUtil.ECCCrypto.encryptWithPublicKey(publicKey, data);
             let result = await getPromise(url, {
                 'form': {// form-data
                     data: encryptData,
@@ -88,13 +90,18 @@ let jcc_ipfs = {
          * @param filePath 文件路径
          * @param address 钱包地址
          */
-        async read(secret,filePath, address) {
+        async read(secret, filePath, address) {
             let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
             let privateKey = deriveKeyPair.privateKey;
             const getPromise = util.promisify(request.get);
             let url = baserpcurl + '/api/v0/read?filePath=' + filePath + '&address=' + address;
             let result = await getPromise(url);
-            return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, result.body);
+            let msg = result.body;
+            if (msg.split("error")) {
+                return msg;
+            } else {
+                return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, JSON.parse(msg));
+            }
         },
         /**
          * 列出path下目录文件
@@ -115,4 +122,5 @@ let jcc_ipfs = {
         },
     }
 }
-module.exports = jcc_ipfs;
+//module.exports = jcc_ipfs;
+export default jcc_ipfs;
