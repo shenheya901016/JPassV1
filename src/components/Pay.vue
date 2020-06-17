@@ -40,7 +40,7 @@
     let baserpcurl = "http://47.103.65.5:9527/";
     //判断是否为开发者模式
     if (process.env.NODE_ENV === "development") {
-        baserpcurl = '/alipay';
+        baserpcurl = 'http://localhost:8080/alipay';
     }
 
     export default {
@@ -128,8 +128,13 @@
                     console.log(response.body)
                     status = response.body;
                     if (status === "TRADE_SUCCESS") {
-                        this.dialogVisiblePay = false;
-                        alert("充值成功！");
+
+                        //_this.$router.push("/jpass/main");
+                        _this.dialogVisiblePay=false;
+                        _this.$message({
+                            message: '恭喜你，充值成功！',
+                            type: 'success'
+                        });
                     } else {
                         console.log("充值失败！")
                         setTimeout(function () {
