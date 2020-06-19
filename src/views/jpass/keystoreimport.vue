@@ -14,7 +14,8 @@
                     <el-upload class="upload-demo" style="text-align: left;"
                                action="https://jsonplaceholder.typicode.com/posts/"
                                :limit="1" :on-exceed="handleExceed" accept="text/plain"
-                               :on-change="getkeystore" >
+                               :on-change="getkeystore"
+                                >
                         <el-button type="primary" size="small" style="float: left">{{$t('keystoreImport.uploadKeystore')}}</el-button>
                     </el-upload>
                 </el-form-item>

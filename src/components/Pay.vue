@@ -17,7 +17,7 @@
                                     <div class="payboxtitle">{{paytemplate.name}}</div>
                                     <span>{{paytemplate.pay}}</span>元
                                     <div class="daycost">
-                                        ≈{{parseFloat(paytemplate.pay/paytemplate.day).toFixed(2)}}¥/天
+                                        ≈{{parseFloat(paytemplate.pay/paytemplate.day).toFixed(2)}}元/天
                                     </div>
                                 </div>
                             </div>
@@ -29,7 +29,7 @@
             <el-footer>
                 <div class="paybtn">
                     <div class="paytrue"><span>实际支付:</span>{{pay}}元</div>
-                    <el-button class="" type="danger" size="small" @click="doPay">立即付款</el-button>
+                    <el-button class="" type="danger" size="small" @click="doPay" :disabled="ispay">立即付款</el-button>
                 </div>
             </el-footer>
         </el-container>
@@ -40,7 +40,7 @@
     let baserpcurl = "http://47.103.65.5:9527/";
     //判断是否为开发者模式
     if (process.env.NODE_ENV === "development") {
-        baserpcurl = '/alipay';
+        baserpcurl = 'http://localhost:8080/alipay';
     }
 
     export default {
@@ -51,6 +51,7 @@
                 current: -1,
                 content: '',
                 pay: 0,//默认支付
+                ispay:true,//支付按钮默认为disabled
                 paytemplate: {
                     "paytemplateItems": [{
                         "key": "fdbce150-fec4-11e9-bd33-854c67bf088b",
@@ -78,6 +79,7 @@
             //关闭支付框触发
             clearPay() {
                 this.$emit("dialogPayGeneratorclose", false);
+                this.ispay=true;
             },
             boxclick(paytemplate, event) {
                 let target = event.currentTarget;
@@ -85,6 +87,7 @@
                 this.current = index;
                 this.content = paytemplate.content;
                 this.pay = paytemplate.pay;
+                this.ispay=false;
             },
             doPay() {
                 const loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -125,8 +128,13 @@
                     console.log(response.body)
                     status = response.body;
                     if (status === "TRADE_SUCCESS") {
-                        this.dialogVisiblePay = false;
-                        alert("充值成功！");
+
+                        //_this.$router.push("/jpass/main");
+                        _this.dialogVisiblePay=false;
+                        _this.$message({
+                            message: '恭喜你，充值成功！',
+                            type: 'success'
+                        });
                     } else {
                         console.log("充值失败！")
                         setTimeout(function () {

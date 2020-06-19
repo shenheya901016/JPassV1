@@ -23,7 +23,7 @@
       >
         <el-form-item :label="$t('register.name')" prop="name">
           <el-input
-            v-model="ruleForm.name"
+            v-model.trim="ruleForm.name"
             style="width:95%;float: left"
           ></el-input>
         </el-form-item>
@@ -36,12 +36,13 @@
             onpaste="return false"
             show-password
           ></el-input>
+          <a href="#"> 
           <img
             @click="passwordGenerator()"
             style="width:5%;"
             src="./img/钥匙.svg"
             alt=""
-          />
+          /></a>
         </el-form-item>
         <!--<el-form-item>-->
         <!--<el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:70%;"></el-progress>-->
@@ -59,7 +60,7 @@
             show-password
           ></el-input>
         </el-form-item>
-        <el-form-item label="" prop="password">
+        <el-form-item label="" >
           <el-button
             type="primary"
             size="small"
