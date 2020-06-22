@@ -1628,6 +1628,16 @@
                     </el-input
                     >
                 </el-form-item>
+                <el-form-item :label="$t('myInfo.vip')" prop="vip">
+                    <el-input
+                            type="text"
+                            v-model="vip"
+                            style="width:100%;"
+                            readonly
+                    >{{ vip }}
+                    </el-input
+                    >
+                </el-form-item>
                 <el-form-item :label="$t('myInfo.keystoreFile')">
                     <el-button
                             type="primary"
@@ -2829,6 +2839,7 @@
     import LocalStorage from 'lowdb/adapters/LocalStorage';
     import password from '../../password.js';
     import ipfs from '@/jcc_ipfs.js'
+    const util = require('util');
 
     let request = require("request");
 
@@ -2854,6 +2865,7 @@
         },
         data() {
             return {
+                vip:"",
                 templatedisable:true,
                 dialogPayGenerator: false,//支付页面弹出框
                 product: "product",
