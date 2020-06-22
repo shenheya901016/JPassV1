@@ -223,5 +223,14 @@ export default {
         keystoreFile: "Keystore File:",
         exportKeystoreFile: "Keystore Export",
     },
+    selects:{
+        password:"Password",
+        number:"Number",
+        email:"Email",
+        address:"Address",
+        login:"Login",
+        phone:"Phone",
+        date:"Date"
+    },
     ...enLocale
 };

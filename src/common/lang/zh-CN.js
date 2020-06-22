@@ -225,5 +225,14 @@ export default {
         keystoreFile: "key文件:",
         exportKeystoreFile: "key文件导出",
     },
+    selects:{
+        password:"密码",
+        number:"号码",
+        email:"邮箱",
+        address:"地址",
+        login:"用户名",
+        phone:"电话",
+        date:"日期"
+    },
     ...zhLocale
 };
