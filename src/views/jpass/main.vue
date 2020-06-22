@@ -3291,7 +3291,12 @@
                 let msg = this.$JSON5.parse(result.body);
 
                 console.log(msg)
-                this.vip = this.formatDate(msg.data.list[0].end_time);
+                if(msg.data.length>0){
+                    this.vip = this.formatDate(msg.data.list[0].end_time);
+                }else {
+                    this.vip ="非会员，请充值！"
+                }
+
                 this.dialogMyInfo = true;
             }, formatDate(datetime) {
                 var date = new Date(datetime);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
