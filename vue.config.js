@@ -12,32 +12,10 @@ module.exports = {
         ]
     },
     devServer: {
-        /*proxy: { // 配置跨域
-            '/ipfs': {
-                //要访问的跨域的api的域名
-                target: 'http://localhost:1337/api/v0',
-                ws: true,
-                changOrigin: true,
-                pathRewrite: {
-                    '^/ipfs': ''
-                }
-            }
-        }*/
-        // proxy: { // 配置跨域
-        //     '/jsonrpc': {
-        //         //要访问的跨域的api的域名
-        //         target: 'http://139.198.191.254:8545/v1/jsonrpc',
-        //         ws: true,
-        //         changOrigin: true,
-        //         pathRewrite: {
-        //             '^/jsonrpc': ''
-        //         }
-        //     }
-        // },
         proxy: { // 配置跨域
             '/ipfs': {
                 //要访问的跨域的api的域名
-                target: 'http://localhost:1337',
+                target: 'http://192.168.2.13:1337',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {
@@ -47,7 +25,6 @@ module.exports = {
             '/alipay': {
                 //要访问的跨域的api的域名
                 target: 'http://47.103.65.5:9527/',
-                //target: 'http://127.0.0.1:9527/',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {

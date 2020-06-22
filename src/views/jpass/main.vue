@@ -845,7 +845,8 @@
             {{ $t("main.name") }}
           </span>
                 <span class="titleInputSpan">
-            <input type="text" v-model="editobject.name" class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
+            <input type="text" v-model="editobject.name" class="myInputTitle"
+                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1055,7 +1056,8 @@
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
                 <span class="titleInputSpan">
-            <input v-model="ruleFormAddTemplate.name" class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')" />
+            <input v-model="ruleFormAddTemplate.name" class="myInputTitle"
+                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1194,7 +1196,7 @@
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item
                                                 v-for="(item, index) in this.templateItems
-.templateItems"
+                          .templateItems"
                                                 :command="item"
                                         >
                                             {{ item.key }}
@@ -3079,23 +3081,23 @@
                             "type": "text",
                             "val": "",
                             "tempkey": "Website"
-                        }, 
-                        {
-                            "id": "fdbce150-fec4-18e9-bd32-854c67bf088b",
-                            "key": "Name",
-                            "type": "text",
-                            "val": "",
-                            "tempkey": "Name"
                         },
-                        {
-                            "id": "fdbce150-feb9-11e9-bd32-854c67bf088b",
-                            "key": "Password",
-                            "type": "password",
-                            "val": "",
-                            "tempkey": "Password",
-                            "percentage": 0,
-                            "pwdstatus": "",
-                        }]
+                            {
+                                "id": "fdbce150-fec4-18e9-bd32-854c67bf088b",
+                                "key": "Name",
+                                "type": "text",
+                                "val": "",
+                                "tempkey": "Name"
+                            },
+                            {
+                                "id": "fdbce150-feb9-11e9-bd32-854c67bf088b",
+                                "key": "Password",
+                                "type": "password",
+                                "val": "",
+                                "tempkey": "Password",
+                                "percentage": 0,
+                                "pwdstatus": "",
+                            }]
                     }]
                 },
                 templateItems: {
@@ -3115,7 +3117,7 @@
                         "tempkey": "Number"
                     }, {
                         "id": "fdbce150-fec4-11e9-bd32-984c67bf088b",
-                        "key": this.$t('selects.email'),
+                        "key": "Email",
                         "type": "text",
                         "val": "",
                         "tempkey": "Email"
@@ -3169,11 +3171,11 @@
                 ruleFormAddTemplate: {
                     name: ""
                 },
-                ruleFormAddTtemp:{
-                    filedName:""
+                ruleFormAddTtemp: {
+                    filedName: ""
                 },
-                ruleFormAddTEdit:{
-                      filedName:""
+                ruleFormAddTEdit: {
+                    filedName: ""
                 },
                  ruleFormAddPro:{
                       filedName:""
@@ -3182,38 +3184,23 @@
                 rules: {
                     modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
-                        {min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}],
-                    filedName:  [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}], 
-                   
+                        {
+                            min: 1,
+                            max: 10,
+                            message: this.$t('main.theLengthIsBetween1And10Characters'),
+                            trigger: 'blur'
+                        }],
+                    filedName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}],
+
                 },
+                // rules:{
+                //    filedName:  [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
+                // },
+
+
             };
         },
         methods: {
-            chooseProduct(val) {
-                this.product = val;
-                if (val === 1) {
-                    $("#1").css("border", "solid red 1px");
-                }
-
-            },
-            pay() {
-                let options = {
-                    url: "http://localhost:8081/pay",
-                    form: {// form-data
-                        product: this.product,
-                    }
-                };
-                request.post(options, function (error, response, body) {
-                    console.info(response)
-
-                    const form = response.body;
-                    const div = document.createElement('div')
-                    div.id = 'alipay'
-                    div.innerHTML = form
-                    document.body.appendChild(div)
-                    document.querySelector('#alipay').children[0].submit()
-                });
-            },
             formatTooltip(val) {
                 return 8 + Math.floor(val / 5);
             },
@@ -3284,8 +3271,28 @@
                 this.loginObj.lock = true;
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = true;
-            }, myInfo() {
+            }, async myInfo() {
+
+                const getPromise = util.promisify(request.get);
+                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
+                let result = await getPromise(url);
+                let msg = this.$JSON5.parse(result.body);
+
+                console.log(msg)
+                this.vip = this.formatDate(msg.data.list[0].end_time);
                 this.dialogMyInfo = true;
+            }, formatDate(datetime) {
+                var date = new Date(datetime);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                var year = date.getFullYear(),
+                    month = ("0" + (date.getMonth() + 1)).slice(-2),
+                    sdate = ("0" + date.getDate()).slice(-2),
+                    hour = ("0" + date.getHours()).slice(-2),
+                    minute = ("0" + date.getMinutes()).slice(-2),
+                    second = ("0" + date.getSeconds()).slice(-2);
+                // 拼接
+                var result = year + "-" + month + "-" + sdate + " " + hour + ":" + minute + ":" + second;
+                // 返回
+                return result;
             }, async exportKey() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
@@ -3461,7 +3468,7 @@
                 this.delobj = note;
                 this.directoryClickId = note.id;
                 this.notesBytargeId(note);
-                this.searchTemp="";//清空搜索框
+                this.searchTemp = "";//清空搜索框
             },
             directoryclick(note, event) {
                 var target = event.currentTarget;
@@ -3471,7 +3478,7 @@
                 this.delobj = note;
                 this.isDisabled = false;
                 this.directoryClickId = note.id;
-                this.searchTemp="";//清空搜索框
+                this.searchTemp = "";//清空搜索框
                 this.notesBytargeId(note);
             }, noteslick(project, event) {
                 var target = event.currentTarget;
@@ -3772,7 +3779,7 @@
                 } else {
                     //读取IPFS中数据
                     let tempipfsData = await this.$myIpfs.Ipfs.read(userSecret,"/main", address);
-                   
+
                     tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                     tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
                     console.log(tempipfsData);
@@ -3963,7 +3970,7 @@
                 if (valid) {
                     this.dialogVisibleItems = false;
                     this.filed.tempkey = this.ruleFormAddPro.filedName;
-                    this.filed.id = this.$Uuidv1(), 
+                    this.filed.id = this.$Uuidv1(),
                     this.templateEvent.datas.push(this.filed);
                     this.filed = "";
                     this.ruleFormAddPro.filedName= "";
@@ -3977,7 +3984,7 @@
                 this.dialogVisibleItemsEdit = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
-                this.ruleFormAddTEdit.filedName=command.key;
+                this.ruleFormAddTEdit.filedName = command.key;
             }, //修改项目，模板增加项
             editAddFiled(formName) {
                 // this.dialogVisibleItemsEdit = false;
@@ -3986,17 +3993,17 @@
                 // this.filedName = "";
                 // this.filed = "";
                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleItemsEdit = false;
-                    this.filed.tempkey = this.ruleFormAddTEdit.filedName;
-                    this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddTEdit.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+                    if (valid) {
+                        this.dialogVisibleItemsEdit = false;
+                        this.filed.tempkey = this.ruleFormAddTEdit.filedName;
+                        this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddTEdit.filedName = "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
             //修改页面
             editProject() {
@@ -4114,18 +4121,17 @@
                 // this.filed = "";
                 // this.filedName = "";
                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleAddTempItems = false;
-                    this.filed.tempkey = this.ruleFormAddTtemp.filedName;
-                    this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddTtemp.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-            
+                    if (valid) {
+                        this.dialogVisibleAddTempItems = false;
+                        this.filed.tempkey = this.ruleFormAddTtemp.filedName;
+                        this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddTtemp.filedName = "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
 
 
             }, //增加模板
@@ -4169,7 +4175,7 @@
                 //清空变量
                 this.ruleFormAddTemplate.name = "";
                 this.color = "";
-                this.tempTemplate = []; 
+                this.tempTemplate = [];
                 this.selectlabels = "";
                 this.dialogVisibleAddTemplate = false;
                 this.getdirectory();
@@ -4318,7 +4324,7 @@
                             tempTemplates.push(templateArray[templateIndex]);
                         }
                         this.projects = tempTemplates;
-                    } 
+                    }
                 }
 
             }, //图片处理(增加模板)
@@ -4757,7 +4763,7 @@
                      this.templatedisable=true
                    }
                 }else{
-                    this.templatedisable=true 
+                    this.templatedisable=true
                 }
              },
 
@@ -4770,7 +4776,7 @@
                        this.templatedisable=true
                     }
                 }else{
-                    this.templatedisable=true 
+                    this.templatedisable=true
                 }
              },
 
@@ -4782,14 +4788,14 @@
                         this.templatedisable=true
                      }
                     }else{
-                      this.templatedisable=true 
+                      this.templatedisable=true
                    }
              },
 
             }
     }
 </script>
-<style lang="less"  scoped>
+<style scoped>
     @import "./css/base.css";
     @import "./css/sy.css";
 
@@ -4848,10 +4854,10 @@
 
     }
 
-    .input-class{    
-       width: 25vw; 
+    .input-class{
+       width: 25vw;
    }
-    
+
     :last-child {
         margin-bottom: 0;
     }
@@ -4881,8 +4887,8 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
-    
-   
+
+
 
 
 
