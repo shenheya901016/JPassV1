@@ -4810,17 +4810,14 @@
                 let localdata = this.db.__wrapped__;
                 let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
                 if(result.indexOf("success")!==-1){
-                                console.log("非会员，无法同步！");
-                                this.$message({
-                                    message: '非会员，无法同步！',
-                                    type: 'error'
-                                });
-                                return ;
-                            }else{
-                               this.dialogSynchronization = false
-                      }
-                 }  
-            },
+                        this.$message({
+                            message: '同步数据失败！',
+                            type: 'error'
+                        });
+                     }else{
+                        this.dialogSynchronization = false;
+                     }  
+                  },
             //关闭同步窗口后关闭同步，防止页面刷新同步数据
             closeInit() {
                 this.isinitialize = false;
