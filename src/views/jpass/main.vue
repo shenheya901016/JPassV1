@@ -359,6 +359,15 @@
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
+                     <el-form-item
+                            v-else-if="data.type === 'date'"
+                            :label="data.tempkey"
+                            :prop="data.tempkey"
+                            style="margin-bottom:3px;"
+                    >
+                        <input type="text" v-model="data.val" readonly/>
+                        <hr/>
+                    </el-form-item>
                 </template>
                 <el-button
                         v-if="this.projectEvent != '' && this.projectEvent.isDel != true"
@@ -759,7 +768,7 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                     <el-date-picker v-model="value1" class="input-class" type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                     <el-date-picker v-model="data.val"  value-format="yyyy-MM-dd " class="input-class" type="date" placeholder="选择日期" size="large" ></el-date-picker>
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -986,6 +995,21 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
+                                  <el-form-item
+                                        v-else-if="data.type === 'date'"
+                                        :label="data.tempkey"
+                                        :prop="data.tempkey"
+                                        style="width: 90%;margin-bottom:0;"
+                                >
+                                  <el-date-picker v-model="data.val" value-format="yyyy-MM-dd" class="input-class" type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="editRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
+                                 </el-form-item>
+
                             </template>
                             <el-form-item
                                     :label="$t('main.chooseCategory')"
@@ -1163,6 +1187,27 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
+                                 <el-form-item
+                                        v-else-if="data.type === 'date'"
+                                        :label="data.tempkey"
+                                        :prop="data.tempkey"
+                                        style="width: 90%;margin-bottom:0;"
+                                >
+                                     <!-- <el-date-picker v-model="data.val" class="input-class-template" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
+                                     <input
+                                            type="text"
+                                            v-model="data.val"
+                                            readonly
+                                            style="width:90%;float: left"
+                                            class="myInput"
+                                    />
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="addTemplageRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
+                                </el-form-item>
                             </template>
                             <el-form-item
                                     :label="$t('main.chooseCategory')"
@@ -1319,6 +1364,27 @@
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input
+                                            type="text"
+                                            v-model="data.val"
+                                            style="float: left;width:90%;"
+                                            readonly
+                                            class="myInput"
+                                    />
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="editRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
+                                </el-form-item>
+                                <el-form-item
+                                        v-else-if="data.type === 'date'"
+                                        :label="data.tempkey"
+                                        :prop="data.tempkey"
+                                        style="width: 90%;margin-bottom:0;"
+                                >
+                                     <!-- <el-date-picker v-model="data.val" class="input-class-template-edit" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
+                                      <input
                                             type="text"
                                             v-model="data.val"
                                             style="float: left;width:90%;"
@@ -4851,7 +4917,13 @@
     .input-class{    
        width: 25vw; 
    }
-    
+     .input-class-template{    
+       width: 22vw; 
+   }
+    .input-class-template-edit{    
+       width: 23.5vw; 
+   }
+
     :last-child {
         margin-bottom: 0;
     }
