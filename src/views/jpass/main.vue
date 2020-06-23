@@ -3907,9 +3907,8 @@
                                 });
                                 return ;
                             }else{
-                                //let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
                                 console.log("同步结果:"+result);
-                                if(result=="success"){
+                                if(result.indexOf("success")>-1){
                                         this.processShow = true;
                                         this.percentage = 100;
                                         this.synStatus = "success";
@@ -3931,7 +3930,7 @@
                                 return ;
                             }else{
                                 console.log("同步结果:"+result);
-                                if(result=="success"){
+                                if(result.indexOf("success")>-1){
                                         this.processShow = true;
                                         this.percentage = 100;
                                         this.synStatus = "success";
