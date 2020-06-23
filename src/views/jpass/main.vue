@@ -3890,7 +3890,12 @@
                     if(tempipfsData.machineId != "" && tempipfsData.machineId !=undefined){
                      if (tempipfsData.version > this.db.get("version").value()) {//version越大内容越新
                             console.log("ipfs版本大于本地版本");
-                            this.db = tempipfsData;
+                            await this.db.set("models", tempipfsData.models).write();
+                            await this.db.set("project", tempipfsData.project).write();
+                            await this.db.set("templates", tempipfsData.templates).write();
+                            await this.db.set('settings', tempipfsData.settings).write();
+                            await this.db.set('machineId', tempipfsData.machineId).write();
+                            await this.db.set('version', tempipfsData.version).write();
                             this.processShow = true;
                             this.percentage = 100;
                             this.synStatus = "success";
