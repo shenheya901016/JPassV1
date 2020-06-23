@@ -48,7 +48,7 @@
                         v-if="showTrash == true"
                         style="border:0;padding: 5px 5px;"
                         @click="dialogclearTrash = true"
-                >  ,
+                > ,
                     <img
                             style="top:-2px;height: 25px;width: 25px;"
                             src="./img/trash.svg"
@@ -359,7 +359,7 @@
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
-                     <el-form-item
+                    <el-form-item
                             v-else-if="data.type === 'date'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
@@ -762,13 +762,14 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                 <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                     <el-date-picker v-model="data.val"  value-format="yyyy-MM-dd " class="input-class" type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <el-date-picker v-model="data.val" value-format="yyyy-MM-dd " class="input-class"
+                                                    type="date" placeholder="选择日期" size="large"></el-date-picker>
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -996,20 +997,21 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                  <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                  <el-date-picker v-model="data.val" value-format="yyyy-MM-dd" class="input-class" type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <el-date-picker v-model="data.val" value-format="yyyy-MM-dd" class="input-class"
+                                                    type="date" placeholder="选择日期" size="large"></el-date-picker>
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
                                             @click="editRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                 </el-form-item>
+                                </el-form-item>
 
                             </template>
                             <el-form-item
@@ -1189,14 +1191,14 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                 <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                     <!-- <el-date-picker v-model="data.val" class="input-class-template" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
-                                     <input
+                                    <!-- <el-date-picker v-model="data.val" class="input-class-template" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
+                                    <input
                                             type="text"
                                             v-model="data.val"
                                             readonly
@@ -1278,7 +1280,8 @@
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
                 <span class="titleInputSpan">
-            <input type="text" v-model="editobject.name" class="myInputTitle"  onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
+            <input type="text" v-model="editobject.name" class="myInputTitle"
+                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1385,8 +1388,8 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                     <!-- <el-date-picker v-model="data.val" class="input-class-template-edit" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
-                                      <input
+                                    <!-- <el-date-picker v-model="data.val" class="input-class-template-edit" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
+                                    <input
                                             type="text"
                                             v-model="data.val"
                                             style="float: left;width:90%;"
@@ -1459,7 +1462,8 @@
                 :close-on-press-escape="false"
                 :show-close="true"
         >
-            <el-form label-width="100px" class="demo-ruleForm" ref="ruleFormAddPro" :rules="rules"   :model="ruleFormAddPro">
+            <el-form label-width="100px" class="demo-ruleForm" ref="ruleFormAddPro" :rules="rules"
+                     :model="ruleFormAddPro">
                 <el-form-item :label="$t('main.name')" prop="filedName" style="margin-top:10%">
                     <el-input
                             type="text"
@@ -1495,8 +1499,9 @@
                 :close-on-press-escape="false"
                 :show-close="true"
         >
-            <el-form label-width="100px" class="demo-ruleForm" ref="ruleFormAddTEdit" :rules="rules"   :model="ruleFormAddTEdit">
-                <el-form-item :label="$t('main.name')"  prop="filedName"  style="margin-top:10%"  >
+            <el-form label-width="100px" class="demo-ruleForm" ref="ruleFormAddTEdit" :rules="rules"
+                     :model="ruleFormAddTEdit">
+                <el-form-item :label="$t('main.name')" prop="filedName" style="margin-top:10%">
                     <el-input
                             type="text"
                             v-model.trim="ruleFormAddTEdit.filedName"
@@ -1531,8 +1536,9 @@
                 :close-on-press-escape="false"
                 :show-close="true"
         >
-            <el-form label-width="100px" class="demo-ruleForm"  ref="ruleFormAddTtemp"  :rules="rules" :model="ruleFormAddTtemp" >
-                <el-form-item :label="$t('main.name')"  prop="filedName" style="margin-top:10%" >
+            <el-form label-width="100px" class="demo-ruleForm" ref="ruleFormAddTtemp" :rules="rules"
+                     :model="ruleFormAddTtemp">
+                <el-form-item :label="$t('main.name')" prop="filedName" style="margin-top:10%">
                     <el-input
                             type="text"
                             v-model="ruleFormAddTtemp.filedName"
@@ -2905,6 +2911,7 @@
     import LocalStorage from 'lowdb/adapters/LocalStorage';
     import password from '../../password.js';
     import ipfs from '@/jcc_ipfs.js'
+
     const util = require('util');
 
     let request = require("request");
@@ -2931,8 +2938,8 @@
         },
         data() {
             return {
-                vip:"",
-                templatedisable:true,
+                vip: "",
+                templatedisable: true,
                 dialogPayGenerator: false,//支付页面弹出框
                 product: "product",
                 dialogVisiblePay: false,
@@ -3074,7 +3081,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":"./img/misc/lock.svg",
+                        "imgurl": "./img/misc/lock.svg",
                         "datas": [{
                             "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
                             "key": "Number",
@@ -3116,7 +3123,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":"./img/misc/lock.svg",
+                        "imgurl": "./img/misc/lock.svg",
                         "datas": [{
                             "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
                             "key": "Email",
@@ -3152,7 +3159,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":"./img/misc/lock.svg",
+                        "imgurl": "./img/misc/lock.svg",
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
                             "key": "Website",
@@ -3206,27 +3213,27 @@
                         "val": "",
                         "tempkey": "Address"
                     },
-                    {
-                        "id": "fdbce150-fec4-11e9-bd32-854d35bf088b",
-                        "key": this.$t('selects.login'),
-                        "type": "text",
-                        "val": "",
-                        "tempkey": "Login"
-                    },
-                    {
-                        "id": "fdbce150-fec4-11e9-bd32-898d67bf088b",
-                        "key": this.$t('selects.phone'),
-                        "type": "text",
-                        "val": "",
-                        "tempkey": "Phone"
-                    },
-                    {
-                        "id": "fdbce150-fec4-11e9-bd32-908d67bf088b",
-                        "key": this.$t('selects.date'),
-                        "type": "date",
-                        "val": "",
-                        "tempkey": "Date"
-                    },
+                        {
+                            "id": "fdbce150-fec4-11e9-bd32-854d35bf088b",
+                            "key": this.$t('selects.login'),
+                            "type": "text",
+                            "val": "",
+                            "tempkey": "Login"
+                        },
+                        {
+                            "id": "fdbce150-fec4-11e9-bd32-898d67bf088b",
+                            "key": this.$t('selects.phone'),
+                            "type": "text",
+                            "val": "",
+                            "tempkey": "Phone"
+                        },
+                        {
+                            "id": "fdbce150-fec4-11e9-bd32-908d67bf088b",
+                            "key": this.$t('selects.date'),
+                            "type": "date",
+                            "val": "",
+                            "tempkey": "Date"
+                        },
                     ]
                 },
                 settings: {
@@ -3249,22 +3256,27 @@
                 ruleFormAddTemplate: {
                     name: ""
                 },
-                ruleFormAddTtemp:{
-                    filedName:""
+                ruleFormAddTtemp: {
+                    filedName: ""
                 },
-                ruleFormAddTEdit:{
-                      filedName:""
+                ruleFormAddTEdit: {
+                    filedName: ""
                 },
-                 ruleFormAddPro:{
-                      filedName:""
+                ruleFormAddPro: {
+                    filedName: ""
                 },
                 ruleFormTemplateEdit: {},
                 rules: {
                     modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
-                        {min: 1, max: 10, message: this.$t('main.theLengthIsBetween1And10Characters'), trigger: 'blur'}],
-                    filedName:  [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}], 
-                   
+                        {
+                            min: 1,
+                            max: 10,
+                            message: this.$t('main.theLengthIsBetween1And10Characters'),
+                            trigger: 'blur'
+                        }],
+                    filedName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}],
+
                 },
             };
         },
@@ -3279,13 +3291,11 @@
             pay() {
                 let options = {
                     url: "http://localhost:8081/pay",
-                    form: {// form-data
+                    form: {
                         product: this.product,
                     }
                 };
                 request.post(options, function (error, response, body) {
-                    console.info(response)
-
                     const form = response.body;
                     const div = document.createElement('div')
                     div.id = 'alipay'
@@ -3365,19 +3375,16 @@
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = true;
             }, async myInfo() {
-
                 const getPromise = util.promisify(request.get);
                 let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
                 let result = await getPromise(url);
                 let msg = this.$JSON5.parse(result.body);
-
                 console.log(msg)
-                if(msg.data.length>0){
+                if (msg.data.list.length > 0) {
                     this.vip = this.formatDate(msg.data.list[0].end_time);
-                }else {
-                    this.vip ="非会员，请充值！"
+                } else {
+                    this.vip = "非会员，请充值！"
                 }
-
                 this.dialogMyInfo = true;
             }, formatDate(datetime) {
                 var date = new Date(datetime);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -3517,7 +3524,7 @@
                             } else {
                                 console.log("从ipfs 取数据！");
                                 //取ipfs值
-                                let result = await this.$myIpfs.Ipfs.read(secret,projectArray[index].imgHash, this.loginObj.address);
+                                let result = await this.$myIpfs.Ipfs.read(secret, projectArray[index].imgHash, this.loginObj.address);
                                 projectArray[index].tempBase64 = result;
                                 //缓存到本地localdb库
                                 img = {"id": projectArray[index].imgHash, "value": result};
@@ -3697,7 +3704,7 @@
                                 } else {
                                     console.log("从ipfs 取数据！");
                                     //取ipfs值
-                                    let result = await this.$myIpfs.Ipfs.read(secret,projectArray[index].imgHash, this.loginObj.address);
+                                    let result = await this.$myIpfs.Ipfs.read(secret, projectArray[index].imgHash, this.loginObj.address);
                                     projectArray[index].tempBase64 = result;
                                     //缓存到本地localdb库
                                     img = {"id": projectArray[index].imgHash, "value": result};
@@ -3736,7 +3743,7 @@
                                 } else {
                                     console.log("从ipfs 取数据！");
                                     //取ipfs值
-                                    let result = await this.$myIpfs.Ipfs.read(secret,projectArray[index].imgHash, this.loginObj.address);
+                                    let result = await this.$myIpfs.Ipfs.read(secret, projectArray[index].imgHash, this.loginObj.address);
                                     projectArray[index].tempBase64 = result;
                                     //缓存到本地localdb库
                                     img = {"id": projectArray[index].imgHash, "value": result};
@@ -3777,7 +3784,7 @@
                                 } else {
                                     console.log("从ipfs 取数据！");
                                     //取ipfs值
-                                    let result = await this.$myIpfs.Ipfs.read(secret,projectArray[index].imgHash, this.loginObj.address);
+                                    let result = await this.$myIpfs.Ipfs.read(secret, projectArray[index].imgHash, this.loginObj.address);
                                     projectArray[index].tempBase64 = result;
                                     //缓存到本地localdb库
                                     img = {"id": projectArray[index].imgHash, "value": result};
@@ -3805,8 +3812,8 @@
                 this.db = await this.$Lowdb(db_name);
                 this.localdb = await this.$Lowdb(db_name + "_local");
                 console.log(secret);
-                 let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
-                 //let ipfsData =  "{'machineId': ''}";
+                let ipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", address);
+                //let ipfsData =  "{'machineId': ''}";
                 ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
                 ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
                 // this.tempipfsData = {"machineId": ""};
@@ -3837,7 +3844,7 @@
                         let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
                         //数据同步
-                        let tempipfsData = await this.$myIpfs.Ipfs.read(loginObj.secret,"/main", this.loginObj.address);
+                        let tempipfsData = await this.$myIpfs.Ipfs.read(loginObj.secret, "/main", this.loginObj.address);
                         tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                         tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
                         await this.db.set("models", tempipfsData.models).write();
@@ -3876,8 +3883,8 @@
                     });
                 } else {
                     //读取IPFS中数据
-                    let tempipfsData = await this.$myIpfs.Ipfs.read(userSecret,"/main", address);
-                   
+                    let tempipfsData = await this.$myIpfs.Ipfs.read(userSecret, "/main", address);
+
                     tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                     tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
                     console.log(tempipfsData);
@@ -3889,10 +3896,19 @@
                         this.processShow = true;
                         this.percentage = 100;
                         this.synStatus = "success";
-                    } else if (tempipfsData.version < this.db.get("version").value()) {
+                    } else if (tempipfsData.version < this.db.get("version").value()||tempipfsData.version===undefined) {
                         console.log("ipfs版本小于本地版本");
                         let localdata = this.db.__wrapped__;
                         let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                        console.log(result)
+                        if(result.indexOf("lackoil")!==-1){
+                            console.log("非会员，无法同步！");
+                            this.$message({
+                                message: '非会员，无法同步！',
+                                type: 'error'
+                            });
+                            return ;
+                        }
                         this.processShow = true;
                         this.percentage = 100;
                         this.synStatus = "success";
@@ -3929,7 +3945,7 @@
                             } else {
                                 console.log("从ipfs 取数据！");
                                 //取ipfs值
-                                let result = await this.$myIpfs.Ipfs.read(userSecret,projectArray[index].imgHash, loginObj.address);
+                                let result = await this.$myIpfs.Ipfs.read(userSecret, projectArray[index].imgHash, loginObj.address);
                                 projectArray[index].tempBase64 = result;
                                 //缓存到本地localdb库
                                 img = {"id": projectArray[index].imgHash, "value": result};
@@ -3960,7 +3976,7 @@
                         } else {
                             console.log("从ipfs 取数据！");
                             //取ipfs值
-                            let result = await this.$myIpfs.Ipfs.read(userSecret,temp.imgHash, loginObj.address);
+                            let result = await this.$myIpfs.Ipfs.read(userSecret, temp.imgHash, loginObj.address);
                             temp.tempBase64 = result;
                             //缓存到本地localdb库
                             img = {"id": temp.imgHash, "value": result};
@@ -4064,25 +4080,25 @@
                 // this.templateEvent.datas.push(this.filed);
                 // this.filed = "";
                 // this.filedName = "";
-                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleItems = false;
-                    this.filed.tempkey = this.ruleFormAddPro.filedName;
-                    this.filed.id = this.$Uuidv1(), 
-                    this.templateEvent.datas.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddPro.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.dialogVisibleItems = false;
+                        this.filed.tempkey = this.ruleFormAddPro.filedName;
+                        this.filed.id = this.$Uuidv1(),
+                            this.templateEvent.datas.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddPro.filedName = "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             }, //修改选中项
             editSelectFiled(command) {
                 this.dialogVisibleItemsEdit = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
-                this.ruleFormAddTEdit.filedName=command.key;
+                this.ruleFormAddTEdit.filedName = command.key;
             }, //修改项目，模板增加项
             editAddFiled(formName) {
                 // this.dialogVisibleItemsEdit = false;
@@ -4091,17 +4107,17 @@
                 // this.filedName = "";
                 // this.filed = "";
                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleItemsEdit = false;
-                    this.filed.tempkey = this.ruleFormAddTEdit.filedName;
-                    this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddTEdit.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+                    if (valid) {
+                        this.dialogVisibleItemsEdit = false;
+                        this.filed.tempkey = this.ruleFormAddTEdit.filedName;
+                        this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddTEdit.filedName = "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
             //修改页面
             editProject() {
@@ -4219,18 +4235,17 @@
                 // this.filed = "";
                 // this.filedName = "";
                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleAddTempItems = false;
-                    this.filed.tempkey = this.ruleFormAddTtemp.filedName;
-                    this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddTtemp.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-            
+                    if (valid) {
+                        this.dialogVisibleAddTempItems = false;
+                        this.filed.tempkey = this.ruleFormAddTtemp.filedName;
+                        this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddTtemp.filedName = "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
 
 
             }, //增加模板
@@ -4274,7 +4289,7 @@
                 //清空变量
                 this.ruleFormAddTemplate.name = "";
                 this.color = "";
-                this.tempTemplate = []; 
+                this.tempTemplate = [];
                 this.selectlabels = "";
                 this.dialogVisibleAddTemplate = false;
                 this.getdirectory();
@@ -4423,7 +4438,7 @@
                             tempTemplates.push(templateArray[templateIndex]);
                         }
                         this.projects = tempTemplates;
-                    } 
+                    }
                 }
 
             }, //图片处理(增加模板)
@@ -4760,7 +4775,7 @@
                 console.log("ipfs 覆盖到本地")
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let secret = loginObj.secret;
-                let tempipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", this.loginObj.address);
+                let tempipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", this.loginObj.address);
                 console.log(tempipfsData);
                 tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                 tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
@@ -4839,12 +4854,24 @@
             closedialogMain(data) {
                 this.dialogPasswordGeneratorMain = data;
             },
-
-
             //打开支付页面
-            openpay() {
-                this.dialogPayGenerator = true;
-
+            async openpay() {
+                const getPromise = util.promisify(request.get);
+                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
+                let result = await getPromise(url);
+                let msg = this.$JSON5.parse(result.body);
+                if (msg.data.list.length > 0) {
+                    if (msg.data.list[0].end_time < new Date().getTime()) {
+                        this.dialogPayGenerator = true;
+                    }else{
+                        this.$message({
+                            message: '已是会员，无需充值！',
+                            type: 'success'
+                        });
+                    }
+                } else {
+                    this.dialogPayGenerator = true;
+                }
             },
             //子组件关闭后还原dialogPayGenerator为false
             closedialogPay(data) {
@@ -4853,48 +4880,48 @@
 
 
         },
-        	watch: {  //密码生成器自动生成
-		    'ruleFormAddTemplate.name': function(){
-                if(this.ruleFormAddTemplate.name){
-                  if(this.ruleFormAddTemplate.name.trim().length>0){
-                     this.templatedisable=false
-                   }else{
-                     this.templatedisable=true
-                   }
-                }else{
-                    this.templatedisable=true 
-                }
-             },
-
-             'editobject.name': function(){
-                 let name=this.editobject.name;
-                if(name){
-                    if(name.trim().length>0){
-                       this.templatedisable=false
-                    }else{
-                       this.templatedisable=true
+        watch: {  //密码生成器自动生成
+            'ruleFormAddTemplate.name': function () {
+                if (this.ruleFormAddTemplate.name) {
+                    if (this.ruleFormAddTemplate.name.trim().length > 0) {
+                        this.templatedisable = false
+                    } else {
+                        this.templatedisable = true
                     }
-                }else{
-                    this.templatedisable=true 
+                } else {
+                    this.templatedisable = true
                 }
-             },
+            },
 
-             'ruleFormAddProject.name':function(){
-                 if(this.ruleFormAddProject.name){
-                     if( this.ruleFormAddProject.name.trim().length>0){
-                        this.templatedisable=false
-                     }else{
-                        this.templatedisable=true
-                     }
-                    }else{
-                      this.templatedisable=true 
-                   }
-             },
+            'editobject.name': function () {
+                let name = this.editobject.name;
+                if (name) {
+                    if (name.trim().length > 0) {
+                        this.templatedisable = false
+                    } else {
+                        this.templatedisable = true
+                    }
+                } else {
+                    this.templatedisable = true
+                }
+            },
 
-            }
+            'ruleFormAddProject.name': function () {
+                if (this.ruleFormAddProject.name) {
+                    if (this.ruleFormAddProject.name.trim().length > 0) {
+                        this.templatedisable = false
+                    } else {
+                        this.templatedisable = true
+                    }
+                } else {
+                    this.templatedisable = true
+                }
+            },
+
+        }
     }
 </script>
-<style lang="less"  scoped>
+<style lang="less" scoped>
     @import "./css/base.css";
     @import "./css/sy.css";
 
@@ -4953,10 +4980,10 @@
 
     }
 
-    .input-class{    
-       width: 25vw; 
-   }
-    
+    .input-class {
+        width: 25vw;
+    }
+
     :last-child {
         margin-bottom: 0;
     }
@@ -4986,9 +5013,6 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
-    
-   
-
 
 
 </style>
