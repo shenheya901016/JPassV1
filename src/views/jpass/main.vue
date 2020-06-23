@@ -3898,7 +3898,8 @@
                             console.log("ipfs版本小于本地版本");
                             let localdata = this.db.__wrapped__;
                             let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                            if(result.indexOf("success")!==-1){
+                            console.log(result);                           
+                           if(result.indexOf("success")===-1){
                                 console.log("非会员，无法同步！");
                                 this.$message({
                                     message: '非会员，无法同步！',
@@ -3921,7 +3922,7 @@
                         console.log("ipfs无数据,本地数据同步到ipfs端");
                          let localdata = this.db.__wrapped__;
                          let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                            if(result.indexOf("success")!==-1){
+                            if(result.indexOf("success")===-1){
                                 console.log("非会员，无法同步！");
                                 this.$message({
                                     message: '非会员，无法同步！',
@@ -4809,7 +4810,7 @@
             async localToIpfs() {
                 let localdata = this.db.__wrapped__;
                 let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                if(result.indexOf("success")!==-1){
+                if(result.indexOf("success")===-1){
                         this.$message({
                             message: '同步数据失败！',
                             type: 'error'
