@@ -128,8 +128,6 @@
                     console.log(response.body)
                     status = response.body;
                     if (status === "TRADE_SUCCESS") {
-
-                        //_this.$router.push("/jpass/main");
                         _this.dialogVisiblePay=false;
                         _this.$message({
                             message: '恭喜你，充值成功！',

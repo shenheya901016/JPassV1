@@ -26,7 +26,7 @@ export default {
         password: "用户密码",
         duplicatePassword: "密码重复",
         register: "注册",
-        cancel:"取消",
+        cancel: "取消",
         repassword: "请再次输入密码！",
         samepwd: "两次输入密码不一致！",
         uservalidaion: "用户名重复，请重新输入！",
@@ -45,10 +45,11 @@ export default {
         title: '&#12288;恭喜您，钱包注册成功,请您用<span style="color: red">钱包地址</span>到井通官网激活钱包！<p style="color: red;font-size: 15px">注:请您及时抄录并妥善保存好以下信息，这是找回您钱包的必要资料，请不要外泄!</p>',
         mnemonic: "助记词:",
         walletAddress: "钱包地址:",
+
         secret: "私钥:",
         keystoreFile: "key文件:",
         exportKeystoreFile: "key文件导出",
-        login:"登录",
+        login: "登录",
     },
     mnemonicimport: {
         importmnemonic: "助记词导入",
@@ -71,7 +72,7 @@ export default {
         mnemonicError: "助记词错误，请重新输入！",
         keystoreGeneratedError: "key文件生成出错！",
         localStorageFailed: "本地存储失败！",
-        cancel:"取消",
+        cancel: "取消",
     },
     main: {
         newFolder: "新建文件夹",
@@ -130,7 +131,7 @@ export default {
         password: "密码",
         template: "模板",
         unmarked: "未标记",
-        trash:"垃圾桶",
+        trash: "垃圾桶",
         familyAccount: "家人账号",
         privateAccount: "私人账号",
         note: "注意",
@@ -143,21 +144,21 @@ export default {
         failToEdit: "修改失败！",
         settingSavedSuccessfully: "设置保存成功！",
         settingSaveFailed: "设置保存失败！",
-        PasswordGenerator:"密码生成器",
-        fields:"字段",
-        recover:"还原",
-        recovertitle:"是否要恢复删除的文件?",
-        cleartrash:"清空垃圾桶",
-        clearTashTitle:"是否清空垃圾桶",
-        selectSymbol:"选择标识",
-        selectColor:"选择颜色",
-        userIcon:"用户图标",
-        color:"颜色",
-        symbol:"标识",
-        synchronizationInfo:"系统检测到你上次同步操作不在本机中操作，为保证数据完整性，请先确保上次操作数据已经成功同步，请慎重选择同步方式！",
-        localToIpfs:"本地同步到ipfs",
-        ipfsToLocal:"ipfs同步到本地",
-        userResource:"用户资源"
+        PasswordGenerator: "密码生成器",
+        fields: "字段",
+        recover: "还原",
+        recovertitle: "是否要恢复删除的文件?",
+        cleartrash: "清空垃圾桶",
+        clearTashTitle: "是否清空垃圾桶",
+        selectSymbol: "选择标识",
+        selectColor: "选择颜色",
+        userIcon: "用户图标",
+        color: "颜色",
+        symbol: "标识",
+        synchronizationInfo: "系统检测到你上次同步操作不在本机中操作，为保证数据完整性，请先确保上次操作数据已经成功同步，请慎重选择同步方式！",
+        localToIpfs: "本地同步到ipfs",
+        ipfsToLocal: "ipfs同步到本地",
+        userResource: "用户资源"
     },
     lock: {
         unlockJpass: "解锁jpass",
@@ -193,8 +194,8 @@ export default {
         theKeystoryFileOrPasswordIsIncorrectPleaseEnter: "keystory 文件或密码有误，请重新输入！",
         newKeystoreGeneratedError: "新key文件生成错误！",
         localStorageFailed: "本地存储失败！",
-        cancel:"取消",
-        login:"直接登录"
+        cancel: "取消",
+        login: "直接登录"
 
     },
     keyImport: {
@@ -217,13 +218,14 @@ export default {
         pleaseEnterTheUserPasswordAgain: "请再次输入用户密码",
         keyIsWrongPleaseEnter: "密钥错误，请重新输入！",
         localStorageFailed: "本地存储失败！",
-        cancel:"取消"
+        cancel: "取消"
     },
     myInfo: {
         name: "用户名",
         walletAddress: "钱包地址",
         keystoreFile: "key文件:",
         exportKeystoreFile: "key文件导出",
+        vip: "会员有效期",
     },
     selects:{
         password:"密码",

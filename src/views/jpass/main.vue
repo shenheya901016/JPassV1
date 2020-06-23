@@ -854,7 +854,8 @@
             {{ $t("main.name") }}
           </span>
                 <span class="titleInputSpan">
-            <input type="text" v-model="editobject.name" class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
+            <input type="text" v-model="editobject.name" class="myInputTitle"
+                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1079,7 +1080,8 @@
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
                 <span class="titleInputSpan">
-            <input v-model="ruleFormAddTemplate.name" class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')" />
+            <input v-model="ruleFormAddTemplate.name" class="myInputTitle"
+                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1239,7 +1241,7 @@
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item
                                                 v-for="(item, index) in this.templateItems
-.templateItems"
+                          .templateItems"
                                                 :command="item"
                                         >
                                             {{ item.key }}
@@ -1689,6 +1691,16 @@
                             style="width:100%;"
                             readonly
                     >{{ myInfoKey }}
+                    </el-input
+                    >
+                </el-form-item>
+                <el-form-item :label="$t('myInfo.vip')" prop="vip">
+                    <el-input
+                            type="text"
+                            v-model="vip"
+                            style="width:100%;"
+                            readonly
+                    >{{ vip }}
                     </el-input
                     >
                 </el-form-item>
@@ -2893,6 +2905,7 @@
     import LocalStorage from 'lowdb/adapters/LocalStorage';
     import password from '../../password.js';
     import ipfs from '@/jcc_ipfs.js'
+    const util = require('util');
 
     let request = require("request");
 
@@ -2918,6 +2931,7 @@
         },
         data() {
             return {
+                vip:"",
                 templatedisable:true,
                 dialogPayGenerator: false,//支付页面弹出框
                 product: "product",
@@ -3145,23 +3159,23 @@
                             "type": "text",
                             "val": "",
                             "tempkey": "Website"
-                        }, 
-                        {
-                            "id": "fdbce150-fec4-18e9-bd32-854c67bf088b",
-                            "key": "Name",
-                            "type": "text",
-                            "val": "",
-                            "tempkey": "Name"
                         },
-                        {
-                            "id": "fdbce150-feb9-11e9-bd32-854c67bf088b",
-                            "key": "Password",
-                            "type": "password",
-                            "val": "",
-                            "tempkey": "Password",
-                            "percentage": 0,
-                            "pwdstatus": "",
-                        }]
+                            {
+                                "id": "fdbce150-fec4-18e9-bd32-854c67bf088b",
+                                "key": "Name",
+                                "type": "text",
+                                "val": "",
+                                "tempkey": "Name"
+                            },
+                            {
+                                "id": "fdbce150-feb9-11e9-bd32-854c67bf088b",
+                                "key": "Password",
+                                "type": "password",
+                                "val": "",
+                                "tempkey": "Password",
+                                "percentage": 0,
+                                "pwdstatus": "",
+                            }]
                     }]
                 },
                 templateItems: {
@@ -3350,8 +3364,33 @@
                 this.loginObj.lock = true;
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
                 this.dialogVisible = true;
-            }, myInfo() {
+            }, async myInfo() {
+
+                const getPromise = util.promisify(request.get);
+                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
+                let result = await getPromise(url);
+                let msg = this.$JSON5.parse(result.body);
+
+                console.log(msg)
+                if(msg.data.length>0){
+                    this.vip = this.formatDate(msg.data.list[0].end_time);
+                }else {
+                    this.vip ="非会员，请充值！"
+                }
+
                 this.dialogMyInfo = true;
+            }, formatDate(datetime) {
+                var date = new Date(datetime);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                var year = date.getFullYear(),
+                    month = ("0" + (date.getMonth() + 1)).slice(-2),
+                    sdate = ("0" + date.getDate()).slice(-2),
+                    hour = ("0" + date.getHours()).slice(-2),
+                    minute = ("0" + date.getMinutes()).slice(-2),
+                    second = ("0" + date.getSeconds()).slice(-2);
+                // 拼接
+                var result = year + "-" + month + "-" + sdate + " " + hour + ":" + minute + ":" + second;
+                // 返回
+                return result;
             }, async exportKey() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
@@ -3527,7 +3566,7 @@
                 this.delobj = note;
                 this.directoryClickId = note.id;
                 this.notesBytargeId(note);
-                this.searchTemp="";//清空搜索框
+                this.searchTemp = "";//清空搜索框
             },
             directoryclick(note, event) {
                 var target = event.currentTarget;
@@ -3537,7 +3576,7 @@
                 this.delobj = note;
                 this.isDisabled = false;
                 this.directoryClickId = note.id;
-                this.searchTemp="";//清空搜索框
+                this.searchTemp = "";//清空搜索框
                 this.notesBytargeId(note);
             }, noteslick(project, event) {
                 var target = event.currentTarget;
@@ -4917,13 +4956,7 @@
     .input-class{    
        width: 25vw; 
    }
-     .input-class-template{    
-       width: 22vw; 
-   }
-    .input-class-template-edit{    
-       width: 23.5vw; 
-   }
-
+    
     :last-child {
         margin-bottom: 0;
     }
