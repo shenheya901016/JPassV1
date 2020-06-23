@@ -3006,8 +3006,7 @@
                 db: '',
                 localdb: '',
                 projects: [],
-                operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS",//运营商钱包地址
-                operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW",//运营商密钥
+ 
                 localData: "",//本地数据
                 processShow: false,//同步进度条是否显示
                 projectEvent: '',
@@ -3801,8 +3800,6 @@
             //启动加载
             async initialize() {
                 console.log("初始化....");
-                let letoperatorJID = this.operatorJID;//运营商钱包地址
-                let operatorSecret = this.operatorSecret; //运营商密钥
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let address = loginObj.address;
                 let secret = loginObj.secret;
@@ -3812,11 +3809,10 @@
                 this.db = await this.$Lowdb(db_name);
                 this.localdb = await this.$Lowdb(db_name + "_local");
                 console.log(secret);
-                let ipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", address);
-                //let ipfsData =  "{'machineId': ''}";
+                //取ipfs数据
+                let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
                 ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
                 ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
-                // this.tempipfsData = {"machineId": ""};
                 this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
                 console.log("本地机器码:" + this.db.get("machineId").value());
                 console.log("ipfs机器码:" + ipfsData.machineId);
@@ -3844,82 +3840,102 @@
                         let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
                         //数据同步
-                        let tempipfsData = await this.$myIpfs.Ipfs.read(loginObj.secret, "/main", this.loginObj.address);
-                        tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
-                        tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
-                        await this.db.set("models", tempipfsData.models).write();
-                        await this.db.set("project", tempipfsData.project).write();
-                        await this.db.set("templates", tempipfsData.templates).write();
-                        await this.db.set('settings', tempipfsData.settings).write();
-                        await this.db.set('machineId', tempipfsData.machineId).write();
-                        await this.db.set('version', tempipfsData.version).write();
+                        // let tempipfsData = await this.$myIpfs.Ipfs.read(loginObj.secret,"/main", this.loginObj.address);
+                        // tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
+                        // tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
+                        // await this.db.set("models", tempipfsData.models).write();
+                        // await this.db.set("project", tempipfsData.project).write();
+                        // await this.db.set("templates", tempipfsData.templates).write();
+                        // await this.db.set('settings', tempipfsData.settings).write();
+                        // await this.db.set('machineId', tempipfsData.machineId).write();
+                        // await this.db.set('version', tempipfsData.version).write();
+                        await this.db.set("models", ipfsData.models).write();
+                        await this.db.set("project", ipfsData.project).write();
+                        await this.db.set("templates", ipfsData.templates).write();
+                        await this.db.set('settings', ipfsData.settings).write();
+                        await this.db.set('machineId', ipfsData.machineId).write();
+                        await this.db.set('version', ipfsData.version).write();
                         this.getdirectory();
                     }
-                } else if (this.db.get("machineId") != ipfsData.machineId) {
-                    this.getdirectory();
-                    this.dialogSynchronization = true;
-                    console.log("机器码不同");
-                } else if (this.db.get("machineId") == ipfsData.machineId) {
-                    this.getdirectory();
-                    console.log("机器码相同,不执行任何操作！");
-                    //同步数据到ipfs
+                } else if (ipfsData.machineId == "" ||ipfsData.machineId == undefined) {
+                     console.log("本地有数据，ipfs 没有数据,系统默认不同步数据");
+                }else if(ipfsData.machineId != "" && ipfsData.machineId !=undefined){
+                    if(this.db.get("machineId") == ipfsData.machineId){
+                     this.getdirectory();
+                     console.log("机器码相同,不执行任何操作！");
+
+                    }else{
+                         console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
+                         this.getdirectory();
+                         this.dialogSynchronization = true;
+                    }
                 }
+                //更新设置
                 this.updatesetting();
+                //启动锁定定时器
                 this.locksystem();
             },
+            //手动同步
             async synchronization() {
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = this.loginObj.address;
-                // let userJID = "j4M4AoSi522XxNpywfyBahmjzQihc4EegL";
                 let userSecret = this.loginObj.secret;
-                // let userSecret = "sa9UcyBBD3A3JU3Ux3ZKcbNCxVw9h";
-                let letoperatorJID = this.operatorJID;//运营商钱包地址
-                let operatorSecret = this.operatorSecret; //运营商密钥
-                let bal = loginObj.bal;//这个值从sessionStorage中取默认为false：未被激活
-                if (!bal) {//未被激活时，判断用户钱包地址是否激活
-                    this.$notify.error({
-                        title: this.$t('main.note'),
-                        message: this.$t('main.pleaseGoToTheOfficialWebsiteToActivateYourWallet')
-                    });
-                } else {
                     //读取IPFS中数据
                     let tempipfsData = await this.$myIpfs.Ipfs.read(userSecret, "/main", address);
-
                     tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                     tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
                     console.log(tempipfsData);
                     console.log("本机版本：" + this.db.get("version").value());
                     console.log("ipfs版本：" + tempipfsData.version);
-                    if (tempipfsData.version > this.db.get("version").value()) {//version越大 内容越新
-                        console.log("ipfs版本大于本地版本");
-                        this.db = tempipfsData;
-                        this.processShow = true;
-                        this.percentage = 100;
-                        this.synStatus = "success";
-                    } else if (tempipfsData.version < this.db.get("version").value()||tempipfsData.version===undefined) {
-                        console.log("ipfs版本小于本地版本");
-                        let localdata = this.db.__wrapped__;
-                        let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                        console.log(result)
-                        if(result.indexOf("lackoil")!==-1){
-                            console.log("非会员，无法同步！");
-                            this.$message({
-                                message: '非会员，无法同步！',
-                                type: 'error'
-                            });
-                            return ;
+                    if(tempipfsData.machineId != "" && tempipfsData.machineId !=undefined){
+                     if (tempipfsData.version > this.db.get("version").value()) {//version越大内容越新
+                            console.log("ipfs版本大于本地版本");
+                            this.db = tempipfsData;
+                            this.processShow = true;
+                            this.percentage = 100;
+                            this.synStatus = "success";
+                        } else if (tempipfsData.version < this.db.get("version").value()) {
+                            console.log("ipfs版本小于本地版本");
+                            let localdata = this.db.__wrapped__;
+                            if(result.indexOf("lackoil")!==-1){
+                                console.log("非会员，无法同步！");
+                                this.$message({
+                                    message: '非会员，无法同步！',
+                                    type: 'error'
+                                });
+                                return ;
+                            }else{
+                                let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                                console.log("同步结果:"+result);
+                                if(result=="success"){
+                                        this.processShow = true;
+                                        this.percentage = 100;
+                                        this.synStatus = "success";
+                                    }
+                                }
+                            } else {
+                            console.log("ipfs版本等于本地版本");
                         }
-                        this.processShow = true;
-                        this.percentage = 100;
-                        this.synStatus = "success";
-                        // if (await this.$myIpfs.tra(transaction) == "success") {
-                        //     this.percentage = 100;
-                        //     this.synStatus = "success";
-                        // }
-                    } else {
-                        console.log("ipfs版本等于本地版本");
-                    }
-                }
+                    }  else{
+                        console.log("ipfs无数据,本地数据同步到ipfs端");
+                         let localdata = this.db.__wrapped__;
+                            if(result.indexOf("lackoil")!==-1){
+                                console.log("非会员，无法同步！");
+                                this.$message({
+                                    message: '非会员，无法同步！',
+                                    type: 'error'
+                                });
+                                return ;
+                            }else{
+                                let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                                console.log("同步结果:"+result);
+                                if(result=="success"){
+                                        this.processShow = true;
+                                        this.percentage = 100;
+                                        this.synStatus = "success";
+                                    }
+                                }
+                       }  
             },
             pwdLength(obj) {
                 obj.format = this.$createPassword.cryptLevel(obj.val);
@@ -3945,7 +3961,7 @@
                             } else {
                                 console.log("从ipfs 取数据！");
                                 //取ipfs值
-                                let result = await this.$myIpfs.Ipfs.read(userSecret, projectArray[index].imgHash, loginObj.address);
+                                let result = await this.$myIpfs.Ipfs.read(userSecret,projectArray[index].imgHash, loginObj.address);
                                 projectArray[index].tempBase64 = result;
                                 //缓存到本地localdb库
                                 img = {"id": projectArray[index].imgHash, "value": result};
@@ -3976,7 +3992,7 @@
                         } else {
                             console.log("从ipfs 取数据！");
                             //取ipfs值
-                            let result = await this.$myIpfs.Ipfs.read(userSecret, temp.imgHash, loginObj.address);
+                            let result = await this.$myIpfs.Ipfs.read(userSecret,temp.imgHash, loginObj.address);
                             temp.tempBase64 = result;
                             //缓存到本地localdb库
                             img = {"id": temp.imgHash, "value": result};
@@ -4080,25 +4096,25 @@
                 // this.templateEvent.datas.push(this.filed);
                 // this.filed = "";
                 // this.filedName = "";
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.dialogVisibleItems = false;
-                        this.filed.tempkey = this.ruleFormAddPro.filedName;
-                        this.filed.id = this.$Uuidv1(),
-                            this.templateEvent.datas.push(this.filed);
-                        this.filed = "";
-                        this.ruleFormAddPro.filedName = "";
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+                 this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.dialogVisibleItems = false;
+                    this.filed.tempkey = this.ruleFormAddPro.filedName;
+                    this.filed.id = this.$Uuidv1(), 
+                    this.templateEvent.datas.push(this.filed);
+                    this.filed = "";
+                    this.ruleFormAddPro.filedName= "";
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
             }, //修改选中项
             editSelectFiled(command) {
                 this.dialogVisibleItemsEdit = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
-                this.ruleFormAddTEdit.filedName = command.key;
+                this.ruleFormAddTEdit.filedName=command.key;
             }, //修改项目，模板增加项
             editAddFiled(formName) {
                 // this.dialogVisibleItemsEdit = false;
@@ -4107,17 +4123,17 @@
                 // this.filedName = "";
                 // this.filed = "";
                 this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.dialogVisibleItemsEdit = false;
-                        this.filed.tempkey = this.ruleFormAddTEdit.filedName;
-                        this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
-                        this.filed = "";
-                        this.ruleFormAddTEdit.filedName = "";
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+                if (valid) {
+                    this.dialogVisibleItemsEdit = false;
+                    this.filed.tempkey = this.ruleFormAddTEdit.filedName;
+                    this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
+                    this.filed = "";
+                    this.ruleFormAddTEdit.filedName= "";
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
             },
             //修改页面
             editProject() {
@@ -4235,23 +4251,22 @@
                 // this.filed = "";
                 // this.filedName = "";
                 this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.dialogVisibleAddTempItems = false;
-                        this.filed.tempkey = this.ruleFormAddTtemp.filedName;
-                        this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
-                        this.filed = "";
-                        this.ruleFormAddTtemp.filedName = "";
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+                if (valid) {
+                    this.dialogVisibleAddTempItems = false;
+                    this.filed.tempkey = this.ruleFormAddTtemp.filedName;
+                    this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
+                    this.filed = "";
+                    this.ruleFormAddTtemp.filedName= "";
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+            
 
 
             }, //增加模板
             async saveTemplate() {
-                let letoperatorJID = this.operatorJID;//运营商钱包地址
-                let operatorSecret = this.operatorSecret; //运营商密钥
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
                 //处理分类
@@ -4289,7 +4304,7 @@
                 //清空变量
                 this.ruleFormAddTemplate.name = "";
                 this.color = "";
-                this.tempTemplate = [];
+                this.tempTemplate = []; 
                 this.selectlabels = "";
                 this.dialogVisibleAddTemplate = false;
                 this.getdirectory();
@@ -4438,7 +4453,7 @@
                             tempTemplates.push(templateArray[templateIndex]);
                         }
                         this.projects = tempTemplates;
-                    }
+                    } 
                 }
 
             }, //图片处理(增加模板)
@@ -4775,7 +4790,7 @@
                 console.log("ipfs 覆盖到本地")
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let secret = loginObj.secret;
-                let tempipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", this.loginObj.address);
+                let tempipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", this.loginObj.address);
                 console.log(tempipfsData);
                 tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                 tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
@@ -4880,48 +4895,48 @@
 
 
         },
-        watch: {  //密码生成器自动生成
-            'ruleFormAddTemplate.name': function () {
-                if (this.ruleFormAddTemplate.name) {
-                    if (this.ruleFormAddTemplate.name.trim().length > 0) {
-                        this.templatedisable = false
-                    } else {
-                        this.templatedisable = true
-                    }
-                } else {
-                    this.templatedisable = true
+        	watch: {  //密码生成器自动生成
+		    'ruleFormAddTemplate.name': function(){
+                if(this.ruleFormAddTemplate.name){
+                  if(this.ruleFormAddTemplate.name.trim().length>0){
+                     this.templatedisable=false
+                   }else{
+                     this.templatedisable=true
+                   }
+                }else{
+                    this.templatedisable=true 
                 }
-            },
+             },
 
-            'editobject.name': function () {
-                let name = this.editobject.name;
-                if (name) {
-                    if (name.trim().length > 0) {
-                        this.templatedisable = false
-                    } else {
-                        this.templatedisable = true
+             'editobject.name': function(){
+                 let name=this.editobject.name;
+                if(name){
+                    if(name.trim().length>0){
+                       this.templatedisable=false
+                    }else{
+                       this.templatedisable=true
                     }
-                } else {
-                    this.templatedisable = true
+                }else{
+                    this.templatedisable=true 
                 }
-            },
+             },
 
-            'ruleFormAddProject.name': function () {
-                if (this.ruleFormAddProject.name) {
-                    if (this.ruleFormAddProject.name.trim().length > 0) {
-                        this.templatedisable = false
-                    } else {
-                        this.templatedisable = true
-                    }
-                } else {
-                    this.templatedisable = true
-                }
-            },
+             'ruleFormAddProject.name':function(){
+                 if(this.ruleFormAddProject.name){
+                     if( this.ruleFormAddProject.name.trim().length>0){
+                        this.templatedisable=false
+                     }else{
+                        this.templatedisable=true
+                     }
+                    }else{
+                      this.templatedisable=true 
+                   }
+             },
 
-        }
+            }
     }
 </script>
-<style lang="less" scoped>
+<style lang="less"  scoped>
     @import "./css/base.css";
     @import "./css/sy.css";
 
@@ -4980,10 +4995,10 @@
 
     }
 
-    .input-class {
-        width: 25vw;
-    }
-
+    .input-class{    
+       width: 25vw; 
+   }
+    
     :last-child {
         margin-bottom: 0;
     }
@@ -5013,6 +5028,9 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
+    
+   
+
 
 
 </style>
