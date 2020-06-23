@@ -46,6 +46,7 @@ export default {
         title: '&#12288;Congratulations! your wallet has been registered successfully.Please use your<span style="color: red"> wallet Address</span> to jingtong website to activate your wallet!<p style="color: red;font-size: 15px">Attention:Please copy and keep the following information in time. It is necessary to retrieve your wallet.</p>',
         mnemonic: "Mnemonic:",
         walletAddress: "Wallet Address:",
+
         secret: "Secret:",
         keystoreFile: "Keystore File:",
         exportKeystoreFile: "Keystore Export",
@@ -222,6 +223,16 @@ export default {
         walletAddress: "Wallet Address",
         keystoreFile: "Keystore File:",
         exportKeystoreFile: "Keystore Export",
+        vip:"vip",
+    },
+    selects:{
+        password:"Password",
+        number:"Number",
+        email:"Email",
+        address:"Address",
+        login:"Login",
+        phone:"Phone",
+        date:"Date"
     },
     ...enLocale
 };

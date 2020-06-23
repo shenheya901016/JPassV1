@@ -1,6 +1,8 @@
 import {IpfsRemote} from "ipfslib";
 import myIpfs from '../src/myIpfs';
+import jcc_ipfs from '../src/jcc_ipfs';
 import axios from "axios"
+import CryptoJS from "crypto-js";
 
 const fs = require("fs")
 let remote = new IpfsRemote({urls: ["http://139.198.191.254:8545/v1/jsonrpc"]});
@@ -26,7 +28,7 @@ describe("test Ipfs", async function () {
             //console.log(await myIpfs.getTransactionStat("819FBB17F14757D71C1091ABF562C4E2D200CE3976283DFD3896D3E087BEDDC5"));    //判断向ipfs写入数据是否完成（同步是否完成）
             //console.log(await myIpfs.readByHash('776CAA6B90F6C08023EF64F6177F8D10080C0F69766DD635EA45E94CAB1D76E2', userSecret));   //直接根据hash值，查找单个file数据
         });*/
-        it("判断账号是否激活", async function () {
+        /*it("判断账号是否激活", async function () {
             let result = await myIpfs.getWalletBalance(userJID);
             if (result === "success") {
                 console.log("该账号已被激活！");
@@ -91,14 +93,20 @@ describe("test Ipfs", async function () {
             let key = JPassUtil.Wallet.deriveKeyPair(userSecret);
             console.log(key.publicKey)
         });
-
-        it('http请求',async function () {
+        it('http请求', async function () {
             let result;
-            await axios.get("http://127.0.0.1:1337/api/v0/read?filePath=/asdasd.txt&address=j4M4AoSi522XxNpywfyBahmjzQihc4EegL").
-            then((response) => {
+            await axios.get("http://127.0.0.1:1337/api/v0/read?filePath=/asdasd.txt&address=j4M4AoSi522XxNpywfyBahmjzQihc4EegL").then((response) => {
                 result = response.data
             })
             console.log(result)
+        });*/
+        it('jcc_ipfs write', async function () {
+            var data = [{id: 1}, {id: 2}]
+            var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'secret key 123').toString();
+
+            var bytes  = CryptoJS.AES.decrypt(ciphertext, 'secret key 123');
+            var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            console.log(decryptedData); // [{id: 1}, {id: 2}]
         });
     });
     /*describe("test get tokens", function () {

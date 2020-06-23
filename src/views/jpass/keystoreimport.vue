@@ -20,14 +20,13 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.oldLoginPassword')" prop="oldPassword">
-                    <el-input type="password" v-model="ruleForm.oldPassword" :placeholder="$t('keystoreImport.pleaseEnterTheOldLoginPassword')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
+                    <el-input type="password" v-model="ruleForm.oldPassword" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                  </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newUserName')" prop="name">
-                    <el-input type="text" v-model="ruleForm.name" :placeholder="$t('keystoreImport.newUsernameWillReplaceTheOldUsername')" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
+                    <el-input type="text" v-model="ruleForm.name"  oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password " :placeholder="$t('keystoreImport.newPasswordWillReplaceTheOldPassword')"
-                              oncopy="return false" onpaste="return false" style="width:95%;float: left" show-password></el-input>
+                    <el-input type="password" v-model="ruleForm.password " oncopy="return false" onpaste="return false" style="width:95%;float: left" show-password></el-input>
                     <img @click="passwordGenerator()" style="width: 5%;" src="./img/钥匙.svg" alt="">
                 </el-form-item>
                 <!--<el-form-item>-->

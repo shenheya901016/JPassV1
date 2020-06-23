@@ -97,7 +97,8 @@ let jcc_ipfs = {
             let url = baserpcurl + '/api/v0/read?filePath=' + filePath + '&address=' + address;
             let result = await getPromise(url);
             let msg = result.body;
-            if (msg.split("error")) {
+            console.log(msg);
+            if (msg.indexOf("error")!=-1) {
                 return msg;
             } else {
                 return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, JSON.parse(msg));

@@ -18,8 +18,8 @@ import vueCanvasNest from 'vue-canvas-nest';
 import passwordGenerator from "@/components/PasswordGenerator";
 import passwordGeneratorMain from "@/components/PasswordGeneratorMain";
 import pay from "@/components/Pay";
-	
-	
+
+
 window.myIpfs=myIpfs;
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
@@ -66,14 +66,12 @@ if (typeof window.require === 'function') {
     Vue.prototype.$IpcRenderer = window.IpcRenderer;
 }
 
-
-
-
 new Vue({
     i18n,
     router,
     store,
     render: h => h(App)//入口页面
 }).$mount("#app");
+
 
 
