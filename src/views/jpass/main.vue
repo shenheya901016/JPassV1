@@ -3897,7 +3897,8 @@
                         } else if (tempipfsData.version < this.db.get("version").value()) {
                             console.log("ipfs版本小于本地版本");
                             let localdata = this.db.__wrapped__;
-                            if(result.indexOf("lackoil")!==-1){
+                            let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                            if(result.indexOf("success")!==-1){
                                 console.log("非会员，无法同步！");
                                 this.$message({
                                     message: '非会员，无法同步！',
@@ -3905,7 +3906,7 @@
                                 });
                                 return ;
                             }else{
-                                let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                                //let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
                                 console.log("同步结果:"+result);
                                 if(result=="success"){
                                         this.processShow = true;
@@ -3919,7 +3920,8 @@
                     }  else{
                         console.log("ipfs无数据,本地数据同步到ipfs端");
                          let localdata = this.db.__wrapped__;
-                            if(result.indexOf("lackoil")!==-1){
+                         let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                            if(result.indexOf("success")!==-1){
                                 console.log("非会员，无法同步！");
                                 this.$message({
                                     message: '非会员，无法同步！',
@@ -3927,7 +3929,6 @@
                                 });
                                 return ;
                             }else{
-                                let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
                                 console.log("同步结果:"+result);
                                 if(result=="success"){
                                         this.processShow = true;
@@ -4807,12 +4808,18 @@
             //本地覆盖ipfs
             async localToIpfs() {
                 let localdata = this.db.__wrapped__;
-                console.log(localdata);
                 let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                console.log(this.$JSON5.parse(result).status);
-                if (this.$JSON5.parse(result).status = "success") {
-                    this.dialogSynchronization = false
-                }
+                if(result.indexOf("success")!==-1){
+                                console.log("非会员，无法同步！");
+                                this.$message({
+                                    message: '非会员，无法同步！',
+                                    type: 'error'
+                                });
+                                return ;
+                            }else{
+                               this.dialogSynchronization = false
+                      }
+                 }  
             },
             //关闭同步窗口后关闭同步，防止页面刷新同步数据
             closeInit() {
