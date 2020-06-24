@@ -1,7 +1,7 @@
 <template>
     <!--支付-->
         <el-container class="container">
-           
+
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;margin-top: -1vw; margin-bottom: 1vw;"/>
             </a>
@@ -132,6 +132,7 @@
                             message: '恭喜你，充值成功！',
                             type: 'success'
                         });
+                        _this.$router.push("/jpass/main");
                     } else {
                         console.log("充值失败！")
                         setTimeout(function () {
