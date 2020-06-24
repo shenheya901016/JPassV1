@@ -15,6 +15,8 @@ import Index from "./views/Index";
 import Registersuccess from "./views/jpass/registersuccess.vue";
 import LockJpass from "./views/jpass/lock.vue";
 import Main from "./views/jpass/main.vue";
+import Pay from "./views/jpass/pay.vue";
+
 
 Vue.use(Router);
 
@@ -96,6 +98,11 @@ export default new Router({
             path: "/jpass/main",
             name: "main",
             component: Main
+        },
+        {
+            path: "/jpass/pay",
+            name: "main",
+            component: Pay
         },
         // {
         //     path: "/about",

@@ -107,6 +107,7 @@
 
 <script type="es6">
     import vueCanvasNest from "vue-canvas-nest";
+        import ipfs from '@/jcc_ipfs.js';
 
     export default {
         components: {
@@ -193,7 +194,6 @@
                 let keyStoreString = localStorage.getItem(this.ruleForm.name);
                 let objKeyStore = this.$JSON5.parse(keyStoreString);
                 let keystring = "";
-                let bal = "";
                 if (keyStoreString != null) {
                     try {
                         //钱包生成密钥
@@ -209,31 +209,27 @@
                     } catch (e) {
                         this.$message.error(this.$t("login.pwderror"));
                         return false;
-                    }
-                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                    //       await this.$myIpfs.initTest( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret,"data");
-                    //       await this.$myIpfs.initTest( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret,"file");
-                    //      bal=true;
-                    //  }else{
-                    //      bal=false;
-                    //  }
-                    bal = true;
+                    }          
                     let userkeyObj = {
                         name: this.ruleForm.name,
                         secret: secret,
                         address: objKeyStore.wallets[0].address,
                         lock: false, //是否锁定
-                        bal: bal
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    //this.$message.success("用户登录成功！");
-                    this.$router.push("/jpass/main");
-                } else {
-                    this.$message.error(this.$t("login.loginerror"));
-                }
-            }
+                    //判断是否充值过
+                    let result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
+                    console.log(result);
+                    if(result.indexOf("success")===-1){
+                          this.$router.push("/jpass/pay"); 
+                        }else{
+                          this.$router.push("/jpass/main");
+                        }  
+                    } else {
+                        this.$message.error(this.$t("login.loginerror"));
+                    }
+              }
         }
     };
 </script>
