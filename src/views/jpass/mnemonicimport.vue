@@ -193,48 +193,52 @@
                 }
             },
 
-            async toMainPage() {
-                let secret = "";
-                let wallet = new this.$JINGCHUANGWallet();
-                let keyStoreString = localStorage.getItem(this.ruleForm.name);
-                let objKeyStore = this.$JSON5.parse(keyStoreString);
-                let keystring = "";
-                let bal=""
-                if (keyStoreString != null) {
-                    try {
-                        //钱包生成密钥
-                        wallet.setJingchangWallet(objKeyStore);
-                        var address = objKeyStore.wallets[0].address;
-                        keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
-                        await keystring.then(function (value) {
-                            secret = value;
-                        });
-                    } catch (e) {
-                        this.$message.error(this.$t('login.pwderror'));
-                        return false;
-                    }
-                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                    //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
-                    //      bal=true;
-                    //  }else{
-                    //      bal=false;
-                    //  }
-                    bal=true;
-                    let userkeyObj = {
-                        name:this.ruleForm.name,
-                        secret: secret,
-                        address: objKeyStore.wallets[0].address,
-                        lock:false,//是否锁定
-                        bal:bal,
-                    }
-                    sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    //this.$message.success("用户登录成功！");
-                    this.$router.push('/jpass/main');
-                } else {
-                    this.$message.error(this.$t('login.loginerror'));
-                }
-            },
+             
+             toMainPage(){
+                  this.$router.push('/jpass/login');
+             },
+            // async toMainPage() {
+            //     let secret = "";
+            //     let wallet = new this.$JINGCHUANGWallet();
+            //     let keyStoreString = localStorage.getItem(this.ruleForm.name);
+            //     let objKeyStore = this.$JSON5.parse(keyStoreString);
+            //     let keystring = "";
+            //     let bal=""
+            //     if (keyStoreString != null) {
+            //         try {
+            //             //钱包生成密钥
+            //             wallet.setJingchangWallet(objKeyStore);
+            //             var address = objKeyStore.wallets[0].address;
+            //             keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
+            //             await keystring.then(function (value) {
+            //                 secret = value;
+            //             });
+            //         } catch (e) {
+            //             this.$message.error(this.$t('login.pwderror'));
+            //             return false;
+            //         }
+            //         // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
+            //         // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
+            //         //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
+            //         //      bal=true;
+            //         //  }else{
+            //         //      bal=false;
+            //         //  }
+            //         bal=true;
+            //         let userkeyObj = {
+            //             name:this.ruleForm.name,
+            //             secret: secret,
+            //             address: objKeyStore.wallets[0].address,
+            //             lock:false,//是否锁定
+            //             bal:bal,
+            //         }
+            //         sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
+            //         //this.$message.success("用户登录成功！");
+            //         this.$router.push('/jpass/main');
+            //     } else {
+            //         this.$message.error(this.$t('login.loginerror'));
+            //     }
+            // },
             //打开密码生成器
             passwordGenerator() {
                this.dialogPasswordGenerator = true;

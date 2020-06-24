@@ -50,7 +50,7 @@ export default {
         secret: "Secret:",
         keystoreFile: "Keystore File:",
         exportKeystoreFile: "Keystore Export",
-        login:"Login"
+        login:"Return to login page"
     },
     mnemonicimport: {
         importmnemonic: "Mnemonic Import",
@@ -110,7 +110,7 @@ export default {
         newKeystoreGeneratedError: "Error generating new keystore file!",
         localStorageFailed: "Local storage failure!",
         cancel:"Cancel",
-        login:"Direct login"
+        login:"Return to login page"
     },
     keyImport: {
         walletKeyImport: "Secret Import",

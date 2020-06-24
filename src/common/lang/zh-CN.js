@@ -49,7 +49,7 @@ export default {
         secret: "私钥:",
         keystoreFile: "key文件:",
         exportKeystoreFile: "key文件导出",
-        login: "登录",
+        login: "返回登录页面",
     },
     mnemonicimport: {
         importmnemonic: "助记词导入",
