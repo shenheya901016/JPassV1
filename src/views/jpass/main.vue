@@ -48,7 +48,7 @@
                         v-if="showTrash == true"
                         style="border:0;padding: 5px 5px;"
                         @click="dialogclearTrash = true"
-                > ,
+                > 
                     <img
                             style="top:-2px;height: 25px;width: 25px;"
                             src="./img/trash.svg"
