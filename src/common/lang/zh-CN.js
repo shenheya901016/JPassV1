@@ -17,8 +17,8 @@ export default {
         namevalidation: "请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！",
         pwdvalidaion: "请输入用户密码",
         pwdlengthvalidaion: "密码长度不小于4位",
-        pwderror: "密码有误，请重新输入！",
-        loginerror: "用户不存在，请重新输入！",
+        pwderror: "用户账号或密码有误，请重新输入！",
+        loginerror: "用户账号或密码有误，请重新输入！，请重新输入！",
     },
     register: {
         title: "用户注册",
@@ -168,7 +168,7 @@ export default {
         unlockedSuccessfully: "解锁成功！"
     },
     keystoreImport: {
-        importKeystoreWallet: "key导入钱包",
+        importKeystoreWallet: "key文件导入钱包",
         keystoreFile: "key文件",
         uploadKeystore: "上传key文件",
         oldLoginPassword: "旧登录密码",
@@ -187,7 +187,7 @@ export default {
         pleaseEnterANewUsername: "请输入新用户名",
         pleaseEnterYourPassword: "请输入旧密码",
         pleaseEnterAUserPassword: "请输入新用户密码",
-        theLengthIsBetween4And20Characters: "长度不小于位",
+        theLengthIsBetween4And20Characters: "长度不小于4位",
         pleaseEnterTheUserPasswordAgain: "请再次输入新用户密码",
         theCurrentLimitSelects1FileThisTimeSelectedFiles: "当前限制上传 1个文件",
         importedKeystoryFilePFailed: "keystory 文件未导入或文件解析失败，请重新输入！",
@@ -195,7 +195,7 @@ export default {
         newKeystoreGeneratedError: "新key文件生成错误！",
         localStorageFailed: "本地存储失败！",
         cancel: "取消",
-        login: "直接登录"
+        login: "返回登录页面"
 
     },
     keyImport: {

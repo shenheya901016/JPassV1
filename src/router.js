@@ -101,7 +101,7 @@ export default new Router({
         },
         {
             path: "/jpass/pay",
-            name: "main",
+            name: "pay",
             component: Pay
         },
         // {

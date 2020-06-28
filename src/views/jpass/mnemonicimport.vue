@@ -95,7 +95,7 @@
                     name: [
                         {required: true, message: this.$t('mnemonicimport.inputUserName'), trigger: 'blur'},
                         {
-                            min: 3,
+                            min: 4,
                             max: 20,
                             message: this.$t('mnemonicimport.lengthBetween3and20Characters'),
                             trigger: 'blur'

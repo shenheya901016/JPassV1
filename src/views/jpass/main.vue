@@ -768,7 +768,7 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                    <el-date-picker v-model="data.val" value-format="yyyy-MM-dd " class="input-class"
+                                    <el-date-picker v-model="data.val" value-format="yyyy-MM-dd" class="input-class"
                                                     type="date" placeholder="选择日期" size="large"></el-date-picker>
                                     <a href="#"
                                     ><i
@@ -1160,10 +1160,11 @@
                                     <input
                                             type="password"
                                             v-model="data.val"
-                                            readonly
-                                            style="width:90%;float: left"
+                                            style="width:21vw;float: left"
                                             class="myInput"
                                     />
+                                    <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
+                                    <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -1180,8 +1181,7 @@
                                     <input
                                             type="text"
                                             v-model="data.val"
-                                            readonly
-                                            style="width:90%;float: left"
+                                            style="width:21vw;float: left"
                                             class="myInput"
                                     />
                                     <a href="#"
@@ -1197,14 +1197,13 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                    <!-- <el-date-picker v-model="data.val" class="input-class-template" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
-                                    <input
+                                    <el-date-picker v-model="data.val" class="input-class-template" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <!-- <input
                                             type="text"
                                             v-model="data.val"
-                                            readonly
                                             style="width:90%;float: left"
                                             class="myInput"
-                                    />
+                                    /> -->
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -1351,10 +1350,11 @@
                                     <input
                                             type="password"
                                             v-model="data.val"
-                                            readonly
-                                            style="float: left;width:90%;"
+                                            style="float: left;width:21vw;"
                                             class="myInput"
                                     />
+                                    <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
+                                    <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -1371,8 +1371,7 @@
                                     <input
                                             type="text"
                                             v-model="data.val"
-                                            style="float: left;width:90%;"
-                                            readonly
+                                            style="float: left;width:21vw;"
                                             class="myInput"
                                     />
                                     <a href="#"
@@ -1388,14 +1387,14 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                    <!-- <el-date-picker v-model="data.val" class="input-class-template-edit" readonly="readonly" type="date" placeholder="选择日期" size="large" ></el-date-picker> -->
-                                    <input
+                                    <el-date-picker v-model="data.val" class="input-class-template-edit" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <!-- <input
                                             type="text"
                                             v-model="data.val"
                                             style="float: left;width:90%;"
                                             readonly
                                             class="myInput"
-                                    />
+                                    /> -->
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -1467,7 +1466,7 @@
                 <el-form-item :label="$t('main.name')" prop="filedName" style="margin-top:10%">
                     <el-input
                             type="text"
-                            v-model="ruleFormAddPro.filedName"
+                            v-model.trim="ruleFormAddPro.filedName"
                             style="width:100%;"
                     ></el-input>
                 </el-form-item>
@@ -1541,7 +1540,7 @@
                 <el-form-item :label="$t('main.name')" prop="filedName" style="margin-top:10%">
                     <el-input
                             type="text"
-                            v-model="ruleFormAddTtemp.filedName"
+                            v-model.trim="ruleFormAddTtemp.filedName"
                             style="width:100%;"
                     ></el-input>
                 </el-form-item>
@@ -3463,6 +3462,7 @@
                         }
                     }
                     alldata[modelkey].count = count;
+                    console.log("contname:"+alldata[modelkey].name+alldata[modelkey].count);
                 }
                 //分组
                 for (var key in alldata) {
@@ -4278,6 +4278,7 @@
                 //处理分类
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
+                    console.log(this.selectlabels);
                 }
                 //图片处理
                 if (this.imageBase64 == '') {
@@ -4437,29 +4438,44 @@
             //搜索框
             search(temp) {
                 console.log(temp);
+                console.log(this.delobj.id);
                 this.projects = [];
                 let projectArray = [];
                 let templateArray = [];
                 let tempProjects = [];
                 let tempTemplates = [];
+                let ljtArray=[];
+                let templjtArray=[];
                 //project
-                if (this.delobj.id != "mb") {
-                    projectArray = this.db.get("project").value();
+                if (this.delobj.id != "mb" && this.delobj.id != "ljt") {
+                    projectArray = this.db.get("project").filter({isDel: !true}).value();
                     for (var projectIndex in projectArray) {
                         if (projectArray[projectIndex].name.indexOf(temp) != -1) {
                             tempProjects.push(projectArray[projectIndex]);
                         }
                     }
                     this.projects = tempProjects;
-                } else {
+                } else if(this.delobj.id =="mb") {
                     //template
-                    templateArray = this.db.get("templates").value();
+                    templateArray = this.db.get("templates").filter({isDel: !true}).value();
                     for (var templateIndex in templateArray) {
                         if (templateArray[templateIndex].name.indexOf(temp) != -1) {
                             tempTemplates.push(templateArray[templateIndex]);
-                        }
-                        this.projects = tempTemplates;
+                        }   
                     } 
+                    this.projects = tempTemplates;
+                }else if(this.delobj.id =="ljt"){
+                      projectArray = this.db.get("project").filter({isDel: true}).value();
+                      templateArray = this.db.get("templates").filter({isDel: true}).value();
+                      console.log(projectArray);
+                      console.log(templateArray );
+                      ljtArray =projectArray.concat(templateArray);
+                      for(var ljtIndex in ljtArray){
+                          if(ljtArray[ljtIndex].name.indexOf(temp) != -1){
+                               templjtArray.push(ljtArray[ljtIndex]);
+                          }
+                      }
+                       this.projects = templjtArray;
                 }
 
             }, //图片处理(增加模板)
@@ -5007,7 +5023,13 @@
     .input-class{    
        width: 25vw; 
    }
-    
+    .input-class-template-edit{
+       width: 21vw;
+    }
+
+    .input-class-template{
+        width: 21vw;
+    }
     :last-child {
         margin-bottom: 0;
     }

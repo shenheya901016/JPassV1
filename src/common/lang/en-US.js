@@ -126,7 +126,7 @@ export default {
         userNameIsDuplicatePleaseEnter: "The user name is duplicate, please enter it again！",
         pleaseEnterTheWalletKey: "Please enter the wallet secret",
         pleaseEnterAUserName: "Please enter user name!",
-        theLengthIsBetween3And20Characters: "The length is between 3 and 20 characters!",
+        theLengthIsBetween3And20Characters: "The length is between 4 and 20 characters!",
         pleaseEnterAUserPassword: "Please enter the user password!",
         lengthIsBetween4And20Characters: "The length is between 4 and 20 characters!",
         pleaseEnterTheUserPasswordAgain: "Please enter the user password again!",

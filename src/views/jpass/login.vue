@@ -131,19 +131,19 @@
                             trigger: "blur"
                         }
                     ],
-                    password: [
-                        {
-                            required: true,
-                            message: this.$t("login.pwdvalidaion"),
-                            trigger: "blur"
-                        },
-                        {
-                            min: 4,
-                            max: 20,
-                            message: this.$t("login.pwdlengthvalidaion"),
-                            trigger: "blur"
-                        }
-                    ]
+                    // password: [
+                    //     {
+                    //         required: true,
+                    //         message: this.$t("login.pwdvalidaion"),
+                    //         trigger: "blur"
+                    //     },
+                    //     {
+                    //         min: 4,
+                    //         max: 20,
+                    //         message: this.$t("login.pwdlengthvalidaion"),
+                    //         trigger: "blur"
+                    //     }
+                    // ]
                 }
             };
         },
@@ -218,6 +218,8 @@
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
+                    // this.$router.push("/jpass/main");
+                 
                     //判断是否充值过
                     let result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
                     console.log(result);

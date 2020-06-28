@@ -94,6 +94,7 @@
                 rules: {
                     name: [
                         {required: true, message: this.$t('keystoreImport.pleaseEnterANewUsername'), trigger: 'blur'},
+                         {min: 4, max: 20, message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'), trigger: 'blur'},
                         {validator: validateName, trigger: 'blur'}
                     ],
                     oldPassword: [
@@ -290,6 +291,10 @@
 </script>
 
 <style>
-
+    .el-dialog__title {
+    line-height: 24px;
+    font-size: 15px;
+    color: #303133;
+}
 
 </style>
