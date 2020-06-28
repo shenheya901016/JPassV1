@@ -3853,7 +3853,7 @@
                         await this.db.set("project", ipfsData.project).write();
                         await this.db.set("templates", ipfsData.templates).write();
                         await this.db.set('settings', ipfsData.settings).write();
-                        await this.db.set('machineId', ipfsData.machineId).write();
+                        await this.db.set('machineId',  this.$Uuidv1()).write();
                         await this.db.set('version', ipfsData.version).write();
                         this.getdirectory();
                     }
@@ -3894,7 +3894,7 @@
                             await this.db.set("project", tempipfsData.project).write();
                             await this.db.set("templates", tempipfsData.templates).write();
                             await this.db.set('settings', tempipfsData.settings).write();
-                            await this.db.set('machineId', tempipfsData.machineId).write();
+                            await this.db.set('machineId', this.$Uuidv1()).write();
                             await this.db.set('version', tempipfsData.version).write();
                             this.processShow = true;
                             this.percentage = 100;
@@ -4821,7 +4821,7 @@
                 await this.db.set("project", tempipfsData.project).write();
                 await this.db.set("templates", tempipfsData.templates).write();
                 await this.db.set('settings', tempipfsData.settings).write();
-                await this.db.set('machineId', tempipfsData.machineId).write();
+                await this.db.set('machineId', this.$Uuidv1()).write();
                 await this.db.set('version', tempipfsData.version).write();
                 this.dialogSynchronization = false
                 this.getdirectory();
