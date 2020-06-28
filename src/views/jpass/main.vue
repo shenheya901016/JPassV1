@@ -3808,7 +3808,6 @@
                 var db_name = "db_" + address;
                 this.db = await this.$Lowdb(db_name);
                 this.localdb = await this.$Lowdb(db_name + "_local");
-                console.log(secret);
                 //取ipfs数据
                 let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
                 ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
@@ -3859,15 +3858,18 @@
                     }
                 } else if (ipfsData.machineId == "" ||ipfsData.machineId == undefined) {
                      console.log("本地有数据，ipfs 没有数据,系统默认不同步数据");
+                      this.getdirectory();
                 }else if(ipfsData.machineId != "" && ipfsData.machineId !=undefined){
-                    if(this.db.get("machineId") == ipfsData.machineId){
+                    if(this.db.get("machineId").value() == ipfsData.machineId){
                      this.getdirectory();
                      console.log("机器码相同,不执行任何操作！");
-
-                    }else{
+                    }else if(ipfsData.version !=this.db.get("version").value()){
                          console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
                          this.getdirectory();
                          this.dialogSynchronization = true;
+                    }else {
+                         console.log("本地与ipfs 机器码不同,但其版本号相同，加载列表！");
+                        this.getdirectory();
                     }
                 }
                 //更新设置
@@ -3899,11 +3901,12 @@
                             this.processShow = true;
                             this.percentage = 100;
                             this.synStatus = "success";
+                            this.getdirectory();
                         } else if (tempipfsData.version < this.db.get("version").value()) {
                             console.log("ipfs版本小于本地版本");
                             let localdata = this.db.__wrapped__;
                             let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                            console.log(result);                           
+                            console.log(result);                          
                            if(result.indexOf("success")===-1){
                                 console.log("非会员，无法同步！");
                                 this.$message({
@@ -3920,7 +3923,10 @@
                                     }
                                 }
                             } else {
-                            console.log("ipfs版本等于本地版本");
+                             this.$message({
+                                    message: '您的数据是最新的，无需同步。',
+                                    type: 'success'
+                                });
                         }
                     }  else{
                         console.log("ipfs无数据,本地数据同步到ipfs端");
