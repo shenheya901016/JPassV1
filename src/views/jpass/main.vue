@@ -1668,7 +1668,7 @@
         <el-dialog
                 title=""
                 :visible.sync="dialogMyInfo"
-                width="40%"
+                width="30%"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="true"
@@ -1683,8 +1683,8 @@
                     <el-input
                             type="text"
                             v-model="username"
-                            style="width:100%;"
-                            readonly
+                            class="messageInput"
+                            disabled="disabled"
                     >{{ username }}
                     </el-input
                     >
@@ -1693,8 +1693,8 @@
                     <el-input
                             type="text"
                             v-model="myInfoKey"
-                            style="width:100%;"
-                            readonly
+                            class="messageInput"
+                            disabled="disabled"
                     >{{ myInfoKey }}
                     </el-input
                     >
@@ -1703,8 +1703,8 @@
                     <el-input
                             type="text"
                             v-model="vip"
-                            style="width:100%;"
-                            readonly
+                            class="messageInput"
+                            disabled="disabled"
                     >{{ vip }}
                     </el-input
                     >
@@ -5064,6 +5064,11 @@
     .row-bg {
         padding: 10px 0;
         background-color: #f9fafc;
+    }
+    .messageInput{
+       width:100%;
+       float:left;
+
     }
     
    
