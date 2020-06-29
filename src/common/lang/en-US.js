@@ -216,7 +216,12 @@ export default {
         synchronizationInfo:"The system has detected that your last synchronization operation was not performed in this machine. In order to ensure data integrity, please ensure that the data of the last operation has been successfully synchronized. Please carefully choose the synchronization method!",
         localToIpfs:"Local to ipfs",
         ipfsToLocal:"Ipfs to local",
-        userResource:"User resource"
+        userResource:"User resource",
+        notvip:"nonmember，please recharge！",
+        lineError:"System abnormal, please test whether the network is normal!",
+        synchronizationSuccessful:"Data synchronization successful!",
+        NonMember:"Non-member, data cannot be synchronized, please recharge!",
+        withoutSynchronization:"Local data is the same as IPFS data, no synchronization required!"
     },
     myInfo: {
         name: "Name",

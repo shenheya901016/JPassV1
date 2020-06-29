@@ -57,7 +57,7 @@ let jcc_ipfs = {
                 }
             });  //req.body);
             // 可以加入 try catch 捕获异常  也可以加 .catch()
-            // console.log("result" , result.body);
+            console.log("result" , result.body);
             return result.body
         },
         /**

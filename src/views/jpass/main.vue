@@ -91,7 +91,7 @@
                 />{{ $t("main.PasswordGenerator") }}
                 </el-button>
             </li>
-            <li>
+            <!-- <li>
                 <el-button
                         style="border:0;padding: 5px 5px;"
                         @click="openpay()"
@@ -101,7 +101,7 @@
                         alt=""
                 />充值
                 </el-button>
-            </li>
+            </li> -->
         </ul>
         <div class="hr" style="width: 40%;">
             <a style="width: 50px;" @click="openSetting">
@@ -1639,13 +1639,6 @@
                                     inactive-color="#ff4949"
                             ></el-switch>
                         </div>
-                        <!--<div style="margin-left: 2vw">-->
-                        <!--{{$t('main.newUserAndPasswordAreAutomaticallySaved')}}-->
-                        <!--<el-select v-model="savePassword" :placeholder="$t('main.pleaseChoose')">-->
-                        <!--<el-option v-for="item in this.savePasswords" :key="item.value" :label="item.label"-->
-                        <!--:value="item.value"></el-option>-->
-                        <!--</el-select>-->
-                        <!--</div>-->
                     </fieldset>
                 </el-form-item>
                 <el-form-item
@@ -3381,7 +3374,7 @@
                 if (msg.data.list.length > 0) {
                     this.vip = this.formatDate(msg.data.list[0].end_time);
                 } else {
-                    this.vip = "非会员，请充值！"
+                    this.vip = this.$t('main.notvip');
                 }
                 this.dialogMyInfo = true;
             }, formatDate(datetime) {
@@ -3839,15 +3832,6 @@
                         let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
                         //数据同步
-                        // let tempipfsData = await this.$myIpfs.Ipfs.read(loginObj.secret,"/main", this.loginObj.address);
-                        // tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
-                        // tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
-                        // await this.db.set("models", tempipfsData.models).write();
-                        // await this.db.set("project", tempipfsData.project).write();
-                        // await this.db.set("templates", tempipfsData.templates).write();
-                        // await this.db.set('settings', tempipfsData.settings).write();
-                        // await this.db.set('machineId', tempipfsData.machineId).write();
-                        // await this.db.set('version', tempipfsData.version).write();
                         await this.db.set("models", ipfsData.models).write();
                         await this.db.set("project", ipfsData.project).write();
                         await this.db.set("templates", ipfsData.templates).write();
@@ -3889,7 +3873,7 @@
                     console.log(tempipfsData);
                     console.log("本机版本：" + this.db.get("version").value());
                     console.log("ipfs版本：" + tempipfsData.version);
-                    if(tempipfsData.machineId != "" && tempipfsData.machineId !=undefined){
+                    if(tempipfsData.machineId !=undefined){
                      if (tempipfsData.version > this.db.get("version").value()) {//version越大内容越新
                             console.log("ipfs版本大于本地版本");
                             await this.db.set("models", tempipfsData.models).write();
@@ -3898,33 +3882,37 @@
                             await this.db.set('settings', tempipfsData.settings).write();
                             await this.db.set('machineId', this.$Uuidv1()).write();
                             await this.db.set('version', tempipfsData.version).write();
-                            this.processShow = true;
-                            this.percentage = 100;
-                            this.synStatus = "success";
+                            this.$message({
+                                message:this.$t("main.synchronizationSuccessful"),
+                                type: 'success'
+                            });
                             this.getdirectory();
                         } else if (tempipfsData.version < this.db.get("version").value()) {
                             console.log("ipfs版本小于本地版本");
                             let localdata = this.db.__wrapped__;
-                            let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                            console.log(result);                          
-                           if(result.indexOf("success")===-1){
-                                console.log("非会员，无法同步！");
-                                this.$message({
-                                    message: '非会员，无法同步！',
+                            let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");                         
+                           if(result.indexOf("success")>0){
+                                console.log("数据同步成功！");
+                                  this.$message({
+                                    message:this.$t("main.synchronizationSuccessful"),
+                                    type: 'success'
+                                });
+                            }else if(result.indexOf("lackoil")>0){
+                                console.log("未充值");
+                                 this.$message({
+                                    message: this.$t("main.NonMember"),
                                     type: 'error'
                                 });
-                                return ;
-                            }else{
-                                console.log("同步结果:"+result);
-                                if(result.indexOf("success")>-1){
-                                        this.processShow = true;
-                                        this.percentage = 100;
-                                        this.synStatus = "success";
-                                    }
-                                }
-                            } else {
+                            } else if(result.indexOf("error")>0){
                              this.$message({
-                                    message: '您的数据是最新的，无需同步。',
+                                    message: this.$t("main.lineError"),
+                                    type: 'error'
+                                });
+                            }
+                        }else if (tempipfsData.version == this.db.get("version").value()) {
+                                console.log("本地数据与ipfs 数据相同，无需同步");
+                                  this.$message({
+                                    message:this.$t("main.withoutSynchronization"),
                                     type: 'success'
                                 });
                         }
@@ -3932,21 +3920,24 @@
                         console.log("ipfs无数据,本地数据同步到ipfs端");
                          let localdata = this.db.__wrapped__;
                          let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                            if(result.indexOf("success")===-1){
-                                console.log("非会员，无法同步！");
-                                this.$message({
-                                    message: '非会员，无法同步！',
+                             if(result.indexOf("success")>0){
+                                console.log("数据同步成功！");
+                                  this.$message({
+                                    message:this.$t("main.synchronizationSuccessful"),
+                                    type: 'success'
+                                });
+                            }else if(result.indexOf("lackoil")>0){
+                                console.log("未充值");
+                                 this.$message({
+                                    message: this.$t("main.NonMember"),
                                     type: 'error'
                                 });
-                                return ;
-                            }else{
-                                console.log("同步结果:"+result);
-                                if(result.indexOf("success")>-1){
-                                        this.processShow = true;
-                                        this.percentage = 100;
-                                        this.synStatus = "success";
-                                    }
-                                }
+                            } else if(result.indexOf("error")>0){
+                             this.$message({
+                                    message: this.$t("main.lineError"),
+                                    type: 'error'
+                                });
+                           }
                        }  
             },
             pwdLength(obj) {
@@ -4579,8 +4570,12 @@
             changeLang(lan) {
                 if (lan === "中文") {
                     this.$i18n.locale = 'zh-CN';
+                     //模板添加选项更新
+                    console.log(this.templateItems);
                 } else if (lan === "English") {
                     this.$i18n.locale = 'en-US';
+                    //模板添加选项更新
+                    console.log(this.templateItems);
                 }
                 this.getdirectory();
                 //国际化设置菜单中 保存用户和密码下来框
@@ -4589,6 +4584,7 @@
                     label: this.$t('main.shutDown')
                 }, {value: 'automatically', label: this.$t('main.autofill')}];
                 localStorage.setItem('lang', this.$i18n.locale);
+               
             },
             //国际化（目录）
             international(name) {
@@ -4900,25 +4896,25 @@
             closedialogMain(data) {
                 this.dialogPasswordGeneratorMain = data;
             },
-            //打开支付页面
-            async openpay() {
-                const getPromise = util.promisify(request.get);
-                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
-                let result = await getPromise(url);
-                let msg = this.$JSON5.parse(result.body);
-                if (msg.data.list.length > 0) {
-                    if (msg.data.list[0].end_time < new Date().getTime()) {
-                        this.dialogPayGenerator = true;
-                    }else{
-                        this.$message({
-                            message: '已是会员，无需充值！',
-                            type: 'success'
-                        });
-                    }
-                } else {
-                    this.dialogPayGenerator = true;
-                }
-            },
+            // //打开支付页面
+            // async openpay() {
+            //     const getPromise = util.promisify(request.get);
+            //     let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
+            //     let result = await getPromise(url);
+            //     let msg = this.$JSON5.parse(result.body);
+            //     if (msg.data.list.length > 0) {
+            //         if (msg.data.list[0].end_time < new Date().getTime()) {
+            //             this.dialogPayGenerator = true;
+            //         }else{
+            //             this.$message({
+            //                 message: '已是会员，无需充值！',
+            //                 type: 'success'
+            //             });
+            //         }
+            //     } else {
+            //         this.dialogPayGenerator = true;
+            //     }
+            // },
             //子组件关闭后还原dialogPayGenerator为false
             closedialogPay(data) {
                 this.dialogPayGenerator = data;

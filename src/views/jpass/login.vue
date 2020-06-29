@@ -218,16 +218,23 @@
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    // this.$router.push("/jpass/main");
-                 
+                     let result;
                     //判断是否充值过
-                    let result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
-                    console.log(result);
-                    if(result.indexOf("success")===-1){
-                          this.$router.push("/jpass/pay"); 
-                        }else{
+                    try{
+                       result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
+                    }catch(e){
+                       console.log(e);
+                    }
+                    if(result.indexOf("success")>0){
+                          console.log("充值成功，会员登录！")  
                           this.$router.push("/jpass/main");
-                        }  
+                        }else if(result.indexOf("lackoil")>0){
+                           console.log("未充值！")  
+                          this.$router.push("/jpass/pay"); 
+                        } else if(result.indexOf("error")>0){
+                           console.log("系统异常！")  
+                           this.$message.error(this.$t("main.lineError"));
+                        } 
                     } else {
                         this.$message.error(this.$t("login.loginerror"));
                     }

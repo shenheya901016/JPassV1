@@ -158,7 +158,12 @@ export default {
         synchronizationInfo: "系统检测到你上次同步操作不在本机中操作，为保证数据完整性，请先确保上次操作数据已经成功同步，请慎重选择同步方式！",
         localToIpfs: "本地同步到ipfs",
         ipfsToLocal: "ipfs同步到本地",
-        userResource: "用户资源"
+        userResource: "用户资源",
+        notvip:"非会员，请充值！",
+        lineError:"系统异常,请测试网络是否正常!",
+        synchronizationSuccessful:"数据同步成功!",
+        NonMember:"非会员，数据无法同步，请充值！",
+        withoutSynchronization:"本地数据与ipfs数据相同，无需同步！"
     },
     lock: {
         unlockJpass: "解锁jpass",
