@@ -3234,6 +3234,13 @@
                             "val": "",
                             "tempkey": "Date"
                         },
+                        {
+                        "id": "fdbce150-fec4-11e9-bd32-854c67bf397b",
+                        "key": this.$t('selects.webside'),
+                        "type": "text",
+                        "val": "",
+                        "tempkey": "Webside"
+                    },
                     ]
                 },
                 settings: {
