@@ -941,7 +941,7 @@
                                             @click="editRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                    <div style="width: 85%;display: inline-block;">
+                                    <div style="width: 50%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :stroke-width="5"
@@ -1164,7 +1164,6 @@
                                             type="password"
                                             v-model="data.val"
                                             style="width:21vw;float: left"
-                                            @input="pwdLength(data)"
                                             class="myInput"
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
@@ -1573,16 +1572,9 @@
             </el-form>
         </el-dialog>
         <!--设置弹出框-->
-        <el-dialog
-                title=""
-                :visible.sync="dialogVisibleSetting"
-                width="50%"
-                :show-close="true"
-                style="text-align: left"
-        >
-            <div
-                    style="text-align: center;font-weight:bolder;margin-bottom:3%;margin-top: -2%"
-            >
+        <el-dialog title="" :visible.sync="dialogVisibleSetting" width="50%" :show-close="true" style="text-align: left"
+                   :before-close="handleClose">
+            <div style="text-align: center;font-weight:bolder;margin-bottom:3%;margin-top: -2%">
                 {{ $t("main.systemSettings") }}
             </div>
             <el-form>
@@ -1592,74 +1584,43 @@
                             {{ $t("main.locking") }}
                         </legend>
                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
-                {{ $t("main.timedLock") }}
-                <el-switch
-                        v-model="systemlock"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                        @change="locksystem()"
-                ></el-switch>
-              </span>
+                            {{ $t("main.timedLock") }}
+                            <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="lockchange"></el-switch>
+                        </span>
                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
-                {{ $t("main.idleTime") }}
-                <el-slider
-                        v-model="locktime"
-                        :disabled="locktimedisabled"
-                ></el-slider>
-              </span>
+                            {{ $t("main.idleTime") }}
+                            <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
+                        </span>
                     </fieldset>
                 </el-form-item>
                 <el-form-item prop="">
-                    <fieldset
-                            style="width: 80%;margin: auto;height: 15vh;border: 1px solid #6C6C6C"
-                    >
+                    <fieldset style="width: 80%;margin: auto;height: 15vh;border: 1px solid #6C6C6C">
                         <legend style="margin-left: 1%">
                             {{ $t("main.language") }}
                         </legend>
                         <span style="margin-left: 2vw">
-                <el-select
-                        v-model="language"
-                        :placeholder="$t('main.languageSelection')"
-                        @change="changeLang(language)"
-                >
-                  <el-option
-                          v-for="item in this.languages"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                  ></el-option>
-                </el-select>
-              </span>
+                            <el-select v-model="language" :placeholder="$t('main.languageSelection')"
+                                       @change="">
+                                <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
+                                           :value="item.value"></el-option>
+                            </el-select>
+                        </span>
                     </fieldset>
                 </el-form-item>
                 <el-form-item prop="">
-                    <fieldset
-                            style="width: 80%;height: 19vh;margin: auto;border: 1px solid #6C6C6C"
-                    >
+                    <fieldset style="width: 80%;height: 19vh;margin: auto;border: 1px solid #6C6C6C">
                         <legend style="margin-left: 1%">
                             {{ $t("main.passwordService") }}
                         </legend>
                         <div style="margin-left: 2vw">
                             {{ $t("main.showPassword") }}
-                            <el-switch
-                                    v-model="showPassword"
-                                    active-color="#13ce66"
-                                    inactive-color="#ff4949"
-                            ></el-switch>
+                            <el-switch v-model="showPassword" active-color="#13ce66"
+                                       inactive-color="#ff4949"></el-switch>
                         </div>
                     </fieldset>
                 </el-form-item>
-                <el-form-item
-                        label=""
-                        prop=""
-                        style="margin-top:5%;text-align: center"
-                >
-                    <el-button
-                            type="primary"
-                            size="small"
-                            style="width:35%;"
-                            @click="savesettings"
-                    >
+                <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
+                    <el-button type="primary" size="small" style="width:35%;" @click="savesettings">
                         {{ $t("main.save") }}
                     </el-button>
                 </el-form-item>
@@ -1676,47 +1637,17 @@
         >
             <img src="./img/tx.svg" alt=""/>
             <el-form label-width="110px" class="demo-ruleForm">
-                <el-form-item
-                        :label="$t('myInfo.name')"
-                        prop="username"
-                        style="margin-top: 5%"
-                >
-                    <el-input
-                            type="text"
-                            v-model="username"
-                            class="messageInput"
-                            disabled="disabled"
-                    >{{ username }}
-                    </el-input
-                    >
+                <el-form-item :label="$t('myInfo.name')" prop="username" style="margin-top: 5%">
+                    <div style="text-align: left"> {{ username }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.walletAddress')" prop="myInfoKey">
-                    <el-input
-                            type="text"
-                            v-model="myInfoKey"
-                            class="messageInput"
-                            disabled="disabled"
-                    >{{ myInfoKey }}
-                    </el-input
-                    >
+                    <div style="text-align: left"> {{ myInfoKey }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.vip')" prop="vip">
-                    <el-input
-                            type="text"
-                            v-model="vip"
-                            class="messageInput"
-                            disabled="disabled"
-                    >{{ vip }}
-                    </el-input
-                    >
+                    <div style="text-align: left"> {{ vip }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.keystoreFile')">
-                    <el-button
-                            type="primary"
-                            size="small"
-                            style="float: left"
-                            @click="exportkeystore"
-                    >
+                    <el-button type="primary" size="small" style="float: left" @click="exportkeystore">
                         {{ $t("myInfo.exportKeystoreFile") }}
                     </el-button>
                 </el-form-item>
@@ -4133,7 +4064,7 @@
                 this.dialogVisibleItemsEdit = true;
                 this.filed = this.$JSON5.parse(this.$JSON5.stringify(command));
                 this.filedName = command.key;
-                this.ruleFormAddTEdit.filedName=command.key;
+                this.ruleFormAddTEdit.filedName = command.key;
             }, //修改项目，模板增加项
             editAddFiled(formName) {
                 // this.dialogVisibleItemsEdit = false;
@@ -4245,11 +4176,12 @@
             }, openDialogTemplate() {
                 this.currentTemplate = -1;
                 this.templateEvent = ""
-            }, openSetting() {
-                this.savePasswords = [{value: 'ask', label: this.$t('main.ask')}, {
+            },
+            openSetting() {
+                /*this.savePasswords = [{value: 'ask', label: this.$t('main.ask')}, {
                     value: 'off',
                     label: this.$t('main.shutDown')
-                }, {value: 'automatically', label: this.$t('main.autofill')}];
+                }, {value: 'automatically', label: this.$t('main.autofill')}];*/
                 this.dialogVisibleSetting = true;
             }, //清除数据库数据
             cleardb() {
@@ -4414,6 +4346,12 @@
                     }
                 }
             }, //lock定时器启动
+            lockchange(){
+                if(this.systemlock) {
+                    this.locktimedisabled = false;
+                }else
+                    this.locktimedisabled = true;
+            },
             locksystem() {
                 console.log("加载定时器");
                 if (this.loginObj.lock) {
@@ -4427,14 +4365,10 @@
                 }
             }, //启动初始化设置参数
             updatesetting() {
-                var setting = this.db.get("settings").value();
+                let setting = this.db.get("settings").value();
                 console.log(setting);
                 this.systemlock = setting.systemlock;
-                if (this.systemlock) {
-                    this.locktimedisabled = false;
-                } else {
-                    this.locktimedisabled = true;
-                }
+                this.locktimedisabled = !this.systemlock;
                 this.locktime = setting.locktime;//自动锁定时间
                 this.language = setting.language;//语言选择
                 this.showPassword = setting.showPassword;//是否显示密码
@@ -4443,16 +4377,34 @@
             //保存设置
             savesettings() {
                 try {
+                    this.locksystem();
+                    this.changeLang(this.language);
                     this.db.get("settings").set("systemlock", this.systemlock).write();
                     this.db.get("settings").set("locktime", this.locktime).write();
                     this.db.get("settings").set("showPassword", this.showPassword).write();
                     this.db.get("settings").set("savePassword", this.savePassword).write();
                     this.db.get("settings").set("language", this.language).write();
-                    this.$message.success(this.$t('main.settingSavedSuccessfully'));
-                    this.dialogVisibleSetting = false;
+                    this.$confirm(this.$t('main.settingSavedSuccessfully')+this.$t('main.re_login'), this.$t('main.suggest'), {
+                        confirmButtonText: this.$t('main.login'),
+                        cancelButtonText: this.$t('main.cancel'),
+                    }).then(() => {
+                        this.dialogVisibleSetting = false;
+                        this.$router.push("/jpass/login");
+                    }).catch(() => {
+                        this.$message({
+                            type: 'warning',
+                            message: this.$t('main.cancel')+" "+this.$t('main.login')
+                        });
+                        this.dialogVisibleSetting = false;
+                    });
                 } catch (e) {
                     this.$message.error(this.$t('main.settingSaveFailed'));
                 }
+            },
+            //未保存设置
+            handleClose() {
+                this.updatesetting();
+                this.dialogVisibleSetting = false;
             },
             //搜索框
             search(temp) {
@@ -5072,7 +5024,7 @@
                 }
             },
 
-        }
+            }
     }
 </script>
 <style lang="less"  scoped>
@@ -5138,7 +5090,7 @@
         width: 25vw;
     }
     .input-class-template-edit{
-        width: 21vw;
+       width: 21vw;
     }
 
     .input-class-template{
