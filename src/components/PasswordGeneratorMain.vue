@@ -18,10 +18,10 @@
 <script>
 	export default {
 		props:["dialogopenMain","dialogcloseMain"],
-		data() {	
+		data() {
 			return {
 				//密码生成器
-				dialogPasswordGeneratorMain:false, // 密码生成器弹出框	
+				dialogPasswordGeneratorMain:false, // 密码生成器弹出框
 				crypt: "",
 				level: "",
 				radio: 3,
@@ -163,7 +163,7 @@
 		        this.level = this.cryptLevel(this.crypt);
                 this.getPercentage(this.crypt);           
             },
-			dialogopenMain: function(data){ 
+			dialogopenMain: function(data){
 				this.dialogPasswordGeneratorMain=data;
 			},
 			dialogcloseMain:function(data){

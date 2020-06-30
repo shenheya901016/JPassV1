@@ -704,7 +704,7 @@
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
                                     <a href="#" @click="addProjectRemoveItem(data.id)"><i class="el-icon-close"></i></a>
-                                    <div style="width: 85%;display: inline-block;">
+                                    <div style="width: 50%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :show-text="false"
@@ -712,9 +712,8 @@
                                                 :percentage="data.percentage"
                                                 :status="data.pwdstatus"
                                         ></el-progress>
-                                        <span class="format">{{data.format}}</span>
                                     </div>
-                                    
+                                    <span class="format">{{data.format}}</span>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'password' && showPassword"
@@ -738,7 +737,7 @@
                                             @click="addProjectRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                    <div style="width: 85%;display: inline-block;">
+                                    <div style="width: 50%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :show-text="false"
@@ -746,9 +745,8 @@
                                                 :percentage="data.percentage"
                                                 :status="data.pwdstatus"
                                         ></el-progress>
-                                         <span class="format">{{data.format}}</span>
                                     </div>
-                                   
+                                    <span class="format">{{data.format}}</span>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -941,7 +939,7 @@
                                             @click="editRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                    <div style="width: 85%;display: inline-block;">
+                                    <div style="width: 50%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :stroke-width="5"
@@ -949,9 +947,8 @@
                                                 :status="data.pwdstatus"
                                                 :show-text="false"
                                         ></el-progress>
-                                          <span class="format">{{data.format}}</span>
                                     </div>
-                                  
+                                    <span class="format">{{data.format}}</span>
                                 </el-form-item>
                                 <el-form-item
                                         v-if="data.type === 'password' && showPassword"
@@ -975,7 +972,7 @@
                                             @click="editRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                    <div style="width: 85%;display: inline-block;">
+                                    <div style="width: 50%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :stroke-width="5"
@@ -983,8 +980,8 @@
                                                 :status="data.pwdstatus"
                                                 :show-text="false"
                                         ></el-progress>
-                                         <span class="format">{{data.format}}</span>
                                     </div>
+                                    <span class="format">{{data.format}}</span>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -1164,22 +1161,16 @@
                                             type="password"
                                             v-model="data.val"
                                             style="width:21vw;float: left"
-                                            @input="pwdLength(data)"
                                             class="myInput"
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"><i class="el-icon-close" @click="addTemplageRemoveItem(data.id)"> </i></a>
-                                     <div style="width:21vw;display: inline-block;">
-                                        <el-progress
-                                                id="process"
-                                                :show-text="false"
-                                                :stroke-width="5"
-                                                :percentage="data.percentage"
-                                                :status="data.pwdstatus"
-                                        ></el-progress>
-                                         <span class="format">{{data.format}}</span>
-                                    </div>
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="addTemplageRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -1360,22 +1351,16 @@
                                             type="password"
                                             v-model="data.val"
                                             style="float: left;width:21vw;"
-                                            @input="pwdLength(data)"
                                             class="myInput"
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)" ></i></a>
-                                     <div style="width:21vw;display: inline-block;">
-                                        <el-progress
-                                                id="process"
-                                                :show-text="false"
-                                                :stroke-width="5"
-                                                :percentage="data.percentage"
-                                                :status="data.pwdstatus"
-                                        ></el-progress>
-                                        <span class="format">{{data.format}}</span>
-                                    </div>
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="editRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -1403,6 +1388,13 @@
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <el-date-picker v-model="data.val" class="input-class-template-edit" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <!-- <input
+                                            type="text"
+                                            v-model="data.val"
+                                            style="float: left;width:90%;"
+                                            readonly
+                                            class="myInput"
+                                    /> -->
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -2938,7 +2930,6 @@
         },
         data() {
             return {
-                status:"",
                 vip: "",
                 templatedisable: true,
                 dialogPayGenerator: false,//支付页面弹出框
@@ -3587,13 +3578,6 @@
                 this.searchTemp = "";//清空搜索框
                 this.notesBytargeId(note);
             }, noteslick(project, event) {
-                //更新密码强度（中英文切换）
-                let items = project.datas
-                 for(var item in items){
-                      if (items[item].type=="password"){
-                           items[item].format = this.cryptLevel(items[item].val); 
-                      }
-                 }
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
@@ -3957,10 +3941,10 @@
                        }  
             },
             pwdLength(obj) {
-                obj.format = this.cryptLevel(obj.val);
-                this.getPercentage(obj.val);
-                obj.percentage = this.percentage;
-                obj.pwdstatus = this.status;
+                obj.format = this.$createPassword.cryptLevel(obj.val);
+                this.$createPassword.getPercentage(obj.val);
+                obj.percentage = this.$createPassword.percentage;
+                obj.pwdstatus = this.$createPassword.status;
             },
             async selectTemplate() {
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -4157,12 +4141,6 @@
             //修改页面
             editProject() {
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
-                 let  items = this.editobject.datas
-                 for(var item in items){
-                      if (items[item].type=="password"){
-                           items[item].format = this.cryptLevel(items[item].val); 
-                      }
-                 }
                 if (this.editobject.type == "project") {
                     let modelsId = this.editobject.modelsId;
                     let models = [];
@@ -4917,123 +4895,33 @@
             //子组件关闭后还原dialogPasswordGenerator为false
             closedialogMain(data) {
                 this.dialogPasswordGeneratorMain = data;
-            },        
+            },
+            // //打开支付页面
+            // async openpay() {
+            //     const getPromise = util.promisify(request.get);
+            //     let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
+            //     let result = await getPromise(url);
+            //     let msg = this.$JSON5.parse(result.body);
+            //     if (msg.data.list.length > 0) {
+            //         if (msg.data.list[0].end_time < new Date().getTime()) {
+            //             this.dialogPayGenerator = true;
+            //         }else{
+            //             this.$message({
+            //                 message: '已是会员，无需充值！',
+            //                 type: 'success'
+            //             });
+            //         }
+            //     } else {
+            //         this.dialogPayGenerator = true;
+            //     }
+            // },
             //子组件关闭后还原dialogPayGenerator为false
             closedialogPay(data) {
                 this.dialogPayGenerator = data;
             },
-             /**
-         * 判断密码强度
-         * @param p
-         * @return {string}
-         */
-            cryptLevel(p) {
-                let des="";
-                let hasUpper = false;
-                let hasLow = false;
-                let hasNum = false;
-                let hasOther = false;
-                let out="";
-                for (let i = 0; i < p.length; i++) {
-                    let c = p.charCodeAt(i);
-                    if (c >= 65 && c <= 90) hasUpper = true;
-                    else if (c >= 97 && c <= 122) hasLow = true;
-                    else if (c >= 48 && c <= 57) hasNum = true;
-                    else hasOther = true;
-                }
-                let pwdNum = 0;
-                if (hasUpper) pwdNum += 26;
-                if (hasLow) pwdNum += 26;
-                if (hasNum) pwdNum += 10;
-                if (hasOther) pwdNum += 32;
-                let num = Math.pow(pwdNum, p.length);
-                if(num==1){
-                  num=0; 
-                }
-                out=this.formatTime(num / (1024 * 1024 * 1024 * 2.4 * 2));
-                if(out!=""){
-                  des = this.$t('main.breakTime') + out;
-                }
-                return des;
-            },
 
-
-            formatTime(s) {
-                    var str = "";
-                    if(s==0)
-                       return  str = ""
-                        s = Math.floor(s);  
-                    if (s<1)
-                       return  str = this.$t('main.moment');
-                         s = Math.floor(s);                      
-                    if (s >= 1) str = s % 60 + this.$t('main.seconds') + str; 
-                    s = Math.floor(s / 60);
-                    if (s >= 1) str = s % 60 + this.$t('main.mintues') + str;
-                    s = Math.floor(s / 60);
-                    if (s >= 1) str = s % 24 + this.$t('main.hours') + str;
-                    s = Math.floor(s / 24);
-                    if (s >= 1) {
-                        str = Math.ceil(s + this.$t('main.day')) + str;
-                        if (s <= 28) {
-                            str = Math.ceil(s / 7) + this.$t('main.weeks');
-                        } else if (s >= 30 && s <= 360) {
-                            str = Math.ceil(s / 30) + this.$t('main.month');
-                        } else if (s >= 360 && s <= 36000) {
-                            str = Math.ceil(s / 360) + this.$t('main.years');
-   
-                        } else {
-                            str = this.$t('main.century');
-                           
-                        }
-                    }
-                    return str;
-                },
-                /**
-	 * 获取进度条百分比
-	 * @param pwd
-	 * @return {string}
-	 */
-	getPercentage(pwd){
-        let level=this.cryptLevel(pwd);
-		if (level.indexOf(this.$t('main.century')) !== -1) {
-		    this.percentage = 100;
-			this.status="success"
-		} else if (level.indexOf(this.$t('main.years')) !== -1) {
-		    this.percentage = 80;
-		    this.status="success"
-		} else if (level.indexOf(this.$t('main.month')) !== -1) {
-		    this.status="success"
-			this.percentage = 60;
-		} else if (level.indexOf(this.$t('main.weeks')) !== -1) {
-		    this.percentage = 40;
-		    this.status="warning"
-        } else if (level.indexOf(this.$t('main.day')) !== -1 ) {
-		    this.percentage = 35;
-		    this.status="exception"
-        } 
-         else if (level.indexOf(this.$t('main.hours')) !== -1) {
-		    this.percentage = 30;
-		    this.status="exception"
-        }
-         else if (level.indexOf(this.$t('main.mintues')) !== -1) {
-		    this.percentage = 15;
-		    this.status="exception"
-        }
-         else if (level.indexOf(this.$t('main.seconds') ) !== -1) {
-		    this.percentage = 10;
-		    this.status="exception"
-		}else if(level.indexOf(this.$t('main.moment')) !== -1){
-		    this.percentage =5;
-		    this.status="exception"
-		}else {
-		    this.percentage =0;
-		    this.level="";
-		}
-
-	  }
 
         },
-     
         	watch: {  //密码生成器自动生成
 		    'ruleFormAddTemplate.name': function(){
                 if(this.ruleFormAddTemplate.name){
