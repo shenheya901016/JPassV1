@@ -3,6 +3,7 @@ import myIpfs from "./myIpfs";
 let JPassUtil = require("jpass-util");
 let request = require("request");
 const util = require('util');
+const json5=require("json5");
 
 let baserpcurl = "http://192.168.2.13:1337";
 //判断是否为开发者模式
@@ -38,7 +39,7 @@ let jcc_ipfs = {
             let deriveKeyPair = JPassUtil.Wallet.deriveKeyPair(secret)
             let privateKey = deriveKeyPair.privateKey;
             let publicKey = deriveKeyPair.publicKey;
-            let encryptData = JSON.stringify(JPassUtil.ECCCrypto.encryptWithPublicKey(publicKey, data));
+            let encryptData = json5.stringify(JPassUtil.ECCCrypto.encryptWithPublicKey(publicKey, data));
             let size = strlen(encryptData);
             let md5 = "md5";
             let timestamp = new Date().getTime()
@@ -101,7 +102,7 @@ let jcc_ipfs = {
             if (msg.indexOf("error")!=-1) {
                 return msg;
             } else {
-                return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, JSON.parse(msg));
+                return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, json5.parse(msg));
             }
         },
         /**
