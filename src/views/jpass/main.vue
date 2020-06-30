@@ -1165,6 +1165,7 @@
                                             v-model="data.val"
                                             style="width:21vw;float: left"
                                             class="myInput"
+                                            @input="pwdLength(data)"
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
