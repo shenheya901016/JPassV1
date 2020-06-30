@@ -258,7 +258,8 @@ export default {
         address:"地址",
         login:"用户名",
         phone:"电话",
-        date:"日期"
+        date:"日期",
+        webside:"网站"
     },
 
     ...zhLocale

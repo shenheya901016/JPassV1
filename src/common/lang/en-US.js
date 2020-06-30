@@ -256,7 +256,8 @@ export default {
         address:"Address",
         login:"Login",
         phone:"Phone",
-        date:"Date"
+        date:"Date",
+        webside:"Webside"
     },
     ...enLocale
 };
