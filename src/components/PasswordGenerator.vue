@@ -23,10 +23,10 @@
 <script>
 	export default {
 		props:["dialogopen","dialogclose"],
-		data() {	
+		data() {
 			return {
 				//密码生成器
-				dialogVisiblePasswordGenerator:false, // 密码生成器弹出框	
+				dialogVisiblePasswordGenerator:false, // 密码生成器弹出框
 				crypt: "",
 				level: "",
 				radio: 3,
@@ -46,7 +46,7 @@
 			},
 			//获取密码
 			getPassword() {
-				this.$emit("transpassword",this.crypt);	
+				this.$emit("transpassword",this.crypt);
 			}
 		},
 		watch: {  //密码生成器自动生成
@@ -63,8 +63,8 @@
 				this.$createPassword.getPercentage(this.crypt);
 				this.percentage = this.$createPassword.percentage;
 				this.status = this.$createPassword.status;
-            }, 
-			dialogopen: function(data){ 
+            },
+			dialogopen: function(data){
 				this.dialogVisiblePasswordGenerator=data
 			},
 			dialogclose:function(data){
