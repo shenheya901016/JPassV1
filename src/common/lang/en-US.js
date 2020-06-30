@@ -221,7 +221,23 @@ export default {
         lineError:"System abnormal, please test whether the network is normal!",
         synchronizationSuccessful:"Data synchronization successful!",
         NonMember:"Non-member, data cannot be synchronized, please recharge!",
-        withoutSynchronization:"Local data is the same as IPFS data, no synchronization required!"
+        withoutSynchronization:"Local data is the same as IPFS data, no synchronization required!",
+        //密码生成器
+        passwordGenerator:"Password Generator",
+        easyMemorize:"Easy to remember",
+        lettersAndNumbers:"Just letters and Numbers",
+        completelyRandom:"Completely random",
+        numberOnly:"Number only",
+        moment:"moments",
+        breakTime:"Break Time:",
+        seconds:"seconds",
+        mintues:"minutes",
+        hours:"hours",
+        day:"days",
+        weeks:"weeks",
+        month:"month",
+        years:"years", 
+        century:"century"  
     },
     myInfo: {
         name: "Name",

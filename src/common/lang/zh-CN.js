@@ -163,7 +163,23 @@ export default {
         lineError:"系统异常,请测试网络是否正常!",
         synchronizationSuccessful:"数据同步成功!",
         NonMember:"非会员，数据无法同步，请充值！",
-        withoutSynchronization:"本地数据与ipfs数据相同，无需同步！"
+        withoutSynchronization:"本地数据与ipfs数据相同，无需同步！",
+        //密码生成器
+        passwordGenerator:"密码生成器",
+        easyMemorize:"便于记忆",
+        lettersAndNumbers:"仅字母和数字",
+        completelyRandom:"完全随机",
+        numberOnly:"仅数字",
+        moment:"瞬间",
+        breakTime:"破解时间:",
+        seconds:"秒",
+        mintues:"分",
+        hours:"时",
+        day:"天",
+        weeks:"周",
+        month:"月",
+        years:"年", 
+        century:"世纪之久" 
     },
     lock: {
         unlockJpass: "解锁jpass",
@@ -241,5 +257,6 @@ export default {
         phone:"电话",
         date:"日期"
     },
+
     ...zhLocale
 };
