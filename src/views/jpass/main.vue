@@ -48,7 +48,7 @@
                         v-if="showTrash == true"
                         style="border:0;padding: 5px 5px;"
                         @click="dialogclearTrash = true"
-                > 
+                >
                     <img
                             style="top:-2px;height: 25px;width: 25px;"
                             src="./img/trash.svg"
@@ -704,7 +704,7 @@
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
                                     <a href="#" @click="addProjectRemoveItem(data.id)"><i class="el-icon-close"></i></a>
-                                    <div style="width: 50%;display: inline-block;">
+                                    <div style="width: 85%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :show-text="false"
@@ -712,8 +712,9 @@
                                                 :percentage="data.percentage"
                                                 :status="data.pwdstatus"
                                         ></el-progress>
+                                        <span class="format">{{data.format}}</span>
                                     </div>
-                                    <span class="format">{{data.format}}</span>
+
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'password' && showPassword"
@@ -737,7 +738,7 @@
                                             @click="addProjectRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                    <div style="width: 50%;display: inline-block;">
+                                    <div style="width: 85%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :show-text="false"
@@ -745,8 +746,9 @@
                                                 :percentage="data.percentage"
                                                 :status="data.pwdstatus"
                                         ></el-progress>
+                                        <span class="format">{{data.format}}</span>
                                     </div>
-                                    <span class="format">{{data.format}}</span>
+
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -939,7 +941,7 @@
                                             @click="editRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                    <div style="width: 50%;display: inline-block;">
+                                    <div style="width: 85%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :stroke-width="5"
@@ -947,8 +949,9 @@
                                                 :status="data.pwdstatus"
                                                 :show-text="false"
                                         ></el-progress>
+                                        <span class="format">{{data.format}}</span>
                                     </div>
-                                    <span class="format">{{data.format}}</span>
+
                                 </el-form-item>
                                 <el-form-item
                                         v-if="data.type === 'password' && showPassword"
@@ -972,7 +975,7 @@
                                             @click="editRemoveItem(data.id)"
                                     ></i
                                     ></a>
-                                    <div style="width: 50%;display: inline-block;">
+                                    <div style="width: 85%;display: inline-block;">
                                         <el-progress
                                                 id="process"
                                                 :stroke-width="5"
@@ -980,8 +983,8 @@
                                                 :status="data.pwdstatus"
                                                 :show-text="false"
                                         ></el-progress>
+                                        <span class="format">{{data.format}}</span>
                                     </div>
-                                    <span class="format">{{data.format}}</span>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -1161,16 +1164,22 @@
                                             type="password"
                                             v-model="data.val"
                                             style="width:21vw;float: left"
+                                            @input="pwdLength(data)"
                                             class="myInput"
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"
-                                    ><i
-                                            class="el-icon-close"
-                                            @click="addTemplageRemoveItem(data.id)"
-                                    ></i
-                                    ></a>
+                                    <a href="#"><i class="el-icon-close" @click="addTemplageRemoveItem(data.id)"> </i></a>
+                                    <div style="width:21vw;display: inline-block;">
+                                        <el-progress
+                                                id="process"
+                                                :show-text="false"
+                                                :stroke-width="5"
+                                                :percentage="data.percentage"
+                                                :status="data.pwdstatus"
+                                        ></el-progress>
+                                        <span class="format">{{data.format}}</span>
+                                    </div>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -1351,16 +1360,22 @@
                                             type="password"
                                             v-model="data.val"
                                             style="float: left;width:21vw;"
+                                            @input="pwdLength(data)"
                                             class="myInput"
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"
-                                    ><i
-                                            class="el-icon-close"
-                                            @click="editRemoveItem(data.id)"
-                                    ></i
-                                    ></a>
+                                    <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)" ></i></a>
+                                    <div style="width:21vw;display: inline-block;">
+                                        <el-progress
+                                                id="process"
+                                                :show-text="false"
+                                                :stroke-width="5"
+                                                :percentage="data.percentage"
+                                                :status="data.pwdstatus"
+                                        ></el-progress>
+                                        <span class="format">{{data.format}}</span>
+                                    </div>
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
@@ -1388,13 +1403,6 @@
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <el-date-picker v-model="data.val" class="input-class-template-edit" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
-                                    <!-- <input
-                                            type="text"
-                                            v-model="data.val"
-                                            style="float: left;width:90%;"
-                                            readonly
-                                            class="myInput"
-                                    /> -->
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -2930,6 +2938,7 @@
         },
         data() {
             return {
+                status:"",
                 vip: "",
                 templatedisable: true,
                 dialogPayGenerator: false,//支付页面弹出框
@@ -2998,7 +3007,7 @@
                 db: '',
                 localdb: '',
                 projects: [],
- 
+
                 localData: "",//本地数据
                 processShow: false,//同步进度条是否显示
                 projectEvent: '',
@@ -3578,6 +3587,13 @@
                 this.searchTemp = "";//清空搜索框
                 this.notesBytargeId(note);
             }, noteslick(project, event) {
+                //更新密码强度（中英文切换）
+                let items = project.datas
+                for(var item in items){
+                    if (items[item].type=="password"){
+                        items[item].format = this.cryptLevel(items[item].val);
+                    }
+                }
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
@@ -3841,18 +3857,18 @@
                         this.getdirectory();
                     }
                 } else if (ipfsData.machineId == "" ||ipfsData.machineId == undefined) {
-                     console.log("本地有数据，ipfs 没有数据,系统默认不同步数据");
-                      this.getdirectory();
+                    console.log("本地有数据，ipfs 没有数据,系统默认不同步数据");
+                    this.getdirectory();
                 }else if(ipfsData.machineId != "" && ipfsData.machineId !=undefined){
                     if(this.db.get("machineId").value() == ipfsData.machineId){
-                     this.getdirectory();
-                     console.log("机器码相同,不执行任何操作！");
+                        this.getdirectory();
+                        console.log("机器码相同,不执行任何操作！");
                     }else if(ipfsData.version !=this.db.get("version").value()){
-                         console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
-                         this.getdirectory();
-                         this.dialogSynchronization = true;
+                        console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
+                        this.getdirectory();
+                        this.dialogSynchronization = true;
                     }else {
-                         console.log("本地与ipfs 机器码不同,但其版本号相同，加载列表！");
+                        console.log("本地与ipfs 机器码不同,但其版本号相同，加载列表！");
                         this.getdirectory();
                     }
                 }
@@ -3866,85 +3882,85 @@
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = this.loginObj.address;
                 let userSecret = this.loginObj.secret;
-                    //读取IPFS中数据
-                    let tempipfsData = await this.$myIpfs.Ipfs.read(userSecret, "/main", address);
-                    tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
-                    tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
-                    console.log(tempipfsData);
-                    console.log("本机版本：" + this.db.get("version").value());
-                    console.log("ipfs版本：" + tempipfsData.version);
-                    if(tempipfsData.machineId !=undefined){
-                     if (tempipfsData.version > this.db.get("version").value()) {//version越大内容越新
-                            console.log("ipfs版本大于本地版本");
-                            await this.db.set("models", tempipfsData.models).write();
-                            await this.db.set("project", tempipfsData.project).write();
-                            await this.db.set("templates", tempipfsData.templates).write();
-                            await this.db.set('settings', tempipfsData.settings).write();
-                            await this.db.set('machineId', this.$Uuidv1()).write();
-                            await this.db.set('version', tempipfsData.version).write();
+                //读取IPFS中数据
+                let tempipfsData = await this.$myIpfs.Ipfs.read(userSecret, "/main", address);
+                tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
+                tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
+                console.log(tempipfsData);
+                console.log("本机版本：" + this.db.get("version").value());
+                console.log("ipfs版本：" + tempipfsData.version);
+                if(tempipfsData.machineId !=undefined){
+                    if (tempipfsData.version > this.db.get("version").value()) {//version越大内容越新
+                        console.log("ipfs版本大于本地版本");
+                        await this.db.set("models", tempipfsData.models).write();
+                        await this.db.set("project", tempipfsData.project).write();
+                        await this.db.set("templates", tempipfsData.templates).write();
+                        await this.db.set('settings', tempipfsData.settings).write();
+                        await this.db.set('machineId', this.$Uuidv1()).write();
+                        await this.db.set('version', tempipfsData.version).write();
+                        this.$message({
+                            message:this.$t("main.synchronizationSuccessful"),
+                            type: 'success'
+                        });
+                        this.getdirectory();
+                    } else if (tempipfsData.version < this.db.get("version").value()) {
+                        console.log("ipfs版本小于本地版本");
+                        let localdata = this.db.__wrapped__;
+                        let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                        if(result.indexOf("success")>0){
+                            console.log("数据同步成功！");
                             this.$message({
                                 message:this.$t("main.synchronizationSuccessful"),
                                 type: 'success'
                             });
-                            this.getdirectory();
-                        } else if (tempipfsData.version < this.db.get("version").value()) {
-                            console.log("ipfs版本小于本地版本");
-                            let localdata = this.db.__wrapped__;
-                            let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");                         
-                           if(result.indexOf("success")>0){
-                                console.log("数据同步成功！");
-                                  this.$message({
-                                    message:this.$t("main.synchronizationSuccessful"),
-                                    type: 'success'
-                                });
-                            }else if(result.indexOf("lackoil")>0){
-                                console.log("未充值");
-                                 this.$message({
-                                    message: this.$t("main.NonMember"),
-                                    type: 'error'
-                                });
-                            } else if(result.indexOf("error")>0){
-                             this.$message({
-                                    message: this.$t("main.lineError"),
-                                    type: 'error'
-                                });
-                            }
-                        }else if (tempipfsData.version == this.db.get("version").value()) {
-                                console.log("本地数据与ipfs 数据相同，无需同步");
-                                  this.$message({
-                                    message:this.$t("main.withoutSynchronization"),
-                                    type: 'success'
-                                });
+                        }else if(result.indexOf("lackoil")>0){
+                            console.log("未充值");
+                            this.$message({
+                                message: this.$t("main.NonMember"),
+                                type: 'error'
+                            });
+                        } else if(result.indexOf("error")>0){
+                            this.$message({
+                                message: this.$t("main.lineError"),
+                                type: 'error'
+                            });
                         }
-                    }  else{
-                        console.log("ipfs无数据,本地数据同步到ipfs端");
-                         let localdata = this.db.__wrapped__;
-                         let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                             if(result.indexOf("success")>0){
-                                console.log("数据同步成功！");
-                                  this.$message({
-                                    message:this.$t("main.synchronizationSuccessful"),
-                                    type: 'success'
-                                });
-                            }else if(result.indexOf("lackoil")>0){
-                                console.log("未充值");
-                                 this.$message({
-                                    message: this.$t("main.NonMember"),
-                                    type: 'error'
-                                });
-                            } else if(result.indexOf("error")>0){
-                             this.$message({
-                                    message: this.$t("main.lineError"),
-                                    type: 'error'
-                                });
-                           }
-                       }  
+                    }else if (tempipfsData.version == this.db.get("version").value()) {
+                        console.log("本地数据与ipfs 数据相同，无需同步");
+                        this.$message({
+                            message:this.$t("main.withoutSynchronization"),
+                            type: 'success'
+                        });
+                    }
+                }  else{
+                    console.log("ipfs无数据,本地数据同步到ipfs端");
+                    let localdata = this.db.__wrapped__;
+                    let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
+                    if(result.indexOf("success")>0){
+                        console.log("数据同步成功！");
+                        this.$message({
+                            message:this.$t("main.synchronizationSuccessful"),
+                            type: 'success'
+                        });
+                    }else if(result.indexOf("lackoil")>0){
+                        console.log("未充值");
+                        this.$message({
+                            message: this.$t("main.NonMember"),
+                            type: 'error'
+                        });
+                    } else if(result.indexOf("error")>0){
+                        this.$message({
+                            message: this.$t("main.lineError"),
+                            type: 'error'
+                        });
+                    }
+                }
             },
             pwdLength(obj) {
-                obj.format = this.$createPassword.cryptLevel(obj.val);
-                this.$createPassword.getPercentage(obj.val);
-                obj.percentage = this.$createPassword.percentage;
-                obj.pwdstatus = this.$createPassword.status;
+                obj.format = this.cryptLevel(obj.val);
+                this.getPercentage(obj.val);
+                obj.percentage = this.percentage;
+                obj.pwdstatus = this.status;
             },
             async selectTemplate() {
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -4099,19 +4115,19 @@
                 // this.templateEvent.datas.push(this.filed);
                 // this.filed = "";
                 // this.filedName = "";
-                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleItems = false;
-                    this.filed.tempkey = this.ruleFormAddPro.filedName;
-                    this.filed.id = this.$Uuidv1(), 
-                    this.templateEvent.datas.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddPro.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.dialogVisibleItems = false;
+                        this.filed.tempkey = this.ruleFormAddPro.filedName;
+                        this.filed.id = this.$Uuidv1(),
+                            this.templateEvent.datas.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddPro.filedName= "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             }, //修改选中项
             editSelectFiled(command) {
                 this.dialogVisibleItemsEdit = true;
@@ -4126,21 +4142,27 @@
                 // this.filedName = "";
                 // this.filed = "";
                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleItemsEdit = false;
-                    this.filed.tempkey = this.ruleFormAddTEdit.filedName;
-                    this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddTEdit.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+                    if (valid) {
+                        this.dialogVisibleItemsEdit = false;
+                        this.filed.tempkey = this.ruleFormAddTEdit.filedName;
+                        this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddTEdit.filedName= "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
             //修改页面
             editProject() {
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
+                let  items = this.editobject.datas
+                for(var item in items){
+                    if (items[item].type=="password"){
+                        items[item].format = this.cryptLevel(items[item].val);
+                    }
+                }
                 if (this.editobject.type == "project") {
                     let modelsId = this.editobject.modelsId;
                     let models = [];
@@ -4254,18 +4276,18 @@
                 // this.filed = "";
                 // this.filedName = "";
                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.dialogVisibleAddTempItems = false;
-                    this.filed.tempkey = this.ruleFormAddTtemp.filedName;
-                    this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
-                    this.filed = "";
-                    this.ruleFormAddTtemp.filedName= "";
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-            
+                    if (valid) {
+                        this.dialogVisibleAddTempItems = false;
+                        this.filed.tempkey = this.ruleFormAddTtemp.filedName;
+                        this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
+                        this.filed = "";
+                        this.ruleFormAddTtemp.filedName= "";
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+
 
 
             }, //增加模板
@@ -4308,7 +4330,7 @@
                 //清空变量
                 this.ruleFormAddTemplate.name = "";
                 this.color = "";
-                this.tempTemplate = []; 
+                this.tempTemplate = [];
                 this.selectlabels = "";
                 this.dialogVisibleAddTemplate = false;
                 this.getdirectory();
@@ -4458,21 +4480,21 @@
                     for (var templateIndex in templateArray) {
                         if (templateArray[templateIndex].name.indexOf(temp) != -1) {
                             tempTemplates.push(templateArray[templateIndex]);
-                        }   
-                    } 
+                        }
+                    }
                     this.projects = tempTemplates;
                 }else if(this.delobj.id =="ljt"){
-                      projectArray = this.db.get("project").filter({isDel: true}).value();
-                      templateArray = this.db.get("templates").filter({isDel: true}).value();
-                      console.log(projectArray);
-                      console.log(templateArray );
-                      ljtArray =projectArray.concat(templateArray);
-                      for(var ljtIndex in ljtArray){
-                          if(ljtArray[ljtIndex].name.indexOf(temp) != -1){
-                               templjtArray.push(ljtArray[ljtIndex]);
-                          }
-                      }
-                       this.projects = templjtArray;
+                    projectArray = this.db.get("project").filter({isDel: true}).value();
+                    templateArray = this.db.get("templates").filter({isDel: true}).value();
+                    console.log(projectArray);
+                    console.log(templateArray );
+                    ljtArray =projectArray.concat(templateArray);
+                    for(var ljtIndex in ljtArray){
+                        if(ljtArray[ljtIndex].name.indexOf(temp) != -1){
+                            templjtArray.push(ljtArray[ljtIndex]);
+                        }
+                    }
+                    this.projects = templjtArray;
                 }
 
             }, //图片处理(增加模板)
@@ -4570,7 +4592,7 @@
             changeLang(lan) {
                 if (lan === "中文") {
                     this.$i18n.locale = 'zh-CN';
-                     //模板添加选项更新
+                    //模板添加选项更新
                     console.log(this.templateItems);
                 } else if (lan === "English") {
                     this.$i18n.locale = 'en-US';
@@ -4584,7 +4606,7 @@
                     label: this.$t('main.shutDown')
                 }, {value: 'automatically', label: this.$t('main.autofill')}];
                 localStorage.setItem('lang', this.$i18n.locale);
-               
+
             },
             //国际化（目录）
             international(name) {
@@ -4833,14 +4855,14 @@
                 let localdata = this.db.__wrapped__;
                 let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
                 if(result.indexOf("success")===-1){
-                        this.$message({
-                            message: '同步数据失败！',
-                            type: 'error'
-                        });
-                     }else{
-                        this.dialogSynchronization = false;
-                     }  
-                  },
+                    this.$message({
+                        message: '同步数据失败！',
+                        type: 'error'
+                    });
+                }else{
+                    this.dialogSynchronization = false;
+                }
+            },
             //关闭同步窗口后关闭同步，防止页面刷新同步数据
             closeInit() {
                 this.isinitialize = false;
@@ -4896,71 +4918,161 @@
             closedialogMain(data) {
                 this.dialogPasswordGeneratorMain = data;
             },
-            // //打开支付页面
-            // async openpay() {
-            //     const getPromise = util.promisify(request.get);
-            //     let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
-            //     let result = await getPromise(url);
-            //     let msg = this.$JSON5.parse(result.body);
-            //     if (msg.data.list.length > 0) {
-            //         if (msg.data.list[0].end_time < new Date().getTime()) {
-            //             this.dialogPayGenerator = true;
-            //         }else{
-            //             this.$message({
-            //                 message: '已是会员，无需充值！',
-            //                 type: 'success'
-            //             });
-            //         }
-            //     } else {
-            //         this.dialogPayGenerator = true;
-            //     }
-            // },
             //子组件关闭后还原dialogPayGenerator为false
             closedialogPay(data) {
                 this.dialogPayGenerator = data;
             },
-
-
-        },
-        	watch: {  //密码生成器自动生成
-		    'ruleFormAddTemplate.name': function(){
-                if(this.ruleFormAddTemplate.name){
-                  if(this.ruleFormAddTemplate.name.trim().length>0){
-                     this.templatedisable=false
-                   }else{
-                     this.templatedisable=true
-                   }
-                }else{
-                    this.templatedisable=true 
+            /**
+             * 判断密码强度
+             * @param p
+             * @return {string}
+             */
+            cryptLevel(p) {
+                let des="";
+                let hasUpper = false;
+                let hasLow = false;
+                let hasNum = false;
+                let hasOther = false;
+                let out="";
+                for (let i = 0; i < p.length; i++) {
+                    let c = p.charCodeAt(i);
+                    if (c >= 65 && c <= 90) hasUpper = true;
+                    else if (c >= 97 && c <= 122) hasLow = true;
+                    else if (c >= 48 && c <= 57) hasNum = true;
+                    else hasOther = true;
                 }
-             },
+                let pwdNum = 0;
+                if (hasUpper) pwdNum += 26;
+                if (hasLow) pwdNum += 26;
+                if (hasNum) pwdNum += 10;
+                if (hasOther) pwdNum += 32;
+                let num = Math.pow(pwdNum, p.length);
+                if(num==1){
+                    num=0;
+                }
+                out=this.formatTime(num / (1024 * 1024 * 1024 * 2.4 * 2));
+                if(out!=""){
+                    des = this.$t('main.breakTime') + out;
+                }
+                return des;
+            },
 
-             'editobject.name': function(){
-                 let name=this.editobject.name;
-                if(name){
-                    if(name.trim().length>0){
-                       this.templatedisable=false
-                    }else{
-                       this.templatedisable=true
+
+            formatTime(s) {
+                var str = "";
+                if(s==0)
+                    return  str = ""
+                s = Math.floor(s);
+                if (s<1)
+                    return  str = this.$t('main.moment');
+                s = Math.floor(s);
+                if (s >= 1) str = s % 60 + this.$t('main.seconds') + str;
+                s = Math.floor(s / 60);
+                if (s >= 1) str = s % 60 + this.$t('main.mintues') + str;
+                s = Math.floor(s / 60);
+                if (s >= 1) str = s % 24 + this.$t('main.hours') + str;
+                s = Math.floor(s / 24);
+                if (s >= 1) {
+                    str = Math.ceil(s + this.$t('main.day')) + str;
+                    if (s <= 28) {
+                        str = Math.ceil(s / 7) + this.$t('main.weeks');
+                    } else if (s >= 30 && s <= 360) {
+                        str = Math.ceil(s / 30) + this.$t('main.month');
+                    } else if (s >= 360 && s <= 36000) {
+                        str = Math.ceil(s / 360) + this.$t('main.years');
+
+                    } else {
+                        str = this.$t('main.century');
+
                     }
-                }else{
-                    this.templatedisable=true 
                 }
-             },
-
-             'ruleFormAddProject.name':function(){
-                 if(this.ruleFormAddProject.name){
-                     if( this.ruleFormAddProject.name.trim().length>0){
-                        this.templatedisable=false
-                     }else{
-                        this.templatedisable=true
-                     }
-                    }else{
-                      this.templatedisable=true 
-                   }
-             },
+                return str;
+            },
+            /**
+             * 获取进度条百分比
+             * @param pwd
+             * @return {string}
+             */
+            getPercentage(pwd){
+                let level=this.cryptLevel(pwd);
+                if (level.indexOf(this.$t('main.century')) !== -1) {
+                    this.percentage = 100;
+                    this.status="success"
+                } else if (level.indexOf(this.$t('main.years')) !== -1) {
+                    this.percentage = 80;
+                    this.status="success"
+                } else if (level.indexOf(this.$t('main.month')) !== -1) {
+                    this.status="success"
+                    this.percentage = 60;
+                } else if (level.indexOf(this.$t('main.weeks')) !== -1) {
+                    this.percentage = 40;
+                    this.status="warning"
+                } else if (level.indexOf(this.$t('main.day')) !== -1 ) {
+                    this.percentage = 35;
+                    this.status="exception"
+                }
+                else if (level.indexOf(this.$t('main.hours')) !== -1) {
+                    this.percentage = 30;
+                    this.status="exception"
+                }
+                else if (level.indexOf(this.$t('main.mintues')) !== -1) {
+                    this.percentage = 15;
+                    this.status="exception"
+                }
+                else if (level.indexOf(this.$t('main.seconds') ) !== -1) {
+                    this.percentage = 10;
+                    this.status="exception"
+                }else if(level.indexOf(this.$t('main.moment')) !== -1){
+                    this.percentage =5;
+                    this.status="exception"
+                }else {
+                    this.percentage =0;
+                    this.level="";
+                }
 
             }
+
+        },
+
+        watch: {  //密码生成器自动生成
+            'ruleFormAddTemplate.name': function(){
+                if(this.ruleFormAddTemplate.name){
+                    if(this.ruleFormAddTemplate.name.trim().length>0){
+                        this.templatedisable=false
+                    }else{
+                        this.templatedisable=true
+                    }
+                }else{
+                    this.templatedisable=true
+                }
+            },
+
+            'editobject.name': function(){
+                let name=this.editobject.name;
+                if(name){
+                    if(name.trim().length>0){
+                        this.templatedisable=false
+                    }else{
+                        this.templatedisable=true
+                    }
+                }else{
+                    this.templatedisable=true
+                }
+            },
+
+            'ruleFormAddProject.name':function(){
+                if(this.ruleFormAddProject.name){
+                    if( this.ruleFormAddProject.name.trim().length>0){
+                        this.templatedisable=false
+                    }else{
+                        this.templatedisable=true
+                    }
+                }else{
+                    this.templatedisable=true
+                }
+            },
+
+        }
     }
 </script>
 <style lang="less"  scoped>
@@ -5022,11 +5134,11 @@
 
     }
 
-    .input-class{    
-       width: 25vw; 
-   }
+    .input-class{
+        width: 25vw;
+    }
     .input-class-template-edit{
-       width: 21vw;
+        width: 21vw;
     }
 
     .input-class-template{
@@ -5062,12 +5174,12 @@
         background-color: #f9fafc;
     }
     .messageInput{
-       width:100%;
-       float:left;
+        width:100%;
+        float:left;
 
     }
-    
-   
+
+
 
 
 

@@ -15,8 +15,8 @@ module.exports = {
         proxy: { // 配置跨域
             '/ipfs': {
                 //要访问的跨域的api的域名
-                // target: 'http://192.168.2.13:1337',
-                target: 'http://localhost:1337',
+                target: 'http://192.168.2.13:1337',
+               //target: 'http://localhost:1337',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {
