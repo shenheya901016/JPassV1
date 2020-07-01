@@ -143,8 +143,8 @@ export default {
         successfullyModified: "修改成功！",
         failToEdit: "修改失败！",
         settingSavedSuccessfully: "设置保存成功！",
-        re_login:"重新登陆实现所有配置更新, 是否重新登陆?",
-        login:"重新登陆",
+        re_login:"重新登录实现所有配置更新, 是否重新登录?",
+        login:"重新登录",
         suggest:"建议",
         settingSaveFailed: "设置保存失败！",
         PasswordGenerator: "密码生成器",
@@ -181,8 +181,8 @@ export default {
         day:"天",
         weeks:"周",
         month:"月",
-        years:"年", 
-        century:"世纪之久" 
+        years:"年",
+        century:"世纪之久"
     },
     lock: {
         unlockJpass: "解锁jpass",
