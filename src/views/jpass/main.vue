@@ -359,6 +359,15 @@
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
+                     <el-form-item
+                            v-else-if="data.type === 'webside'"
+                            :label="data.tempkey"
+                            :prop="data.tempkey"
+                            style="margin-bottom:3px;"
+                    >
+                        <input type="text" v-model="data.val" readonly/>
+                        <hr/>
+                    </el-form-item>
                     <el-form-item
                             v-else-if="data.type === 'date'"
                             :label="data.tempkey"
@@ -764,6 +773,20 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
+                                 <el-form-item
+                                        v-else-if="data.type === 'webside'"
+                                        :label="data.tempkey"
+                                        :prop="data.tempkey"
+                                        style="width: 90%;margin-bottom:0;"
+                                >
+                                    <input type="text" v-model="data.val" class="myInput"/>
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="addProjectRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
+                                </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
@@ -1001,6 +1024,20 @@
                                     ></a>
                                 </el-form-item>
                                 <el-form-item
+                                        v-else-if="data.type === 'webside'"
+                                        :label="data.tempkey"
+                                        :prop="data.tempkey"
+                                        style="width: 90%;margin-bottom:0"
+                                >
+                                    <input type="text" v-model="data.val" class="myInput"/>
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="editRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
+                                </el-form-item>
+                                <el-form-item
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1201,6 +1238,25 @@
                                     ></a>
                                 </el-form-item>
                                 <el-form-item
+                                        v-else-if="data.type === 'webside'"
+                                        :label="data.tempkey"
+                                        :prop="data.tempkey"
+                                        style="width: 90%;margin-bottom: 0"
+                                >
+                                    <input
+                                            type="text"
+                                            v-model="data.val"
+                                            style="width:21vw;float: left"
+                                            class="myInput"
+                                    />
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="addTemplageRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
+                                </el-form-item>
+                                <el-form-item
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1379,6 +1435,25 @@
                                 </el-form-item>
                                 <el-form-item
                                         v-else-if="data.type === 'text'"
+                                        :label="data.tempkey"
+                                        :prop="data.tempkey"
+                                        style="width: 90%;margin-bottom:0"
+                                >
+                                    <input
+                                            type="text"
+                                            v-model="data.val"
+                                            style="float: left;width:21vw;"
+                                            class="myInput"
+                                    />
+                                    <a href="#"
+                                    ><i
+                                            class="el-icon-close"
+                                            @click="editRemoveItem(data.id)"
+                                    ></i
+                                    ></a>
+                                </el-form-item>
+                                 <el-form-item
+                                        v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
@@ -3169,7 +3244,7 @@
                         {
                         "id": "fdbce150-fec4-11e9-bd32-854c67bf397b",
                         "key": this.$t('selects.webside'),
-                        "type": "text",
+                        "type": "webside",
                         "val": "",
                         "tempkey": "Webside"
                     },
