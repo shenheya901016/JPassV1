@@ -5,7 +5,7 @@ let request = require("request");
 const util = require('util');
 const json5=require("json5");
 
-let baserpcurl = "http://192.168.2.13:1337";
+let baserpcurl = "https://jccipfs.jccdex.cn";
 //判断是否为开发者模式
 if (process.env.NODE_ENV === "development") {
     baserpcurl = 'http://localhost:8080/ipfs';
