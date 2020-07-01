@@ -359,7 +359,7 @@
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
-                     <el-form-item
+                    <el-form-item
                             v-else-if="data.type === 'webside'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
@@ -368,7 +368,7 @@
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
-                     <el-form-item
+                    <el-form-item
                             v-else-if="data.type === 'login'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
@@ -782,7 +782,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                 <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -796,7 +796,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                  <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1060,7 +1060,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                 <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1243,7 +1243,8 @@
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"><i class="el-icon-close" @click="addTemplageRemoveItem(data.id)"> </i></a>
+                                    <a href="#"><i class="el-icon-close"
+                                                   @click="addTemplageRemoveItem(data.id)"> </i></a>
                                     <div style="width:21vw;display: inline-block;">
                                         <el-progress
                                                 id="process"
@@ -1318,7 +1319,9 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                    <el-date-picker v-model="data.val" class="input-class-template" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <el-date-picker v-model="data.val" class="input-class-template"
+                                                    value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                                    size="large"></el-date-picker>
                                     <!-- <input
                                             type="text"
                                             v-model="data.val"
@@ -1477,7 +1480,7 @@
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)" ></i></a>
+                                    <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
                                     <div style="width:21vw;display: inline-block;">
                                         <el-progress
                                                 id="process"
@@ -1508,7 +1511,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                 <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1527,7 +1530,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                 <el-form-item
+                                <el-form-item
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1552,7 +1555,9 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                    <el-date-picker v-model="data.val" class="input-class-template-edit" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
+                                    <el-date-picker v-model="data.val" class="input-class-template-edit"
+                                                    value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                                    size="large"></el-date-picker>
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -1736,7 +1741,8 @@
                         </legend>
                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
                             {{ $t("main.timedLock") }}
-                            <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="lockchange"></el-switch>
+                            <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949"
+                                       @change="lockchange"></el-switch>
                         </span>
                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
                             {{ $t("main.idleTime") }}
@@ -3020,7 +3026,7 @@
         },
         data() {
             return {
-                status:"",
+                status: "",
                 vip: "",
                 templatedisable: true,
                 dialogPayGenerator: false,//支付页面弹出框
@@ -3317,11 +3323,11 @@
                             "tempkey": "Date"
                         },
                         {
-                        "id": "fdbce150-fec4-11e9-bd32-854c67bf397b",
-                        "key": this.$t('selects.webside'),
-                        "type": "webside",
-                        "val": "",
-                        "tempkey": "Webside"
+                            "id": "fdbce150-fec4-11e9-bd32-854c67bf397b",
+                            "key": this.$t('selects.webside'),
+                            "type": "webside",
+                            "val": "",
+                            "tempkey": "Webside"
                         },
                     ]
                 },
@@ -3553,7 +3559,7 @@
                         }
                     }
                     alldata[modelkey].count = count;
-                    console.log("contname:"+alldata[modelkey].name+alldata[modelkey].count);
+                    console.log("contname:" + alldata[modelkey].name + alldata[modelkey].count);
                 }
                 //分组
                 for (var key in alldata) {
@@ -3678,8 +3684,8 @@
             }, noteslick(project, event) {
                 //更新密码强度（中英文切换）
                 let items = project.datas
-                for(var item in items){
-                    if (items[item].type=="password"){
+                for (var item in items) {
+                    if (items[item].type == "password") {
                         items[item].format = this.cryptLevel(items[item].val);
                     }
                 }
@@ -3907,7 +3913,7 @@
                 this.db = await this.$Lowdb(db_name);
                 this.localdb = await this.$Lowdb(db_name + "_local");
                 //取ipfs数据
-                let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
+                let ipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", address);
                 ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
                 ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
                 this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
@@ -3941,22 +3947,22 @@
                         await this.db.set("project", ipfsData.project).write();
                         await this.db.set("templates", ipfsData.templates).write();
                         await this.db.set('settings', ipfsData.settings).write();
-                        await this.db.set('machineId',  this.$Uuidv1()).write();
+                        await this.db.set('machineId', this.$Uuidv1()).write();
                         await this.db.set('version', ipfsData.version).write();
                         this.getdirectory();
                     }
-                } else if (ipfsData.machineId == "" ||ipfsData.machineId == undefined) {
+                } else if (ipfsData.machineId == "" || ipfsData.machineId == undefined) {
                     console.log("本地有数据，ipfs 没有数据,系统默认不同步数据");
                     this.getdirectory();
-                }else if(ipfsData.machineId != "" && ipfsData.machineId !=undefined){
-                    if(this.db.get("machineId").value() == ipfsData.machineId){
+                } else if (ipfsData.machineId != "" && ipfsData.machineId != undefined) {
+                    if (this.db.get("machineId").value() == ipfsData.machineId) {
                         this.getdirectory();
                         console.log("机器码相同,不执行任何操作！");
-                    }else if(ipfsData.version !=this.db.get("version").value()){
+                    } else if (ipfsData.version != this.db.get("version").value()) {
                         console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
                         this.getdirectory();
                         this.dialogSynchronization = true;
-                    }else {
+                    } else {
                         console.log("本地与ipfs 机器码不同,但其版本号相同，加载列表！");
                         this.getdirectory();
                     }
@@ -3978,7 +3984,7 @@
                 console.log(tempipfsData);
                 console.log("本机版本：" + this.db.get("version").value());
                 console.log("ipfs版本：" + tempipfsData.version);
-                if(tempipfsData.machineId !=undefined){
+                if (tempipfsData.machineId != undefined) {
                     if (tempipfsData.version > this.db.get("version").value()) {//version越大内容越新
                         console.log("ipfs版本大于本地版本");
                         await this.db.set("models", tempipfsData.models).write();
@@ -3988,7 +3994,7 @@
                         await this.db.set('machineId', this.$Uuidv1()).write();
                         await this.db.set('version', tempipfsData.version).write();
                         this.$message({
-                            message:this.$t("main.synchronizationSuccessful"),
+                            message: this.$t("main.synchronizationSuccessful"),
                             type: 'success'
                         });
                         this.getdirectory();
@@ -3996,48 +4002,48 @@
                         console.log("ipfs版本小于本地版本");
                         let localdata = this.db.__wrapped__;
                         let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                        if(result.indexOf("success")>0){
+                        if (result.indexOf("success") > 0) {
                             console.log("数据同步成功！");
                             this.$message({
-                                message:this.$t("main.synchronizationSuccessful"),
+                                message: this.$t("main.synchronizationSuccessful"),
                                 type: 'success'
                             });
-                        }else if(result.indexOf("lackoil")>0){
+                        } else if (result.indexOf("lackoil") > 0) {
                             console.log("未充值");
                             this.$message({
                                 message: this.$t("main.NonMember"),
                                 type: 'error'
                             });
-                        } else if(result.indexOf("error")>0){
+                        } else if (result.indexOf("error") > 0) {
                             this.$message({
                                 message: this.$t("main.lineError"),
                                 type: 'error'
                             });
                         }
-                    }else if (tempipfsData.version == this.db.get("version").value()) {
+                    } else if (tempipfsData.version == this.db.get("version").value()) {
                         console.log("本地数据与ipfs 数据相同，无需同步");
                         this.$message({
-                            message:this.$t("main.withoutSynchronization"),
+                            message: this.$t("main.withoutSynchronization"),
                             type: 'success'
                         });
                     }
-                }  else{
+                } else {
                     console.log("ipfs无数据,本地数据同步到ipfs端");
                     let localdata = this.db.__wrapped__;
                     let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                    if(result.indexOf("success")>0){
+                    if (result.indexOf("success") > 0) {
                         console.log("数据同步成功！");
                         this.$message({
-                            message:this.$t("main.synchronizationSuccessful"),
+                            message: this.$t("main.synchronizationSuccessful"),
                             type: 'success'
                         });
-                    }else if(result.indexOf("lackoil")>0){
+                    } else if (result.indexOf("lackoil") > 0) {
                         console.log("未充值");
                         this.$message({
                             message: this.$t("main.NonMember"),
                             type: 'error'
                         });
-                    } else if(result.indexOf("error")>0){
+                    } else if (result.indexOf("error") > 0) {
                         this.$message({
                             message: this.$t("main.lineError"),
                             type: 'error'
@@ -4069,7 +4075,7 @@
                             } else {
                                 console.log("从ipfs 取数据！");
                                 //取ipfs值
-                                let result = await this.$myIpfs.Ipfs.read(userSecret,projectArray[index].imgHash, loginObj.address);
+                                let result = await this.$myIpfs.Ipfs.read(userSecret, projectArray[index].imgHash, loginObj.address);
                                 projectArray[index].tempBase64 = result;
                                 //缓存到本地localdb库
                                 img = {"id": projectArray[index].imgHash, "value": result};
@@ -4100,7 +4106,7 @@
                         } else {
                             console.log("从ipfs 取数据！");
                             //取ipfs值
-                            let result = await this.$myIpfs.Ipfs.read(userSecret,temp.imgHash, loginObj.address);
+                            let result = await this.$myIpfs.Ipfs.read(userSecret, temp.imgHash, loginObj.address);
                             temp.tempBase64 = result;
                             //缓存到本地localdb库
                             img = {"id": temp.imgHash, "value": result};
@@ -4211,7 +4217,7 @@
                         this.filed.id = this.$Uuidv1(),
                             this.templateEvent.datas.push(this.filed);
                         this.filed = "";
-                        this.ruleFormAddPro.filedName= "";
+                        this.ruleFormAddPro.filedName = "";
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -4236,7 +4242,7 @@
                         this.filed.tempkey = this.ruleFormAddTEdit.filedName;
                         this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
                         this.filed = "";
-                        this.ruleFormAddTEdit.filedName= "";
+                        this.ruleFormAddTEdit.filedName = "";
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -4246,9 +4252,9 @@
             //修改页面
             editProject() {
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
-                let  items = this.editobject.datas
-                for(var item in items){
-                    if (items[item].type=="password"){
+                let items = this.editobject.datas
+                for (var item in items) {
+                    if (items[item].type == "password") {
                         items[item].format = this.cryptLevel(items[item].val);
                     }
                 }
@@ -4371,13 +4377,12 @@
                         this.filed.tempkey = this.ruleFormAddTtemp.filedName;
                         this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
                         this.filed = "";
-                        this.ruleFormAddTtemp.filedName= "";
+                        this.ruleFormAddTtemp.filedName = "";
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
-
 
 
             }, //增加模板
@@ -4504,10 +4509,10 @@
                     }
                 }
             }, //lock定时器启动
-            lockchange(){
-                if(this.systemlock) {
+            lockchange() {
+                if (this.systemlock) {
                     this.locktimedisabled = false;
-                }else
+                } else
                     this.locktimedisabled = true;
             },
             locksystem() {
@@ -4542,7 +4547,8 @@
                     this.db.get("settings").set("showPassword", this.showPassword).write();
                     this.db.get("settings").set("savePassword", this.savePassword).write();
                     this.db.get("settings").set("language", this.language).write();
-                    this.$confirm(this.$t('main.settingSavedSuccessfully')+this.$t('main.re_login'), this.$t('main.suggest'), {
+                    this.db.set("version", new Date().getTime()).write();
+                    this.$confirm(this.$t('main.settingSavedSuccessfully') + this.$t('main.re_login'), this.$t('main.suggest'), {
                         confirmButtonText: this.$t('main.login'),
                         cancelButtonText: this.$t('main.cancel'),
                     }).then(() => {
@@ -4551,7 +4557,7 @@
                     }).catch(() => {
                         this.$message({
                             type: 'warning',
-                            message: this.$t('main.cancel')+" "+this.$t('main.login')
+                            message: this.$t('main.cancel') + " " + this.$t('main.login')
                         });
                         this.dialogVisibleSetting = false;
                     });
@@ -4573,8 +4579,8 @@
                 let templateArray = [];
                 let tempProjects = [];
                 let tempTemplates = [];
-                let ljtArray=[];
-                let templjtArray=[];
+                let ljtArray = [];
+                let templjtArray = [];
                 //project
                 if (this.delobj.id != "mb" && this.delobj.id != "ljt") {
                     projectArray = this.db.get("project").filter({isDel: !true}).value();
@@ -4584,7 +4590,7 @@
                         }
                     }
                     this.projects = tempProjects;
-                } else if(this.delobj.id =="mb") {
+                } else if (this.delobj.id == "mb") {
                     //template
                     templateArray = this.db.get("templates").filter({isDel: !true}).value();
                     for (var templateIndex in templateArray) {
@@ -4593,14 +4599,14 @@
                         }
                     }
                     this.projects = tempTemplates;
-                }else if(this.delobj.id =="ljt"){
+                } else if (this.delobj.id == "ljt") {
                     projectArray = this.db.get("project").filter({isDel: true}).value();
                     templateArray = this.db.get("templates").filter({isDel: true}).value();
                     console.log(projectArray);
-                    console.log(templateArray );
-                    ljtArray =projectArray.concat(templateArray);
-                    for(var ljtIndex in ljtArray){
-                        if(ljtArray[ljtIndex].name.indexOf(temp) != -1){
+                    console.log(templateArray);
+                    ljtArray = projectArray.concat(templateArray);
+                    for (var ljtIndex in ljtArray) {
+                        if (ljtArray[ljtIndex].name.indexOf(temp) != -1) {
                             templjtArray.push(ljtArray[ljtIndex]);
                         }
                     }
@@ -4946,7 +4952,7 @@
                 console.log("ipfs 覆盖到本地")
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let secret = loginObj.secret;
-                let tempipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", this.loginObj.address);
+                let tempipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", this.loginObj.address);
                 console.log(tempipfsData);
                 tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                 tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
@@ -4964,12 +4970,12 @@
             async localToIpfs() {
                 let localdata = this.db.__wrapped__;
                 let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                if(result.indexOf("success")===-1){
+                if (result.indexOf("success") === -1) {
                     this.$message({
                         message: '同步数据失败！',
                         type: 'error'
                     });
-                }else{
+                } else {
                     this.dialogSynchronization = false;
                 }
             },
@@ -5038,12 +5044,12 @@
              * @return {string}
              */
             cryptLevel(p) {
-                let des="";
+                let des = "";
                 let hasUpper = false;
                 let hasLow = false;
                 let hasNum = false;
                 let hasOther = false;
-                let out="";
+                let out = "";
                 for (let i = 0; i < p.length; i++) {
                     let c = p.charCodeAt(i);
                     if (c >= 65 && c <= 90) hasUpper = true;
@@ -5057,11 +5063,11 @@
                 if (hasNum) pwdNum += 10;
                 if (hasOther) pwdNum += 32;
                 let num = Math.pow(pwdNum, p.length);
-                if(num==1){
-                    num=0;
+                if (num == 1) {
+                    num = 0;
                 }
-                out=this.formatTime(num / (1024 * 1024 * 1024 * 2.4 * 2));
-                if(out!=""){
+                out = this.formatTime(num / (1024 * 1024 * 1024 * 2.4 * 2));
+                if (out != "") {
                     des = this.$t('main.breakTime') + out;
                 }
                 return des;
@@ -5070,11 +5076,11 @@
 
             formatTime(s) {
                 var str = "";
-                if(s==0)
-                    return  str = ""
+                if (s == 0)
+                    return str = ""
                 s = Math.floor(s);
-                if (s<1)
-                    return  str = this.$t('main.moment');
+                if (s < 1)
+                    return str = this.$t('main.moment');
                 s = Math.floor(s);
                 if (s >= 1) str = s % 60 + this.$t('main.seconds') + str;
                 s = Math.floor(s / 60);
@@ -5103,41 +5109,38 @@
              * @param pwd
              * @return {string}
              */
-            getPercentage(pwd){
-                let level=this.cryptLevel(pwd);
+            getPercentage(pwd) {
+                let level = this.cryptLevel(pwd);
                 if (level.indexOf(this.$t('main.century')) !== -1) {
                     this.percentage = 100;
-                    this.status="success"
+                    this.status = "success"
                 } else if (level.indexOf(this.$t('main.years')) !== -1) {
                     this.percentage = 80;
-                    this.status="success"
+                    this.status = "success"
                 } else if (level.indexOf(this.$t('main.month')) !== -1) {
-                    this.status="success"
+                    this.status = "success"
                     this.percentage = 60;
                 } else if (level.indexOf(this.$t('main.weeks')) !== -1) {
                     this.percentage = 40;
-                    this.status="warning"
-                } else if (level.indexOf(this.$t('main.day')) !== -1 ) {
+                    this.status = "warning"
+                } else if (level.indexOf(this.$t('main.day')) !== -1) {
                     this.percentage = 35;
-                    this.status="exception"
-                }
-                else if (level.indexOf(this.$t('main.hours')) !== -1) {
+                    this.status = "exception"
+                } else if (level.indexOf(this.$t('main.hours')) !== -1) {
                     this.percentage = 30;
-                    this.status="exception"
-                }
-                else if (level.indexOf(this.$t('main.mintues')) !== -1) {
+                    this.status = "exception"
+                } else if (level.indexOf(this.$t('main.mintues')) !== -1) {
                     this.percentage = 15;
-                    this.status="exception"
-                }
-                else if (level.indexOf(this.$t('main.seconds') ) !== -1) {
+                    this.status = "exception"
+                } else if (level.indexOf(this.$t('main.seconds')) !== -1) {
                     this.percentage = 10;
-                    this.status="exception"
-                }else if(level.indexOf(this.$t('main.moment')) !== -1){
-                    this.percentage =5;
-                    this.status="exception"
-                }else {
-                    this.percentage =0;
-                    this.level="";
+                    this.status = "exception"
+                } else if (level.indexOf(this.$t('main.moment')) !== -1) {
+                    this.percentage = 5;
+                    this.status = "exception"
+                } else {
+                    this.percentage = 0;
+                    this.level = "";
                 }
 
             }
@@ -5145,47 +5148,47 @@
         },
 
         watch: {  //密码生成器自动生成
-            'ruleFormAddTemplate.name': function(){
-                if(this.ruleFormAddTemplate.name){
-                    if(this.ruleFormAddTemplate.name.trim().length>0){
-                        this.templatedisable=false
-                    }else{
-                        this.templatedisable=true
+            'ruleFormAddTemplate.name': function () {
+                if (this.ruleFormAddTemplate.name) {
+                    if (this.ruleFormAddTemplate.name.trim().length > 0) {
+                        this.templatedisable = false
+                    } else {
+                        this.templatedisable = true
                     }
-                }else{
-                    this.templatedisable=true
+                } else {
+                    this.templatedisable = true
                 }
             },
 
-            'editobject.name': function(){
-                let name=this.editobject.name;
-                if(name){
-                    if(name.trim().length>0){
-                        this.templatedisable=false
-                    }else{
-                        this.templatedisable=true
+            'editobject.name': function () {
+                let name = this.editobject.name;
+                if (name) {
+                    if (name.trim().length > 0) {
+                        this.templatedisable = false
+                    } else {
+                        this.templatedisable = true
                     }
-                }else{
-                    this.templatedisable=true
+                } else {
+                    this.templatedisable = true
                 }
             },
 
-            'ruleFormAddProject.name':function(){
-                if(this.ruleFormAddProject.name){
-                    if( this.ruleFormAddProject.name.trim().length>0){
-                        this.templatedisable=false
-                    }else{
-                        this.templatedisable=true
+            'ruleFormAddProject.name': function () {
+                if (this.ruleFormAddProject.name) {
+                    if (this.ruleFormAddProject.name.trim().length > 0) {
+                        this.templatedisable = false
+                    } else {
+                        this.templatedisable = true
                     }
-                }else{
-                    this.templatedisable=true
+                } else {
+                    this.templatedisable = true
                 }
             },
 
-            }
+        }
     }
 </script>
-<style lang="less"  scoped>
+<style lang="less" scoped>
     @import "./css/base.css";
     @import "./css/sy.css";
 
@@ -5244,16 +5247,18 @@
 
     }
 
-    .input-class{
+    .input-class {
         width: 25vw;
     }
-    .input-class-template-edit{
-       width: 21vw;
-    }
 
-    .input-class-template{
+    .input-class-template-edit {
         width: 21vw;
     }
+
+    .input-class-template {
+        width: 21vw;
+    }
+
     :last-child {
         margin-bottom: 0;
     }
@@ -5283,14 +5288,12 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
-    .messageInput{
-        width:100%;
-        float:left;
+
+    .messageInput {
+        width: 100%;
+        float: left;
 
     }
-
-
-
 
 
 </style>
