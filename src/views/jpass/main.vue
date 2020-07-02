@@ -1787,7 +1787,7 @@
         <el-dialog
                 title=""
                 :visible.sync="dialogMyInfo"
-                width="30%"
+                width="40%"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="true"
@@ -1795,16 +1795,16 @@
             <img src="./img/tx.svg" alt=""/>
             <el-form label-width="110px" class="demo-ruleForm">
                 <el-form-item :label="$t('myInfo.name')" prop="username" style="margin-top: 5%">
-                    <div style="text-align: left"> {{ username }}</div>
+                    <div style="text-align: left;margin-top: 4px;"> {{ username }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.walletAddress')" prop="myInfoKey">
-                    <div style="text-align: left"> {{ myInfoKey }}</div>
+                    <div style="text-align: left;margin-top: 4px;"> {{ myInfoKey }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.vip')" prop="vip">
-                    <div style="text-align: left"> {{ vip }}</div>
+                    <div style="text-align: left;margin-top: 4px;"> {{ vip }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.keystoreFile')">
-                    <el-button type="primary" size="small" style="float: left" @click="exportkeystore">
+                    <el-button type="primary" size="small" style="float: left;margin-top: 5px;" @click="exportkeystore">
                         {{ $t("myInfo.exportKeystoreFile") }}
                     </el-button>
                 </el-form-item>
