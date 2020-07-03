@@ -4645,12 +4645,12 @@
             beforeAvatarUpload(file) {
                 let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png', 'image/svg'];
                 const isImage = types.includes(file.type);
-                const isLt200K = file.size / 1024 / 1024 / 1024 < 200;
+                const isLt200K = file.size / 1024<20;
                 if (!isImage) {
                     this.$message.error('上传头像图片只能是 JPG ,GIF,BMP,PNG,SVG 格式!');
                 }
                 if (!isLt200K) {
-                    this.$message.error('上传头像图片大小不能超过 200KB!');
+                    this.$message.error('上传头像图片大小不能超过 20KB!');
                 }
                 return isImage && isLt200K;
             },
