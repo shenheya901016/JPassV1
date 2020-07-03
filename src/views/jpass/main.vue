@@ -3682,6 +3682,9 @@
                 for(var item in items){
                     if (items[item].type=="password"){
                         items[item].format = this.cryptLevel(items[item].val);
+                        this.getPercentage(items[item].val);
+                        items[item].percentage=this.percentage;
+                        items[item].pwdstatus= this.status;
                     }
                 }
                 console.log(project);
@@ -4200,12 +4203,6 @@
             }, //添加项目，模板增加项
             addFiled(formName) {
                 console.log(formName);
-                // this.dialogVisibleItems = false;
-                // this.filed.tempkey = this.filedName;
-                // this.filed.id = this.$Uuidv1();
-                // this.templateEvent.datas.push(this.filed);
-                // this.filed = "";
-                // this.filedName = "";
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.dialogVisibleItems = false;
@@ -4227,11 +4224,6 @@
                 this.ruleFormAddTEdit.filedName = command.key;
             }, //修改项目，模板增加项
             editAddFiled(formName) {
-                // this.dialogVisibleItemsEdit = false;
-                // this.filed.tempkey = this.filedName;
-                // this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
-                // this.filedName = "";
-                // this.filed = "";
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.dialogVisibleItemsEdit = false;
@@ -4362,11 +4354,6 @@
                 this.ruleFormAddTtemp.filedName = command.key;
             },
             addFiledTemplate(formName) {
-                // this.dialogVisibleAddTempItems = false;
-                // this.filed.tempkey = this.filedName;
-                // this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
-                // this.filed = "";
-                // this.filedName = "";
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.dialogVisibleAddTempItems = false;
