@@ -359,7 +359,7 @@
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
-                    <el-form-item
+                     <el-form-item
                             v-else-if="data.type === 'webside'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
@@ -368,7 +368,7 @@
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
-                    <el-form-item
+                     <el-form-item
                             v-else-if="data.type === 'login'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
@@ -782,7 +782,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                <el-form-item
+                                 <el-form-item
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -796,7 +796,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                <el-form-item
+                                  <el-form-item
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1060,7 +1060,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                <el-form-item
+                                 <el-form-item
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1243,8 +1243,7 @@
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"><i class="el-icon-close"
-                                                   @click="addTemplageRemoveItem(data.id)"> </i></a>
+                                    <a href="#"><i class="el-icon-close" @click="addTemplageRemoveItem(data.id)"> </i></a>
                                     <div style="width:21vw;display: inline-block;">
                                         <el-progress
                                                 id="process"
@@ -1319,9 +1318,7 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                    <el-date-picker v-model="data.val" class="input-class-template"
-                                                    value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                                    size="large"></el-date-picker>
+                                    <el-date-picker v-model="data.val" class="input-class-template" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
                                     <!-- <input
                                             type="text"
                                             v-model="data.val"
@@ -1480,7 +1477,7 @@
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)"></i></a>
+                                    <a href="#"><i class="el-icon-close" @click="editRemoveItem(data.id)" ></i></a>
                                     <div style="width:21vw;display: inline-block;">
                                         <el-progress
                                                 id="process"
@@ -1511,7 +1508,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                <el-form-item
+                                 <el-form-item
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1530,7 +1527,7 @@
                                     ></i
                                     ></a>
                                 </el-form-item>
-                                <el-form-item
+                                 <el-form-item
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
@@ -1555,9 +1552,7 @@
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
-                                    <el-date-picker v-model="data.val" class="input-class-template-edit"
-                                                    value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                                    size="large"></el-date-picker>
+                                    <el-date-picker v-model="data.val" class="input-class-template-edit" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
                                     <a href="#"
                                     ><i
                                             class="el-icon-close"
@@ -1741,8 +1736,7 @@
                         </legend>
                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
                             {{ $t("main.timedLock") }}
-                            <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949"
-                                       @change="lockchange"></el-switch>
+                            <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="lockchange"></el-switch>
                         </span>
                         <span style="display:inline-block;width: 60vh;margin-left: 2vw">
                             {{ $t("main.idleTime") }}
@@ -1787,7 +1781,7 @@
         <el-dialog
                 title=""
                 :visible.sync="dialogMyInfo"
-                width="40%"
+                width="30%"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="true"
@@ -1795,16 +1789,16 @@
             <img src="./img/tx.svg" alt=""/>
             <el-form label-width="110px" class="demo-ruleForm">
                 <el-form-item :label="$t('myInfo.name')" prop="username" style="margin-top: 5%">
-                    <div style="text-align: left;margin-top: 4px;"> {{ username }}</div>
+                    <div style="text-align: left"> {{ username }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.walletAddress')" prop="myInfoKey">
-                    <div style="text-align: left;margin-top: 4px;"> {{ myInfoKey }}</div>
+                    <div style="text-align: left"> {{ myInfoKey }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.vip')" prop="vip">
-                    <div style="text-align: left;margin-top: 4px;"> {{ vip }}</div>
+                    <div style="text-align: left"> {{ vip }}</div>
                 </el-form-item>
                 <el-form-item :label="$t('myInfo.keystoreFile')">
-                    <el-button type="primary" size="small" style="float: left;margin-top: 5px;" @click="exportkeystore">
+                    <el-button type="primary" size="small" style="float: left" @click="exportkeystore">
                         {{ $t("myInfo.exportKeystoreFile") }}
                     </el-button>
                 </el-form-item>
@@ -1846,182 +1840,182 @@
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/la.svg`)"
                     />
                     <img
                             src="./img/abc/lb.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lb.svg`)"
                     />
                     <img
                             src="./img/abc/lc.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lc.svg`)"
                     />
                     <img
                             src="./img/abc/ld.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/ld.svg`)"
                     />
                     <img
                             src="./img/abc/le.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/le.svg`)"
                     />
                     <img
                             src="./img/abc/lf.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lf.svg`)"
                     />
                     <img
                             src="./img/abc/lg.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lg.svg`)"
                     />
                     <img
                             src="./img/abc/lh.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lh.svg`)"
                     />
                     <img
                             src="./img/abc/li.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/li.svg`)"
                     />
                     <img
                             src="./img/abc/lj.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lj.svg`)"
                     />
                     <img
                             src="./img/abc/lk.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lk.svg`)"
                     />
                     <img
                             src="./img/abc/ll.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/ll.svg`)"
                     />
                     <img
                             src="./img/abc/lm.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lm.svg`)"
                     />
                     <img
                             src="./img/abc/ln.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/ln.svg`)"
                     />
                     <img
                             src="./img/abc/lo.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lo.svg`)"
                     />
                     <img
                             src="./img/abc/lp.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lp.svg`)"
                     />
                     <img
                             src="./img/abc/lq.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lq.svg`)"
                     />
                     <img
                             src="./img/abc/lr.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lr.svg`)"
                     />
                     <img
                             src="./img/abc/ls.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/ls.svg`)"
                     />
                     <img
                             src="./img/abc/lt.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lt.svg`)"
                     />
                     <img
                             src="./img/abc/lu.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lu.svg`)"
                     />
                     <img
                             src="./img/abc/lv.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lv.svg`)"
                     />
                     <img
                             src="./img/abc/lw.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lw.svg`)"
                     />
                     <img
                             src="./img/abc/lx.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lx.svg`)"
                     />
                     <img
                             src="./img/abc/ly.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/ly.svg`)"
                     />
                     <img
                             src="./img/abc/lz.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/abc/lz.svg`)"
                     />
                 </el-tab-pane>
                 <el-tab-pane label="finances">
@@ -2030,147 +2024,147 @@
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/amex.svg`)"
                     />
                     <img
                             src="./img/finances/atm.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/atm.svg`)"
                     />
                     <img
                             src="./img/finances/bank.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/bank.svg`)"
                     />
                     <img
                             src="./img/finances/bitcoin.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/bitcoin.svg`)"
                     />
                     <img
                             src="./img/finances/coins.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/coins.svg`)"
                     />
                     <img
                             src="./img/finances/credit_card.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/credit_card.svg`)"
                     />
                     <img
                             src="./img/finances/diners_club.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/diners_club.svg`)"
                     />
                     <img
                             src="./img/finances/dollar.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/dollar.svg`)"
                     />
                     <img
                             src="./img/finances/euro.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/euro.svg`)"
                     />
                     <img
                             src="./img/finances/jcb.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/jcb.svg`)"
                     />
                     <img
                             src="./img/finances/mastercard.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/mastercard.svg`)"
                     />
                     <img
                             src="./img/finances/meastro.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/meastro.svg`)"
                     />
                     <img
                             src="./img/finances/money.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/money.svg`)"
                     />
                     <img
                             src="./img/finances/paypal.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/paypal.svg`)"
                     />
                     <img
                             src="./img/finances/piggy_bank.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/piggy_bank.svg`)"
                     />
                     <img
                             src="./img/finances/pound.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/pound.svg`)"
                     />
                     <img
                             src="./img/finances/ruble.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/ruble.svg`)"
                     />
                     <img
                             src="./img/finances/rupee.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/rupee.svg`)"
                     />
                     <img
                             src="./img/finances/visa.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/visa.svg`)"
                     />
                     <img
                             src="./img/finances/yen.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/yen.svg`)"
                     />
                     <img
                             src="./img/finances/rupay.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/finances/rupay.svg`)"
                     />
                 </el-tab-pane>
                 <el-tab-pane label="internet">
@@ -2179,161 +2173,161 @@
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/amazon.svg`)"
                     />
                     <img
                             src="./img/internet/at_sign.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/at_sign.svg`)"
                     />
                     <img
                             src="./img/internet/blog.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/blog.svg`)"
                     />
                     <img
                             src="./img/internet/community.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/community.svg`)"
                     />
                     <img
                             src="./img/internet/download.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/download.svg`)"
                     />
                     <img
                             src="./img/internet/ebay.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/ebay.svg`)"
                     />
                     <img
                             src="./img/internet/email.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/email.svg`)"
                     />
                     <img
                             src="./img/internet/f.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/f.svg`)"
                     />
                     <img
                             src="./img/internet/g.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/g.svg`)"
                     />
                     <img
                             src="./img/internet/in.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/in.svg`)"
                     />
                     <img
                             src="./img/internet/instagram.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/instagram.svg`)"
                     />
                     <img
                             src="./img/internet/joomla.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/joomla.svg`)"
                     />
                     <img
                             src="./img/internet/mail_ru.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/mail_ru.svg`)"
                     />
                     <img
                             src="./img/internet/pinterest.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/pinterest.svg`)"
                     />
                     <img
                             src="./img/internet/rss.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/rss.svg`)"
                     />
                     <img
                             src="./img/internet/s.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/s.svg`)"
                     />
                     <img
                             src="./img/internet/t.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/t.svg`)"
                     />
                     <img
                             src="./img/internet/v.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/v.svg`)"
                     />
                     <img
                             src="./img/internet/vk.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/vk.svg`)"
                     />
                     <img
                             src="./img/internet/web_site.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/web_site.svg`)"
                     />
                     <img
                             src="./img/internet/worldpress.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/worldpress.svg`)"
                     />
                     <img
                             src="./img/internet/y.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/y.svg`)"
                     />
                     <img
                             src="./img/internet/ya.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/internet/ya.svg`)"
                     />
                 </el-tab-pane>
                 <el-tab-pane label="misc">
@@ -2342,112 +2336,112 @@
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/alarm.svg`)"
                     />
                     <img
                             src="./img/misc/bag.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/bag.svg`)"
                     />
                     <img
                             src="./img/misc/box.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/box.svg`)"
                     />
                     <img
                             src="./img/misc/default.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/default.svg`)"
                     />
                     <img
                             src="./img/misc/door.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/door.svg`)"
                     />
                     <img
                             src="./img/misc/key.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/key.svg`)"
                     />
                     <img
                             src="./img/misc/lock.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/lock.svg`)"
                     />
                     <img
                             src="./img/misc/movie.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/movie.svg`)"
                     />
                     <img
                             src="./img/misc/music.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/music.svg`)"
                     />
                     <img
                             src="./img/misc/network.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/network.svg`)"
                     />
                     <img
                             src="./img/misc/note.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/note.svg`)"
                     />
                     <img
                             src="./img/misc/picture.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/picture.svg`)"
                     />
                     <img
                             src="./img/misc/safe.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/safe.svg`)"
                     />
                     <img
                             src="./img/misc/sale.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/sale.svg`)"
                     />
                     <img
                             src="./img/misc/shopping_cart.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/shopping_cart.svg`)"
                     />
                     <img
                             src="./img/misc/suitcase.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/misc/suitcase.svg`)"
                     />
                 </el-tab-pane>
                 <el-tab-pane label="personal">
@@ -2456,133 +2450,133 @@
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/dental_insurance.svg`)"
                     />
                     <img
                             src="./img/personal/eye.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/eye.svg`)"
                     />
                     <img
                             src="./img/personal/fitness.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/fitness.svg`)"
                     />
                     <img
                             src="./img/personal/food.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/food.svg`)"
                     />
                     <img
                             src="./img/personal/glasses.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/glasses.svg`)"
                     />
                     <img
                             src="./img/personal/health_insurance.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/health_insurance.svg`)"
                     />
                     <img
                             src="./img/personal/hospital.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/hospital.svg`)"
                     />
                     <img
                             src="./img/personal/house.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/house.svg`)"
                     />
                     <img
                             src="./img/personal/id.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/id.svg`)"
                     />
                     <img
                             src="./img/personal/insurance.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/insurance.svg`)"
                     />
                     <img
                             src="./img/personal/membership.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/membership.svg`)"
                     />
                     <img
                             src="./img/personal/passport.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/passport.svg`)"
                     />
                     <img
                             src="./img/personal/pets.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/pets.svg`)"
                     />
                     <img
                             src="./img/personal/prescription.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/prescription.svg`)"
                     />
                     <img
                             src="./img/personal/shield.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/shield.svg`)"
                     />
                     <img
                             src="./img/personal/social_security.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/social_security.svg`)"
                     />
                     <img
                             src="./img/personal/tshirt.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/tshirt.svg`)"
                     />
                     <img
                             src="./img/personal/user.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/user.svg`)"
                     />
                     <img
                             src="./img/personal/user2.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/personal/user2.svg`)"
                     />
                 </el-tab-pane>
                 <el-tab-pane label="technology">
@@ -2591,175 +2585,175 @@
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/adobe.svg`)"
                     />
                     <img
                             src="./img/technology/android.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/android.svg`)"
                     />
                     <img
                             src="./img/technology/apple.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/apple.svg`)"
                     />
                     <img
                             src="./img/technology/calling_card.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/calling_card.svg`)"
                     />
                     <img
                             src="./img/technology/camera.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/camera.svg`)"
                     />
                     <img
                             src="./img/technology/cd.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/cd.svg`)"
                     />
                     <img
                             src="./img/technology/computer.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/computer.svg`)"
                     />
                     <img
                             src="./img/technology/gaming.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/gaming.svg`)"
                     />
                     <img
                             src="./img/technology/hard_drive.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/hard_drive.svg`)"
                     />
                     <img
                             src="./img/technology/laptop.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/laptop.svg`)"
                     />
                     <img
                             src="./img/technology/phone.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/phone.svg`)"
                     />
                     <img
                             src="./img/technology/printer.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/printer.svg`)"
                     />
                     <img
                             src="./img/technology/router.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/router.svg`)"
                     />
                     <img
                             src="./img/technology/sd_card.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/sd_card.svg`)"
                     />
                     <img
                             src="./img/technology/server.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/server.svg`)"
                     />
                     <img
                             src="./img/technology/sim_card.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/sim_card.svg`)"
                     />
                     <img
                             src="./img/technology/smartphone.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/smartphone.svg`)"
                     />
                     <img
                             src="./img/technology/source_code.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/source_code.svg`)"
                     />
                     <img
                             src="./img/technology/tablet.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/tablet.svg`)"
                     />
                     <img
                             src="./img/technology/tv.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/tv.svg`)"
                     />
                     <img
                             src="./img/technology/ubuntu.png.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/ubuntu.png.svg`)"
                     />
                     <img
                             src="./img/technology/video.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/video.svg`)"
                     />
                     <img
                             src="./img/technology/voicemail.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/voicemail.svg`)"
                     />
                     <img
                             src="./img/technology/wifi.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/wifi.svg`)"
                     />
                     <img
                             src="./img/technology/windows.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/technology/windows.svg`)"
                     />
                 </el-tab-pane>
                 <el-tab-pane label="transport">
@@ -2768,98 +2762,98 @@
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/airplane.svg`)"
                     />
                     <img
                             src="./img/transport/bicycle.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/bicycle.svg`)"
                     />
                     <img
                             src="./img/transport/bus.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/bus.svg`)"
                     />
                     <img
                             src="./img/transport/car.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/car.svg`)"
                     />
                     <img
                             src="./img/transport/garage.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/garage.svg`)"
                     />
                     <img
                             src="./img/transport/gas.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/gas.svg`)"
                     />
                     <img
                             src="./img/transport/helicopter.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/helicopter.svg`)"
                     />
                     <img
                             src="./img/transport/jeep.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/jeep.svg`)"
                     />
                     <img
                             src="./img/transport/motorcycle.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/motorcycle.svg`)"
                     />
                     <img
                             src="./img/transport/parking.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/parking.svg`)"
                     />
                     <img
                             src="./img/transport/scooter.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/scooter.svg`)"
                     />
                     <img
                             src="./img/transport/ship.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/ship.svg`)"
                     />
                     <img
                             src="./img/transport/train.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/train.svg`)"
                     />
                     <img
                             src="./img/transport/truck.svg"
                             :style="{ background: color }"
                             alt=""
                             class="temlateSymbol"
-                            @click="setImageBase64($event)"
+                            @click="setImageBase64($event,`${publicPath}img/transport/truck.svg`)"
                     />
                 </el-tab-pane>
             </el-tabs>
@@ -3026,7 +3020,8 @@
         },
         data() {
             return {
-                status: "",
+                publicPath: process.env.BASE_URL,
+                status:"",
                 vip: "",
                 templatedisable: true,
                 dialogPayGenerator: false,//支付页面弹出框
@@ -3323,11 +3318,11 @@
                             "tempkey": "Date"
                         },
                         {
-                            "id": "fdbce150-fec4-11e9-bd32-854c67bf397b",
-                            "key": this.$t('selects.webside'),
-                            "type": "webside",
-                            "val": "",
-                            "tempkey": "Webside"
+                        "id": "fdbce150-fec4-11e9-bd32-854c67bf397b",
+                        "key": this.$t('selects.webside'),
+                        "type": "webside",
+                        "val": "",
+                        "tempkey": "Webside"
                         },
                     ]
                 },
@@ -3559,7 +3554,7 @@
                         }
                     }
                     alldata[modelkey].count = count;
-                    console.log("contname:" + alldata[modelkey].name + alldata[modelkey].count);
+                    console.log("contname:"+alldata[modelkey].name+alldata[modelkey].count);
                 }
                 //分组
                 for (var key in alldata) {
@@ -3684,11 +3679,12 @@
             }, noteslick(project, event) {
                 //更新密码强度（中英文切换）
                 let items = project.datas
-                for (var item in items) {
-                    if (items[item].type == "password") {
+                for(var item in items){
+                    if (items[item].type=="password"){
                         items[item].format = this.cryptLevel(items[item].val);
                     }
                 }
+                console.log(project);
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
@@ -3913,7 +3909,7 @@
                 this.db = await this.$Lowdb(db_name);
                 this.localdb = await this.$Lowdb(db_name + "_local");
                 //取ipfs数据
-                let ipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", address);
+                let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
                 ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
                 ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
                 this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
@@ -3947,22 +3943,22 @@
                         await this.db.set("project", ipfsData.project).write();
                         await this.db.set("templates", ipfsData.templates).write();
                         await this.db.set('settings', ipfsData.settings).write();
-                        await this.db.set('machineId', this.$Uuidv1()).write();
+                        await this.db.set('machineId',  this.$Uuidv1()).write();
                         await this.db.set('version', ipfsData.version).write();
                         this.getdirectory();
                     }
-                } else if (ipfsData.machineId == "" || ipfsData.machineId == undefined) {
+                } else if (ipfsData.machineId == "" ||ipfsData.machineId == undefined) {
                     console.log("本地有数据，ipfs 没有数据,系统默认不同步数据");
                     this.getdirectory();
-                } else if (ipfsData.machineId != "" && ipfsData.machineId != undefined) {
-                    if (this.db.get("machineId").value() == ipfsData.machineId) {
+                }else if(ipfsData.machineId != "" && ipfsData.machineId !=undefined){
+                    if(this.db.get("machineId").value() == ipfsData.machineId){
                         this.getdirectory();
                         console.log("机器码相同,不执行任何操作！");
-                    } else if (ipfsData.version != this.db.get("version").value()) {
+                    }else if(ipfsData.version !=this.db.get("version").value()){
                         console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
                         this.getdirectory();
                         this.dialogSynchronization = true;
-                    } else {
+                    }else {
                         console.log("本地与ipfs 机器码不同,但其版本号相同，加载列表！");
                         this.getdirectory();
                     }
@@ -3984,7 +3980,7 @@
                 console.log(tempipfsData);
                 console.log("本机版本：" + this.db.get("version").value());
                 console.log("ipfs版本：" + tempipfsData.version);
-                if (tempipfsData.machineId != undefined) {
+                if(tempipfsData.machineId !=undefined){
                     if (tempipfsData.version > this.db.get("version").value()) {//version越大内容越新
                         console.log("ipfs版本大于本地版本");
                         await this.db.set("models", tempipfsData.models).write();
@@ -3994,7 +3990,7 @@
                         await this.db.set('machineId', this.$Uuidv1()).write();
                         await this.db.set('version', tempipfsData.version).write();
                         this.$message({
-                            message: this.$t("main.synchronizationSuccessful"),
+                            message:this.$t("main.synchronizationSuccessful"),
                             type: 'success'
                         });
                         this.getdirectory();
@@ -4002,48 +3998,48 @@
                         console.log("ipfs版本小于本地版本");
                         let localdata = this.db.__wrapped__;
                         let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                        if (result.indexOf("success") > 0) {
+                        if(result.indexOf("success")>0){
                             console.log("数据同步成功！");
                             this.$message({
-                                message: this.$t("main.synchronizationSuccessful"),
+                                message:this.$t("main.synchronizationSuccessful"),
                                 type: 'success'
                             });
-                        } else if (result.indexOf("lackoil") > 0) {
+                        }else if(result.indexOf("lackoil")>0){
                             console.log("未充值");
                             this.$message({
                                 message: this.$t("main.NonMember"),
                                 type: 'error'
                             });
-                        } else if (result.indexOf("error") > 0) {
+                        } else if(result.indexOf("error")>0){
                             this.$message({
                                 message: this.$t("main.lineError"),
                                 type: 'error'
                             });
                         }
-                    } else if (tempipfsData.version == this.db.get("version").value()) {
+                    }else if (tempipfsData.version == this.db.get("version").value()) {
                         console.log("本地数据与ipfs 数据相同，无需同步");
                         this.$message({
-                            message: this.$t("main.withoutSynchronization"),
+                            message:this.$t("main.withoutSynchronization"),
                             type: 'success'
                         });
                     }
-                } else {
+                }  else{
                     console.log("ipfs无数据,本地数据同步到ipfs端");
                     let localdata = this.db.__wrapped__;
                     let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                    if (result.indexOf("success") > 0) {
+                    if(result.indexOf("success")>0){
                         console.log("数据同步成功！");
                         this.$message({
-                            message: this.$t("main.synchronizationSuccessful"),
+                            message:this.$t("main.synchronizationSuccessful"),
                             type: 'success'
                         });
-                    } else if (result.indexOf("lackoil") > 0) {
+                    }else if(result.indexOf("lackoil")>0){
                         console.log("未充值");
                         this.$message({
                             message: this.$t("main.NonMember"),
                             type: 'error'
                         });
-                    } else if (result.indexOf("error") > 0) {
+                    } else if(result.indexOf("error")>0){
                         this.$message({
                             message: this.$t("main.lineError"),
                             type: 'error'
@@ -4075,7 +4071,7 @@
                             } else {
                                 console.log("从ipfs 取数据！");
                                 //取ipfs值
-                                let result = await this.$myIpfs.Ipfs.read(userSecret, projectArray[index].imgHash, loginObj.address);
+                                let result = await this.$myIpfs.Ipfs.read(userSecret,projectArray[index].imgHash, loginObj.address);
                                 projectArray[index].tempBase64 = result;
                                 //缓存到本地localdb库
                                 img = {"id": projectArray[index].imgHash, "value": result};
@@ -4106,7 +4102,7 @@
                         } else {
                             console.log("从ipfs 取数据！");
                             //取ipfs值
-                            let result = await this.$myIpfs.Ipfs.read(userSecret, temp.imgHash, loginObj.address);
+                            let result = await this.$myIpfs.Ipfs.read(userSecret,temp.imgHash, loginObj.address);
                             temp.tempBase64 = result;
                             //缓存到本地localdb库
                             img = {"id": temp.imgHash, "value": result};
@@ -4217,7 +4213,7 @@
                         this.filed.id = this.$Uuidv1(),
                             this.templateEvent.datas.push(this.filed);
                         this.filed = "";
-                        this.ruleFormAddPro.filedName = "";
+                        this.ruleFormAddPro.filedName= "";
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -4242,7 +4238,7 @@
                         this.filed.tempkey = this.ruleFormAddTEdit.filedName;
                         this.filed.id = this.$Uuidv1(), this.editobject.datas.push(this.filed);
                         this.filed = "";
-                        this.ruleFormAddTEdit.filedName = "";
+                        this.ruleFormAddTEdit.filedName= "";
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -4252,9 +4248,9 @@
             //修改页面
             editProject() {
                 this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
-                let items = this.editobject.datas
-                for (var item in items) {
-                    if (items[item].type == "password") {
+                let  items = this.editobject.datas
+                for(var item in items){
+                    if (items[item].type=="password"){
                         items[item].format = this.cryptLevel(items[item].val);
                     }
                 }
@@ -4377,12 +4373,13 @@
                         this.filed.tempkey = this.ruleFormAddTtemp.filedName;
                         this.filed.id = this.$Uuidv1(), this.tempTemplate.push(this.filed);
                         this.filed = "";
-                        this.ruleFormAddTtemp.filedName = "";
+                        this.ruleFormAddTtemp.filedName= "";
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
+
 
 
             }, //增加模板
@@ -4509,10 +4506,10 @@
                     }
                 }
             }, //lock定时器启动
-            lockchange() {
-                if (this.systemlock) {
+            lockchange(){
+                if(this.systemlock) {
                     this.locktimedisabled = false;
-                } else
+                }else
                     this.locktimedisabled = true;
             },
             locksystem() {
@@ -4547,8 +4544,7 @@
                     this.db.get("settings").set("showPassword", this.showPassword).write();
                     this.db.get("settings").set("savePassword", this.savePassword).write();
                     this.db.get("settings").set("language", this.language).write();
-                    this.db.set("version", new Date().getTime()).write();
-                    this.$confirm(this.$t('main.settingSavedSuccessfully') + this.$t('main.re_login'), this.$t('main.suggest'), {
+                    this.$confirm(this.$t('main.settingSavedSuccessfully')+this.$t('main.re_login'), this.$t('main.suggest'), {
                         confirmButtonText: this.$t('main.login'),
                         cancelButtonText: this.$t('main.cancel'),
                     }).then(() => {
@@ -4557,7 +4553,7 @@
                     }).catch(() => {
                         this.$message({
                             type: 'warning',
-                            message: this.$t('main.cancel') + " " + this.$t('main.login')
+                            message: this.$t('main.cancel')+" "+this.$t('main.login')
                         });
                         this.dialogVisibleSetting = false;
                     });
@@ -4579,8 +4575,8 @@
                 let templateArray = [];
                 let tempProjects = [];
                 let tempTemplates = [];
-                let ljtArray = [];
-                let templjtArray = [];
+                let ljtArray=[];
+                let templjtArray=[];
                 //project
                 if (this.delobj.id != "mb" && this.delobj.id != "ljt") {
                     projectArray = this.db.get("project").filter({isDel: !true}).value();
@@ -4590,7 +4586,7 @@
                         }
                     }
                     this.projects = tempProjects;
-                } else if (this.delobj.id == "mb") {
+                } else if(this.delobj.id =="mb") {
                     //template
                     templateArray = this.db.get("templates").filter({isDel: !true}).value();
                     for (var templateIndex in templateArray) {
@@ -4599,14 +4595,14 @@
                         }
                     }
                     this.projects = tempTemplates;
-                } else if (this.delobj.id == "ljt") {
+                }else if(this.delobj.id =="ljt"){
                     projectArray = this.db.get("project").filter({isDel: true}).value();
                     templateArray = this.db.get("templates").filter({isDel: true}).value();
                     console.log(projectArray);
-                    console.log(templateArray);
-                    ljtArray = projectArray.concat(templateArray);
-                    for (var ljtIndex in ljtArray) {
-                        if (ljtArray[ljtIndex].name.indexOf(temp) != -1) {
+                    console.log(templateArray );
+                    ljtArray =projectArray.concat(templateArray);
+                    for(var ljtIndex in ljtArray){
+                        if(ljtArray[ljtIndex].name.indexOf(temp) != -1){
                             templjtArray.push(ljtArray[ljtIndex]);
                         }
                     }
@@ -4797,23 +4793,23 @@
                 // }
                 this.dialogSymbolcolor = true;
             },
-            setImageBase64(path) {
+            setImageBase64(path,realpath) {
                 //进行修改操作时插入图片
                 if (this.operationType == "template_edit") {
-                    this.editobject.tempBase64 = path.target.currentSrc;
+                    this.editobject.tempBase64 =realpath;
                     this.dialogSymbol = false;
                     this.imgtype = "url"
                 } else if (this.operationType == "template_add") {
                     //进行新建操作时插入图片
-                    this.imageBase64 = path.target.currentSrc;
+                    this.imageBase64 = realpath;
                     this.dialogSymbol = false;
                     this.imgtype = "url"
                 } else if (this.operationType == "project_add") {
-                    this.templateEvent.tempBase64 = path.target.currentSrc;
+                    this.templateEvent.tempBase64 =realpath;
                     this.dialogSymbol = false;
                     this.imgtype = "url"
                 } else if (this.operationType == "project_edit") {
-                    this.editobject.tempBase64 = path.target.currentSrc;
+                    this.editobject.tempBase64 =realpath;
                     this.dialogSymbol = false;
                     this.imgtype = "url"
                 }
@@ -4952,7 +4948,7 @@
                 console.log("ipfs 覆盖到本地")
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let secret = loginObj.secret;
-                let tempipfsData = await this.$myIpfs.Ipfs.read(secret, "/main", this.loginObj.address);
+                let tempipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", this.loginObj.address);
                 console.log(tempipfsData);
                 tempipfsData = this.$JSON5.parse(tempipfsData)//ipfs转成对象
                 tempipfsData = this.$JSON5.parse(this.$JSON5.stringify(tempipfsData));//序列化新对象
@@ -4970,12 +4966,12 @@
             async localToIpfs() {
                 let localdata = this.db.__wrapped__;
                 let result = await this.$myIpfs.Ipfs.write(this.loginObj.secret, this.$JSON5.stringify(localdata), "/main");
-                if (result.indexOf("success") === -1) {
+                if(result.indexOf("success")===-1){
                     this.$message({
                         message: '同步数据失败！',
                         type: 'error'
                     });
-                } else {
+                }else{
                     this.dialogSynchronization = false;
                 }
             },
@@ -5044,12 +5040,12 @@
              * @return {string}
              */
             cryptLevel(p) {
-                let des = "";
+                let des="";
                 let hasUpper = false;
                 let hasLow = false;
                 let hasNum = false;
                 let hasOther = false;
-                let out = "";
+                let out="";
                 for (let i = 0; i < p.length; i++) {
                     let c = p.charCodeAt(i);
                     if (c >= 65 && c <= 90) hasUpper = true;
@@ -5063,11 +5059,11 @@
                 if (hasNum) pwdNum += 10;
                 if (hasOther) pwdNum += 32;
                 let num = Math.pow(pwdNum, p.length);
-                if (num == 1) {
-                    num = 0;
+                if(num==1){
+                    num=0;
                 }
-                out = this.formatTime(num / (1024 * 1024 * 1024 * 2.4 * 2));
-                if (out != "") {
+                out=this.formatTime(num / (1024 * 1024 * 1024 * 2.4 * 2));
+                if(out!=""){
                     des = this.$t('main.breakTime') + out;
                 }
                 return des;
@@ -5076,11 +5072,11 @@
 
             formatTime(s) {
                 var str = "";
-                if (s == 0)
-                    return str = ""
+                if(s==0)
+                    return  str = ""
                 s = Math.floor(s);
-                if (s < 1)
-                    return str = this.$t('main.moment');
+                if (s<1)
+                    return  str = this.$t('main.moment');
                 s = Math.floor(s);
                 if (s >= 1) str = s % 60 + this.$t('main.seconds') + str;
                 s = Math.floor(s / 60);
@@ -5109,38 +5105,41 @@
              * @param pwd
              * @return {string}
              */
-            getPercentage(pwd) {
-                let level = this.cryptLevel(pwd);
+            getPercentage(pwd){
+                let level=this.cryptLevel(pwd);
                 if (level.indexOf(this.$t('main.century')) !== -1) {
                     this.percentage = 100;
-                    this.status = "success"
+                    this.status="success"
                 } else if (level.indexOf(this.$t('main.years')) !== -1) {
                     this.percentage = 80;
-                    this.status = "success"
+                    this.status="success"
                 } else if (level.indexOf(this.$t('main.month')) !== -1) {
-                    this.status = "success"
+                    this.status="success"
                     this.percentage = 60;
                 } else if (level.indexOf(this.$t('main.weeks')) !== -1) {
                     this.percentage = 40;
-                    this.status = "warning"
-                } else if (level.indexOf(this.$t('main.day')) !== -1) {
+                    this.status="warning"
+                } else if (level.indexOf(this.$t('main.day')) !== -1 ) {
                     this.percentage = 35;
-                    this.status = "exception"
-                } else if (level.indexOf(this.$t('main.hours')) !== -1) {
+                    this.status="exception"
+                }
+                else if (level.indexOf(this.$t('main.hours')) !== -1) {
                     this.percentage = 30;
-                    this.status = "exception"
-                } else if (level.indexOf(this.$t('main.mintues')) !== -1) {
+                    this.status="exception"
+                }
+                else if (level.indexOf(this.$t('main.mintues')) !== -1) {
                     this.percentage = 15;
-                    this.status = "exception"
-                } else if (level.indexOf(this.$t('main.seconds')) !== -1) {
+                    this.status="exception"
+                }
+                else if (level.indexOf(this.$t('main.seconds') ) !== -1) {
                     this.percentage = 10;
-                    this.status = "exception"
-                } else if (level.indexOf(this.$t('main.moment')) !== -1) {
-                    this.percentage = 5;
-                    this.status = "exception"
-                } else {
-                    this.percentage = 0;
-                    this.level = "";
+                    this.status="exception"
+                }else if(level.indexOf(this.$t('main.moment')) !== -1){
+                    this.percentage =5;
+                    this.status="exception"
+                }else {
+                    this.percentage =0;
+                    this.level="";
                 }
 
             }
@@ -5148,47 +5147,47 @@
         },
 
         watch: {  //密码生成器自动生成
-            'ruleFormAddTemplate.name': function () {
-                if (this.ruleFormAddTemplate.name) {
-                    if (this.ruleFormAddTemplate.name.trim().length > 0) {
-                        this.templatedisable = false
-                    } else {
-                        this.templatedisable = true
+            'ruleFormAddTemplate.name': function(){
+                if(this.ruleFormAddTemplate.name){
+                    if(this.ruleFormAddTemplate.name.trim().length>0){
+                        this.templatedisable=false
+                    }else{
+                        this.templatedisable=true
                     }
-                } else {
-                    this.templatedisable = true
+                }else{
+                    this.templatedisable=true
                 }
             },
 
-            'editobject.name': function () {
-                let name = this.editobject.name;
-                if (name) {
-                    if (name.trim().length > 0) {
-                        this.templatedisable = false
-                    } else {
-                        this.templatedisable = true
+            'editobject.name': function(){
+                let name=this.editobject.name;
+                if(name){
+                    if(name.trim().length>0){
+                        this.templatedisable=false
+                    }else{
+                        this.templatedisable=true
                     }
-                } else {
-                    this.templatedisable = true
+                }else{
+                    this.templatedisable=true
                 }
             },
 
-            'ruleFormAddProject.name': function () {
-                if (this.ruleFormAddProject.name) {
-                    if (this.ruleFormAddProject.name.trim().length > 0) {
-                        this.templatedisable = false
-                    } else {
-                        this.templatedisable = true
+            'ruleFormAddProject.name':function(){
+                if(this.ruleFormAddProject.name){
+                    if( this.ruleFormAddProject.name.trim().length>0){
+                        this.templatedisable=false
+                    }else{
+                        this.templatedisable=true
                     }
-                } else {
-                    this.templatedisable = true
+                }else{
+                    this.templatedisable=true
                 }
             },
 
-        }
+            }
     }
 </script>
-<style lang="less" scoped>
+<style lang="less"  scoped>
     @import "./css/base.css";
     @import "./css/sy.css";
 
@@ -5247,18 +5246,16 @@
 
     }
 
-    .input-class {
+    .input-class{
         width: 25vw;
     }
-
-    .input-class-template-edit {
-        width: 21vw;
+    .input-class-template-edit{
+       width: 21vw;
     }
 
-    .input-class-template {
+    .input-class-template{
         width: 21vw;
     }
-
     :last-child {
         margin-bottom: 0;
     }
@@ -5288,12 +5285,14 @@
         padding: 10px 0;
         background-color: #f9fafc;
     }
-
-    .messageInput {
-        width: 100%;
-        float: left;
+    .messageInput{
+        width:100%;
+        float:left;
 
     }
+
+
+
 
 
 </style>

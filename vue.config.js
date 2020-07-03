@@ -15,8 +15,7 @@ module.exports = {
         proxy: { // 配置跨域
             '/ipfs': {
                 //要访问的跨域的api的域名
-                target: 'https://jccipfs.jccdex.cn',
-               //target: 'http://localhost:1337',
+              target: 'https://jccipfs.jccdex.cn',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {
