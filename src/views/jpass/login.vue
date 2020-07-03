@@ -218,13 +218,10 @@
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                     let result;
+                     let result="";
                     //判断是否充值过
-                    try{
-                       result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
-                    }catch(e){
-                       console.log(e);
-                    }
+                    result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
+                    console.log(result.indexOf("success"));
                     if(result.indexOf("success")>0){
                           console.log("充值成功，会员登录！")  
                           this.$router.push("/jpass/main");
@@ -234,7 +231,9 @@
                         } else if(result.indexOf("error")>0){
                            console.log("系统异常！")  
                            this.$message.error(this.$t("main.lineError"));
-                        } 
+                        }else{
+                          this.$message.error("登录出错！");  
+                        }
                     } else {
                         this.$message.error(this.$t("login.loginerror"));
                     }
