@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Basic//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd">
+<svg version="1.1" baseProfile="basic" id="Layer_1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="100px"
+	 viewBox="0 0 100 100" xml:space="preserve">
+<g id="truck">
+	<circle fill="#FFFFFF" cx="15.257" cy="66.93" r="7.837"/>
+	<circle fill="#FFFFFF" cx="74.695" cy="66.93" r="7.837"/>
+	<rect x="32.745" y="26.234" fill="#FFFFFF" width="64.255" height="30.707"/>
+	<path fill="#FFFFFF" d="M68.62,59.092H28.668V33.833L8.116,35.397c0,0-4.507,11.159-6.116,15.09V61.13v3.82
+		c0,1.092,0.887,1.979,1.979,1.979h1.36c0-5.479,4.441-9.92,9.918-9.92c5.479,0,9.918,4.44,9.918,9.92h39.602
+		C64.777,63.741,66.282,60.906,68.62,59.092z M20.746,48.731l-15.82,1.989l4.569-11.867l11.252-0.858v10.736H20.746z"/>
+	<path fill="#FFFFFF" d="M96.946,59.092H80.772c2.336,1.814,3.842,4.649,3.842,7.838h2.313h4.107l5.931-2.101L96.946,59.092z"/>
+</g>
+</svg>
