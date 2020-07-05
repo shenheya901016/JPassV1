@@ -51,7 +51,6 @@
                     <el-button
                             type="primary"
                             style="width:90%;"
-                            native-type="submit"
                             size="small"
                             @click="submitForm('ruleForm')"
                     >{{ $t("login.login") }}
@@ -108,6 +107,8 @@
 <script type="es6">
     import vueCanvasNest from "vue-canvas-nest";
         import ipfs from '@/jcc_ipfs.js';
+        let request = require("request");
+        const util = require('util');
 
     export default {
         components: {
@@ -170,7 +171,7 @@
                         this.login();
                     } else {
                         console.log("error submit!!");
-                        return false;
+                        return false
                     }
                 });
             },
@@ -218,22 +219,34 @@
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                     let result="";
+                   
                     //判断是否充值过
-                    result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
-                    console.log(result.indexOf("success"));
-                    if(result.indexOf("success")>0){
-                          console.log("充值成功，会员登录！")  
-                          this.$router.push("/jpass/main");
-                        }else if(result.indexOf("lackoil")>0){
-                           console.log("未充值！")  
-                          this.$router.push("/jpass/pay"); 
-                        } else if(result.indexOf("error")>0){
-                           console.log("系统异常！")  
-                           this.$message.error(this.$t("main.lineError"));
-                        }else{
-                          this.$message.error("登录出错！");  
-                        }
+                    // console.log("result:"+result);
+                    // result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
+                    // console.log(result);
+                    // if(result.indexOf("success")>0){
+                    //       console.log("充值成功，会员登录！")  
+                    //       this.$router.push("/jpass/main");
+                    //     }else if(result.indexOf("lackoil")>0){
+                    //        console.log("未充值！")  
+                    //       this.$router.push("/jpass/pay"); 
+                    //     } else if(result.indexOf("error")>0){
+                    //        console.log("系统异常！")  
+                    //        this.$message.error(this.$t("main.lineError"));
+                    //     }else{
+                    //       this.$message.error("登录出错！");  
+                    //     }
+                      const getPromise = util.promisify(request.get);
+                            let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + userkeyObj.address + "&t=0";
+                            let result = await getPromise(url);
+                            let msg = this.$JSON5.parse(result.body);
+                            if (msg.data.list.length > 0 && msg.data.list[0].end_time > new Date().getTime()) {
+                                console.log("充值成功！");
+                                 this.$router.push("/jpass/main");
+                            } else {
+                                 console.log("不是vip！");
+                                this.$router.push("/jpass/pay"); 
+                            }
                     } else {
                         this.$message.error(this.$t("login.loginerror"));
                     }
