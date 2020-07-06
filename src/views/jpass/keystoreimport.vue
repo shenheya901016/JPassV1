@@ -96,7 +96,6 @@
             return {
                 dialogPasswordGenerator: false,// 密码生成器弹出框
                 dialogclose: false,//关闭密码器指示
-
                 dialogVisible: false,
                 keystorefile: {},
                 ruleForm: {
