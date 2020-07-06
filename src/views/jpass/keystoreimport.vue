@@ -90,6 +90,7 @@
                     password: '',
                     secret: '',
                     repassword: '',
+                    keystore:""
                 },
                 rules: {
                     name: [
@@ -184,7 +185,7 @@
                     await jingchuangWallet.then(function (value) {
                         keystore = value;
                     });
-                    //this.ruleForm.keystore=keystore;
+                    this.ruleForm.keystore=keystore;
                 } catch (e) {
                     this.$message.error(this.$t('keystoreImport.newKeystoreGeneratedError'));
                     return false;
@@ -202,6 +203,8 @@
             exportkeystore() {
                 var content = this.ruleForm.keystore;
                 var keystoreString = this.$JSON5.stringify(content);
+                console.log(content);
+                console.log(keystoreString);
                 var FileSaver = require('file-saver');
                 var blob = new Blob([keystoreString], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, "keystore");
