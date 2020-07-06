@@ -4531,6 +4531,7 @@
                     this.db.get("settings").set("showPassword", this.showPassword).write();
                     this.db.get("settings").set("savePassword", this.savePassword).write();
                     this.db.get("settings").set("language", this.language).write();
+                    this.db.set('version', new Date().valueOf()).write();
                     this.$confirm(this.$t('main.settingSavedSuccessfully')+this.$t('main.re_login'), this.$t('main.suggest'), {
                         confirmButtonText: this.$t('main.login'),
                         cancelButtonText: this.$t('main.cancel'),
