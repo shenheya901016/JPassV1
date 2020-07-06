@@ -638,7 +638,7 @@
             <input
                     type="text"
                     v-model="ruleFormAddProject.name"
-                    class="myInputTitle" onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"
+                    class="myInputTitle"
             />
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
@@ -903,8 +903,7 @@
             {{ $t("main.name") }}
           </span>
                 <span class="titleInputSpan">
-            <input type="text" v-model="editobject.name" class="myInputTitle"
-                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
+            <input type="text" v-model="editobject.name" class="myInputTitle"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1159,8 +1158,7 @@
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
                 <span class="titleInputSpan">
-            <input v-model="ruleFormAddTemplate.name" class="myInputTitle"
-                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
+            <input v-model="ruleFormAddTemplate.name" class="myInputTitle"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -1400,8 +1398,7 @@
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
                 <span class="titleInputSpan">
-            <input type="text" v-model="editobject.name" class="myInputTitle"
-                   onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"/>
+            <input type="text" v-model="editobject.name" class="myInputTitle"/>
           </span>
                 <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
             <img
@@ -5055,8 +5052,6 @@
                 }
                 return des;
             },
-
-
             formatTime(s) {
                 var str = "";
                 if(s==0)
@@ -5129,13 +5124,13 @@
                     this.level="";
                 }
 
-            }
-
+            },
         },
 
         watch: {  //密码生成器自动生成
             'ruleFormAddTemplate.name': function(){
                 if(this.ruleFormAddTemplate.name){
+                    this.ruleFormAddTemplate.name=this.ruleFormAddTemplate.name.replace(/^\s+|\s+$/g,'');
                     if(this.ruleFormAddTemplate.name.trim().length>0){
                         this.templatedisable=false
                     }else{
@@ -5147,6 +5142,7 @@
             },
 
             'editobject.name': function(){
+                this.editobject.name= this.editobject.name.replace(/^\s+|\s+$/g,'');
                 let name=this.editobject.name;
                 if(name){
                     if(name.trim().length>0){
@@ -5161,6 +5157,7 @@
 
             'ruleFormAddProject.name':function(){
                 if(this.ruleFormAddProject.name){
+                    this.ruleFormAddProject.name=this.ruleFormAddProject.name.replace(/^\s+|\s+$/g,'');
                     if( this.ruleFormAddProject.name.trim().length>0){
                         this.templatedisable=false
                     }else{
