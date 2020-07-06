@@ -158,7 +158,7 @@
                     await jingchuangWallet.then(function (value) {
                         keystore = value;
                     });
-                    //this.ruleForm.keystore=keystore;
+                    this.ruleForm.keystore=keystore;
                 } catch (e) {
                     this.$message.error(this.$t('mnemonicimport.keystoreGeneratedError'));
                     return false;
