@@ -427,7 +427,7 @@
         <el-dialog
                 :title="$t('main.passwordUnlock')"
                 :visible.sync="dialogVisible"
-                width="30%"
+                width="35%"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="false"
