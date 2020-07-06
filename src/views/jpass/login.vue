@@ -125,26 +125,13 @@
                     password: ""
                 },
                 rules: {
-                    name: [
-                        {
-                            required: true,
-                            message: this.$t("login.namevalidation"),
-                            trigger: "blur"
-                        }
-                    ],
-                    // password: [
+                    // name: [
                     //     {
                     //         required: true,
-                    //         message: this.$t("login.pwdvalidaion"),
-                    //         trigger: "blur"
-                    //     },
-                    //     {
-                    //         min: 4,
-                    //         max: 20,
-                    //         message: this.$t("login.pwdlengthvalidaion"),
+                    //         message: this.$t("login.namevalidation"),
                     //         trigger: "blur"
                     //     }
-                    // ]
+                    // ],
                 }
             };
         },
@@ -219,23 +206,6 @@
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                   
-                    //判断是否充值过
-                    // console.log("result:"+result);
-                    // result = await this.$myIpfs.Ipfs.write(userkeyObj.secret, "testpay", "/testpay");
-                    // console.log(result);
-                    // if(result.indexOf("success")>0){
-                    //       console.log("充值成功，会员登录！")  
-                    //       this.$router.push("/jpass/main");
-                    //     }else if(result.indexOf("lackoil")>0){
-                    //        console.log("未充值！")  
-                    //       this.$router.push("/jpass/pay"); 
-                    //     } else if(result.indexOf("error")>0){
-                    //        console.log("系统异常！")  
-                    //        this.$message.error(this.$t("main.lineError"));
-                    //     }else{
-                    //       this.$message.error("登录出错！");  
-                    //     }
                       const getPromise = util.promisify(request.get);
                             let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + userkeyObj.address + "&t=0";
                             let result = await getPromise(url);
