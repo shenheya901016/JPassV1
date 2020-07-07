@@ -45,6 +45,7 @@
                             v-model="ruleForm.password"
                             style="width:100%;"
                             show-password
+                            @keyup.enter.native="submitForm('ruleForm')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
