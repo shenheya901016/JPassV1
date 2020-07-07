@@ -449,7 +449,6 @@
                             type="primary"
                             size="small"
                             @click="unlock()"
-                            native-type="submit"
                     >
                         {{ $t("main.unlock") }}
                     </el-button>
