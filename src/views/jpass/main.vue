@@ -5142,9 +5142,9 @@
             },
 
             'editobject.name': function(){
-                this.editobject.name= this.editobject.name.replace(/^\s+|\s+$/g,'');
-                let name=this.editobject.name;
-                if(name){
+                if(this.editobject.name){
+                    this.editobject.name= this.editobject.name.replace(/^\s+|\s+$/g,'');
+                    let name=this.editobject.name;
                     if(name.trim().length>0){
                         this.templatedisable=false
                     }else{
