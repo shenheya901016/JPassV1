@@ -432,7 +432,7 @@
                 :close-on-press-escape="false"
                 :show-close="false"
         >
-            <el-form label-width="8vw" class="demo-ruleForm" style="width:80%;">
+            <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;">
                 <el-form-item :label="$t('main.loginPassword')" prop="password">
                     <el-input
                             type="password"
