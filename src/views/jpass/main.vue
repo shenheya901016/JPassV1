@@ -3159,7 +3159,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":this.publicPath+"img+/misc/lock.svg",
+                        "imgurl":this.publicPath+"img/misc/lock.svg",
                         "datas": [{
                             "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
                             "key": "Number",
@@ -3201,7 +3201,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl": this.publicPath+"img+/misc/lock.svg",
+                        "imgurl": this.publicPath+"img/misc/lock.svg",
                         "datas": [{
                             "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
                             "key": "Email",
@@ -3237,7 +3237,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl": this.publicPath+"img+/misc/lock.svg",
+                        "imgurl": this.publicPath+"img/misc/lock.svg",
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
                             "key": "Website",
@@ -3446,7 +3446,6 @@
                     });
                 } catch (e) {
                     this.$message.error(this.$t('main.thePasswordIsIncorrectPleaseReEnter'));
-                    return false;
                 }
                 this.loginObj.lock = false;
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
