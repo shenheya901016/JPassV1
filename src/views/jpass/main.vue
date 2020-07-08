@@ -4949,7 +4949,12 @@
                 await this.db.set('machineId', this.$Uuidv1()).write();
                 await this.db.set('version', tempipfsData.version).write();
                 this.dialogSynchronization = false
-                this.getdirectory();
+                //更新设置
+                this.updatesetting();
+                //启动锁定定时器
+                this.locksystem();
+                //设置语言
+                this.changeLang(this.language);
             },
             //本地覆盖ipfs
             async localToIpfs() {
