@@ -433,24 +433,11 @@
                 :show-close="false"
         >
             <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;">
-                <el-form-item :label="$t('main.loginPassword')" >
-                    <el-input
-                            type="password"
-                            v-model="password"
-                            style="width:90%;"
-                            @keyup.enter.native="unlock()"
-                    ></el-input>
+                <el-form-item :label="$t('main.loginPassword')" prop="password">
+                    <el-input type="password" v-model="password"  style="width:90%;"></el-input>
                 </el-form-item>
-                <el-form-item
-                        label=""
-                        prop=""
-                        style="margin-bottom: 7%;margin-top: 10%"
-                >
-                    <el-button
-                            type="primary"
-                            size="small"
-                            @click="unlock()"
-                    >
+                <el-form-item label="" prop="" style="margin-bottom: 7%;margin-top: 10%">
+                    <el-button type="primary" size="small" @click="unlock()">
                         {{ $t("main.unlock") }}
                     </el-button>
                 </el-form-item>
