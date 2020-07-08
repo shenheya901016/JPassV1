@@ -433,11 +433,12 @@
                 :show-close="false"
         >
             <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;">
-                <el-form-item :label="$t('main.loginPassword')" prop="password">
+                <el-form-item :label="$t('main.loginPassword')" >
                     <el-input
                             type="password"
                             v-model="password"
                             style="width:90%;"
+                            @keyup.enter.native="unlock()"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
@@ -3446,6 +3447,7 @@
                     });
                 } catch (e) {
                     this.$message.error(this.$t('main.thePasswordIsIncorrectPleaseReEnter'));
+                    return false;
                 }
                 this.loginObj.lock = false;
                 sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
@@ -3951,7 +3953,7 @@
                     if(this.db.get("machineId").value() == ipfsData.machineId){
                         this.getdirectory();
                         console.log("机器码相同,不执行任何操作！");
-                    }else if(ipfsData.version !=this.db.get("version").value()){
+                    }else if(ipfsData.version >this.db.get("version").value()){
                         console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
                         this.getdirectory();
                         this.dialogSynchronization = true;
@@ -3964,6 +3966,8 @@
                 this.updatesetting();
                 //启动锁定定时器
                 this.locksystem();
+                //设置语言
+                this.changeLang(this.language);
             },
             //手动同步
             async synchronization() {
@@ -4507,7 +4511,7 @@
             }, //启动初始化设置参数
             updatesetting() {
                 let setting = this.db.get("settings").value();
-                console.log(setting);
+                console.log("更新用户设置:"+setting.systemlock);
                 this.systemlock = setting.systemlock;
                 this.locktimedisabled = !this.systemlock;
                 this.locktime = setting.locktime;//自动锁定时间
@@ -4684,6 +4688,7 @@
             // },
             //国际化(整体配置)
             changeLang(lan) {
+                console.log("更新语言");
                 if (lan === "中文") {
                     this.$i18n.locale = 'zh-CN';
                     //模板添加选项更新
@@ -4691,7 +4696,7 @@
                 } else if (lan === "English") {
                     this.$i18n.locale = 'en-US';
                     //模板添加选项更新
-                    console.log(this.templateItems);
+                    // console.log(this.templateItems);
                 }
                 this.getdirectory();
                 //国际化设置菜单中 保存用户和密码下来框
