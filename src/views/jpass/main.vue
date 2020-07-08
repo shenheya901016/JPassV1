@@ -3954,6 +3954,8 @@
                         this.getdirectory();
                         console.log("机器码相同,不执行任何操作！");
                     }else if(ipfsData.version >this.db.get("version").value()){
+                        console.log("ipfs版本"+ipfsData.version);
+                        console.log("本地版本"+ipfsData.version);
                         console.log("本地与ipfs 机器码不同,弹出提示框让用户选择!");
                         this.getdirectory();
                         this.dialogSynchronization = true;
