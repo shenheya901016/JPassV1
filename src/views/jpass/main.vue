@@ -432,9 +432,9 @@
                 :close-on-press-escape="false"
                 :show-close="false"
         >
-            <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;">
+            <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;" @submit.native.prevent >
                 <el-form-item :label="$t('main.loginPassword')" prop="password">
-                    <el-input type="password" v-model="password"  style="width:90%;"></el-input>
+                    <el-input type="password" v-model="password"  style="width:90%;"  @keyup.enter.native="unlock()"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-bottom: 7%;margin-top: 10%">
                     <el-button type="primary" size="small" @click="unlock()">
@@ -458,6 +458,7 @@
                     class="demo-ruleForm"
                     style="width: 80%;"
                     :rules="rules"
+                    @submit.native.prevent
             >
                 <!--<el-form-item label="类型选择" prop="modelsType">-->
                 <!--<el-radio v-model="ruleForm.modelsType" label="project" style="float:left;line-height: inherit">目录</el-radio>-->
