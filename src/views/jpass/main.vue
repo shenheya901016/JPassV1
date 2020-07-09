@@ -2979,10 +2979,14 @@
     import password from '../../password.js';
     import ipfs from '@/jcc_ipfs.js'
 
+
     const util = require('util');
-
     let request = require("request");
-
+    let timecurl = "http://api.m.taobao.com/";
+    //判断是否为开发者模式
+    if (process.env.NODE_ENV === "development") {
+        timecurl = 'http://localhost:8080/altime/';
+    }
     export default {
         mounted: function () {
             //阻止浏览器右击菜单
@@ -3453,7 +3457,6 @@
                 let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + this.myInfoKey + "&t=0";
                 let result = await getPromise(url);
                 let msg = this.$JSON5.parse(result.body);
-                console.log(msg)
                 if (msg.data.list.length > 0) {
                     this.vip = this.formatDate(msg.data.list[0].end_time);
                 } else {
@@ -3630,12 +3633,13 @@
                 this.$refs[formName].resetFields();
                 this.dialogVisible2 = false;
             }, //增加文件夹
-            addDirectory(formName) {
+           async addDirectory(formName) {
                 let id = this.$Uuidv1();
                 let name = this.ruleForm.pName;
                 let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPaht":"","type":"model","isDel":false,}';
                 this.db.get("models").push(this.$JSON5.parse(newModel)).write();
-                this.db.set('version', new Date().valueOf()).write();
+                let now= await this.getTime();
+                this.db.set('version',now ).write();
                 this.dialogVisible2 = false, this.getdirectory();
                 this.$refs[formName].resetFields();
             },
@@ -3691,13 +3695,14 @@
                     this.dialogVisibledTemplate = true;
                 }
             }, //删除数据
-            removeData() {
+          async  removeData() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
                 if (type == "model") {
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
-                    this.db.set('version', new Date().valueOf()).write();
+                    let now= await this.getTime();
+                    this.db.set('version',now ).write();
                     if (projects.length > 0) {
                         for (var project in projects) {
                             var index = projects[project].modelsId.indexOf(id);
@@ -3742,7 +3747,8 @@
                 } else if (type == "project") {
                     var projects = this.db.get("project").value();
                     this.db.get("project").find({id: this.delobj.id}).set('isDel', true).write();
-                    this.db.set('version', new Date().valueOf()).write();
+                    let now= await this.getTime();
+                    this.db.set('version',now ).write();
                     this.currentNote = -1;
                     this.isDisabled = true;
                     this.dialogVisibledProject = false;
@@ -3750,10 +3756,9 @@
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                 } else if (type == "template") {
-                    // this.db.get("templates").remove({id: id}).write();
-                    //this.delobj.isDel = true;
                     this.db.get("templates").find({id: this.delobj.id}).set('isDel', true).write();
-                    this.db.set('version', new Date().valueOf()).write();
+                    let now= await this.getTime();
+                    this.db.set('version',now ).write();
                     //更新template 在project中显示
                     this.projects = this.db.get("templates").value();
                     this.dialogVisibledTemplate = false;
@@ -3906,7 +3911,6 @@
                     if (ipfsData.machineId == "" || ipfsData.machineId == undefined) {
                         console.log("初始化");
                         //初始化新数据
-                        var newversion = new Date().valueOf();
                         let profiles = {
                             name: loginObj.name, address: address,
                         }
@@ -4123,7 +4127,7 @@
                     this.operationType = "project_add";
                 }
             }, //数据提交
-            submitproject() {
+           async submitproject() {
                 let projectName = this.ruleFormAddProject.name;
                 let formData = this.templateEvent;
                 let newProject = ""
@@ -4152,6 +4156,7 @@
                     //继承模板图片
                     imgtype = formData.imgtype;
                 }
+
                 this.newProject = {
                     "id": this.$Uuidv1(),
                     "name": projectName,
@@ -4159,7 +4164,7 @@
                     "isDel": false,
                     "type": "project",
                     "datas": formData.datas,
-                    "dateTime": new Date().valueOf(),
+                    "dateTime": await this.getTime(),
                     "tempBase64": "",
                     "imgHash": formData.imgHash,
                     "imgtype": imgtype,
@@ -4168,7 +4173,7 @@
                 };
                 //db project 追加数据
                 this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
-                this.db.set('version', new Date().valueOf()).write();
+                this.db.set('version', await this.getTime(),).write();
                 this.selectlabels = "";
                 this.dialogVisibleAddProject = false;
                 this.ruleFormAddProject.name = "";
@@ -4258,7 +4263,7 @@
                     this.operationType = "template_edit";
                 }
             }, //修改project
-            editDo() {
+           async editDo() {
                 try {
                     this.db.get("project").remove({id: this.editobject.id}).write();
                     var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
@@ -4286,7 +4291,7 @@
                         this.editobject.imgtype = "base64";
                     }
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
-                    this.db.set('version', new Date().valueOf()).write();
+                    this.db.set('version', await this.getTime()).write();
                     this.dialogVisibleEdit = false
                     this.editobject.tempBase64 = img;
                     this.$message.success(this.$t('main.successfullyModified'));
@@ -4393,7 +4398,7 @@
                     "bgcolor": this.color
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
-                this.db.set('version', new Date().valueOf()).write();
+                this.db.set('version', await this.getTime()).write();
                 //清空变量
                 this.ruleFormAddTemplate.name = "";
                 this.color = "";
@@ -4411,7 +4416,7 @@
                 this.imageBase64 = "";
                 this.newTemplate = "";
             }, //修改模板
-            editTemplate() {
+          async  editTemplate() {
                 var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
@@ -4429,7 +4434,7 @@
                     this.db.get("templates").remove({id: this.editobject.id}).write();
                     this.editobject.modelsId = this.selectlabels;
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
-                    this.db.set('version', new Date().valueOf()).write();
+                    this.db.set('version', await this.getTime()).write();
                     this.dialogVisibleTemplateEdit = false
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.editobject.tempBase64 = img;
@@ -4510,7 +4515,7 @@
                 this.savePassword = setting.savePassword;
             },
             //保存设置
-            savesettings() {
+           async savesettings() {
                 try {
                     this.locksystem();
                     this.changeLang(this.language);
@@ -4519,7 +4524,7 @@
                     this.db.get("settings").set("showPassword", this.showPassword).write();
                     this.db.get("settings").set("savePassword", this.savePassword).write();
                     this.db.get("settings").set("language", this.language).write();
-                    this.db.set('version', new Date().valueOf()).write();
+                    this.db.set('version', await this.getTime()).write();
                     this.$confirm(this.$t('main.settingSavedSuccessfully')+this.$t('main.re_login'), this.$t('main.suggest'), {
                         confirmButtonText: this.$t('main.login'),
                         cancelButtonText: this.$t('main.cancel'),
@@ -4630,7 +4635,7 @@
                 }
                 return isImage && isLt200K;
             },
-            favorite(obj) {
+           async favorite(obj) {
                 if (obj.isDel) {
                     return false;
                 }
@@ -4647,11 +4652,11 @@
                     this.db.get("templates").remove({id: obj.id}).write();
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 }
-                this.db.set('version', new Date().valueOf()).write();
+                this.db.set('version',await this.getTime()).write();
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
             },
-            unfavorite(obj) {
+           async unfavorite(obj) {
                 if (obj.isDel) {
                     return false;
                 }
@@ -4669,7 +4674,8 @@
                     this.db.get("templates").remove({id: obj.id}).write();
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
                 }
-                this.db.set('version', new Date().valueOf()).write()
+                this.db.set('version', await this.getTime()).write()
+                console.log(this.db.get("version").value());
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
             },
@@ -5080,6 +5086,19 @@
                 }
                 return str;
             },
+            /**
+             * 阿里云获取国际时间
+            **/
+            async getTime(){
+                console.log("获取时间");
+                const getPromise = util.promisify(request.get);
+                let url = timecurl+"rest/api3.do?api=mtop.common.getTimestamp";
+                let result = await getPromise(url);
+                let timeobj=this.$JSON5.parse((result.body));
+                return timeobj.data['t'];
+            },
+
+
             /**
              * 获取进度条百分比
              * @param pwd

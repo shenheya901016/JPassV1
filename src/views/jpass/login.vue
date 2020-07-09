@@ -107,9 +107,13 @@
 
 <script type="es6">
     import vueCanvasNest from "vue-canvas-nest";
-        import ipfs from '@/jcc_ipfs.js';
         let request = require("request");
         const util = require('util');
+        let timecurl = "http://api.m.taobao.com/";
+        //判断是否为开发者模式
+        if (process.env.NODE_ENV === "development") {
+            timecurl = 'http://localhost:8080/altime/';
+        }
 
     export default {
         components: {
@@ -177,6 +181,17 @@
                     this.$router.push("/jpass/mnemonicimport");
                 }
             },
+            /**
+             * 阿里云获取国际时间
+             **/
+            async getTime(){
+                console.log("获取时间");
+                const getPromise = util.promisify(request.get);
+                let url = timecurl+"rest/api3.do?api=mtop.common.getTimestamp";
+                let result = await getPromise(url);
+                let timeobj=this.$JSON5.parse((result.body));
+                return timeobj.data['t'];
+            },
             async login() {
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
@@ -211,7 +226,8 @@
                             let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + userkeyObj.address + "&t=0";
                             let result = await getPromise(url);
                             let msg = this.$JSON5.parse(result.body);
-                            if (msg.data.list.length > 0 && msg.data.list[0].end_time > new Date().getTime()) {
+                            console.log(await this.getTime());
+                            if (msg.data.list.length > 0 && msg.data.list[0].end_time > await this.getTime()) {
                                 console.log("充值成功！");
                                  this.$router.push("/jpass/main");
                             } else {
