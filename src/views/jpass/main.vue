@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <header class="header">
         <!-- 全局隐藏域 -->
-        <img src="./img/misc/lock.svg" ref="icon_default" style="display: none"/>
+        <img :src='`${publicPath}img/misc/lock.svg`' ref="icon_default" style="display: none"/>
         <h1 style="margin-left: 40px;">
             <a href="#"> <img src="./img/Logo-4.svg" alt=""/> </a>
         </h1>
@@ -3152,7 +3152,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":this.publicPath+"img/misc/lock.svg",
+                        "imgurl":`${this.publicPath}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
                             "key": "Number",
@@ -3194,7 +3194,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl": this.publicPath+"img/misc/lock.svg",
+                        "imgurl":`${this.publicPath}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
                             "key": "Email",
@@ -3230,7 +3230,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl": this.publicPath+"img/misc/lock.svg",
+                        "imgurl": `${this.publicPath}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
                             "key": "Website",
@@ -3541,7 +3541,7 @@
                         }
                     }
                     alldata[modelkey].count = count;
-                    console.log("contname:"+alldata[modelkey].name+alldata[modelkey].count);
+                    // console.log("contname:"+alldata[modelkey].name+alldata[modelkey].count);
                 }
                 //分组
                 for (var key in alldata) {
@@ -4328,15 +4328,8 @@
                     label: this.$t('main.shutDown')
                 }, {value: 'automatically', label: this.$t('main.autofill')}];*/
                 this.dialogVisibleSetting = true;
-            }, //清除数据库数据
-            cleardb() {
-                this.db.unset("project").write();
-                this.db.unset("models").write();
-                this.db.unset("version").write();
-                this.db.unset("templates").write();
-                this.db.unset("profiles").write();
-                this.db.unset("settings").write();
-            }, addTemplate() {
+            },
+            addTemplate() {
                 this.selectlabels = [];
                 this.dialogVisibleAddTemplate = true;
                 this.operationType = "template_add";
@@ -4369,12 +4362,13 @@
                 //处理分类
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
-                    console.log(this.selectlabels);
+                    // console.log(this.selectlabels);
                 }
                 //图片处理
                 if (this.imageBase64 == '') {
                     //默认图片
-                    this.imageBase64 = this.$refs.icon_default.src;
+                    // this.imageBase64 = this.$refs.icon_default.src;
+                    this.imageBase64=`${this.publicPath}img/misc/lock.svg`;
                     this.imgtype = "url";
                 }
                 if (this.imgtype == "url") {
@@ -4397,6 +4391,7 @@
                     "imgurl": this.imgurl,
                     "bgcolor": this.color
                 }
+                console.log(this.newTemplate);
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
                 this.db.set('version', await this.getTime()).write();
                 //清空变量
@@ -4766,14 +4761,12 @@
                 } else if (this.operationType == "template_add") {
                     //新建模板，给默认图片
                     if (this.imageBase64 == '') {
-                        this.imageBase64 = this.$refs.icon_default.src;
+                        // this.imageBase64 = this.$refs.icon_default.src;
+                        this.imageBase64=`${this.publicPath}img/misc/lock.svg`;
                     }
                 } else if (this.operationType == "template_edit") {
                     this.imageBase64 = obj.tempBase64;
                 }
-                // if(this.imageBase64==""){
-                //     this.imageBase64=this.$refs.icon_default.src;
-                // }
                 this.dialogSymbolcolor = true;
             },
             setImageBase64(path,realpath) {
@@ -5090,7 +5083,7 @@
              * 阿里云获取国际时间
             **/
             async getTime(){
-                console.log("获取时间");
+                // console.log("获取时间");
                 const getPromise = util.promisify(request.get);
                 let url = timecurl+"rest/api3.do?api=mtop.common.getTimestamp";
                 let result = await getPromise(url);
