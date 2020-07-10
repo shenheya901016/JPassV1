@@ -4041,6 +4041,12 @@
                         });
                     }
                 }
+                //更新设置
+                this.updatesetting();
+                //启动锁定定时器
+                this.locksystem();
+                //设置语言
+                this.changeLang(this.language);
             },
             pwdLength(obj) {
                 obj.format = this.cryptLevel(obj.val);
