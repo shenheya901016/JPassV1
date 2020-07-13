@@ -629,7 +629,7 @@
                     class="myInputTitle"
             />
           </span>
-                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
+                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
             <img
                     v-if="templateEvent.tempBase64"
                     :src="templateEvent.tempBase64"
@@ -893,7 +893,7 @@
                 <span class="titleInputSpan">
             <input type="text" v-model="editobject.name" class="myInputTitle"/>
           </span>
-                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
+                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
             <img
                     :src="editobject.tempBase64"
                     class="avatar"
@@ -1148,7 +1148,7 @@
                 <span class="titleInputSpan">
             <input v-model="ruleFormAddTemplate.name" class="myInputTitle"/>
           </span>
-                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
+                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
             <img
                     v-if="imageBase64 != ''"
                     :src="imageBase64"
@@ -1388,7 +1388,7 @@
                 <span class="titleInputSpan">
             <input type="text" v-model="editobject.name" class="myInputTitle"/>
           </span>
-                <span style="height:7vh;width:4vw;" @click.right="showIconMenu()">
+                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
             <img
                     :src="editobject.tempBase64"
                     class="avatar"
@@ -4747,7 +4747,7 @@
                 this.getdirectory();
             },
             showIconMenu() {
-                var uils = document.getElementsByClassName("choosepic")
+                var uils = document.getElementsByClassName("choosepic");
                 for (var i = 0; i < uils.length; i++) {
                     uils[i].style.display = "block";
                 }
@@ -4816,8 +4816,9 @@
                 document.onclick = function (e) {
                     var e = e || window.event;
                     var uils = document.getElementsByClassName("choosepic")
+                    // console.log(e.target.className);
                     for (var i = 0; i < uils.length; i++) {
-                        if (uils[i].style.display == "block") {
+                        if (uils[i].style.display == "block" && e.target.className!="avatar") {
                             uils[i].style.display = "none";
                         }
                     }
