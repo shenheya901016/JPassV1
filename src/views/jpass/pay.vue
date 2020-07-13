@@ -112,6 +112,7 @@
                     div.innerHTML = newFrom
                     document.body.appendChild(div)
                     document.querySelector('#alipay').children[0].submit()
+                    document.body.removeChild(div);
                     _this.query(out_trade_no)
                 });
             },
