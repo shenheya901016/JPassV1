@@ -19,6 +19,7 @@ export default {
         pwdlengthvalidaion: "The length is between 4 and 20 characters",
         pwderror: "Wrong password, please re-enter!",
         loginerror: "The user does not exist, please re-enter!",
+        outline:"The network connection is abnormal. Please check the network!"
     },
 
     register:{

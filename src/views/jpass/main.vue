@@ -2989,6 +2989,9 @@
     }
     export default {
         mounted: function () {
+            //网络检查
+            window.addEventListener('online',  this.online);
+            window.addEventListener('offline', this.outline);
             //阻止浏览器右击菜单
             window.oncontextmenu = function () {
                 return false;
@@ -3007,8 +3010,16 @@
             this.initialize();
             this.unshow();
         },
+
+        //销毁监听事件
+        beforeDestroy(){
+            window.removeEventListener('online',   this.online);
+            window.removeEventListener('offline',  this.outline);
+        },
+
         data() {
             return {
+                network:true,
                 publicPath: process.env.BASE_URL,
                 status:"",
                 vip: "",
@@ -3359,6 +3370,14 @@
             };
         },
         methods: {
+            online(){
+                console.log("网络已连接...");
+                this.network=true;
+            },
+            outline(){
+                console.log("网络已断线...");
+                this.network=false;
+            },
             chooseProduct(val) {
                 this.product = val;
                 if (val === 1) {
@@ -3965,6 +3984,10 @@
             },
             //手动同步
             async synchronization() {
+                if(!this.network){
+                    this.$message.error(this.$t('login.outline'));
+                    return false;
+                }else{
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = this.loginObj.address;
                 let userSecret = this.loginObj.secret;
@@ -4041,12 +4064,14 @@
                         });
                     }
                 }
+
                 //更新设置
                 this.updatesetting();
                 //启动锁定定时器
                 this.locksystem();
                 //设置语言
                 this.changeLang(this.language);
+                }
             },
             pwdLength(obj) {
                 obj.format = this.cryptLevel(obj.val);
@@ -4134,65 +4159,70 @@
                 }
             }, //数据提交
            async submitproject() {
-                let projectName = this.ruleFormAddProject.name;
-                let formData = this.templateEvent;
-                let newProject = ""
-                let imgtype = ""
-                let img = formData.tempBase64;
-                if (this.selectlabels.indexOf("sy") == -1) {
-                    this.selectlabels.push("sy");//所有项必须有
-                }
-                if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                    this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                }
-                if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                    //大于2项，包含所有项和为标记项时删除为标记项
-                    this.selectlabels = this.selectlabels.filter(function (item) {
-                        return item !== "wbj"
-                    })
-                }
-                //图片
-                if (this.imgtype == "url") {
-                    imgtype = "url";
-                    formData.imgHash = "";
-                } else if (this.imgtype == "base64") {
-                    formData.imgurl = ""
-                    imgtype = "base64";
-                } else {
-                    //继承模板图片
-                    imgtype = formData.imgtype;
-                }
+               if(!this.network){
+                   this.$message.error(this.$t('login.outline'));
+                   return false;
+               }else {
+                   let projectName = this.ruleFormAddProject.name;
+                   let formData = this.templateEvent;
+                   let newProject = ""
+                   let imgtype = ""
+                   let img = formData.tempBase64;
+                   if (this.selectlabels.indexOf("sy") == -1) {
+                       this.selectlabels.push("sy");//所有项必须有
+                   }
+                   if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                       this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                   }
+                   if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                       //大于2项，包含所有项和为标记项时删除为标记项
+                       this.selectlabels = this.selectlabels.filter(function (item) {
+                           return item !== "wbj"
+                       })
+                   }
+                   //图片
+                   if (this.imgtype == "url") {
+                       imgtype = "url";
+                       formData.imgHash = "";
+                   } else if (this.imgtype == "base64") {
+                       formData.imgurl = ""
+                       imgtype = "base64";
+                   } else {
+                       //继承模板图片
+                       imgtype = formData.imgtype;
+                   }
 
-                this.newProject = {
-                    "id": this.$Uuidv1(),
-                    "name": projectName,
-                    "modelsId": this.selectlabels, // "modelsName":newArray.toString(),
-                    "isDel": false,
-                    "type": "project",
-                    "datas": formData.datas,
-                    "dateTime": await this.getTime(),
-                    "tempBase64": "",
-                    "imgHash": formData.imgHash,
-                    "imgtype": imgtype,
-                    "imgurl": formData.tempBase64,
-                    "bgcolor": formData.bgcolor
-                };
-                //db project 追加数据
-                this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
-                this.db.set('version', await this.getTime(),).write();
-                this.selectlabels = "";
-                this.dialogVisibleAddProject = false;
-                this.ruleFormAddProject.name = "";
-                this.color = "";
-                this.getdirectory();
-                this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
-                if (imgtype == "base64") {
-                    this.uploadImg(img, this.newProject.type, this.newProject.id);
-                }
-                //二次刷新
-                this.getdirectory();
-                this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
-                this.templateEvent = "";
+                   this.newProject = {
+                       "id": this.$Uuidv1(),
+                       "name": projectName,
+                       "modelsId": this.selectlabels, // "modelsName":newArray.toString(),
+                       "isDel": false,
+                       "type": "project",
+                       "datas": formData.datas,
+                       "dateTime": await this.getTime(),
+                       "tempBase64": "",
+                       "imgHash": formData.imgHash,
+                       "imgtype": imgtype,
+                       "imgurl": formData.tempBase64,
+                       "bgcolor": formData.bgcolor
+                   };
+                   //db project 追加数据
+                   this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
+                   this.db.set('version', await this.getTime(),).write();
+                   this.selectlabels = "";
+                   this.dialogVisibleAddProject = false;
+                   this.ruleFormAddProject.name = "";
+                   this.color = "";
+                   this.getdirectory();
+                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                   if (imgtype == "base64") {
+                       this.uploadImg(img, this.newProject.type, this.newProject.id);
+                   }
+                   //二次刷新
+                   this.getdirectory();
+                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                   this.templateEvent = "";
+               }
             }, //增加选中项
             selectFiled(command) {
                 this.dialogVisibleItems = true;
@@ -4238,92 +4268,97 @@
             },
             //修改页面
             editProject() {
-                this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
-                let  items = this.editobject.datas
-                for(var item in items){
-                    if (items[item].type=="password"){
-                        items[item].format = this.cryptLevel(items[item].val);
-                    }
-                }
-                if (this.editobject.type == "project") {
-                    let modelsId = this.editobject.modelsId;
-                    let models = [];
-                    for (var index in modelsId) { //下拉框不显示sy,wbj
-                        if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")) {
-                            models.push(modelsId[index]);
+                    this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
+                    let items = this.editobject.datas
+                    for (var item in items) {
+                        if (items[item].type == "password") {
+                            items[item].format = this.cryptLevel(items[item].val);
                         }
                     }
-                    this.selectlabels = models;
-                    this.dialogVisibleEdit = true;
-                    this.operationType = "project_edit";
-                } else if (this.editobject.type == "template") {
-                    var modelsId = this.editobject.modelsId;
-                    var models = [];
-                    for (var index in modelsId) { //下拉框不显示mb
-                        if (modelsId[index].indexOf("mb") == -1) {
-                            models.push(modelsId[index]);
+                    if (this.editobject.type == "project") {
+                        let modelsId = this.editobject.modelsId;
+                        let models = [];
+                        for (var index in modelsId) { //下拉框不显示sy,wbj
+                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")) {
+                                models.push(modelsId[index]);
+                            }
                         }
+                        this.selectlabels = models;
+                        this.dialogVisibleEdit = true;
+                        this.operationType = "project_edit";
+                    } else if (this.editobject.type == "template") {
+                        var modelsId = this.editobject.modelsId;
+                        var models = [];
+                        for (var index in modelsId) { //下拉框不显示mb
+                            if (modelsId[index].indexOf("mb") == -1) {
+                                models.push(modelsId[index]);
+                            }
+                        }
+                        this.selectlabels = models;
+                        this.dialogVisibleTemplateEdit = true;
+                        this.operationType = "template_edit";
                     }
-                    this.selectlabels = models;
-                    this.dialogVisibleTemplateEdit = true;
-                    this.operationType = "template_edit";
-                }
             }, //修改project
            async editDo() {
-                try {
-                    this.db.get("project").remove({id: this.editobject.id}).write();
-                    var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
-                    if (this.selectlabels.indexOf("sy") == -1) {
-                        this.selectlabels.push("sy");//所有项必须有
-                    }
-                    if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                        this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                    }
-                    if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                        //大于2项，包含所有项和为标记项时删除为标记项
-                        this.selectlabels = this.selectlabels.filter(function (item) {
-                            return item !== "wbj"
-                        })
-                    }
-                    this.editobject.modelsId = this.selectlabels;
-                    //图片处理
-                    if (this.imgtype == "url") {
-                        this.imgHash = "";
-                        this.editobject.imgtype = "url";
-                        this.editobject.imgurl = this.editobject.tempBase64;
-                    } else if (this.imgtype == "base64") {
-                        this.editobject.imgurl = ""
-                        this.editobject.tempBase64 = "";//先删除tempBase64
-                        this.editobject.imgtype = "base64";
-                    }
-                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
-                    this.db.set('version', await this.getTime()).write();
-                    this.dialogVisibleEdit = false
-                    this.editobject.tempBase64 = img;
-                    this.$message.success(this.$t('main.successfullyModified'));
-                    this.projectEvent = this.editobject;
-                    this.selectlabels = "";
-                    this.color = "";
-                    this.getdirectory();
-                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
-                    if (this.imgtype == "base64") {
-                        if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
-                            let imgBase64 = this.localdb.get("img").find({id: this.editobject.imgHash}).value();
-                            if (imgBase64 == undefined || imgBase64.value != this.editobject.tempBase64) {
-                                this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
-                            }
-                        } else {
-                            this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
-                        }
-                    }
-                    //二次刷新
-                    this.getdirectory();
-                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
-                    this.editobject = "";
-                } catch (e) {
-                    console.log(e);
-                    this.$message.error(this.$t('main.failToEdit'));
-                }
+               if(!this.network){
+                   this.$message.error(this.$t('login.outline'));
+                   return false;
+               }else {
+                   try {
+                       this.db.get("project").remove({id: this.editobject.id}).write();
+                       var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
+                       if (this.selectlabels.indexOf("sy") == -1) {
+                           this.selectlabels.push("sy");//所有项必须有
+                       }
+                       if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                           this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                       }
+                       if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                           //大于2项，包含所有项和为标记项时删除为标记项
+                           this.selectlabels = this.selectlabels.filter(function (item) {
+                               return item !== "wbj"
+                           })
+                       }
+                       this.editobject.modelsId = this.selectlabels;
+                       //图片处理
+                       if (this.imgtype == "url") {
+                           this.imgHash = "";
+                           this.editobject.imgtype = "url";
+                           this.editobject.imgurl = this.editobject.tempBase64;
+                       } else if (this.imgtype == "base64") {
+                           this.editobject.imgurl = ""
+                           this.editobject.tempBase64 = "";//先删除tempBase64
+                           this.editobject.imgtype = "base64";
+                       }
+                       this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
+                       this.db.set('version', await this.getTime()).write();
+                       this.dialogVisibleEdit = false
+                       this.editobject.tempBase64 = img;
+                       this.$message.success(this.$t('main.successfullyModified'));
+                       this.projectEvent = this.editobject;
+                       this.selectlabels = "";
+                       this.color = "";
+                       this.getdirectory();
+                       this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                       if (this.imgtype == "base64") {
+                           if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
+                               let imgBase64 = this.localdb.get("img").find({id: this.editobject.imgHash}).value();
+                               if (imgBase64 == undefined || imgBase64.value != this.editobject.tempBase64) {
+                                   this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
+                               }
+                           } else {
+                               this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
+                           }
+                       }
+                       //二次刷新
+                       this.getdirectory();
+                       this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                       this.editobject = "";
+                   } catch (e) {
+                       console.log(e);
+                       this.$message.error(this.$t('main.failToEdit'));
+                   }
+               }
             }, openDialogTemplate() {
                 this.currentTemplate = -1;
                 this.templateEvent = ""
@@ -4363,6 +4398,10 @@
 
             }, //增加模板
             async saveTemplate() {
+                if(!this.network){
+                    this.$message.error(this.$t('login.outline'));
+                    return false;
+                }else{
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
                 //处理分类
@@ -4416,8 +4455,13 @@
                 this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                 this.imageBase64 = "";
                 this.newTemplate = "";
+                }
             }, //修改模板
           async  editTemplate() {
+              if(!this.network){
+                  this.$message.error(this.$t('login.outline'));
+                  return false;
+              }else{
                 var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
@@ -4462,6 +4506,7 @@
                     console.log(e);
                     this.$message.error(this.$t('main.failToEdit'));
                 }
+              }
             }, //删除项(修改模板，项目)
             editRemoveItem(itemsId) {
                 let itemArray = this.editobject.datas;

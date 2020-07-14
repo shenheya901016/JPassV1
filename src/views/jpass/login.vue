@@ -123,8 +123,11 @@
             return {
                 dialogVisible: false,
                 names: [],
-                operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS", //运营商钱包地址
-                operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW", //运营商密钥
+                // onLine: navigator.onLine,//网络状态
+                network:true,
+                window: window,
+                // operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS", //运营商钱包地址
+                // operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW", //运营商密钥
                 ruleForm: {
                     name: "",
                     password: ""
@@ -140,12 +143,17 @@
                 }
             };
         },
-        async mounted() {
+         mounted() {
+            //网络检查
+            window.addEventListener('online',  this.online);
+            window.addEventListener('offline', this.outline);
+
             if (this.$IpcRenderer) {
                 this.$IpcRenderer.on("closeEditorWarning", event => {
                     this.$IpcRenderer.send("app.exit");
                 });
             }
+
             //select 数据生成
             var names = localStorage.getItem("name_string");
             if (names != null) {
@@ -156,7 +164,23 @@
                 });
             }
         },
+
+        //销毁监听事件
+        beforeDestroy(){
+            console.log(6666);
+            window.removeEventListener('online',   this.online);
+            window.removeEventListener('offline',  this.outline);
+        },
+
         methods: {
+            online(){
+                console.log("网络已连接...");
+                this.network=true;
+            },
+            outline(){
+                console.log("网络已断线...");
+                this.network=false;
+            },
             submitForm(formName) {
                 this.$refs[formName].validate(valid => {
                     if (valid) {
@@ -185,7 +209,6 @@
              * 阿里云获取国际时间
              **/
             async getTime(){
-                console.log("获取时间");
                 const getPromise = util.promisify(request.get);
                 let url = timecurl+"rest/api3.do?api=mtop.common.getTimestamp";
                 let result = await getPromise(url);
@@ -193,6 +216,10 @@
                 return timeobj.data['t'];
             },
             async login() {
+                if(!this.network){
+                    this.$message.error(this.$t('login.outline'));
+                    return false;
+                }else{
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(this.ruleForm.name);
@@ -226,7 +253,6 @@
                             let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + userkeyObj.address + "&t=0";
                             let result = await getPromise(url);
                             let msg = this.$JSON5.parse(result.body);
-                            console.log(await this.getTime());
                             if (msg.data.list.length > 0 && msg.data.list[0].end_time > await this.getTime()) {
                                 console.log("充值成功！");
                                  this.$router.push("/jpass/main");
@@ -238,6 +264,7 @@
                         this.$message.error(this.$t("login.loginerror"));
                     }
               }
+            },
         }
     };
 </script>
