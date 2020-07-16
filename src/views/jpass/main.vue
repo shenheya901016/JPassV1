@@ -4517,7 +4517,7 @@
                 this.dialogVisibleSetting = false;
             },
             //搜索框
-            search(temp) {
+          async search(temp) {
                 this.projects = [];
                 let projectArray = [];
                 let templateArray = [];
@@ -4533,6 +4533,28 @@
                             tempProjects.push(projectArray[projectIndex]);
                         }
                     }
+                    //图片载入
+                    for (var index in tempProjects) {
+                        if (tempProjects[index].imgtype == "url") {
+                            tempProjects[index].tempBase64 = tempProjects[index].imgurl;
+                        } else if (tempProjects[index].imgtype == "base64") {
+                            if (tempProjects[index].imgHash != "") {
+                                let img = this.localdb.get("img").find({id: tempProjects[index].imgHash}).value();
+                                if (img != undefined) {
+                                    tempProjects[index].tempBase64 = img.value;
+                                } else {
+                                    //取ipfs值
+                                    let result = await this.$myIpfs.Ipfs.read(secret, tempProjects[index].imgHash, this.loginObj.address);
+                                    tempProjects[index].tempBase64 = result;
+                                    //缓存到本地localdb库
+                                    img = {"id": tempProjects[index].imgHash, "value": result};
+                                    this.localdb.get("img").push(img).write();
+                                }
+                            } else {
+                                tempProjects[index].tempBase64 = "";
+                            }
+                        }
+                    }
                     this.projects = tempProjects;
                 } else if(this.delobj.id =="mb") {
                     //template
@@ -4540,6 +4562,28 @@
                     for (var templateIndex in templateArray) {
                         if (templateArray[templateIndex].name.indexOf(temp) != -1) {
                             tempTemplates.push(templateArray[templateIndex]);
+                        }
+                    }
+                    //图片载入
+                    for (var index in tempTemplates) {
+                        if (tempTemplates[index].imgtype == "url") {
+                            tempTemplates[index].tempBase64 = tempTemplates[index].imgurl;
+                        } else if (tempTemplates[index].imgtype == "base64") {
+                            if (tempTemplates[index].imgHash != "") {
+                                let img = this.localdb.get("img").find({id: tempTemplates[index].imgHash}).value();
+                                if (img != undefined) {
+                                    tempTemplates[index].tempBase64 = img.value;
+                                } else {
+                                    //取ipfs值
+                                    let result = await this.$myIpfs.Ipfs.read(secret, tempTemplates[index].imgHash, this.loginObj.address);
+                                    tempTemplates[index].tempBase64 = result;
+                                    //缓存到本地localdb库
+                                    img = {"id": tempTemplates[index].imgHash, "value": result};
+                                    this.localdb.get("img").push(img).write();
+                                }
+                            } else {
+                                tempTemplates[index].tempBase64 = "";
+                            }
                         }
                     }
                     this.projects = tempTemplates;
@@ -4550,6 +4594,28 @@
                     for(var ljtIndex in ljtArray){
                         if(ljtArray[ljtIndex].name.indexOf(temp) != -1){
                             templjtArray.push(ljtArray[ljtIndex]);
+                        }
+                    }
+                    //图片载入
+                    for (var index in templjtArray) {
+                        if (templjtArray[index].imgtype == "url") {
+                            templjtArray[index].tempBase64 = templjtArray[index].imgurl;
+                        } else if (templjtArray[index].imgtype == "base64") {
+                            if (templjtArray[index].imgHash != "") {
+                                let img = this.localdb.get("img").find({id: templjtArray[index].imgHash}).value();
+                                if (img != undefined) {
+                                    templjtArray[index].tempBase64 = img.value;
+                                } else {
+                                    //取ipfs值
+                                    let result = await this.$myIpfs.Ipfs.read(secret, templjtArray[index].imgHash, this.loginObj.address);
+                                    templjtArray[index].tempBase64 = result;
+                                    //缓存到本地localdb库
+                                    img = {"id": templjtArray[index].imgHash, "value": result};
+                                    this.localdb.get("img").push(img).write();
+                                }
+                            } else {
+                                templjtArray[index].tempBase64 = "";
+                            }
                         }
                     }
                     this.projects = templjtArray;
