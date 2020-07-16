@@ -91,17 +91,7 @@
                 />{{ $t("main.PasswordGenerator") }}
                 </el-button>
             </li>
-            <!-- <li>
-                <el-button
-                        style="border:0;padding: 5px 5px;"
-                        @click="openpay()"
-                ><img
-                        style="top:-2px;height: 25px;width: 25px;"
-                        src="./img/ICON-SCQ.svg"
-                        alt=""
-                />充值
-                </el-button>
-            </li> -->
+
         </ul>
         <div class="hr" style="width: 40%;">
             <a style="width: 50px;" @click="openSetting">
@@ -3346,7 +3336,7 @@
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
                         {
                             min: 1,
-                            max: 10,
+                            max: 5,
                             message: this.$t('main.theLengthIsBetween1And10Characters'),
                             trigger: 'blur'
                         }],

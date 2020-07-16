@@ -183,7 +183,7 @@ export default {
         autofill: "Auto fill",
         pleaseChooseTheType: "Please select type!",
         pleaseEnterAName: "Please enter name!",
-        theLengthIsBetween1And10Characters: "Length between 1 and 10 characters!",
+        theLengthIsBetween1And10Characters: "Length between 1 and 5 characters!",
         thePasswordIsIncorrectPleaseReEnter: "Wrong password, please enter again!",
         unlockedSuccessfully: "Unlocked！",
         theInputIsIncorrectPleaseConfirmItAndSubmitItAgain: "Input error, please confirm correct before submitting!",

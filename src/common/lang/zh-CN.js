@@ -123,7 +123,7 @@ export default {
         autofill: "自动填充",
         pleaseChooseTheType: "请选择类型！",
         pleaseEnterAName: "请输入名称",
-        theLengthIsBetween1And10Characters: "长度不大于10位",
+        theLengthIsBetween1And10Characters: "长度不大于5位",
         thePasswordIsIncorrectPleaseReEnter: "密码有误，请重新输入！",
         unlockedSuccessfully: "解锁成功！",
         theInputIsIncorrectPleaseConfirmItAndSubmitItAgain: "输入有误，请确认无误后再提交!",
