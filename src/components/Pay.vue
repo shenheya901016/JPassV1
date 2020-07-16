@@ -146,12 +146,6 @@
             dialogopen: function (data) {
                 this.dialogVisiblePay = data
             },
-            // dialogclose:function(data){
-            // 	if(data){
-            // 		this.dialogVisiblePay=false
-
-            // 	}
-            // }
         },
     }
 

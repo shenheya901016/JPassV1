@@ -104,7 +104,6 @@
                 request.post(options, function (error, response, body) {
                     let form = response.body.split("#")[0];
                     out_trade_no = response.body.split("#")[1];
-                    console.log(out_trade_no)
                     const target = "target='_blank' ";
                     let newFrom = form.slice(0, 6) + target + form.slice(6)
                     const div = document.createElement('div')
@@ -126,7 +125,6 @@
                 };
                 let _this = this;
                 request.post(options, function (error, response, body) {
-                    console.log(response.body)
                     status = response.body;
                     if (status === "TRADE_SUCCESS") {
                         _this.$message({
@@ -135,7 +133,6 @@
                         });
                         _this.$router.push("/jpass/main");
                     } else {
-                        console.log("充值失败！")
                         setTimeout(function () {
                             let _out_trade_no = out_trade_no;
                             _this.query(_out_trade_no)

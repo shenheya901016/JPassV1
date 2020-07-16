@@ -158,8 +158,6 @@
             },
             handleExceed(files, fileList) {
                 let msg = this.$t('keystoreImport.theCurrentLimitSelects1FileThisTimeSelectedFiles');
-                // let filenum=files.length+fileList.length;
-                // msg.replace("{0}",filenum);
                 this.$message.warning(msg);
             },
             //获取keystore文件
@@ -197,7 +195,6 @@
                     var secret = wallet.getSecretWithAddress(password, address);
                     await secret.then(function (value) {
                         secret = value;
-                        // console.log(secret);
                     });
                     this.ruleForm.secret = secret;
                     this.generateWallet();
@@ -232,8 +229,6 @@
             exportkeystore() {
                 var content = this.ruleForm.keystore;
                 var keystoreString = this.$JSON5.stringify(content);
-                console.log(content);
-                console.log(keystoreString);
                 var FileSaver = require('file-saver');
                 var blob = new Blob([keystoreString], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, "keystore");

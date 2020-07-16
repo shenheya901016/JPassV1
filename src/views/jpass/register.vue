@@ -154,7 +154,6 @@
                 if (valid) {
                     this.register();
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });

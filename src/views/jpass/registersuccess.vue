@@ -81,9 +81,6 @@
                 saveAs(blob, "keystore");
             },
         },
-        mounted() {
-            console.log( this.$route.params)
-        }
     }
 </script>
 <style>

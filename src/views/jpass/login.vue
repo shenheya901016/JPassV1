@@ -123,23 +123,14 @@
             return {
                 dialogVisible: false,
                 names: [],
-                // onLine: navigator.onLine,//网络状态
                 network:true,
                 window: window,
-                // operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS", //运营商钱包地址
-                // operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW", //运营商密钥
                 ruleForm: {
                     name: "",
                     password: ""
                 },
                 rules: {
-                    // name: [
-                    //     {
-                    //         required: true,
-                    //         message: this.$t("login.namevalidation"),
-                    //         trigger: "blur"
-                    //     }
-                    // ],
+
                 }
             };
         },
@@ -167,18 +158,15 @@
 
         //销毁监听事件
         beforeDestroy(){
-            console.log(6666);
             window.removeEventListener('online',   this.online);
             window.removeEventListener('offline',  this.outline);
         },
 
         methods: {
             online(){
-                console.log("网络已连接...");
                 this.network=true;
             },
             outline(){
-                console.log("网络已断线...");
                 this.network=false;
             },
             submitForm(formName) {
@@ -186,7 +174,6 @@
                     if (valid) {
                         this.login();
                     } else {
-                        console.log("error submit!!");
                         return false
                     }
                 });
@@ -254,10 +241,8 @@
                             let result = await getPromise(url);
                             let msg = this.$JSON5.parse(result.body);
                             if (msg.data.list.length > 0 && msg.data.list[0].end_time > await this.getTime()) {
-                                console.log("充值成功！");
                                  this.$router.push("/jpass/main");
                             } else {
-                                 console.log("不是vip！");
                                 this.$router.push("/jpass/pay"); 
                             }
                     } else {

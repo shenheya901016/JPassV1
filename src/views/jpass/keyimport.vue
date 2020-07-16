@@ -132,7 +132,6 @@
                     if (valid) {
                         this.keyImport();
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -147,8 +146,6 @@
                         keystore = value;
                     });
                     this.ruleForm.keystore = keystore;
-                    // console.log("新keystore:"+this.$JSON5.stringify(this.ruleForm.keystore));
-                    // console.log("用户名称:"+this.ruleForm.name );
                 } catch (e) {
                     this.$message.error(this.$t('keyImport.keyIsWrongPleaseEnter'));
                     return false;

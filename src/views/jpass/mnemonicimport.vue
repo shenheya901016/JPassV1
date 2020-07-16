@@ -131,7 +131,6 @@
                     if (valid) {
                         this.mnemonicImport();
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -144,9 +143,7 @@
                 //加上空格
                 mnemonic = mnemonic.split("").join(" ");
                 try {
-                    console.log(mnemonic);
                     var seed = this.$JPassUtil.Mnemonic.wordsToEntropy(mnemonic, this.$i18n.locale);
-                    console.log(seed);
                     var jtWallet = this.$JPassUtil.Wallet.generateWallet(seed);
                 } catch (e) {
                     this.$message.error(this.$t('mnemonicimport.mnemonicError'));

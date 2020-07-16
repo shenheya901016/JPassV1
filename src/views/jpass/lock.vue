@@ -11,11 +11,6 @@
             </div>
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm"
                      style="width:75%; margin:10% 20% 5% 10%;" @submit.native.prevent>
-                <!--<el-form-item label="用户名称" prop="name">-->
-                <!--<el-select placeholder="请选择登录用户" v-model="ruleForm.name" title="请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！" style="width:100%;">-->
-                <!--<el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.value"></el-option>-->
-                <!--</el-select>-->
-                <!--</el-form-item>-->
                 <el-form-item :label="$t('main.loginPassword')" prop="password" style="margin-top:10%">
                     <el-input type="password" v-model="ruleForm.password" style="width:100%;"></el-input>
                 </el-form-item>
@@ -54,7 +49,6 @@
                     if (valid) {
                         this.login();
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
