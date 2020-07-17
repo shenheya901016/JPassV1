@@ -18,7 +18,7 @@ export default {
         pwdvalidaion: "请输入用户密码",
         pwdlengthvalidaion: "密码长度不小于4位",
         pwderror: "用户账号或密码有误，请重新输入！",
-        loginerror: "用户账号或密码有误，请重新输入！，请重新输入！",
+        loginerror: "用户账号或密码有误，请重新输入！",
         outline:"网络连接异常，请检查网络！"
     },
     register: {
