@@ -9,46 +9,62 @@
             <div style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px">
                 {{$t('keystoreImport.importKeystoreWallet')}}
             </div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="8vw" class="demo-ruleForm" style="width:70%; margin:10% 20% 10% 10%">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="8vw" class="demo-ruleForm"
+                     style="width:70%; margin:10% 20% 10% 10%">
                 <el-form-item :label="$t('keystoreImport.keystoreFile')" prop="">
                     <el-upload class="upload-demo" style="text-align: left;"
                                action="https://jsonplaceholder.typicode.com/posts/"
                                :limit="1" :on-exceed="handleExceed" accept="text/plain"
                                :on-change="getkeystore"
-                                >
-                        <el-button type="primary" size="small" style="float: left">{{$t('keystoreImport.uploadKeystore')}}</el-button>
+                    >
+                        <el-button type="primary" size="small" style="float: left">
+                            {{$t('keystoreImport.uploadKeystore')}}
+                        </el-button>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.oldLoginPassword')" prop="oldPassword">
-                    <el-input type="password" v-model="ruleForm.oldPassword" oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
-                 </el-form-item>
+                    <el-input type="password" v-model="ruleForm.oldPassword" oncopy="return false"
+                              onpaste="return false" style="width:95%;float: left">
+                    </el-input>
+                </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newUserName')" prop="name">
-                    <el-input type="text" v-model="ruleForm.name"  oncopy="return false" onpaste="return false" style="width:95%;float: left"></el-input>
+                    <el-input type="text" v-model="ruleForm.name" oncopy="return false" onpaste="return false"
+                              style="width:95%;float: left"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('keystoreImport.newLoginPassword')" prop="password">
-                    <el-input type="password" v-model="ruleForm.password " oncopy="return false" onpaste="return false" style="width:95%;float: left" show-password></el-input>
+                    <el-input type="password" v-model="ruleForm.password " oncopy="return false" onpaste="return false"
+                              style="width:95%;float: left" show-password></el-input>
                     <img @click="passwordGenerator()" style="width: 5%;" src="./img/钥匙.svg" alt="">
                 </el-form-item>
                 <!--<el-form-item>-->
-                    <!--<el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;"></el-progress>-->
+                <!--<el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;"></el-progress>-->
                 <!--</el-form-item>-->
                 <el-form-item :label="$t('keystoreImport.passwordRepetition')" prop="repassword">
                     <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"
                               oncopy="return false" onpaste="return false" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
-                    <el-button type="primary"  size="small"  style="width:40%" @click="submitForm('ruleForm')">{{$t('keystoreImport.importWallet')}}</el-button>
-                    <el-button type="primary"  size="small" style="width:40%" @click="toLoginPage">{{$t('keystoreImport.cancel')}}</el-button>
+                    <el-button type="primary" size="small" style="width:40%" @click="submitForm('ruleForm')">
+                        {{$t('keystoreImport.importWallet')}}
+                    </el-button>
+                    <el-button type="primary" size="small" style="width:40%" @click="toLoginPage">
+                        {{$t('keystoreImport.cancel')}}
+                    </el-button>
                 </el-form-item>
-                <el-dialog :title="$t('keystoreImport.walletImportedSuccessfully')" :visible.sync="dialogVisible" width="30%">
-                    <el-button type="primary" size="small" @click="exportkeystore">{{$t('keystoreImport.keystoreExport')}}</el-button>
-                    <el-button type="primary" size="small" @click="toMainPage">{{$t('keystoreImport.login')}}</el-button>
+                <el-dialog :title="$t('keystoreImport.walletImportedSuccessfully')" :visible.sync="dialogVisible"
+                           width="40%">
+                    <el-button type="primary" size="small" @click="exportkeystore">
+                        {{$t('keystoreImport.keystoreExport')}}
+                    </el-button>
+                    <el-button type="primary" size="small" @click="toMainPage">{{$t('keystoreImport.login')}}
+                    </el-button>
                 </el-dialog>
             </el-form>
         </div>
         <vue-canvas-nest :config="{color:'255,0,0', count:100}" :el="'#main'"></vue-canvas-nest>
-		<passwordGenerator :dialogopen="dialogPasswordGenerator" @dialogPasswordGeneratorclose="closedialog"
-		@transpassword="getPassword" :dialogclose="dialogclose"  @recoverdialogtag="recovertag"></passwordGenerator>
+        <passwordGenerator :dialogopen="dialogPasswordGenerator" @dialogPasswordGeneratorclose="closedialog"
+                           @transpassword="getPassword" :dialogclose="dialogclose"
+                           @recoverdialogtag="recovertag"></passwordGenerator>
     </div>
 </template>
 
@@ -79,8 +95,7 @@
             };
             return {
                 dialogPasswordGenerator: false,// 密码生成器弹出框
-                dialogclose:false,//关闭密码器指示
-
+                dialogclose: false,//关闭密码器指示
                 dialogVisible: false,
                 keystorefile: {},
                 ruleForm: {
@@ -90,10 +105,17 @@
                     password: '',
                     secret: '',
                     repassword: '',
+                    keystore: ""
                 },
                 rules: {
                     name: [
                         {required: true, message: this.$t('keystoreImport.pleaseEnterANewUsername'), trigger: 'blur'},
+                        {
+                            min: 4,
+                            max: 20,
+                            message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'),
+                            trigger: 'blur'
+                        },
                         {validator: validateName, trigger: 'blur'}
                     ],
                     oldPassword: [
@@ -102,18 +124,27 @@
                     ],
                     password: [
                         {required: true, message: this.$t('keystoreImport.pleaseEnterAUserPassword'), trigger: 'blur'},
-                        {min: 4, max: 20, message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'), trigger: 'blur'}
+                        {
+                            min: 4,
+                            max: 20,
+                            message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'),
+                            trigger: 'blur'
+                        }
                     ],
                     repassword: [
-                        {required: true, message: this.$t('keystoreImport.pleaseEnterTheUserPasswordAgain'), trigger: 'blur'},
+                        {
+                            required: true,
+                            message: this.$t('keystoreImport.pleaseEnterTheUserPasswordAgain'),
+                            trigger: 'blur'
+                        },
                         {validator: validateRepassword, trigger: 'blur'}
                     ],
                 }
             };
         },
-        
+
         methods: {
-            toLoginPage(){
+            toLoginPage() {
                 this.$router.push('/jpass/login');
             },
             submitForm(formName) {
@@ -126,14 +157,12 @@
                 });
             },
             handleExceed(files, fileList) {
-                let msg =this.$t('keystoreImport.theCurrentLimitSelects1FileThisTimeSelectedFiles');
-                // let filenum=files.length+fileList.length;
-                // msg.replace("{0}",filenum);
+                let msg = this.$t('keystoreImport.theCurrentLimitSelects1FileThisTimeSelectedFiles');
                 this.$message.warning(msg);
             },
             //获取keystore文件
-            getkeystore(file){
-                this.keystorefile=file.raw;
+            getkeystore(file) {
+                this.keystorefile = file.raw;
             },
             //解析keystoreAnalysis 文件
             async keystoreAnalysis() {
@@ -166,7 +195,6 @@
                     var secret = wallet.getSecretWithAddress(password, address);
                     await secret.then(function (value) {
                         secret = value;
-                        // console.log(secret);
                     });
                     this.ruleForm.secret = secret;
                     this.generateWallet();
@@ -183,7 +211,7 @@
                     await jingchuangWallet.then(function (value) {
                         keystore = value;
                     });
-                    //this.ruleForm.keystore=keystore;
+                    this.ruleForm.keystore = keystore;
                 } catch (e) {
                     this.$message.error(this.$t('keystoreImport.newKeystoreGeneratedError'));
                     return false;
@@ -196,7 +224,7 @@
                     return false;
                 }
             },
-           
+
             //导出keystore 文件
             exportkeystore() {
                 var content = this.ruleForm.keystore;
@@ -219,73 +247,36 @@
                     localStorage.setItem(name, this.$JSON5.stringify(keystore));
                 }
             },
-            async toMainPage() {
-                let secret = "";
-                let wallet = new this.$JINGCHUANGWallet();
-                let keyStoreString = localStorage.getItem(this.ruleForm.name);
-                let objKeyStore = this.$JSON5.parse(keyStoreString);
-                let keystring = "";
-                let bal=""
-                if (keyStoreString != null) {
-                    try {
-                        //钱包生成密钥
-                        wallet.setJingchangWallet(objKeyStore);
-                        var address = objKeyStore.wallets[0].address;
-                        keystring = wallet.getSecretWithAddress(this.ruleForm.oldPassword, address);
-                        await keystring.then(function (value) {
-                            secret = value;
-                        });
-                    } catch (e) {
-                        this.$message.error(this.$t('login.pwderror'));
-                        return false;
-                    }
-                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                    //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
-                    //      bal=true;
-                    //  }else{
-                    //      bal=false;
-                    //  }
-                    bal=true;
-                    let userkeyObj = {
-                        name:this.ruleForm.name,
-                        secret: secret,
-                        address: objKeyStore.wallets[0].address,
-                        lock:false,//是否锁定
-                        bal:bal,
-                    }
-                    sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    //this.$message.success("用户登录成功！");
-                    this.$router.push('/jpass/main');
-                } else {
-                    this.$message.error(this.$t('login.loginerror'));
-                }
+
+            toMainPage() {
+                this.$router.push("/jpass/login");
             },
-			
-			//打开密码生成器
-			passwordGenerator() {
-			   this.dialogPasswordGenerator = true;
-			   this.percentage = 0;
-			},
-			//子组件关闭后还原dialogPasswordGenerator为false
-			closedialog(data){
-				this.dialogPasswordGenerator=data;
-			},
-			//密码器赋值
-			getPassword(data){
-				this.ruleForm.password = data;
-				this.ruleForm.repassword= data;
-				this.dialogclose=true;
-			},
-			//子组件关闭后还原dialogclose值为false
-			recovertag(data){
-				this.dialogclose=data;
-			}
+
+            //打开密码生成器
+            passwordGenerator() {
+                this.dialogPasswordGenerator = true;
+                this.percentage = 0;
+            },
+            //子组件关闭后还原dialogPasswordGenerator为false
+            closedialog(data) {
+                this.dialogPasswordGenerator = data;
+            },
+            //密码器赋值
+            getPassword(data) {
+                this.ruleForm.password = data;
+                this.ruleForm.repassword = data;
+                this.dialogclose = true;
+            },
+            //子组件关闭后还原dialogclose值为false
+            recovertag(data) {
+                this.dialogclose = data;
+            }
         }
     }
 </script>
 
 <style>
-
-
-</style>
+    .el-dialog__header {
+        padding: 40px 40px 0px;
+    }
+</style> 

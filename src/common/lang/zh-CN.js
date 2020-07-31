@@ -17,8 +17,9 @@ export default {
         namevalidation: "请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包！",
         pwdvalidaion: "请输入用户密码",
         pwdlengthvalidaion: "密码长度不小于4位",
-        pwderror: "密码有误，请重新输入！",
-        loginerror: "用户不存在，请重新输入！",
+        pwderror: "用户账号或密码有误，请重新输入！",
+        loginerror: "用户账号或密码有误，请重新输入！",
+        outline:"网络连接异常，请检查网络！"
     },
     register: {
         title: "用户注册",
@@ -49,7 +50,7 @@ export default {
         secret: "私钥:",
         keystoreFile: "key文件:",
         exportKeystoreFile: "key文件导出",
-        login: "登录",
+        login: "返回登录页面",
     },
     mnemonicimport: {
         importmnemonic: "助记词导入",
@@ -122,7 +123,7 @@ export default {
         autofill: "自动填充",
         pleaseChooseTheType: "请选择类型！",
         pleaseEnterAName: "请输入名称",
-        theLengthIsBetween1And10Characters: "长度不大于10位",
+        theLengthIsBetween1And10Characters: "长度不大于5位",
         thePasswordIsIncorrectPleaseReEnter: "密码有误，请重新输入！",
         unlockedSuccessfully: "解锁成功！",
         theInputIsIncorrectPleaseConfirmItAndSubmitItAgain: "输入有误，请确认无误后再提交!",
@@ -143,6 +144,9 @@ export default {
         successfullyModified: "修改成功！",
         failToEdit: "修改失败！",
         settingSavedSuccessfully: "设置保存成功！",
+        re_login:"重新登录实现所有配置更新, 是否重新登录?",
+        login:"重新登录",
+        suggest:"建议",
         settingSaveFailed: "设置保存失败！",
         PasswordGenerator: "密码生成器",
         fields: "字段",
@@ -158,7 +162,28 @@ export default {
         synchronizationInfo: "系统检测到你上次同步操作不在本机中操作，为保证数据完整性，请先确保上次操作数据已经成功同步，请慎重选择同步方式！",
         localToIpfs: "本地同步到ipfs",
         ipfsToLocal: "ipfs同步到本地",
-        userResource: "用户资源"
+        userResource: "用户资源",
+        notvip:"非会员，请充值！",
+        lineError:"系统异常,请测试网络是否正常!",
+        synchronizationSuccessful:"数据同步成功!",
+        NonMember:"非会员，数据无法同步，请充值！",
+        withoutSynchronization:"本地数据与ipfs数据相同，无需同步！",
+        //密码生成器
+        passwordGenerator:"密码生成器",
+        easyMemorize:"便于记忆",
+        lettersAndNumbers:"仅字母和数字",
+        completelyRandom:"完全随机",
+        numberOnly:"仅数字",
+        moment:"瞬间",
+        breakTime:"破解时间:",
+        seconds:"秒",
+        mintues:"分",
+        hours:"时",
+        day:"天",
+        weeks:"周",
+        month:"月",
+        years:"年",
+        century:"世纪之久"
     },
     lock: {
         unlockJpass: "解锁jpass",
@@ -168,7 +193,7 @@ export default {
         unlockedSuccessfully: "解锁成功！"
     },
     keystoreImport: {
-        importKeystoreWallet: "key导入钱包",
+        importKeystoreWallet: "key文件导入钱包",
         keystoreFile: "key文件",
         uploadKeystore: "上传key文件",
         oldLoginPassword: "旧登录密码",
@@ -187,7 +212,7 @@ export default {
         pleaseEnterANewUsername: "请输入新用户名",
         pleaseEnterYourPassword: "请输入旧密码",
         pleaseEnterAUserPassword: "请输入新用户密码",
-        theLengthIsBetween4And20Characters: "长度不小于位",
+        theLengthIsBetween4And20Characters: "长度不小于4位",
         pleaseEnterTheUserPasswordAgain: "请再次输入新用户密码",
         theCurrentLimitSelects1FileThisTimeSelectedFiles: "当前限制上传 1个文件",
         importedKeystoryFilePFailed: "keystory 文件未导入或文件解析失败，请重新输入！",
@@ -195,7 +220,7 @@ export default {
         newKeystoreGeneratedError: "新key文件生成错误！",
         localStorageFailed: "本地存储失败！",
         cancel: "取消",
-        login: "直接登录"
+        login: "返回登录页面"
 
     },
     keyImport: {
@@ -234,7 +259,9 @@ export default {
         address:"地址",
         login:"用户名",
         phone:"电话",
-        date:"日期"
+        date:"日期",
+        webside:"网站"
     },
+
     ...zhLocale
 };

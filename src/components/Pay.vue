@@ -104,7 +104,6 @@
                 request.post(options, function (error, response, body) {
                     let form = response.body.split("#")[0];
                     out_trade_no = response.body.split("#")[1];
-                    console.log(out_trade_no)
                     const target = "target='_blank' ";
                     let newFrom = form.slice(0, 6) + target + form.slice(6)
                     const div = document.createElement('div')
@@ -147,12 +146,6 @@
             dialogopen: function (data) {
                 this.dialogVisiblePay = data
             },
-            // dialogclose:function(data){
-            // 	if(data){
-            // 		this.dialogVisiblePay=false
-
-            // 	}
-            // }
         },
     }
 

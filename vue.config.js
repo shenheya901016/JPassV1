@@ -15,7 +15,7 @@ module.exports = {
         proxy: { // 配置跨域
             '/ipfs': {
                 //要访问的跨域的api的域名
-                target: 'http://192.168.2.13:1337',
+                target: 'https://jccipfs.jccdex.cn',
                 ws: true,
                 changOrigin: true,
                 pathRewrite: {
@@ -30,7 +30,18 @@ module.exports = {
                 pathRewrite: {
                     '^/alipay': '/'
                 }
+            },
+            '/altime': {
+                //要访问的跨域的api的域名
+                target: 'http://api.m.taobao.com/',
+                ws: true,
+                changOrigin: true,
+                pathRewrite: {
+                    '^/altime': '/'
+                }
             }
         }
+
+
     }
 };

@@ -6,7 +6,7 @@
                 <img src="../../img/logo.png" alt="" style="width:150px;">
             </a>
         </div>
-        <div style="width:45%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
+        <div style="width:60%;border:1px solid white;margin:2% auto;border-radius:10px;box-shadow: 0 0 7px 1px #c5c5c5;">
             <div style="width:100%;border-radius:10px 10px 0 0; font-size:18px;margin-top:50px; color: #66B1FF;text-align: left">
                 <div v-html="$t('registersuccess.title')"></div>
 
@@ -67,48 +67,10 @@
             };
         },
         methods: {
-            async toMainPage() {
-                let secret = "";
-                let wallet = new this.$JINGCHUANGWallet();
-                let keyStoreString = localStorage.getItem(this.ruleForm.name);
-                let objKeyStore = this.$JSON5.parse(keyStoreString);
-                let keystring = "";
-                let bal=""
-                if (keyStoreString != null) {
-                    try {
-                        //钱包生成密钥
-                        wallet.setJingchangWallet(objKeyStore);
-                        var address = objKeyStore.wallets[0].address;
-                        keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
-                        await keystring.then(function (value) {
-                            secret = value;
-                        });
-                    } catch (e) {
-                        this.$message.error(this.$t('login.pwderror'));
-                        return false;
-                    }
-                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                    //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
-                    //      bal=true;
-                    //  }else{
-                    //      bal=false;
-                    //  }
-                    bal=true;
-                    let userkeyObj = {
-                        name:this.ruleForm.name,
-                        secret: secret,
-                        address: objKeyStore.wallets[0].address,
-                        lock:false,//是否锁定
-                        bal:bal,
-                    }
-                    sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    //this.$message.success("用户登录成功！");
-                    this.$router.push('/jpass/main');
-                } else {
-                    this.$message.error(this.$t('login.loginerror'));
-                }
+            toMainPage(){
+                 this.$router.push("/jpass/login");
             },
+
             //导出keystore 文件
             exportkeystore() {
                 let userObjString = sessionStorage.getItem("userObj");
@@ -119,9 +81,6 @@
                 saveAs(blob, "keystore");
             },
         },
-        mounted() {
-            console.log( this.$route.params)
-        }
     }
 </script>
 <style>

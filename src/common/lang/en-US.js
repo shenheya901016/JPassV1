@@ -19,6 +19,7 @@ export default {
         pwdlengthvalidaion: "The length is between 4 and 20 characters",
         pwderror: "Wrong password, please re-enter!",
         loginerror: "The user does not exist, please re-enter!",
+        outline:"The network connection is abnormal. Please check the network!"
     },
 
     register:{
@@ -50,7 +51,7 @@ export default {
         secret: "Secret:",
         keystoreFile: "Keystore File:",
         exportKeystoreFile: "Keystore Export",
-        login:"Login"
+        login:"Return to login page"
     },
     mnemonicimport: {
         importmnemonic: "Mnemonic Import",
@@ -110,7 +111,7 @@ export default {
         newKeystoreGeneratedError: "Error generating new keystore file!",
         localStorageFailed: "Local storage failure!",
         cancel:"Cancel",
-        login:"Direct login"
+        login:"Return to login page"
     },
     keyImport: {
         walletKeyImport: "Secret Import",
@@ -126,7 +127,7 @@ export default {
         userNameIsDuplicatePleaseEnter: "The user name is duplicate, please enter it again！",
         pleaseEnterTheWalletKey: "Please enter the wallet secret",
         pleaseEnterAUserName: "Please enter user name!",
-        theLengthIsBetween3And20Characters: "The length is between 3 and 20 characters!",
+        theLengthIsBetween3And20Characters: "The length is between 4 and 20 characters!",
         pleaseEnterAUserPassword: "Please enter the user password!",
         lengthIsBetween4And20Characters: "The length is between 4 and 20 characters!",
         pleaseEnterTheUserPasswordAgain: "Please enter the user password again!",
@@ -182,7 +183,7 @@ export default {
         autofill: "Auto fill",
         pleaseChooseTheType: "Please select type!",
         pleaseEnterAName: "Please enter name!",
-        theLengthIsBetween1And10Characters: "Length between 1 and 10 characters!",
+        theLengthIsBetween1And10Characters: "Length between 1 and 5 characters!",
         thePasswordIsIncorrectPleaseReEnter: "Wrong password, please enter again!",
         unlockedSuccessfully: "Unlocked！",
         theInputIsIncorrectPleaseConfirmItAndSubmitItAgain: "Input error, please confirm correct before submitting!",
@@ -201,6 +202,9 @@ export default {
         successfullyModified: "Edit successfully！",
         failToEdit: "Edit failure！",
         settingSavedSuccessfully: "Settings saved successfully！",
+        re_login:"Re-login to implement all configuration updates, do you re-login?",
+        suggest:"Suggest",
+        login:"re_login",
         settingSaveFailed: "Settings save failed！",
         PasswordGenerator:"Password generator",
         fields:"Fields",
@@ -216,7 +220,28 @@ export default {
         synchronizationInfo:"The system has detected that your last synchronization operation was not performed in this machine. In order to ensure data integrity, please ensure that the data of the last operation has been successfully synchronized. Please carefully choose the synchronization method!",
         localToIpfs:"Local to ipfs",
         ipfsToLocal:"Ipfs to local",
-        userResource:"User resource"
+        userResource:"User resource",
+        notvip:"nonmember，please recharge！",
+        lineError:"System abnormal, please test whether the network is normal!",
+        synchronizationSuccessful:"Data synchronization successful!",
+        NonMember:"Non-member, data cannot be synchronized, please recharge!",
+        withoutSynchronization:"Local data is the same as IPFS data, no synchronization required!",
+        //密码生成器
+        passwordGenerator:"Password Generator",
+        easyMemorize:"Easy to remember",
+        lettersAndNumbers:"Just letters and Numbers",
+        completelyRandom:"Completely random",
+        numberOnly:"Number only",
+        moment:"moments",
+        breakTime:"Break Time:",
+        seconds:"seconds",
+        mintues:"minutes",
+        hours:"hours",
+        day:"days",
+        weeks:"weeks",
+        month:"month",
+        years:"years", 
+        century:"century"  
     },
     myInfo: {
         name: "Name",
@@ -232,7 +257,8 @@ export default {
         address:"Address",
         login:"Login",
         phone:"Phone",
-        date:"Date"
+        date:"Date",
+        webside:"Webside"
     },
     ...enLocale
 };

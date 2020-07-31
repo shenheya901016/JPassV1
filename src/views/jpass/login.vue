@@ -45,13 +45,13 @@
                             v-model="ruleForm.password"
                             style="width:100%;"
                             show-password
+                            @keyup.enter.native="submitForm('ruleForm')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="">
                     <el-button
                             type="primary"
                             style="width:90%;"
-                            native-type="submit"
                             size="small"
                             @click="submitForm('ruleForm')"
                     >{{ $t("login.login") }}
@@ -107,6 +107,13 @@
 
 <script type="es6">
     import vueCanvasNest from "vue-canvas-nest";
+        let request = require("request");
+        const util = require('util');
+        let timecurl = "http://api.m.taobao.com/";
+        //判断是否为开发者模式
+        if (process.env.NODE_ENV === "development") {
+            timecurl = 'http://localhost:8080/altime/';
+        }
 
     export default {
         components: {
@@ -116,42 +123,28 @@
             return {
                 dialogVisible: false,
                 names: [],
-                operatorJID: "jHDbFiFZ6rfDjhfRnhD1ReCwY2erhpiYBS", //运营商钱包地址
-                operatorSecret: "ssxWidEVcs6bCtsVbfd7gMXUoRfMW", //运营商密钥
+                network:true,
+                window: window,
                 ruleForm: {
                     name: "",
                     password: ""
                 },
                 rules: {
-                    name: [
-                        {
-                            required: true,
-                            message: this.$t("login.namevalidation"),
-                            trigger: "blur"
-                        }
-                    ],
-                    password: [
-                        {
-                            required: true,
-                            message: this.$t("login.pwdvalidaion"),
-                            trigger: "blur"
-                        },
-                        {
-                            min: 4,
-                            max: 20,
-                            message: this.$t("login.pwdlengthvalidaion"),
-                            trigger: "blur"
-                        }
-                    ]
+
                 }
             };
         },
-        async mounted() {
+         mounted() {
+            //网络检查
+            window.addEventListener('online',  this.online);
+            window.addEventListener('offline', this.outline);
+
             if (this.$IpcRenderer) {
                 this.$IpcRenderer.on("closeEditorWarning", event => {
                     this.$IpcRenderer.send("app.exit");
                 });
             }
+
             //select 数据生成
             var names = localStorage.getItem("name_string");
             if (names != null) {
@@ -162,14 +155,26 @@
                 });
             }
         },
+
+        //销毁监听事件
+        beforeDestroy(){
+            window.removeEventListener('online',   this.online);
+            window.removeEventListener('offline',  this.outline);
+        },
+
         methods: {
+            online(){
+                this.network=true;
+            },
+            outline(){
+                this.network=false;
+            },
             submitForm(formName) {
                 this.$refs[formName].validate(valid => {
                     if (valid) {
                         this.login();
                     } else {
-                        console.log("error submit!!");
-                        return false;
+                        return false
                     }
                 });
             },
@@ -187,13 +192,26 @@
                     this.$router.push("/jpass/mnemonicimport");
                 }
             },
+            /**
+             * 阿里云获取国际时间
+             **/
+            async getTime(){
+                const getPromise = util.promisify(request.get);
+                let url = timecurl+"rest/api3.do?api=mtop.common.getTimestamp";
+                let result = await getPromise(url);
+                let timeobj=this.$JSON5.parse((result.body));
+                return timeobj.data['t'];
+            },
             async login() {
+                if(!this.network){
+                    this.$message.error(this.$t('login.outline'));
+                    return false;
+                }else{
                 let secret = "";
                 let wallet = new this.$JINGCHUANGWallet();
                 let keyStoreString = localStorage.getItem(this.ruleForm.name);
                 let objKeyStore = this.$JSON5.parse(keyStoreString);
                 let keystring = "";
-                let bal = "";
                 if (keyStoreString != null) {
                     try {
                         //钱包生成密钥
@@ -209,31 +227,29 @@
                     } catch (e) {
                         this.$message.error(this.$t("login.pwderror"));
                         return false;
-                    }
-                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                    //       await this.$myIpfs.initTest( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret,"data");
-                    //       await this.$myIpfs.initTest( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret,"file");
-                    //      bal=true;
-                    //  }else{
-                    //      bal=false;
-                    //  }
-                    bal = true;
+                    }          
                     let userkeyObj = {
                         name: this.ruleForm.name,
                         secret: secret,
                         address: objKeyStore.wallets[0].address,
                         lock: false, //是否锁定
-                        bal: bal
                     };
                     sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
                     localStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    //this.$message.success("用户登录成功！");
-                    this.$router.push("/jpass/main");
-                } else {
-                    this.$message.error(this.$t("login.loginerror"));
-                }
-            }
+                      const getPromise = util.promisify(request.get);
+                            let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + userkeyObj.address + "&t=0";
+                            let result = await getPromise(url);
+                            let msg = this.$JSON5.parse(result.body);
+                            if (msg.data.list.length > 0 && msg.data.list[0].end_time > await this.getTime()) {
+                                 this.$router.push("/jpass/main");
+                            } else {
+                                this.$router.push("/jpass/pay"); 
+                            }
+                    } else {
+                        this.$message.error(this.$t("login.loginerror"));
+                    }
+              }
+            },
         }
     };
 </script>

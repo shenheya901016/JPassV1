@@ -35,7 +35,7 @@
                     </el-button>
                     <el-button type="primary" style="width:40%;" size="small" @click="toLoginPage">{{$t('mnemonicimport.cancel')}}</el-button>
                 </el-form-item>
-                <el-dialog :title="$t('mnemonicimport.importSuccessfully')" :visible.sync="dialogVisible" width="30%">
+                <el-dialog :title="$t('mnemonicimport.importSuccessfully')" :visible.sync="dialogVisible" width="40%">
                     <el-button type="primary" size="small" @click="exportkeystore">
                         {{$t('mnemonicimport.keystoreExport')}}
                     </el-button>
@@ -95,7 +95,7 @@
                     name: [
                         {required: true, message: this.$t('mnemonicimport.inputUserName'), trigger: 'blur'},
                         {
-                            min: 3,
+                            min: 4,
                             max: 20,
                             message: this.$t('mnemonicimport.lengthBetween3and20Characters'),
                             trigger: 'blur'
@@ -131,7 +131,6 @@
                     if (valid) {
                         this.mnemonicImport();
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -156,7 +155,7 @@
                     await jingchuangWallet.then(function (value) {
                         keystore = value;
                     });
-                    //this.ruleForm.keystore=keystore;
+                    this.ruleForm.keystore=keystore;
                 } catch (e) {
                     this.$message.error(this.$t('mnemonicimport.keystoreGeneratedError'));
                     return false;
@@ -193,48 +192,10 @@
                 }
             },
 
-            async toMainPage() {
-                let secret = "";
-                let wallet = new this.$JINGCHUANGWallet();
-                let keyStoreString = localStorage.getItem(this.ruleForm.name);
-                let objKeyStore = this.$JSON5.parse(keyStoreString);
-                let keystring = "";
-                let bal=""
-                if (keyStoreString != null) {
-                    try {
-                        //钱包生成密钥
-                        wallet.setJingchangWallet(objKeyStore);
-                        var address = objKeyStore.wallets[0].address;
-                        keystring = wallet.getSecretWithAddress(this.ruleForm.password, address);
-                        await keystring.then(function (value) {
-                            secret = value;
-                        });
-                    } catch (e) {
-                        this.$message.error(this.$t('login.pwderror'));
-                        return false;
-                    }
-                    // if(await this.$myIpfs.bal("j4M4AoSi522XxNpywfyBahmjzQihc4EegL") === "success"){
-                    // if(await this.$myIpfs.bal(objKeyStore.wallets[0].address) === "success"){
-                    //      await this.$myIpfs.initll( objKeyStore.wallets[0].address, secret,this.operatorJID,this.operatorSecret);
-                    //      bal=true;
-                    //  }else{
-                    //      bal=false;
-                    //  }
-                    bal=true;
-                    let userkeyObj = {
-                        name:this.ruleForm.name,
-                        secret: secret,
-                        address: objKeyStore.wallets[0].address,
-                        lock:false,//是否锁定
-                        bal:bal,
-                    }
-                    sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(userkeyObj));
-                    //this.$message.success("用户登录成功！");
-                    this.$router.push('/jpass/main');
-                } else {
-                    this.$message.error(this.$t('login.loginerror'));
-                }
-            },
+             
+             toMainPage(){
+                  this.$router.push('/jpass/login');
+             },
             //打开密码生成器
             passwordGenerator() {
                this.dialogPasswordGenerator = true;
@@ -257,3 +218,17 @@
         }
     }
 </script>
+
+   
+<style>
+/* .el-dialog__title {
+    line-height: 24px;
+    font-size: 15px;
+    color: #303133;   
+} */
+
+.el-dialog__header {
+    padding: 40px 40px 0px;
+}  
+
+</style> 
