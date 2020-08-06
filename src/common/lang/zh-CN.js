@@ -78,6 +78,7 @@ export default {
     main: {
         newFolder: "新建文件夹",
         newTemplate: "新建模板",
+        selectColorD:"选择颜色",
         newProject: "新建项目",
         delete: "删除",
         synchronize: "同步",

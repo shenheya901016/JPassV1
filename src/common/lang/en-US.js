@@ -138,6 +138,7 @@ export default {
     main: {
         newFolder: "New folder",
         newTemplate: "New template",
+        selectColorD:"修改颜色",
         newProject: "New project",
         delete: "Delete",
         synchronize: "Synchronize",

@@ -124,20 +124,21 @@
                 </li>
             </ul>
             <h3>{{ $t("main.folder") }}</h3>
-            <ul class="dhwjj" id="DirUL">
-                <li
+            <ul class="wjj"id="DirUL" style="display: flex;flex-direction: column;padding: 0 1.8vw 0 2.5vw;">
+                <li style="height: 35px;line-height: 35px;border-radius: 7px;margin-bottom: 2%"
                         v-for="(project, index) in DDirectory.directory"
                         @click.left="directoryclick(project, $event)"
                         :data-index="index"
                         :class="index == currentDirectory ? click : disclick"
                         @contextmenu.prevent="openMenu_1(project, $event)"
                 >
-            <span :title="project.name"
+             <img style="height: 35px;width: 20px;float: left;text-align: left;margin-left: 2px" :src='`${publicPath}img/directory/${project.imgPath}`'  alt=""/>
+            <span :title="project.name" style="float: left;text-align: left;margin-left:3%;"
             >{{
                 project.name.length > 10
                   ? project.name.substring(0, 10) + "..."
                   : project.name
-              }}<i>{{ project.count }}</i></span
+              }}<i style="float: right;color: #A8B1C6;width: 47px;height: 23px;text-align: center;border-radius: 11.5px;line-height: 23px; margin-top: 7px;position: absolute;right: 2vw;">{{ project.count }}</i></span
             >
                 </li>
             </ul>
@@ -150,6 +151,14 @@
                         alt=""
                 />
                 {{ $t("main.newFolder") }}
+            </li>
+            <li ref="" :class="selectColorClasses" @click="selectColor">
+              <img
+                  src="./img/tsp.png"
+                  style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                  alt=""
+              />
+              {{ $t("main.selectColorD") }}
             </li>
             <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
                 <img src="./img/moban.svg" alt=""/>
@@ -2949,6 +2958,133 @@
                 />
             </div>
         </el-dialog>
+      <!--文件夹颜色选择弹出框-->
+      <el-dialog
+          :title="$t('main.color')"
+          :visible.sync="dialogDirlcolor"
+          width="20%"
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+          :show-close="true"
+      >
+        <div
+            style="width:70%;border: 1px solid #9A9A9A;margin: auto;padding: 2% 1%;"
+        >
+          <img
+              :src='`${publicPath}img/directory/aside_F15723.svg`'
+              style="background:#F15723"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_F15723.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_DC4437.svg`'
+              style="background:#DC4437"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_DC4437.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_F0851D.svg`'
+              style="background:#F0851D"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_F0851D.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_ECA402.svg`'
+              style="background:#ECA402"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_ECA402.svg')"
+          /><br/>
+          <img
+              :src='`${publicPath}img/directory/aside_F0CA39.svg`'
+              style="background:#F0CA39"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_F0CA39.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_C3D140.svg`'
+              style="background:#C3D140"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_C3D140.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_64B044.svg`'
+              style="background:#64B044"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_64B044.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_109D59.svg`'
+              style="background:#109D59"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_109D59.svg')"
+          /><br/>
+          <img
+              :src='`${publicPath}img/directory/aside_11AACC.svg`'
+              style="background:#11AACC"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_11AACC.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_4385F5.svg`'
+              style="background:#4385F5"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_4385F5.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_3F5CA8.svg`'
+              style="background:#3F5CA8"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_3F5CA8.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_9E69AF.svg`'
+              style="background:#9E69AF"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_9E69AF.svg')"
+          /><br/>
+          <img
+              :src='`${publicPath}img/directory/aside_BC5779.svg`'
+              style="background:#BC5779"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_BC5779.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_89695E.svg`'
+              style="background:#89695E"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_89695E.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_999999.svg`'
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_999999.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_333333.svg`'
+              style="background:#333333"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_333333.svg')"
+          />
+        </div>
+      </el-dialog>
+
+
 
     </aside>
     </body>
@@ -3024,6 +3160,7 @@
                 ImageBase64: "",
                 color: "#999999",
                 dialogSymbolcolor: false,//图片库颜色
+                dialogDirlcolor:false,//文件夹图片颜色
                 dialogSymbol: false,//图片库
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
@@ -3101,6 +3238,7 @@
                 emptyTrashClasses: [],//清空垃圾样式表
                 deleteClasses: [],//删除样式表
                 recoverClass: [],//恢复样式表
+                selectColorClasses:[],//选择颜色样式表
                 newProject: {
                     "id": "",
                     "name": "",
@@ -3621,7 +3759,7 @@
            async addDirectory(formName) {
                 let id = this.$Uuidv1();
                 let name = this.ruleForm.pName;
-                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPaht":"","type":"model","isDel":false,}';
+                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,}';
                 this.db.get("models").push(this.$JSON5.parse(newModel)).write();
                 let now= await this.getTime();
                 this.db.set('version',now ).write();
@@ -4898,6 +5036,7 @@
                 this.addTemplateClasses = [];
                 this.emptyTrashClasses = [];
                 this.deleteClasses = [];
+                this.selectColorClasses=[];
                 this.recoverClass = ["unuse"];
                 var menu = document.getElementById("menu_1");
                 var e = e || window.event;
@@ -4909,6 +5048,7 @@
                 this.deleteClasses.push("unuse");
                 this.recoverClass.push("unuse");
                 this.addDirClasses.push("unuse");
+                this.selectColorClasses.push("unuse");
             },
             //菜单变化
             menulistchange(obj) {
@@ -4917,6 +5057,7 @@
                 this.addTemplateClasses = [];
                 this.emptyTrashClasses = [];
                 this.deleteClasses = [];
+                this.selectColorClasses=[];
                 this.recoverClass = ["unuse"];
                 if (obj.modelsType == "directory") {
                     this.emptyTrashClasses.push("unuse");
@@ -4929,6 +5070,7 @@
                     this.addTemplateClasses.push("unuse");
                     this.emptyTrashClasses.push("unuse");
                     this.deleteClasses.push("unuse");
+                    this.selectColorClasses.push("unuse");
                 }
                 if (this.showTrash != true) {
                     this.emptyTrashClasses.push("unuse");
@@ -4939,6 +5081,7 @@
                 }
                 if (obj.type != "model") {
                     this.addDirClasses.push("unuse");
+                    this.selectColorClasses.push("unuse");
                 }
                 if (obj.id == "ljt" && this.showTrash == true) {
                     this.emptyTrashClasses = [];
@@ -5155,6 +5298,34 @@
                 }
 
             },
+          /**
+           * 文件夹颜色选择框
+           * @param pwd
+           * @return {string}
+           */
+          selectColor() {
+            this.dialogDirlcolor = true;
+          },
+
+          /**
+           * 设置文件夹颜色
+           */
+          async setcolorD(value){
+             console.log(value);
+             let type = this.delobj.type;
+             let id = this.delobj.id;
+             let directory = this.db.get("models").find({id: id}).value();
+             directory.imgPath = value;
+             this.db.get("models").remove({id: id}).write();
+             this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
+             console.log(directory);
+             let now= await this.getTime();
+             this.db.set('version',now ).write();
+             this.getdirectory();
+             this.dialogDirlcolor = false;
+
+          }
+
         },
 
         watch: {  //密码生成器自动生成

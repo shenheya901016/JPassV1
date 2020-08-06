@@ -264,17 +264,13 @@
 	line-height: 35px;
 	padding-left: 30px;
 	cursor: pointer;
-	background: url(../img/aside_icon1.svg) no-repeat left center;
 	background-size: 23px 23px;
 	margin-top: 4px;
 	border-radius: 7px;
 	border: 1px solid white;
 }
-.aside .nav ul.dhwjj li span{
-	float: left;
+.aside .nav ul.wjj li span{
 	color: #333;
-    text-align: left;
-    width: 200px;
 }
 .aside .nav ul.dhwjj li i{
     float: right;
@@ -293,26 +289,26 @@
 	background-size: 23px 23px;
 }
 .aside ul.dhwjj li:nth-child(4n+2){
-	background: url(../img/aside_wjj02.svg) no-repeat left 40%;
+	/*background: url(../img/aside_wjj02.svg) no-repeat left 40%;*/
 	background-size: 23px 23px;
 }
 .aside ul.dhwjj li:nth-child(4n+3){
-	background: url(../img/aside_wjj03.svg) no-repeat left 40%;
+	/*background: url(../img/aside_wjj03.svg) no-repeat left 40%;*/
 	background-size: 23px 23px;
 }
 .aside ul.dhwjj li:nth-child(4n){
-	background: url(../img/aside_wjj04.svg) no-repeat left 40%;
+	/*background: url(../img/aside_wjj04.svg) no-repeat left 40%;*/
 	background-size: 23px 23px;
 }
-/* .aside .nav ul.dhwjj li:hover span{
+.aside .nav ul.wjj li:hover span{
 	color: #046BDA;
 	background-color:#DCEDFF;
-} */
-.aside .nav ul.dhwjj li:hover i{
+}
+.aside .nav ul.wjj li:hover i{
 	color: #5F768B;
 	/* background-color: #DCEDFF; */
 }
-.aside .nav ul.dhwjj li:hover{
+.aside .nav ul.wjj li:hover{
 	color: #5F768B;
 	background-color: #DCEDFF;
 	border:1px solid #50A4FF !important;
@@ -658,9 +654,10 @@
 	background:#999999;
 }
 .temlateSymbol{
-	margin: 1% 1%;
+	margin: 2% 2%;
 	width: 40px;
 	background:#999999;
+	border-radius: 50%;
 
 }
 .detail_icon{
