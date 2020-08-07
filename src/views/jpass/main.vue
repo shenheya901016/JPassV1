@@ -128,6 +128,7 @@
                 <li style="height: 35px;line-height: 35px;border-radius: 7px;margin-bottom: 2%"
                         v-for="(project, index) in DDirectory.directory"
                         @click.left="directoryclick(project, $event)"
+                        @dblclick="rename()"
                         :data-index="index"
                         :class="index == currentDirectory ? click : disclick"
                         @contextmenu.prevent="openMenu_1(project, $event)"
@@ -481,6 +482,45 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+      <!--修改文件夹名称-->
+      <el-dialog
+          :title="$t('main.rename')"
+          :visible.sync="dialogVisibleRename"
+          width="30%"
+          :close-on-click-modal="false"
+          :show-close="false"
+      >
+        <el-form
+            :model="ruleFormRename"
+            ref="ruleFormRename"
+            label-width="100px"
+            class="demo-ruleForm"
+            style="width: 80%;"
+            :rules="rules"
+            @submit.native.prevent
+        >
+          <el-form-item :label="$t('main.name')" prop="pName" style="">
+            <el-input v-model.trim="ruleFormRename.pName" style="width:100%;"></el-input>
+          </el-form-item>
+          <el-form-item
+              label=""
+              prop=""
+              style="margin-top:10%;text-align: center"
+          >
+            <el-button
+                type="primary"
+                size="small"
+                @click="submitFormRename('ruleFormRename')"
+            >{{ $t("main.ok") }}
+            </el-button
+            >
+            <el-button size="small" @click="cancelRename('ruleFormRename')">{{
+                $t("main.cancel")
+              }}
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
         <!--删除文件夹弹出框-->
         <el-dialog
                 :title="$t('main.prompt')"
@@ -3159,6 +3199,8 @@
                 showpass: "", //弹出框
                 ImageBase64: "",
                 color: "#999999",
+                ruleFormRename:false,
+                dialogVisibleRename:false,//文件夹重命名
                 dialogSymbolcolor: false,//图片库颜色
                 dialogDirlcolor:false,//文件夹图片颜色
                 dialogSymbol: false,//图片库
@@ -3469,6 +3511,9 @@
                     filedName: ""
                 },
                 ruleFormTemplateEdit: {},
+                ruleFormRename:{
+                  pName:""
+                },
                 rules: {
                     modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
@@ -3755,7 +3800,14 @@
             }, cancel(formName) {
                 this.$refs[formName].resetFields();
                 this.dialogVisible2 = false;
-            }, //增加文件夹
+            },
+
+          cancelRename(formName) {
+            this.$refs[formName].resetFields();
+            this.dialogVisibleRename = false;
+          },
+
+          //增加文件夹
            async addDirectory(formName) {
                 let id = this.$Uuidv1();
                 let name = this.ruleForm.pName;
@@ -5311,20 +5363,49 @@
            * 设置文件夹颜色
            */
           async setcolorD(value){
-             console.log(value);
              let type = this.delobj.type;
              let id = this.delobj.id;
              let directory = this.db.get("models").find({id: id}).value();
              directory.imgPath = value;
              this.db.get("models").remove({id: id}).write();
              this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
-             console.log(directory);
              let now= await this.getTime();
              this.db.set('version',now ).write();
              this.getdirectory();
              this.dialogDirlcolor = false;
-
-          }
+          },
+          /**
+           * 文件夹重命名
+           */
+          rename(){
+            this.dialogVisibleRename = true;
+          },
+          //增加文件夹
+          async renameDo(formName) {
+             let id = this.delobj.id;
+             let directory = this.db.get("models").find({id: id}).value();
+             directory.name =this.ruleFormRename.pName; 
+             this.db.get("models").remove({id: id}).write();
+             this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
+             let now= await this.getTime();
+             this.db.set('version',now).write();
+             this.dialogVisibleRename = false,
+             this.getdirectory();
+             this.$refs[formName].resetFields();
+          },
+          /**
+           * 文件夹重命名
+           * @param formName
+           */
+          submitFormRename(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                this.renameDo(formName);
+              } else {
+                return false;
+              }
+            });
+          },
 
         },
 

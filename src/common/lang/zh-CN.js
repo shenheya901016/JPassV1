@@ -76,6 +76,7 @@ export default {
         cancel: "取消",
     },
     main: {
+        rename:"文件夹重命名",
         newFolder: "新建文件夹",
         newTemplate: "新建模板",
         selectColorD:"选择颜色",

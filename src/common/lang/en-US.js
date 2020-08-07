@@ -136,6 +136,7 @@ export default {
         cancel:"Cancel",
     },
     main: {
+        rename:"Folder rename",
         newFolder: "New folder",
         newTemplate: "New template",
         selectColorD:"修改颜色",
