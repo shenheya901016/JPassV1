@@ -153,6 +153,14 @@
                 />
                 {{ $t("main.newFolder") }}
             </li>
+             <li ref="" :class="renameClasses" @click="rename">
+                <img
+                        src="./img/edit.svg"
+                        style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;"
+                        alt=""
+                />
+                {{ $t("main.rename") }}
+            </li>
             <li ref="" :class="selectColorClasses" @click="selectColor">
               <img
                   src="./img/tsp.png"
@@ -3274,6 +3282,7 @@
                 show: "none",
                 operationType: "",//symbol 新建或修改对象类型
                 //menu 右击菜单
+                renameClasses:[],//rename
                 addDirClasses: [],//新建文件夹样式表
                 addProjectClasses: [],//新建项目样式表
                 addTemplateClasses: [],//新建模板样式表
@@ -3517,12 +3526,13 @@
                 rules: {
                     modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
-                        {
-                            min: 1,
-                            max: 5,
-                            message: this.$t('main.theLengthIsBetween1And10Characters'),
-                            trigger: 'blur'
-                        }],
+                        // {
+                        //     min: 1,
+                        //     max: 5,
+                        //     message: this.$t('main.theLengthIsBetween1And10Characters'),
+                        //     trigger: 'blur'
+                        // }
+                        ],
                     filedName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}],
 
                 },
@@ -5084,6 +5094,7 @@
             //点击空白地区显示菜单
             openMenu_empty(obj) {
                 this.addDirClasses = [];
+                this.renameClasses =[];
                 this.addProjectClasses = [];
                 this.addTemplateClasses = [];
                 this.emptyTrashClasses = [];
@@ -5100,11 +5111,13 @@
                 this.deleteClasses.push("unuse");
                 this.recoverClass.push("unuse");
                 this.addDirClasses.push("unuse");
+                this.renameClasses.push("unuse");
                 this.selectColorClasses.push("unuse");
             },
             //菜单变化
             menulistchange(obj) {
                 this.addDirClasses = [];
+                this.renameClasses = [];
                 this.addProjectClasses = [];
                 this.addTemplateClasses = [];
                 this.emptyTrashClasses = [];
@@ -5123,6 +5136,7 @@
                     this.emptyTrashClasses.push("unuse");
                     this.deleteClasses.push("unuse");
                     this.selectColorClasses.push("unuse");
+                    this.renameClasses.push("unuse")
                 }
                 if (this.showTrash != true) {
                     this.emptyTrashClasses.push("unuse");
@@ -5132,6 +5146,7 @@
                     this.deleteClasses = ["unuse"];
                 }
                 if (obj.type != "model") {
+                    this.renameClasses.push("unuse")
                     this.addDirClasses.push("unuse");
                     this.selectColorClasses.push("unuse");
                 }
