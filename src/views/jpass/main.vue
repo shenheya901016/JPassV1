@@ -3207,7 +3207,6 @@
                 showpass: "", //弹出框
                 ImageBase64: "",
                 color: "#999999",
-                ruleFormRename:false,
                 dialogVisibleRename:false,//文件夹重命名
                 dialogSymbolcolor: false,//图片库颜色
                 dialogDirlcolor:false,//文件夹图片颜色
@@ -3328,7 +3327,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":`${this.publicPath}img/misc/lock.svg`,
+                        "imgurl":`${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
                             "key": "Number",
@@ -3370,7 +3369,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":`${this.publicPath}img/misc/lock.svg`,
+                        "imgurl":`${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
                             "key": "Email",
@@ -3406,7 +3405,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl": `${this.publicPath}img/misc/lock.svg`,
+                        "imgurl": `${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
                             "key": "Website",
@@ -3868,6 +3867,7 @@
                     this.isDisabled = false;
                 }
                 this.projectEvent = project;
+                console.log(project);
             }, remove() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
@@ -4095,6 +4095,7 @@
                         await this.db.defaults(newdata).write();
                         let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
+                        console.log(this.templates);
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
                         await this.db.set('settings', this.settings).write();
