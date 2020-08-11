@@ -76,6 +76,7 @@ export default {
         cancel: "取消",
     },
     main: {
+        toTop:"置顶",
         rename:"文件夹重命名",
         newFolder: "新建文件夹",
         newTemplate: "新建模板",

@@ -169,6 +169,25 @@
               />
               {{ $t("main.selectColorD") }}
             </li>
+             <li  v-if="delobj.modelsType == 'directory'" :class="toTop" @click="toTop">
+              <!-- <img
+                  src="./img/tsp.png"
+                  style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                  alt=""
+              /> -->
+                <img
+                      v-if="delobj.top==true"
+                      style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                      src="./img/bottom.svg"      
+                />
+                <img
+                      v-if="delobj.top==false"
+                      style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                      src="./img/top.svg"
+                />
+              {{ $t("main.toTop") }}
+            </li>
+
             <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
                 <img src="./img/moban.svg" alt=""/>
                 {{ $t("main.newTemplate") }}
@@ -3153,6 +3172,9 @@
     }
     export default {
         mounted: function () {
+              window['lock'] = () => {
+                    this.lock();
+            },
             //网络检查
             window.addEventListener('online',  this.online);
             window.addEventListener('offline', this.outline);
@@ -3207,6 +3229,7 @@
                 showpass: "", //弹出框
                 ImageBase64: "",
                 color: "#999999",
+                ruleFormRename:false,
                 dialogVisibleRename:false,//文件夹重命名
                 dialogSymbolcolor: false,//图片库颜色
                 dialogDirlcolor:false,//文件夹图片颜色
@@ -3793,6 +3816,8 @@
                     }
                 }
                 this.projects = projectArray;
+                 //更新排序
+                 this.sort();
             },
             addDirectoryOP() {
                 this.dialogVisible2 = true;
@@ -3820,7 +3845,7 @@
            async addDirectory(formName) {
                 let id = this.$Uuidv1();
                 let name = this.ruleForm.pName;
-                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,}';
+                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,"top":false,"index":""}';
                 this.db.get("models").push(this.$JSON5.parse(newModel)).write();
                 let now= await this.getTime();
                 this.db.set('version',now ).write();
@@ -3867,7 +3892,6 @@
                     this.isDisabled = false;
                 }
                 this.projectEvent = project;
-                console.log(project);
             }, remove() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
@@ -4068,6 +4092,7 @@
                         }
                     }
                 }
+                projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
                 this.projects = projectArray;
             },
             //启动加载
@@ -4091,11 +4116,10 @@
                         let profiles = {
                             name: loginObj.name, address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
+                        var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},]}');
                         await this.db.defaults(newdata).write();
                         let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
-                        console.log(this.templates);
                         this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
                         await this.db.set("templates", this.operateTemplates.templates).write();
                         await this.db.set('settings', this.settings).write();
@@ -5394,13 +5418,16 @@
            * 文件夹重命名
            */
           rename(){
+            this.ruleFormRename.pName=this.delobj.name;
             this.dialogVisibleRename = true;
+            
           },
           //增加文件夹
           async renameDo(formName) {
              let id = this.delobj.id;
              let directory = this.db.get("models").find({id: id}).value();
              directory.name =this.ruleFormRename.pName; 
+             directory
              this.db.get("models").remove({id: id}).write();
              this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
              let now= await this.getTime();
@@ -5422,6 +5449,70 @@
               }
             });
           },
+
+         async toTop(){
+               let id = this.delobj.id;
+               let topDirectory = this.db.get("models").find({id: id}).value();
+               let directorylist =this.DDirectory.directory;
+               if (topDirectory.modelsType == "directory") {
+                      for(let index in directorylist){
+                             if(directorylist[index].id==topDirectory.id){
+                                 if(directorylist[index].top!=true){
+                                     //增加置顶
+                                     directorylist[index].top=true;
+                                     directorylist[index].index=0;    
+                                     this.db.get("models").remove({id: id}).write();
+                                     this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directorylist[index]))).write();
+                                     let now= await this.getTime();
+                                     this.db.set('version',now).write();
+                                 }else{
+                                     //取消置顶
+                                     directorylist[index].top=false;
+                                     directorylist[index].index="";
+                                     this.db.get("models").remove({id: id}).write();
+                                     this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directorylist[index]))).write();
+                                     let now= await this.getTime();
+                                     this.db.set('version',now).write();
+                                 }
+                             }else if(directorylist[index].top!=false){
+                                directorylist[index].index = directorylist[index].index+1;
+                                this.db.get("models").remove({id:directorylist[index].id}).write();
+                                this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directorylist[index]))).write();
+                                let now= await this.getTime();
+                                this.db.set('version',now).write();
+                             }
+                      }      
+                }  
+                this.getdirectory();
+          },
+        //排序
+          sort(){
+            //   var regExpAZ  = new RegExp("[A-Za-z]+");
+            //   var regExpZH = new RegExp("[\u4E00-\u9FA5]+");
+            //   var regExp09 = new RegExp("[0-9]+");
+             //文件夹排序
+              let data =this.DDirectory.directory;
+              let topArray =[];
+              let indexArray =[];
+              for(let index in data){
+                  if(data[index].top!=false){
+                      topArray.push(data[index]);
+                  }else{
+                      indexArray.push(data[index])
+                  } 
+              }
+              topArray.sort((a, b) => a.index - b.index); //a~z 排序    
+              indexArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序    
+              topArray.push(...indexArray); //a.push(...b);
+              this.DDirectory.directory=topArray;
+
+
+              //项目排序
+              let project =this.projects;
+              console.log(project);
+              project.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
+              this.projects=project;
+          }
 
         },
 

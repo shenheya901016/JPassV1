@@ -136,6 +136,7 @@ export default {
         cancel:"Cancel",
     },
     main: {
+        toTop:"Pin to top",
         rename:"Folder rename",
         newFolder: "New folder",
         newTemplate: "New template",
