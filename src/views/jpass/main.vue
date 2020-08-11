@@ -461,7 +461,8 @@
         >
             <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;" @submit.native.prevent >
                 <el-form-item :label="$t('main.loginPassword')" prop="password">
-                    <el-input type="password" v-model="password"  style="width:90%;"  @keyup.enter.native="unlock()"></el-input>
+                    <input type="password" v-model="password"  style="width:85%;border-radius:4px;border: 1px solid #C0C4CC;height: 4vh;"  @keyup.enter.native="unlock()"/>
+                    <a href="#" @click="changePass($event)" style="margin-left:2%"><i class="el-icon-view"></i></a>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-bottom: 7%;margin-top: 10%">
                     <el-button type="primary" size="small" @click="unlock()">
@@ -3600,6 +3601,7 @@
             },
             //密码显示控制
             changePass(e) {
+                console.log(1111);
                 if (e.currentTarget.previousElementSibling.getAttribute('type') == "password") {
                     e.currentTarget.previousElementSibling.setAttribute("type", "text");
                 } else {
