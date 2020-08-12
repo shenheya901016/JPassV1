@@ -124,20 +124,22 @@
                 </li>
             </ul>
             <h3>{{ $t("main.folder") }}</h3>
-            <ul class="dhwjj" id="DirUL">
-                <li
+            <ul class="wjj"id="DirUL" style="display: flex;flex-direction: column;padding: 0 1.8vw 0 2.5vw;">
+                <li style="height: 35px;line-height: 35px;border-radius: 7px;margin-bottom: 2%"
                         v-for="(project, index) in DDirectory.directory"
                         @click.left="directoryclick(project, $event)"
+                        @dblclick="rename()"
                         :data-index="index"
                         :class="index == currentDirectory ? click : disclick"
                         @contextmenu.prevent="openMenu_1(project, $event)"
                 >
-            <span :title="project.name"
+             <img style="height: 35px;width: 20px;float: left;text-align: left;margin-left: 2px" :src='`${publicPath}img/directory/${project.imgPath}`'  alt=""/>
+            <span :title="project.name" style="float: left;text-align: left;margin-left:3%;"
             >{{
                 project.name.length > 10
                   ? project.name.substring(0, 10) + "..."
                   : project.name
-              }}<i>{{ project.count }}</i></span
+              }}<i style="float: right;color: #A8B1C6;width: 47px;height: 23px;text-align: center;border-radius: 11.5px;line-height: 23px; margin-top: 7px;position: absolute;right: 2vw;">{{ project.count }}</i></span
             >
                 </li>
             </ul>
@@ -151,6 +153,41 @@
                 />
                 {{ $t("main.newFolder") }}
             </li>
+             <li ref="" :class="renameClasses" @click="rename">
+                <img
+                        src="./img/edit.svg"
+                        style="width: 2vw;    margin-left: 0.5vw;margin-right: 0.1vw;"
+                        alt=""
+                />
+                {{ $t("main.rename") }}
+            </li>
+            <li ref="" :class="selectColorClasses" @click="selectColor">
+              <img
+                  src="./img/tsp.png"
+                  style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                  alt=""
+              />
+              {{ $t("main.selectColorD") }}
+            </li>
+             <li  v-if="delobj.modelsType == 'directory'" :class="toTop" @click="toTop">
+              <!-- <img
+                  src="./img/tsp.png"
+                  style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                  alt=""
+              /> -->
+                <img
+                      v-if="delobj.top==true"
+                      style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                      src="./img/bottom.svg"      
+                />
+                <img
+                      v-if="delobj.top==false"
+                      style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                      src="./img/top.svg"
+                />
+              {{ $t("main.toTop") }}
+            </li>
+
             <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
                 <img src="./img/moban.svg" alt=""/>
                 {{ $t("main.newTemplate") }}
@@ -424,7 +461,8 @@
         >
             <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;" @submit.native.prevent >
                 <el-form-item :label="$t('main.loginPassword')" prop="password">
-                    <el-input type="password" v-model="password"  style="width:90%;"  @keyup.enter.native="unlock()"></el-input>
+                    <input type="password" v-model="password"  style="width:85%;border-radius:4px;border: 1px solid #C0C4CC;height: 4vh;"  @keyup.enter.native="unlock()"/>
+                    <a href="#" @click="changePass($event)" style="margin-left:2%"><i class="el-icon-view"></i></a>
                 </el-form-item>
                 <el-form-item label="" prop="" style="margin-bottom: 7%;margin-top: 10%">
                     <el-button type="primary" size="small" @click="unlock()">
@@ -472,6 +510,45 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+      <!--修改文件夹名称-->
+      <el-dialog
+          :title="$t('main.rename')"
+          :visible.sync="dialogVisibleRename"
+          width="30%"
+          :close-on-click-modal="false"
+          :show-close="false"
+      >
+        <el-form
+            :model="ruleFormRename"
+            ref="ruleFormRename"
+            label-width="100px"
+            class="demo-ruleForm"
+            style="width: 80%;"
+            :rules="rules"
+            @submit.native.prevent
+        >
+          <el-form-item :label="$t('main.name')" prop="pName" style="">
+            <el-input v-model.trim="ruleFormRename.pName" style="width:100%;"></el-input>
+          </el-form-item>
+          <el-form-item
+              label=""
+              prop=""
+              style="margin-top:10%;text-align: center"
+          >
+            <el-button
+                type="primary"
+                size="small"
+                @click="submitFormRename('ruleFormRename')"
+            >{{ $t("main.ok") }}
+            </el-button
+            >
+            <el-button size="small" @click="cancelRename('ruleFormRename')">{{
+                $t("main.cancel")
+              }}
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
         <!--删除文件夹弹出框-->
         <el-dialog
                 :title="$t('main.prompt')"
@@ -2949,6 +3026,133 @@
                 />
             </div>
         </el-dialog>
+      <!--文件夹颜色选择弹出框-->
+      <el-dialog
+          :title="$t('main.color')"
+          :visible.sync="dialogDirlcolor"
+          width="20%"
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+          :show-close="true"
+      >
+        <div
+            style="width:70%;border: 1px solid #9A9A9A;margin: auto;padding: 2% 1%;"
+        >
+          <img
+              :src='`${publicPath}img/directory/aside_F15723.svg`'
+              style="background:#F15723"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_F15723.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_DC4437.svg`'
+              style="background:#DC4437"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_DC4437.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_F0851D.svg`'
+              style="background:#F0851D"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_F0851D.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_ECA402.svg`'
+              style="background:#ECA402"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_ECA402.svg')"
+          /><br/>
+          <img
+              :src='`${publicPath}img/directory/aside_F0CA39.svg`'
+              style="background:#F0CA39"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_F0CA39.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_C3D140.svg`'
+              style="background:#C3D140"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_C3D140.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_64B044.svg`'
+              style="background:#64B044"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_64B044.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_109D59.svg`'
+              style="background:#109D59"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_109D59.svg')"
+          /><br/>
+          <img
+              :src='`${publicPath}img/directory/aside_11AACC.svg`'
+              style="background:#11AACC"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_11AACC.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_4385F5.svg`'
+              style="background:#4385F5"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_4385F5.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_3F5CA8.svg`'
+              style="background:#3F5CA8"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_3F5CA8.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_9E69AF.svg`'
+              style="background:#9E69AF"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_9E69AF.svg')"
+          /><br/>
+          <img
+              :src='`${publicPath}img/directory/aside_BC5779.svg`'
+              style="background:#BC5779"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_BC5779.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_89695E.svg`'
+              style="background:#89695E"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_89695E.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_999999.svg`'
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_999999.svg')"
+          />
+          <img
+              :src='`${publicPath}img/directory/aside_333333.svg`'
+              style="background:#333333"
+              alt=""
+              class="temlateSymbol"
+              @click="setcolorD('aside_333333.svg')"
+          />
+        </div>
+      </el-dialog>
+
+
 
     </aside>
     </body>
@@ -2969,6 +3173,9 @@
     }
     export default {
         mounted: function () {
+              window['lock'] = () => {
+                    this.lock();
+            },
             //网络检查
             window.addEventListener('online',  this.online);
             window.addEventListener('offline', this.outline);
@@ -3023,7 +3230,10 @@
                 showpass: "", //弹出框
                 ImageBase64: "",
                 color: "#999999",
+                ruleFormRename:false,
+                dialogVisibleRename:false,//文件夹重命名
                 dialogSymbolcolor: false,//图片库颜色
+                dialogDirlcolor:false,//文件夹图片颜色
                 dialogSymbol: false,//图片库
                 dialogVisible: false,//密码锁定弹出框
                 dialogVisible2: false,//增加文件夹弹出框
@@ -3095,12 +3305,14 @@
                 show: "none",
                 operationType: "",//symbol 新建或修改对象类型
                 //menu 右击菜单
+                renameClasses:[],//rename
                 addDirClasses: [],//新建文件夹样式表
                 addProjectClasses: [],//新建项目样式表
                 addTemplateClasses: [],//新建模板样式表
                 emptyTrashClasses: [],//清空垃圾样式表
                 deleteClasses: [],//删除样式表
                 recoverClass: [],//恢复样式表
+                selectColorClasses:[],//选择颜色样式表
                 newProject: {
                     "id": "",
                     "name": "",
@@ -3139,7 +3351,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":`${this.publicPath}img/misc/lock.svg`,
+                        "imgurl":`${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
                             "key": "Number",
@@ -3181,7 +3393,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl":`${this.publicPath}img/misc/lock.svg`,
+                        "imgurl":`${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
                             "key": "Email",
@@ -3217,7 +3429,7 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
-                        "imgurl": `${this.publicPath}img/misc/lock.svg`,
+                        "imgurl": `${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
                             "key": "Website",
@@ -3331,15 +3543,19 @@
                     filedName: ""
                 },
                 ruleFormTemplateEdit: {},
+                ruleFormRename:{
+                  pName:""
+                },
                 rules: {
                     modelsType: [{required: true, message: this.$t('main.pleaseChooseTheType'), trigger: 'blur'}],
                     pName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'},
-                        {
-                            min: 1,
-                            max: 5,
-                            message: this.$t('main.theLengthIsBetween1And10Characters'),
-                            trigger: 'blur'
-                        }],
+                        // {
+                        //     min: 1,
+                        //     max: 5,
+                        //     message: this.$t('main.theLengthIsBetween1And10Characters'),
+                        //     trigger: 'blur'
+                        // }
+                        ],
                     filedName: [{required: true, message: this.$t('main.pleaseEnterAName'), trigger: 'blur'}],
 
                 },
@@ -3385,6 +3601,7 @@
             },
             //密码显示控制
             changePass(e) {
+                console.log(1111);
                 if (e.currentTarget.previousElementSibling.getAttribute('type') == "password") {
                     e.currentTarget.previousElementSibling.setAttribute("type", "text");
                 } else {
@@ -3601,6 +3818,8 @@
                     }
                 }
                 this.projects = projectArray;
+                 //更新排序
+                 this.sort();
             },
             addDirectoryOP() {
                 this.dialogVisible2 = true;
@@ -3617,11 +3836,18 @@
             }, cancel(formName) {
                 this.$refs[formName].resetFields();
                 this.dialogVisible2 = false;
-            }, //增加文件夹
+            },
+
+          cancelRename(formName) {
+            this.$refs[formName].resetFields();
+            this.dialogVisibleRename = false;
+          },
+
+          //增加文件夹
            async addDirectory(formName) {
                 let id = this.$Uuidv1();
                 let name = this.ruleForm.pName;
-                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPaht":"","type":"model","isDel":false,}';
+                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,"top":false,"index":""}';
                 this.db.get("models").push(this.$JSON5.parse(newModel)).write();
                 let now= await this.getTime();
                 this.db.set('version',now ).write();
@@ -3868,6 +4094,7 @@
                         }
                     }
                 }
+                projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
                 this.projects = projectArray;
             },
             //启动加载
@@ -3891,7 +4118,7 @@
                         let profiles = {
                             name: loginObj.name, address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"}, {"id":"06","name":"测试","modelsType":"directory","type":"model"}, ]}');
+                        var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},]}');
                         await this.db.defaults(newdata).write();
                         let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
@@ -4894,10 +5121,12 @@
             //点击空白地区显示菜单
             openMenu_empty(obj) {
                 this.addDirClasses = [];
+                this.renameClasses =[];
                 this.addProjectClasses = [];
                 this.addTemplateClasses = [];
                 this.emptyTrashClasses = [];
                 this.deleteClasses = [];
+                this.selectColorClasses=[];
                 this.recoverClass = ["unuse"];
                 var menu = document.getElementById("menu_1");
                 var e = e || window.event;
@@ -4909,14 +5138,18 @@
                 this.deleteClasses.push("unuse");
                 this.recoverClass.push("unuse");
                 this.addDirClasses.push("unuse");
+                this.renameClasses.push("unuse");
+                this.selectColorClasses.push("unuse");
             },
             //菜单变化
             menulistchange(obj) {
                 this.addDirClasses = [];
+                this.renameClasses = [];
                 this.addProjectClasses = [];
                 this.addTemplateClasses = [];
                 this.emptyTrashClasses = [];
                 this.deleteClasses = [];
+                this.selectColorClasses=[];
                 this.recoverClass = ["unuse"];
                 if (obj.modelsType == "directory") {
                     this.emptyTrashClasses.push("unuse");
@@ -4929,6 +5162,8 @@
                     this.addTemplateClasses.push("unuse");
                     this.emptyTrashClasses.push("unuse");
                     this.deleteClasses.push("unuse");
+                    this.selectColorClasses.push("unuse");
+                    this.renameClasses.push("unuse")
                 }
                 if (this.showTrash != true) {
                     this.emptyTrashClasses.push("unuse");
@@ -4938,7 +5173,9 @@
                     this.deleteClasses = ["unuse"];
                 }
                 if (obj.type != "model") {
+                    this.renameClasses.push("unuse")
                     this.addDirClasses.push("unuse");
+                    this.selectColorClasses.push("unuse");
                 }
                 if (obj.id == "ljt" && this.showTrash == true) {
                     this.emptyTrashClasses = [];
@@ -5155,6 +5392,130 @@
                 }
 
             },
+          /**
+           * 文件夹颜色选择框
+           * @param pwd
+           * @return {string}
+           */
+          selectColor() {
+            this.dialogDirlcolor = true;
+          },
+
+          /**
+           * 设置文件夹颜色
+           */
+          async setcolorD(value){
+             let type = this.delobj.type;
+             let id = this.delobj.id;
+             let directory = this.db.get("models").find({id: id}).value();
+             directory.imgPath = value;
+             this.db.get("models").remove({id: id}).write();
+             this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
+             let now= await this.getTime();
+             this.db.set('version',now ).write();
+             this.getdirectory();
+             this.dialogDirlcolor = false;
+          },
+          /**
+           * 文件夹重命名
+           */
+          rename(){
+            this.ruleFormRename.pName=this.delobj.name;
+            this.dialogVisibleRename = true;
+            
+          },
+          //增加文件夹
+          async renameDo(formName) {
+             let id = this.delobj.id;
+             let directory = this.db.get("models").find({id: id}).value();
+             directory.name =this.ruleFormRename.pName; 
+             directory
+             this.db.get("models").remove({id: id}).write();
+             this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
+             let now= await this.getTime();
+             this.db.set('version',now).write();
+             this.dialogVisibleRename = false,
+             this.getdirectory();
+             this.$refs[formName].resetFields();
+          },
+          /**
+           * 文件夹重命名
+           * @param formName
+           */
+          submitFormRename(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                this.renameDo(formName);
+              } else {
+                return false;
+              }
+            });
+          },
+
+         async toTop(){
+               let id = this.delobj.id;
+               let topDirectory = this.db.get("models").find({id: id}).value();
+               let directorylist =this.DDirectory.directory;
+               if (topDirectory.modelsType == "directory") {
+                      for(let index in directorylist){
+                             if(directorylist[index].id==topDirectory.id){
+                                 if(directorylist[index].top!=true){
+                                     //增加置顶
+                                     directorylist[index].top=true;
+                                     directorylist[index].index=0;    
+                                     this.db.get("models").remove({id: id}).write();
+                                     this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directorylist[index]))).write();
+                                     let now= await this.getTime();
+                                     this.db.set('version',now).write();
+                                 }else{
+                                     //取消置顶
+                                     directorylist[index].top=false;
+                                     directorylist[index].index="";
+                                     this.db.get("models").remove({id: id}).write();
+                                     this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directorylist[index]))).write();
+                                     let now= await this.getTime();
+                                     this.db.set('version',now).write();
+                                 }
+                             }else if(directorylist[index].top!=false){
+                                directorylist[index].index = directorylist[index].index+1;
+                                this.db.get("models").remove({id:directorylist[index].id}).write();
+                                this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directorylist[index]))).write();
+                                let now= await this.getTime();
+                                this.db.set('version',now).write();
+                             }
+                      }      
+                }  
+                this.getdirectory();
+          },
+        //排序
+          sort(){
+            //   var regExpAZ  = new RegExp("[A-Za-z]+");
+            //   var regExpZH = new RegExp("[\u4E00-\u9FA5]+");
+            //   var regExp09 = new RegExp("[0-9]+");
+             //文件夹排序
+              let data =this.DDirectory.directory;
+              let topArray =[];
+              let indexArray =[];
+              for(let index in data){
+                  if(data[index].top!=false){
+                      topArray.push(data[index]);
+                  }else{
+                      indexArray.push(data[index])
+                  } 
+              }
+              topArray.sort((a, b) => a.index - b.index); //a~z 排序    
+              indexArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序    
+              topArray.push(...indexArray); //a.push(...b);
+              this.DDirectory.directory=topArray;
+
+
+              //项目排序
+              let project =this.projects;
+              console.log(project);
+              project.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
+              this.projects=project;
+          }
+
         },
 
         watch: {  //密码生成器自动生成
