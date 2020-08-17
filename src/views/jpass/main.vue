@@ -73,14 +73,6 @@
                     $t("main.synchronize")
                     }}
                 </el-button>
-                <el-progress
-                        :percentage="percentage"
-                        :stroke-width="4"
-                        :color="customColor"
-                        :status="synStatus"
-                        :show-text="true"
-                        v-show="processShow"
-                ></el-progress>
             </li>
             <li>
                 <el-button style="border:0;padding: 5px 5px;" @click="lock()"
@@ -360,7 +352,7 @@
                                     :stroke-width="15"
                                     :percentage="data.percentage"
                                     :show-text="false"
-                                    :status="data.pwdstatus"
+                                    :color="data.pwdstatus"
                             ></el-progress>
                         </div>
                         <span style="margin-left: 5%;">{{data.format}}</span>
@@ -384,7 +376,7 @@
                                     id="process"
                                     :stroke-width="15"
                                     :percentage="data.percentage"
-                                    :status="data.pwdstatus"
+                                    :color="data.pwdstatus"
                                     :show-text="false"
                             ></el-progress>
                         </div>
@@ -583,7 +575,7 @@
       </el-dialog>
         <!--删除文件夹弹出框-->
         <el-dialog
-                :title="$t('main.prompt')"
+                :title="$t('main.delete')"
                 :visible.sync="dialogVisibledDirectory"
                 width="30%"
         >
@@ -615,7 +607,7 @@
         </el-dialog>
         <!--删除项目弹出框-->
         <el-dialog
-                :title="$t('main.prompt')"
+                :title="$t('main.delete')"
                 :visible.sync="dialogVisibledProject"
                 width="30%"
         >
@@ -647,7 +639,7 @@
         </el-dialog>
         <!--删除模板弹框-->
         <el-dialog
-                :title="$t('main.prompt')"
+                :title="$t('main.delete')"
                 :visible.sync="dialogVisibledTemplate"
                 width="30%"
         >
@@ -813,7 +805,7 @@
                                                 :show-text="false"
                                                 :stroke-width="5"
                                                 :percentage="data.percentage"
-                                                :status="data.pwdstatus"
+                                                :color="data.pwdstatus"
                                         ></el-progress>
                                         <span class="format">{{data.format}}</span>
                                     </div>
@@ -848,7 +840,7 @@
                                                 :show-text="false"
                                                 :stroke-width="5"
                                                 :percentage="data.percentage"
-                                                :status="data.pwdstatus"
+                                                :color="data.pwdstatus"
                                         ></el-progress>
                                         <span class="format">{{data.format}}</span>
                                     </div>
@@ -1082,7 +1074,7 @@
                                                 id="process"
                                                 :stroke-width="5"
                                                 :percentage="data.percentage"
-                                                :status="data.pwdstatus"
+                                                :color="data.pwdstatus"
                                                 :show-text="false"
                                         ></el-progress>
                                         <span class="format">{{data.format}}</span>
@@ -1117,7 +1109,7 @@
                                                 id="process"
                                                 :stroke-width="5"
                                                 :percentage="data.percentage"
-                                                :status="data.pwdstatus"
+                                                :color="data.pwdstatus"
                                                 :show-text="false"
                                         ></el-progress>
                                         <span class="format">{{data.format}}</span>
@@ -1345,7 +1337,7 @@
                                                 :show-text="false"
                                                 :stroke-width="5"
                                                 :percentage="data.percentage"
-                                                :status="data.pwdstatus"
+                                                :color="data.pwdstatus"
                                         ></el-progress>
                                         <span class="format">{{data.format}}</span>
                                     </div>
@@ -1577,7 +1569,7 @@
                                                 :show-text="false"
                                                 :stroke-width="5"
                                                 :percentage="data.percentage"
-                                                :status="data.pwdstatus"
+                                                :color="data.pwdstatus"
                                         ></el-progress>
                                         <span class="format">{{data.format}}</span>
                                     </div>
@@ -3555,7 +3547,7 @@
                 dialogVisibleAddNote:false,//增加笔记
                 network:true,
                 publicPath: process.env.BASE_URL,
-                status:"",
+                status:"#E5E9F2",
                 vip: "",
                 templatedisable: true,
                 dialogPayGenerator: false,//支付页面弹出框
@@ -3616,7 +3608,6 @@
                 disclick: 'disclick',
                 delobj: '',
                 isDisabled: true,
-                customColor: "",
                 percentage: 0,
                 percentageTemplate: 0,
                 tempPercentage: 0,
@@ -5778,37 +5769,39 @@
                 let level=this.cryptLevel(pwd);
                 if (level.indexOf(this.$t('main.century')) !== -1) {
                     this.percentage = 100;
-                    this.status="success"
+                    this.status="#13CE66"
                 } else if (level.indexOf(this.$t('main.years')) !== -1) {
                     this.percentage = 80;
-                    this.status="success"
+                    this.status="#20A0FF"
                 } else if (level.indexOf(this.$t('main.month')) !== -1) {
-                    this.status="success"
+                    this.status="#20A0FF"
                     this.percentage = 60;
                 } else if (level.indexOf(this.$t('main.weeks')) !== -1) {
                     this.percentage = 40;
-                    this.status="warning"
+                    this.status="#E6A23C"
                 } else if (level.indexOf(this.$t('main.day')) !== -1 ) {
                     this.percentage = 35;
-                    this.status="exception"
+                    this.status="#FF4949"
                 }
                 else if (level.indexOf(this.$t('main.hours')) !== -1) {
                     this.percentage = 30;
-                    this.status="exception"
+                    this.status="#FF4949"
                 }
                 else if (level.indexOf(this.$t('main.mintues')) !== -1) {
                     this.percentage = 15;
-                    this.status="exception"
+                    this.status="#FF4949"
                 }
                 else if (level.indexOf(this.$t('main.seconds') ) !== -1) {
                     this.percentage = 10;
-                    this.status="exception"
+                    this.status="#FF4949"
                 }else if(level.indexOf(this.$t('main.moment')) !== -1){
                     this.percentage =5;
-                    this.status="exception"
+                    this.status="#FF4949"
                 }else {
                     this.percentage =0;
                     this.level="";
+                     this.status="#E5E9F2"
+                    
                 }
 
             },
