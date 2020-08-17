@@ -14,13 +14,22 @@
                     {{ $t("main.newFolder") }}
                 </el-button>
             </li>
-            <li>
+            <!-- <li>
                 <el-button @click="addTemplate" style="border:0;padding: 5px 5px;"
                 ><img
                         style="top:-2px;height: 20px;width: 20px;"
                         src="./img/moban.svg"
                         alt=""
                 />{{ $t("main.newTemplate") }}
+                </el-button>
+            </li> -->
+            <li>
+                <el-button @click="addNote" style="border:0;padding: 5px 5px;"
+                ><img
+                        style="top:-2px;height: 20px;width: 20px;"
+                        src="./img/moban.svg"
+                        alt=""
+                />{{ $t("main.newNote") }}
                 </el-button>
             </li>
             <li>
@@ -117,6 +126,7 @@
                         :data-index="index"
                         :class="index == currentProject ? click : disclick"
                         @contextmenu.prevent="openMenu_1(project, $event)"
+                        :key="index"
                 >
             <span
             >{{ project.name }} <i>{{ project.count }}</i></span
@@ -132,6 +142,7 @@
                         :data-index="index"
                         :class="index == currentDirectory ? click : disclick"
                         @contextmenu.prevent="openMenu_1(project, $event)"
+                        :key="index"
                 >
              <img style="height: 35px;width: 20px;float: left;text-align: left;margin-left: 2px" :src='`${publicPath}img/directory/${project.imgPath}`'  alt=""/>
             <span :title="project.name" style="float: left;text-align: left;margin-left:3%;"
@@ -230,6 +241,7 @@
                         :class="index == currentNote ? click : disclick"
                         style="margin-top: 5px;"
                         @contextmenu.prevent="openMenu_1(project, $event)"
+                        :key="index"
                 >
             <span>
               <img
@@ -332,6 +344,7 @@
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             style="margin-bottom:3px;"
+                            :key="index"
                     >
                         <input
                                 type="password"
@@ -359,6 +372,7 @@
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             style="margin-bottom:3px;"
+                            :key="data.tempkey"
                     >
                         <input type="text" v-model="data.val" readonly style=""/><a
                             href="#"
@@ -381,6 +395,7 @@
                             v-else-if="data.type === 'text'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
+                            :key="data.tempkey"
                             style="margin-bottom:3px;"
                     >
                         <input type="text" v-model="data.val" readonly/>
@@ -390,6 +405,7 @@
                             v-else-if="data.type === 'webside'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
+                            :key="data.tempkey"
                             style="margin-bottom:3px;"
                     >
                         <input type="text" v-model="data.val" readonly/>
@@ -399,6 +415,7 @@
                             v-else-if="data.type === 'login'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
+                            :key="data.tempkey"
                             style="margin-bottom:3px;"
                     >
                         <input type="text" v-model="data.val" readonly/>
@@ -408,11 +425,26 @@
                             v-else-if="data.type === 'date'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
+                            :key="data.tempkey"
                             style="margin-bottom:3px;"
                     >
                         <input type="text" v-model="data.val" readonly/>
                         <hr/>
                     </el-form-item>
+                </template>
+            
+               
+                <template v-for="(data, index) in this.projectEvent.note">
+                     <el-form-item 
+                             v-if="data!=''"
+                            :label="data.tempkey"
+                            :prop="data.tempkey"
+                            :key="data.tempkey"
+                            style="margin-bottom:3px;">
+                       <div id="textarea" ref="textarea" v-html="data.notes.replace(/\n|\r\n/g,'<br />')"  style="border:0;white-space: pre-wrap;" readonly ></div>
+ 
+                          <hr/>
+                     </el-form-item> 
                 </template>
                 <el-button
                         v-if="this.projectEvent != '' && this.projectEvent.isDel != true"
@@ -645,6 +677,7 @@
                         v-for="(project, index) in this.operateTemplates"
                         @click="projectlick(project, $event)"
                         :data-index="index"
+                        :key="index"
                         :class="index == currentTemplate ? click : disclick"
                         style="height:5vh;border: 0;text-align: left;margin-top: 2px"
                 >
@@ -762,6 +795,7 @@
                                         v-if="data.type === 'password' && !showPassword"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="index"
                                         style="width:90%;margin-bottom:0;"
                                 >
                                     <input
@@ -789,6 +823,7 @@
                                         v-else-if="data.type === 'password' && showPassword"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="index"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <input
@@ -823,6 +858,7 @@
                                         v-else-if="data.type === 'text'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="index"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <input type="text" v-model="data.val" class="myInput"/>
@@ -837,6 +873,7 @@
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="index"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <input type="text" v-model="data.val" class="myInput"/>
@@ -851,6 +888,7 @@
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                         :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <input type="text" v-model="data.val" class="myInput"/>
@@ -865,6 +903,7 @@
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <el-date-picker v-model="data.val" value-format="yyyy-MM-dd" class="input-class"
@@ -907,9 +946,9 @@
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item
-                                                v-for="(item, index) in this.templateItemsTemp
-                          .templateItems"
+                                                v-for="(item, index) in this.templateItemsTemp.templateItems"
                                                 :command="item"
+                                                :key="index"
                                         >{{ item.key }}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
@@ -1019,6 +1058,7 @@
                                         v-if="data.type === 'password' && !showPassword"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="index"
                                         style="width: 90%;margin-bottom: 0"
                                 >
                                     <input
@@ -1053,6 +1093,7 @@
                                         v-if="data.type === 'password' && showPassword"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input
@@ -1086,6 +1127,7 @@
                                         v-else-if="data.type === 'text'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input type="text" v-model="data.val" class="myInput"/>
@@ -1100,6 +1142,7 @@
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input type="text" v-model="data.val" class="myInput"/>
@@ -1114,6 +1157,7 @@
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input type="text" v-model="data.val" class="myInput"/>
@@ -1128,6 +1172,7 @@
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <el-date-picker v-model="data.val" value-format="yyyy-MM-dd" class="input-class"
@@ -1170,9 +1215,9 @@
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item
-                                                v-for="(item, index) in this.templateItemsTemp
-                          .templateItems"
+                                                v-for="(item, index) in this.templateItemsTemp.templateItems"
                                                 :command="item"
+                                                :key="index"
                                         >{{ item.key }}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
@@ -1281,6 +1326,7 @@
                                         v-if="data.type === 'password'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="index"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input
@@ -1308,6 +1354,7 @@
                                         v-else-if="data.type === 'text'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom: 0"
                                 >
                                     <input
@@ -1327,6 +1374,7 @@
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom: 0"
                                 >
                                     <input
@@ -1346,6 +1394,7 @@
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom: 0"
                                 >
                                     <input
@@ -1365,6 +1414,7 @@
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <el-date-picker v-model="data.val" class="input-class-template" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
@@ -1405,9 +1455,9 @@
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item
-                                                v-for="(item, index) in this.templateItems
-                          .templateItems"
+                                                v-for="(item, index) in this.templateItems.templateItems"
                                                 :command="item"
+                                                :key="index"
                                         >
                                             {{ item.key }}
                                         </el-dropdown-item>
@@ -1509,6 +1559,7 @@
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         style="width: 90%;margin-bottom: 0"
+                                        :key="index"
                                 >
                                     <input
                                             type="password"
@@ -1535,6 +1586,7 @@
                                         v-else-if="data.type === 'text'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input
@@ -1554,6 +1606,7 @@
                                         v-else-if="data.type === 'webside'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input
@@ -1573,6 +1626,7 @@
                                         v-else-if="data.type === 'login'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0"
                                 >
                                     <input
@@ -1592,6 +1646,7 @@
                                         v-else-if="data.type === 'date'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
+                                        :key="data.tempkey"
                                         style="width: 90%;margin-bottom:0;"
                                 >
                                     <el-date-picker v-model="data.val" class="input-class-template-edit" value-format="yyyy-MM-dd"  type="date" placeholder="选择日期" size="large" ></el-date-picker>
@@ -1629,9 +1684,9 @@
                                     </el-button>
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item
-                                                v-for="(item, index) in this.templateItems
-                          .templateItems"
+                                                v-for="(item, index) in this.templateItems.templateItems"
                                                 :command="item"
+                                                 :key="index"
                                         >
                                             {{ item.key }}
                                         </el-dropdown-item>
@@ -1771,36 +1826,110 @@
                 {{ $t("main.systemSettings") }}
             </div>
             <el-form>
-                <el-form-item prop="">
-                    <fieldset style="width: 80%;margin: auto;border: 1px solid #6C6C6C">
-                        <legend style="margin-left: 1%">
-                            {{ $t("main.locking") }}
-                        </legend>
-                        <span style="display:inline-block;width: 60vh;margin-left: 2vw">
-                            {{ $t("main.timedLock") }}
-                            <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="lockchange"></el-switch>
-                        </span>
-                        <span style="display:inline-block;width: 60vh;margin-left: 2vw">
-                            {{ $t("main.idleTime") }}
-                            <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
-                        </span>
-                    </fieldset>
-                </el-form-item>
-                <el-form-item prop="">
+                <el-tabs type="border-card" style="height:55vh">
+                    <el-tab-pane :label="$t('main.generic')">
+                        <el-form-item prop="">
+                            <fieldset style="width: 80%;height:14vh;margin: auto;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.mainWindow") }}
+                                </legend>
+                                <div style="margin-left: 2vw">
+                                    {{ $t("main.loginOpenJpass") }}<br/>
+                                    <el-switch v-model="showPassword" active-color="#13ce66"
+                                            inactive-color="#ff4949"></el-switch>
+                                </div>
+                            </fieldset>
+                        </el-form-item> 
+                        <el-form-item prop="">
+                            <fieldset style="width: 80%;height: 14vh;margin: auto;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.KeyboardShortcuts") }}
+                                </legend>
+                                <div style="margin-left: 2vw">
+                                    {{ $t("main.lockRadio") }}<br/>
+                                    <el-switch v-model="showPassword" active-color="#13ce66"
+                                            inactive-color="#ff4949"></el-switch>
+                                </div>
+                            </fieldset>
+                        </el-form-item>
+                         <el-form-item prop="">
+                            <fieldset style="width: 80%;margin: auto;height: 12vh;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.language") }}
+                                </legend>
+                                <span style="margin-left: 2vw">
+                                    <el-select v-model="language" :placeholder="$t('main.languageSelection')">
+                                        <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
+                                                :value="item.value"></el-option>
+                                    </el-select>
+                                </span>
+                            </fieldset>
+                         </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane :label="$t('main.security')">
+                         <el-form-item prop="">
+                            <fieldset style="width: 80%;height: 10vh;margin: auto;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.passwordService") }}
+                                </legend>
+                                <div style="margin-left: 2vw">
+                                    {{ $t("main.showPassword") }}
+                                    <el-switch v-model="showPassword" active-color="#13ce66"
+                                            inactive-color="#ff4949"></el-switch>
+                                </div>
+                            </fieldset>
+                          </el-form-item>
+                          <el-form-item prop="">
+                            <fieldset style="width: 80%;margin: auto;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.locking") }}
+                                </legend>
+                                <span style="display:inline-block;width: 60vh;margin-left: 2vw">
+                                    {{ $t("main.timedLock") }}
+                                    <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="lockchange"></el-switch>
+                                </span>
+                                <span style="display:inline-block;width: 60vh;margin-left: 2vw">
+                                    {{ $t("main.idleTime") }}
+                                    <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
+                                </span>
+                            </fieldset>
+                           </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane :label="$t('main.browser')"></el-tab-pane>
+                    <el-tab-pane :label="$t('main.update')"></el-tab-pane>
+                    <!-- <el-tab-pane :label="$t('main.highLevel')"></el-tab-pane> -->
+                </el-tabs>
+                    <!-- <el-form-item prop="">
+                        <fieldset style="width: 80%;margin: auto;border: 1px solid #6C6C6C">
+                            <legend style="margin-left: 1%">
+                                {{ $t("main.locking") }}
+                            </legend>
+                            <span style="display:inline-block;width: 60vh;margin-left: 2vw">
+                                {{ $t("main.timedLock") }}
+                                <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="lockchange"></el-switch>
+                            </span>
+                            <span style="display:inline-block;width: 60vh;margin-left: 2vw">
+                                {{ $t("main.idleTime") }}
+                                <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
+                            </span>
+                        </fieldset>
+                    </el-form-item> -->
+                    
+
+                <!-- <el-form-item prop="">
                     <fieldset style="width: 80%;margin: auto;height: 15vh;border: 1px solid #6C6C6C">
                         <legend style="margin-left: 1%">
                             {{ $t("main.language") }}
                         </legend>
                         <span style="margin-left: 2vw">
-                            <el-select v-model="language" :placeholder="$t('main.languageSelection')"
-                                       @change="">
+                            <el-select v-model="language" :placeholder="$t('main.languageSelection')">
                                 <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
                                            :value="item.value"></el-option>
                             </el-select>
                         </span>
                     </fieldset>
-                </el-form-item>
-                <el-form-item prop="">
+                </el-form-item> -->
+                <!-- <el-form-item prop="">
                     <fieldset style="width: 80%;height: 19vh;margin: auto;border: 1px solid #6C6C6C">
                         <legend style="margin-left: 1%">
                             {{ $t("main.passwordService") }}
@@ -1811,7 +1940,7 @@
                                        inactive-color="#ff4949"></el-switch>
                         </div>
                     </fieldset>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
                     <el-button type="primary" size="small" style="width:35%;" @click="savesettings">
                         {{ $t("main.save") }}
@@ -3151,9 +3280,225 @@
           />
         </div>
       </el-dialog>
+        <!-- 新建笔记 -->
+       <el-dialog
+                class="mb"
+                :title="$t('main.newNote')"
+                :visible.sync="dialogVisibleAddNote"
+                width="40%"
+                height="90%"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false"
+                :show-close="true"
+                @closed="cleartype"
+                @close="clearDataTemplate"
+        >
+            <div class="titleDiv">
+                <span class="titleNameDiv">{{ $t("main.name") }}</span>
+                <span class="titleInputSpan">
+            <input v-model="ruleFormAddNote.name" class="myInputTitle"/>
+          </span>
+                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
+            <img
+                    v-if="imageBase64 != ''"
+                    :src="imageBase64"
+                    class="avatar"
+                    :style="{ background: color }"
+            />
+            <img
+                    v-else
+                    src="./img/misc/lock.svg"
+                    class="avatar"
+                    :style="{ background: color }"
+            />
+          </span>
+            </div>
+            <ul
+                    style="margin-left:71.5%;z-index: 10;border-radius: 5px;"
+                    class="choosepic menu"
+            >
+                <li @click="dialogSymbolOpen">
+                    <img
+                            src="./img/tp.png"
+                            style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                            alt=""
+                    />
+                    <span>{{ $t("main.selectSymbol") }}</span>
+                </li>
+                <li @click="opencolor(tempTemplate)">
+                    <img
+                            src="./img/tsp.png"
+                            style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                            alt=""
+                    />
+                    <span>{{ $t("main.selectColor") }}</span>
+                </li>
+                <li>
+            <span style="display:inline-block">
+              <img
+                      src="./img/zy.png"
+                      style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                      alt=""
+              />
+              <el-upload
+                      action="https://jsonplaceholder.typicode.com/posts/"
+                      :show-file-list="false"
+                      :on-success="handleAvatarSuccessAdd"
+                      :before-upload="beforeAvatarUpload"
+                      style="height:2.5vh;width:8vw;display: inline-block"
+              >{{ $t("main.userResource") }}
+              </el-upload>
+            </span>
+                </li>
+            </ul>
+            <br/>
+            <el-tabs type="border-card">
+                <el-tab-pane :label="$t('main.notes')">
+                    <div style="height:40vh;overflow: auto;">
+                        <el-form
+                                :model="ruleFormAddNote"
+                                ref="ruleFormAddNote"
+                                label-width="100px"
+                                class="demo-ruleForm"
+                                style="width: 80%;margin: auto;text-align: left"
+                                label-position="top"
+                        >
+                           <el-form-item>
+                                <el-input type="textarea" :rows="14"   v-model="ruleFormAddNote.notes"></el-input>
+                           </el-form-item>
+                        </el-form>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+             <div style="margin-top:1vh;text-align: center">
+                    <span style="float: left;line-height: 5vh;margin-right: 1vw;">选择分类</span>
+                   <el-select v-model="selectlabels" multiple 
+                   :placeholder="$t('main.pleaseChoose')" 
+                   style="float: left;width:75%">
+                    <el-option
+                            v-for="(item, index) in this.labels.labels"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                    ></el-option>
+                    </el-select>
+              </div>
+            <div style="margin-top:7vh;text-align: center">
+                <el-button size="small" type="primary" @click="saveNote" :disabled="templatedisable"
+                >{{$t('main.submit')}}
+                </el-button
+                >
+                <el-button size="small" @click="dialogVisibleAddNote = false"
+                >{{$t('keystoreImport.cancel')}}
+                </el-button>
+            </div>
+        </el-dialog>
 
-
-
+        <!--修改笔记-->
+        <el-dialog
+                :title="$t('main.modifyNote')"
+                class="mb"
+                :visible.sync="dialogVisibleNoteEdit"
+                width="40%"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false"
+                :show-close="true"
+                @closed="cleartype"
+        >
+            <div class="titleDiv">
+                <span class="titleNameDiv">{{ $t("main.name") }}</span>
+                <span class="titleInputSpan">
+            <input type="text" v-model="editobject.name" class="myInputTitle"/>
+          </span>
+                <span style="height:7vh;width:4vw;" @click="showIconMenu()">
+            <img
+                    :src="editobject.tempBase64"
+                    class="avatar"
+                    :style="{ background: editobject.bgcolor }"
+            />
+          </span>
+            </div>
+            <ul
+                    style="margin-left:71.5%;z-index: 10;border-radius: 5px;"
+                    class="choosepic menu"
+            >
+                <li @click="dialogSymbolOpen">
+                    <img
+                            src="./img/tp.png"
+                            style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                            alt=""
+                    />
+                    <span>{{ $t("main.selectSymbol") }}</span>
+                </li>
+                <li @click="opencolor(editobject)">
+                    <img
+                            src="./img/tsp.png"
+                            style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                            alt=""
+                    />
+                    <span>{{ $t("main.selectColor") }}</span>
+                </li>
+                <li>
+            <span style="display:inline-block">
+              <img
+                      src="./img/zy.png"
+                      style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
+                      alt=""
+              />
+              <el-upload
+                      action="https://jsonplaceholder.typicode.com/posts/"
+                      :show-file-list="false"
+                      :on-success="handleAvatarSuccessEdit"
+                      :before-upload="beforeAvatarUpload"
+                      style="height:2.5vh;width:8vw;display: inline-block"
+              >{{ $t("main.userResource") }}
+              </el-upload>
+            </span>
+                </li>
+            </ul>
+            <br/>
+            <el-tabs type="border-card">
+                <el-tab-pane :label="$t('main.fields')">
+                    <div style="height:45vh;overflow: auto;">
+                        <el-form
+                                :model="ruleFormNoteEdit"
+                                ref="ruleFormNoteEdit"
+                                label-width="100px"
+                                class="demo-ruleForm"
+                                style="width: 85%;margin: auto;text-align: left"
+                                label-position="top"
+                        >
+                          <el-form-item>
+                                <el-input type="textarea" :rows="16" v-model="ruleFormNoteEdit.notes"></el-input>
+                          </el-form-item>
+                        </el-form>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+             <div style="margin-top:1vh;text-align: center">
+                    <span style="float: left;line-height: 5vh;margin-right: 1vw;">选择分类</span>
+                     <el-select  v-model="selectlabels"
+                                 multiple 
+                                 :placeholder="$t('main.pleaseChoose')"
+                                 style="float: left;width:75%">
+                        <el-option
+                                v-for="(item, index) in this.labels.labels"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                        </el-option>
+                      </el-select>
+               </div>
+            <div style="margin-top:7vh;text-align: center">
+                <el-button size="small" type="primary" :disabled="templatedisable" @click="editNote">{{
+                    $t("main.submit")
+                    }}
+                </el-button>
+                <el-button size="small" @click="dialogVisibleNoteEdit = false"
+                >{{ $t("main.cancelFormat") }}
+                </el-button>
+            </div>
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -3206,6 +3551,8 @@
 
         data() {
             return {
+                dialogVisibleNoteEdit:false,//修改笔记
+                dialogVisibleAddNote:false,//增加笔记
                 network:true,
                 publicPath: process.env.BASE_URL,
                 status:"",
@@ -3340,7 +3687,10 @@
                     "imgtype": "",
                     "imgurl": "",
                     "isDel": false,
-                    "bgcolor": ""
+                    "bgcolor": "",
+                    "hasnote":false,
+                    "isnote":false,//笔记类型
+                    "note":""
                 },
                 templates: {
                     "templates": [{
@@ -3352,6 +3702,9 @@
                         "isDel": false,
                         "imgtype": "url",
                         "imgurl":`${process.env.BASE_URL}img/misc/lock.svg`,
+                        "hasnote":false,
+                        "isnote":false,//笔记类型
+                        "note":"",
                         "datas": [{
                             "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
                             "key": "Number",
@@ -3393,6 +3746,9 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
+                        "hasnote":false,
+                        "isnote":false,//笔记类型
+                        "note":"",
                         "imgurl":`${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
@@ -3429,6 +3785,9 @@
                         "type": "template",
                         "isDel": false,
                         "imgtype": "url",
+                        "hasnote":false,
+                        "isnote":false,//笔记类型
+                        "note":"",
                         "imgurl": `${process.env.BASE_URL}img/misc/lock.svg`,
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
@@ -3543,6 +3902,14 @@
                     filedName: ""
                 },
                 ruleFormTemplateEdit: {},
+                ruleFormAddNote: {
+                    notes:"",
+                    name:"", 
+                },
+                ruleFormNoteEdit: {
+                    notes:"",
+                    name:"",
+                },
                 ruleFormRename:{
                   pName:""
                 },
@@ -3893,8 +4260,16 @@
                 if (this.delobj.isDel != true) {
                     this.isDisabled = false;
                 }
+                // var re2=/\n/g;
+                // var re =/\n|\r\n/g;
+                // project.note[0].notes.replace(re,"<br>")
+                // console.log(project.note[0].notes);
+                // console.log(project);
                 this.projectEvent = project;
-            }, remove() {
+            },
+
+   
+            remove() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
                 if (type == "model") {
@@ -3984,6 +4359,7 @@
                 let secret = loginObj.secret;
                 let id = obj.id;
                 let projectArray = new Array();
+                console.log(obj);
                 if (obj.id != "mb" && obj.id != "ljt") {
                     let projects = this.db.get("project").value();
                     projects = this.$JSON5.parse(this.$JSON5.stringify(projects));
@@ -4368,7 +4744,10 @@
                        "imgHash": formData.imgHash,
                        "imgtype": imgtype,
                        "imgurl": formData.tempBase64,
-                       "bgcolor": formData.bgcolor
+                       "bgcolor": formData.bgcolor,
+                       "isnote":false,//笔记类型
+                       "hasnote":false,
+                       "note":"",
                    };
                    //db project 追加数据
                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
@@ -4436,7 +4815,7 @@
                             items[item].format = this.cryptLevel(items[item].val);
                         }
                     }
-                    if (this.editobject.type == "project") {
+                    if (this.editobject.type == "project" && this.editobject.isnote!=true) {
                         let modelsId = this.editobject.modelsId;
                         let models = [];
                         for (var index in modelsId) { //下拉框不显示sy,wbj
@@ -4447,7 +4826,20 @@
                         this.selectlabels = models;
                         this.dialogVisibleEdit = true;
                         this.operationType = "project_edit";
-                    } else if (this.editobject.type == "template") {
+                    }else if(this.editobject.type == "project" && this.editobject.isnote==true){
+                        let modelsId = this.editobject.modelsId; 
+                        let models = [];
+                         for (var index in modelsId) { //下拉框不显示sy,wbj
+                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")) {
+                                models.push(modelsId[index]);
+                            }
+                        }
+                        this.selectlabels = models;
+                        this.dialogVisibleNoteEdit = true;
+                        this.operationType = "note_edit";
+                        this.ruleFormNoteEdit.notes=this.editobject.note[0].notes;
+                        console.log(this.editobject.note[0].notes);
+                    }else if (this.editobject.type == "template") {
                         var modelsId = this.editobject.modelsId;
                         var models = [];
                         for (var index in modelsId) { //下拉框不显示mb
@@ -4459,7 +4851,8 @@
                         this.dialogVisibleTemplateEdit = true;
                         this.operationType = "template_edit";
                     }
-            }, //修改project
+            }, 
+            //修改project
            async editDo() {
                if(!this.network){
                    this.$message.error(this.$t('login.outline'));
@@ -4588,7 +4981,10 @@
                     "imgHash": this.imgHash,
                     "imgtype": this.imgtype,
                     "imgurl": this.imgurl,
-                    "bgcolor": this.color
+                    "bgcolor": this.color,
+                    "isnote":false,//笔记类型
+                    "hasnote":false,
+                    "note":"",
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
                 this.db.set('version', await this.getTime()).write();
@@ -5018,7 +5414,16 @@
                     }
                 } else if (this.operationType == "template_edit") {
                     this.imageBase64 = obj.tempBase64;
+                } else if(this.operationType == "note_add"){
+                   //新建模板，给默认图片
+                    if (this.imageBase64 == '') {
+                        // this.imageBase64 = this.$refs.icon_default.src;
+                        this.imageBase64=`${this.publicPath}img/misc/lock.svg`;
+                    }
+                } else if(this.operationType == "note_edit"){
+                      this.imageBase64 = obj.tempBase64;
                 }
+
                 this.dialogSymbolcolor = true;
             },
             setImageBase64(path,realpath) {
@@ -5040,6 +5445,15 @@
                     this.editobject.tempBase64 =realpath;
                     this.dialogSymbol = false;
                     this.imgtype = "url"
+                }else if(this.operationType == "note_add"){
+                     //进行新建操作时插入图片
+                    this.imageBase64 = realpath;
+                    this.dialogSymbol = false;
+                    this.imgtype = "url"
+                }else if(this.operationType == "note_edit"){
+                    this.editobject.tempBase64 =realpath;
+                    this.dialogSymbol = false;
+                    this.imgtype = "url"
                 }
             },
             setcolor(color) {
@@ -5053,6 +5467,12 @@
                     this.templateEvent.bgcolor = color;
                     this.dialogSymbolcolor = false;
                 } else if (this.operationType == "project_edit") {
+                    this.editobject.bgcolor = color;
+                    this.dialogSymbolcolor = false;
+                }else if(this.operationType == "note_add"){
+                    this.color= color;
+                    this.dialogSymbolcolor = false;
+                }else if(this.operationType == "note_edit"){
                     this.editobject.bgcolor = color;
                     this.dialogSymbolcolor = false;
                 }
@@ -5452,6 +5872,7 @@
             });
           },
 
+         //置顶
          async toTop(){
                let id = this.delobj.id;
                let topDirectory = this.db.get("models").find({id: id}).value();
@@ -5508,17 +5929,151 @@
               topArray.push(...indexArray); //a.push(...b);
               this.DDirectory.directory=topArray;
 
-
               //项目排序
               let project =this.projects;
               console.log(project);
               project.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
               this.projects=project;
-          }
+          },
+           // 增加笔记页面打开
+           addNote() {
+                this.selectlabels = [];
+                this.dialogVisibleAddNote = true;
+                this.operationType = "note_add";
+            },
+            // 保存笔记
+           async saveNote() {
+               if(!this.network){
+                   this.$message.error(this.$t('login.outline'));
+                   return false;
+               }else {
+                   let projectName = this.ruleFormAddNote.name;
+                   let newProject = ""
+                   let imgtype = ""
+                   if (this.selectlabels.indexOf("sy") == -1) {
+                       this.selectlabels.push("sy");//所有项必须有
+                   }
+                   if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                       this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                   }
+                   if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                       //大于2项，包含所有项和为标记项时删除为标记项
+                       this.selectlabels = this.selectlabels.filter(function (item) {
+                           return item !== "wbj"
+                       })
+                   }
+                   //图片
+                   if (this.imageBase64 == '') {
+                    //默认图片
+                    this.imageBase64=`${this.publicPath}img/misc/lock.svg`;
+                    this.imgtype = "url";
+                   }
+                    if (this.imgtype == "url") {
+                        this.imgHash = "";
+                        this.imgurl = this.imageBase64;
+                    } else if (this.imgtype == "base64") {
+                        this.imgurl = ""
+                    }
+                   this.newProject = {
+                       "id": this.$Uuidv1(),
+                       "name": projectName,
+                       "modelsId": this.selectlabels, // "modelsName":newArray.toString(),
+                       "isDel": false,
+                       "type": "project",
+                       "datas": [],
+                       "dateTime": await this.getTime(),
+                       "tempBase64": "",
+                       "imgHash": this.imgHash,
+                       "imgtype":this.imgtype,
+                       "imgurl": this.imgurl,
+                       "bgcolor":this.color,
+                       "isnote":true,//笔记类型
+                       "hasnote":true,//是否有笔
+                       "note":[{"notes":this.ruleFormAddNote.notes}],
+                   };
+                   console.log(this.newProject);
+                   //db project 追加数据
+                   this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
+                   this.db.set('version', await this.getTime(),).write();
+                   this.selectlabels = "";
+                   this.dialogVisibleAddNote = false;
+                   this.ruleFormAddNote.name = "";
+                   this.color = "";
+                   this.ruleFormAddNote.notes="";
+                   this.getdirectory();
+                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                   if (imgtype == "base64") {
+                       this.uploadImg(img, this.newProject.type, this.newProject.id);
+                   }
+                   //二次刷新
+                   this.getdirectory();
+                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+               }
+            },
+
+             async  editNote() {
+              if(!this.network){
+                  this.$message.error(this.$t('login.outline'));
+                  return false;
+              }else{
+                if (this.selectlabels.indexOf("sy") == -1) {
+                           this.selectlabels.push("sy");//所有项必须有
+                       }
+                       if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                           this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                       }
+                       if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                           //大于2项，包含所有项和为标记项时删除为标记项
+                           this.selectlabels = this.selectlabels.filter(function (item) {
+                               return item !== "wbj"
+                           })
+                   }
+                var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
+                if (this.imgtype == "url") {
+                    this.imgHash = "";
+                    this.editobject.imgtype = "url";
+                    this.editobject.imgurl = this.editobject.tempBase64;
+                } else if (this.imgtype == "base64") {
+                    this.editobject.imgurl = ""
+                    this.editobject.tempBase64 = "";//先删除tempBase64
+                    this.editobject.imgtype = "base64";
+                }
+                try {
+                    this.db.get("project").remove({id: this.editobject.id}).write();
+                    this.editobject.modelsId = this.selectlabels;
+                    this.editobject.note[0].notes=this.ruleFormNoteEdit.notes;
+                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
+                    this.db.set('version', await this.getTime()).write();
+                    console.log(this.editobject);
+                    this.dialogVisibleNoteEdit = false
+                    this.$message.success(this.$t('main.successfullyModified'));
+                    this.editobject.tempBase64 = img;
+                    this.projectEvent = this.editobject;
+                    this.selectlabels = "";
+                    this.getdirectory();
+                    this.color = "";
+                    if (this.imgtype == "base64") {
+                        if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
+                            let imgBase64 = this.localdb.get("img").find({id: this.editobject.imgHash}).value();
+                            if (imgBase64 == undefined || imgBase64.value != this.editobject.tempBase64) {
+                                this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
+                            }
+                        } else {
+                            this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
+                        }
+                    }
+                    //二次刷新
+                    this.getdirectory();
+                    this.editobject = "";
+                } catch (e) {
+                    this.$message.error(this.$t('main.failToEdit'));
+                }
+              }
+            },
 
         },
 
-        watch: {  //密码生成器自动生成
+        watch: { 
             'ruleFormAddTemplate.name': function(){
                 if(this.ruleFormAddTemplate.name){
                     this.ruleFormAddTemplate.name=this.ruleFormAddTemplate.name.replace(/^\s+|\s+$/g,'');
@@ -5550,6 +6105,18 @@
                 if(this.ruleFormAddProject.name){
                     this.ruleFormAddProject.name=this.ruleFormAddProject.name.replace(/^\s+|\s+$/g,'');
                     if( this.ruleFormAddProject.name.trim().length>0){
+                        this.templatedisable=false
+                    }else{
+                        this.templatedisable=true
+                    }
+                }else{
+                    this.templatedisable=true
+                }
+            },
+             'ruleFormAddNote.name':function(){
+                if(this.ruleFormAddNote.name){
+                    this.ruleFormAddNote.name=this.ruleFormAddNote.name.replace(/^\s+|\s+$/g,'');
+                    if( this.ruleFormAddNote.name.trim().length>0){
                         this.templatedisable=false
                     }else{
                         this.templatedisable=true
@@ -5665,9 +6232,6 @@
         float:left;
 
     }
-
-
-
 
 
 </style>
