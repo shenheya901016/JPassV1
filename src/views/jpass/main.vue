@@ -173,11 +173,6 @@
               {{ $t("main.selectColorD") }}
             </li>
              <li  v-if="delobj.modelsType == 'directory'" :class="toTop" @click="toTop">
-              <!-- <img
-                  src="./img/tsp.png"
-                  style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
-                  alt=""
-              /> -->
                 <img
                       v-if="delobj.top==true"
                       style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"
@@ -617,6 +612,22 @@
             $t("main.okFormat")
           }}</el-button>
           <el-button size="small" @click="dialogVisibledProject = false">{{
+            $t("main.cancelFormat")
+          }}</el-button>
+        </span>
+        </el-dialog>
+        <!--删除项目弹出框(trash)-->
+        <el-dialog
+                :title="$t('main.delete')"
+                :visible.sync="dialogVisibledProjectDel"
+                width="30%"
+        >
+            <span>{{ $t("main.doYouWantToDeleteTheProjectrestore") }}</span>
+            <span slot="footer" class="dialog-footer">
+          <el-button size="small" type="primary" @click="removeDataTrash()">{{
+            $t("main.okFormat")
+          }}</el-button>
+          <el-button size="small" @click="dialogVisibledProjectDel = false">{{
             $t("main.cancelFormat")
           }}</el-button>
         </span>
@@ -3509,6 +3520,7 @@
         timecurl = 'http://localhost:8080/altime/';
     }
     export default {
+        created() {this.keyevent();},
         mounted: function () {
               window['lock'] = () => {
                     this.lock();
@@ -3543,6 +3555,9 @@
 
         data() {
             return {
+                checkedArray:[],
+                isctrl:"",//是否按下ctrl
+                isshift:"",//是否按下shift
                 dialogVisibleNoteEdit:false,//修改笔记
                 dialogVisibleAddNote:false,//增加笔记
                 network:true,
@@ -3579,6 +3594,7 @@
                 dialogVisibledDirectory: false,//删除文件夹弹出框
                 dialogVisibledProject: false,//删除项目弹出框
                 dialogVisibledTemplate: false, //删除模板弹框
+                dialogVisibledProjectDel: false,//删除项目弹出框(直接删除)
                 dialogVisibleTemplate: false,//模板弹出框
                 dialogVisibleAddProject: false, //增加项目弹出框
                 dialogVisibleItems: false,//增加Items 弹出框
@@ -3920,6 +3936,33 @@
             };
         },
         methods: {
+            keyevent() { 
+                var that =this;   
+                document.onkeydown = function(e) {        //按下键盘      
+                 switch (e.keyCode) {        
+                   case 16:           
+                 that.isshift = true;    
+                 console.log('按下shift'); 
+                   break;         
+                   case 17:          
+                 that.isctrl = true; 
+                  console.log('按下ctrl');        
+                    break;     
+                  }     
+                };    
+                 document.onkeyup = function(e) {        //放弃键盘   
+                    switch (e.keyCode) {      
+                    case 16:           
+                that.isshift = false;
+                console.log('释放shift');       
+                    break;        
+                    case 17:         
+                that.isctrl = false;  
+                console.log('释放ctrl');          
+                    break;       
+                   }     
+               }; 
+    },
             online(){
                 this.network=true;
             },
@@ -4248,32 +4291,101 @@
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
                 this.delobj = project;
-                if (this.delobj.isDel != true) {
-                    this.isDisabled = false;
-                }
-                // var re2=/\n/g;
-                // var re =/\n|\r\n/g;
-                // project.note[0].notes.replace(re,"<br>")
-                // console.log(project.note[0].notes);
-                // console.log(project);
+                this.isDisabled = false;         
                 this.projectEvent = project;
+                if(this.isctrl==true){
+                    let repetitive=false;//判断是否重复标识
+                     if(this.checkedArray.length>0){ //array>0时判断是否有重复，重复不加入新对象
+                          this.checkedArray.forEach(item=>{
+                              if(item.id==project.id){
+                                  repetitive=true;
+                              }
+                          })
+                      if(!repetitive){
+                            this.checkedArray.push(project);
+                            console.log(this.checkedArray);
+                      }
+                     }else{
+                         this.checkedArray.push(project);
+                     }
+                }else{
+                    this.checkedArray=[];
+                    console.log(this.checkedArray);
+                }
+
             },
 
    
             remove() {
-                var type = this.delobj.type;
-                var id = this.delobj.id;
-                if (type == "model") {
-                    this.dialogVisibledDirectory = true;
-                } else if (type == "project") {
-                    this.dialogVisibledProject = true;
-                } else if (type == "template") {
-                    this.dialogVisibledTemplate = true;
+                let type = this.delobj.type;
+                let id = this.delobj.id;
+                //多选操作
+                if(this.checkedArray.length>0){
+                     //通过数字第一个对象判断其类型
+                     if(this.checkedArray[0].type=="project" && this.checkedArray[0].isDel!=true){
+                        this.dialogVisibledProject = true;
+                     }
+                     if(this.checkedArray[0].type=="template" && this.checkedArray[0].isDel!=true){
+                        this.dialogVisibledTemplate = true;
+                     }
+
+                    if(this.checkedArray[0].isDel==true){
+                        this.dialogVisibledProjectDel = true;
+                     }
+
+                }else{
+                 //单选操作
+                if (type == "model" ) {
+                  this.dialogVisibledDirectory = true;
+                } 
+                 if (type == "project" && this.delobj.isDel!=true) {
+                  this.dialogVisibledProject = true;
+                } 
+                 
+                 if (type == "template" && this.delobj.isDel!=true) {
+                  this.dialogVisibledTemplate = true;
                 }
+                if (this.delobj.isDel==true) {
+                  this.dialogVisibledProjectDel = true;
+                } 
+
+
+            }
+                
+                
             }, //删除数据
           async  removeData() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
+                //批量删除
+                if(this.checkedArray.length>0){
+                    if(this.checkedArray[0].type=="project" && this.checkedArray[0].isDel!=true){
+                        this.checkedArray.forEach(item=>{
+                            this.db.get("project").find({id: item.id}).set('isDel', true).write();
+                        })
+                    let now= await this.getTime();
+                    this.db.set('version',now ).write();
+                    this.dialogVisibledProject = false;
+                    this.projectEvent = "";
+                    this.getdirectory();
+                    console.log(this.directoryClickId);
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                    }
+                    if(this.checkedArray[0].type=="template" && this.checkedArray[0].isDel!=true){
+                         this.checkedArray.forEach(item=>{
+                            this.db.get("templates").find({id: item.id}).set('isDel', true).write();
+                        })
+                    let now= await this.getTime();
+                    this.db.set('version',now ).write();    
+                    this.dialogVisibledTemplate = false;
+                    this.projectEvent = "";
+                    this.isDisabled = true;
+                    this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
+                    }
+                   this.checkedArray=[];
+                }else{
+                    //单独删除
                 if (type == "model") {
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
@@ -4343,8 +4455,52 @@
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
                     this.currentNote = -1;
-                }
-            }, //点击目录生成projects列表
+                } 
+             }
+            }, 
+            
+             //垃圾桶直接删除
+            async removeDataTrash(){
+                 var type = this.delobj.type;
+                 var id = this.delobj.id;
+                 if(this.checkedArray.length>0){
+                   //批量删除
+                   if(this.checkedArray[0].isDel==true){
+                        this.checkedArray.forEach(item=>{
+                            if(item.type=="project"){
+                                this.db.get("project").remove({id:item.id}).write();
+                            }
+                            if(item.type=="template"){
+                                this.db.get("templates").remove({id: item.id}).write();
+                            } 
+                        })
+                    this.dialogVisibledProjectDel = false;
+                    this.projectEvent = "";
+                    this.getdirectory();
+                    console.log(this.directoryClickId);
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                    }
+                   this.checkedArray=[];
+                 }else{
+                   //单个删除
+                   if (type == "project") {
+                      this.db.get("project").remove({id:this.delobj.id}).write();
+                    }
+                    if (type == "template") {
+                       this.db.get("templates").remove({id:this.delobj.id}).write();
+                    }
+                    this.currentNote = -1;
+                    this.isDisabled = true;
+                    this.dialogVisibledProjectDel = false;
+                    this.projectEvent = "";
+                    this.getdirectory();
+                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                 }
+                let now= await this.getTime();
+                this.db.set('version',now ).write();
+             },
+            
+            //点击目录生成projects列表
             async notesBytargeId(obj) {
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let secret = loginObj.secret;
@@ -5357,19 +5513,32 @@
                 return name;
             },
             //恢复
-            recover() {
+          async  recover() {
+              //批量恢复
+                if(this.checkedArray.length>0){
+                     this.checkedArray.forEach(item=>{
+                         if(item.type == "project")
+                            this.db.get("project").find({id: item.id}).set("isDel", false).write();
+                         if(item.type == "template")
+                            this.db.get("templates").find({id: item.id}).set("isDel", false).write();
+                        })
+                        this.checkedArray=[];
+                }else{
+                //单个恢复    
                 if (this.projectEvent.type == "project") {
                     this.db.get("project").find({id: this.projectEvent.id}).set("isDel", false).write();
                 } else if (this.projectEvent.type == "template") {
                     this.db.get("templates").find({id: this.projectEvent.id}).set("isDel", false).write();
-                }
+                } 
+              }
+                this.db.set('version',await this.getTime()).write();
                 this.dialogRecover = false;
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                 this.currentNote = -1;
             },
             //清空垃圾箱
-            clearTrash() {
+            async  clearTrash() {
                 let delTemplate = this.db.get("templates").filter({isDel: true}).value();
                 for (var index in delTemplate) {
                     this.db.get("templates").remove({id: delTemplate[index].id}).write();
@@ -5378,6 +5547,7 @@
                 for (var index in delProject) {
                     this.db.get("project").remove({id: delProject[index].id}).write();
                 }
+                this.db.set('version',await this.getTime()).write();
                 this.dialogclearTrash = false;
                 this.getdirectory();
             },
@@ -5581,7 +5751,7 @@
                 }
                 if (obj.isDel) {
                     this.recoverClass = [];
-                    this.deleteClasses = ["unuse"];
+                    // this.deleteClasses = ["unuse"];
                 }
                 if (obj.type != "model") {
                     this.renameClasses.push("unuse")

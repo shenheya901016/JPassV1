@@ -172,6 +172,7 @@ export default {
         okFormat: "Confirm",
         cancelFormat: "Cancel",
         doYouWantToDeleteTheProject: "Do you want to delete Card?",
+        doYouWantToDeleteTheProjectrestore:"After the data is deleted, it cannot be recovered. Are you sure you want to delete the data?",
         doYouWantToDeleteTheTemplate: "Do you want to delete Template",
         selectTemplate: "Option template",
         addItem: "New card",

@@ -112,6 +112,7 @@ export default {
         okFormat: "确 定",
         cancelFormat: "取 消",
         doYouWantToDeleteTheProject: "是否删除卡片？",
+        doYouWantToDeleteTheProjectrestore:"数据删除后将无法恢复，您确定要删除数据么？",
         doYouWantToDeleteTheTemplate: "是否删除模板？",
         selectTemplate: "选择模板",
         addItem: "新增卡片",
