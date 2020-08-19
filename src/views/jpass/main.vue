@@ -225,7 +225,7 @@
                         v-for="(project, index) in projects"
                         @click.left="noteslick(project, $event)"
                         :data-index="index"
-                        :class="index == currentNote ? click : disclick"
+                        :class="index == currentNote || project.checked ? click : disclick"
                         style="margin-top: 5px;"
                         @contextmenu.prevent="openMenu_1(project, $event)"
                         :key="index"
@@ -3680,7 +3680,11 @@
                     "imgtype": "",
                     "imgurl": "",
                     "isDel": false,
-                    "bgcolor": ""
+                    "bgcolor": "",
+                    "hasnote":false,
+                    "isnote":false,//笔记类型
+                    "note":"",
+                    "checked":false,
                 },
                 newTemplate: {
                     "id": "",
@@ -3697,7 +3701,8 @@
                     "bgcolor": "",
                     "hasnote":false,
                     "isnote":false,//笔记类型
-                    "note":""
+                    "note":"",
+                    "checked":false,
                 },
                 templates: {
                     "templates": [{
@@ -3712,6 +3717,7 @@
                         "hasnote":false,
                         "isnote":false,//笔记类型
                         "note":"",
+                        "checked":false,
                         "datas": [{
                             "id": "fdbce150-fec4-11e9-bd45-854c67bf088b",
                             "key": "Number",
@@ -3757,6 +3763,10 @@
                         "isnote":false,//笔记类型
                         "note":"",
                         "imgurl":`${process.env.BASE_URL}img/misc/lock.svg`,
+                        "hasnote":false,
+                        "isnote":false,//笔记类型
+                        "note":"",
+                        "checked":false,
                         "datas": [{
                             "id": "fdbce183-fec4-11e9-bd32-854c67bf088b",
                             "key": "Email",
@@ -3796,6 +3806,10 @@
                         "isnote":false,//笔记类型
                         "note":"",
                         "imgurl": `${process.env.BASE_URL}img/misc/lock.svg`,
+                        "hasnote":false,
+                        "isnote":false,//笔记类型
+                        "note":"",
+                        "checked":false,
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
                             "key": "Website",
@@ -3937,7 +3951,7 @@
         },
         methods: {
             keyevent() { 
-                var that =this;   
+                var that =this; 
                 document.onkeydown = function(e) {        //按下键盘      
                  switch (e.keyCode) {        
                    case 16:           
@@ -4116,6 +4130,7 @@
                 saveAs(blob, "keystore");
             }, //获取目录
             async getdirectory() {
+               // this.clearChecked();
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let secret = loginObj.secret;
                 var alldata = this.db.get("models").value();
@@ -4255,7 +4270,8 @@
                 this.dialogVisible2 = false, this.getdirectory();
                 this.$refs[formName].resetFields();
             },
-            projectclick(note, event) {
+            projectclick(note, event) {  
+                this.clearChecked();
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentProject = index;
@@ -4267,6 +4283,7 @@
                 this.searchTemp = "";//清空搜索框
             },
             directoryclick(note, event) {
+                this.clearChecked();
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
                 this.currentDirectory = index;
@@ -4302,14 +4319,18 @@
                               }
                           })
                       if(!repetitive){
+                            project.checked=true;
                             this.checkedArray.push(project);
                             console.log(this.checkedArray);
                       }
                      }else{
+                         project.checked=true;
                          this.checkedArray.push(project);
                      }
                 }else{
-                    this.checkedArray=[];
+                    this.clearChecked();
+                    project.checked=true;
+                    this.checkedArray.push(project);
                     console.log(this.checkedArray);
                 }
 
@@ -4359,6 +4380,7 @@
                 var id = this.delobj.id;
                 //批量删除
                 if(this.checkedArray.length>0){
+                     console.log("批量删除");
                     if(this.checkedArray[0].type=="project" && this.checkedArray[0].isDel!=true){
                         this.checkedArray.forEach(item=>{
                             this.db.get("project").find({id: item.id}).set('isDel', true).write();
@@ -4383,9 +4405,9 @@
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
                     }
-                   this.checkedArray=[];
                 }else{
                     //单独删除
+                    console.log("单独删除");
                 if (type == "model") {
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
@@ -4480,7 +4502,6 @@
                     console.log(this.directoryClickId);
                     this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                     }
-                   this.checkedArray=[];
                  }else{
                    //单个删除
                    if (type == "project") {
@@ -4895,6 +4916,7 @@
                        "isnote":false,//笔记类型
                        "hasnote":false,
                        "note":"",
+                       "checked":false,
                    };
                    //db project 追加数据
                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
@@ -5031,6 +5053,8 @@
                            this.editobject.tempBase64 = "";//先删除tempBase64
                            this.editobject.imgtype = "base64";
                        }
+
+                       this.editobject.checked=false;
                        this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                        this.db.set('version', await this.getTime()).write();
                        this.dialogVisibleEdit = false
@@ -5132,6 +5156,7 @@
                     "isnote":false,//笔记类型
                     "hasnote":false,
                     "note":"",
+                    "checked":false
                 }
                 this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.newTemplate))).write();
                 this.db.set('version', await this.getTime()).write();
@@ -5172,6 +5197,7 @@
                     this.editobject.imgtype = "base64";
                 }
                 try {
+                    this.editobject.checked=false;
                     this.db.get("templates").remove({id: this.editobject.id}).write();
                     this.editobject.modelsId = this.selectlabels;
                     this.db.get("templates").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
@@ -5522,7 +5548,7 @@
                          if(item.type == "template")
                             this.db.get("templates").find({id: item.id}).set("isDel", false).write();
                         })
-                        this.checkedArray=[];
+                         this.clearChecked();
                 }else{
                 //单个恢复    
                 if (this.projectEvent.type == "project") {
@@ -6153,6 +6179,7 @@
                        "isnote":true,//笔记类型
                        "hasnote":true,//是否有笔
                        "note":[{"notes":this.ruleFormAddNote.notes}],
+                       "checked":false
                    };
                    console.log(this.newProject);
                    //db project 追加数据
@@ -6202,6 +6229,7 @@
                     this.editobject.imgtype = "base64";
                 }
                 try {
+                    this.editobject.checked=false;
                     this.db.get("project").remove({id: this.editobject.id}).write();
                     this.editobject.modelsId = this.selectlabels;
                     this.editobject.note[0].notes=this.ruleFormNoteEdit.notes;
@@ -6233,6 +6261,25 @@
                 }
               }
             },
+
+            //清除选中
+            clearChecked(){
+                  let project =this.db.get("project").value();
+                  let template =this.db.get("templates").value();
+                  project.forEach(item=>{
+                      item.checked=false;
+                  });
+
+                  template.forEach(item=>{
+                      item.checked=false;
+                  });
+
+                  this.checkedArray.forEach(item=>{
+                      item.checked=false;
+                  });                  
+                this.checkedArray=[];
+                console.log("crash");
+            }
 
         },
 
