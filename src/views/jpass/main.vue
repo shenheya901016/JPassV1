@@ -634,7 +634,7 @@
         </el-dialog>
         <!--清空垃圾箱弹出框-->
         <el-dialog
-                :title="$t('main.prompt')"
+                :title="$t('main.cleartrash')"
                 :visible.sync="dialogclearTrash"
                 width="30%"
         >

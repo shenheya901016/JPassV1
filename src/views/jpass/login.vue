@@ -1,12 +1,12 @@
 <template>
     <div id="main" style="width:100%;">
-        <div style="margin:30px auto;width:150px;">
+        <div style="margin:50px auto;width:150px;">
             <a href="#">
                 <img src="../../img/logo.png" alt="" style="width:150px;"/>
             </a>
         </div>
         <div
-                style="width:35%;margin:2% auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;"
+                style="width:35%;margin:6% auto;border-radius:10px; box-shadow: 0 0 7px 1px #c5c5c5;border:1px solid white;"
         >
             <div
                     style="width:100%;height:20%;border-radius:10px 10px 0 0;font-size:20px;margin-top:50px"
@@ -41,6 +41,7 @@
                         style="margin-top:10%"
                 >
                     <el-input
+                            :placeholder="$t('login.pwdvalidaion')"
                             type="password"
                             v-model="ruleForm.password"
                             style="width:100%;"
@@ -51,7 +52,7 @@
                 <el-form-item label="" prop="">
                     <el-button
                             type="primary"
-                            style="width:90%;"
+                            style="width:100%;"
                             size="small"
                             @click="submitForm('ruleForm')"
                     >{{ $t("login.login") }}

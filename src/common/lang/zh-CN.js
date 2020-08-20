@@ -2,7 +2,7 @@ import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 
 export default {
     login: {
-        title: "登录Jpass",
+        title: "登录Jpassword",
         selectuser: "请选择登录用户",
         name: "用户名称",
         nametitle: "请选择登录用户，如果下拉框无数据，请先注册用户或导入已有钱包",
@@ -169,7 +169,7 @@ export default {
         recover: "还原",
         recovertitle: "是否要恢复删除的文件?",
         cleartrash: "清空垃圾桶",
-        clearTashTitle: "是否清空垃圾桶",
+        clearTashTitle: "是否清空垃圾桶？",
         selectSymbol: "选择标识",
         selectColor: "选择颜色",
         userIcon: "用户图标",

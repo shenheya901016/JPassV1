@@ -2,7 +2,7 @@ import enLocale from 'element-ui/lib/locale/lang/en'
 
 export default {
     login: {
-        title: "Login Jpass",
+        title: "Login Jpassword",
         selectuser: "Please select login user",
         name: "Username",
         nametitle: "Please select login user. If there is no data in the drop-down box, please register user first or import the existing wallet!",
