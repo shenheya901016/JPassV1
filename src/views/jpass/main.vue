@@ -5578,6 +5578,7 @@
                 this.db.set('version',await this.getTime()).write();
                 this.dialogclearTrash = false;
                 this.getdirectory();
+                this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
             },
             showIconMenu() {
                 var uils = document.getElementsByClassName("choosepic");
