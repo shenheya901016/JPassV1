@@ -4777,13 +4777,13 @@
                         });
                     }
                 }
-
                 //更新设置
                 this.updatesetting();
                 //启动锁定定时器
                 this.locksystem();
                 //设置语言
                 this.changeLang(this.language);
+                this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                 }
             },
             pwdLength(obj) {
