@@ -3296,7 +3296,7 @@
                 :close-on-press-escape="false"
                 :show-close="true"
                 @closed="cleartype"
-                @close="clearDataTemplate"
+                @close="clearDataNote"
         >
             <div class="titleDiv">
                 <span class="titleNameDiv">{{ $t("main.name") }}</span>
@@ -5009,7 +5009,6 @@
                         this.dialogVisibleNoteEdit = true;
                         this.operationType = "note_edit";
                         this.ruleFormNoteEdit.notes=this.editobject.note[0].notes;
-                        console.log(this.editobject.note[0].notes);
                     }else if (this.editobject.type == "template") {
                         var modelsId = this.editobject.modelsId;
                         var models = [];
@@ -5688,6 +5687,7 @@
                 this.operationType = "";
                 this.imageBase64 = "";
                 this.color = "";
+                this.templatedisable=true
             },
             //关闭添加模板框，清空数据
             clearDataTemplate() {
@@ -6238,7 +6238,6 @@
                     this.editobject.note[0].notes=this.ruleFormNoteEdit.notes;
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.editobject))).write();
                     this.db.set('version', await this.getTime()).write();
-                    console.log(this.editobject);
                     this.dialogVisibleNoteEdit = false
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.editobject.tempBase64 = img;
@@ -6288,11 +6287,19 @@
 				onCopy(e){
 				    this.$message.success("内容已复制到剪切板！")
 				},
-				// 复制失败
+			// 复制失败
 				onError(e){
 				    this.$message.error("抱歉，复制失败！")
-				},
+                },
+
+             //关闭添加模板框，清空数据
+            clearDataNote() {
+                this.ruleFormAddNote.name = "";
+                this.tempTemplate = [];
+                this.ruleFormAddNote.notes="";
+            },
         },
+            
 
         watch: { 
             'ruleFormAddTemplate.name': function(){
