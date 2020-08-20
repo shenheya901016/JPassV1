@@ -12,6 +12,10 @@
 			<el-radio :label="4">{{$t("main.numberOnly")}}</el-radio>
 		</el-radio-group>
         <el-slider :step="1" :max="20" show-stops v-model="value2"></el-slider>
+		<el-button  type="primary" size="medium"
+            v-clipboard:copy="crypt"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError" :disabled="copydisabled">复制</el-button>
 	</el-dialog>
 </template>
 
@@ -29,6 +33,7 @@
 				//进度条值
 				percentage: 0,
 				status: "exception",
+				copydisabled:true,
 			}
 		},
 		methods: {
@@ -72,7 +77,16 @@
                   des = this.$t('main.breakTime') + out;
                 }
                 return des;
-            },
+			},
+			
+			 // 复制成功
+				onCopy(e){
+				   this.$emit("onCopy");
+				},
+				// 复制失败
+				onError(e){
+				    this.$emit("onError");
+				},
 
 
             formatTime(s) {
@@ -153,6 +167,13 @@
 
 		},
 		watch: {  //密码生成器自动生成
+		     'crypt':function(){
+                if(this.crypt.length>0){
+                  this.copydisabled=false;
+				}else{
+				  this.copydisabled=true;
+				}
+			 },
 		    'value2': function(){
 		        this.crypt = this.$createPassword.genCrypt(this.radio, this.value2);
 		        this.level = this.cryptLevel(this.crypt);

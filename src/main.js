@@ -18,6 +18,7 @@ import vueCanvasNest from 'vue-canvas-nest';
 import passwordGenerator from "@/components/PasswordGenerator";
 import passwordGeneratorMain from "@/components/PasswordGeneratorMain";
 import pay from "@/components/Pay";
+import VueClipboard from 'vue-clipboard2';
 
 
 window.myIpfs=myIpfs;
@@ -25,6 +26,7 @@ Vue.config.productionTip = false;
 Vue.use(VueI18n);
 //https://element.eleme.cn/#/zh-CN/component/quickstart
 Vue.use(ElementUI);
+Vue.use(VueClipboard);
 
 //components
 Vue.component("vueCanvasNest",vueCanvasNest)

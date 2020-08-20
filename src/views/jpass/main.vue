@@ -1991,6 +1991,8 @@
                 :dialogopenMain="dialogPasswordGeneratorMain"
                 @dialogPasswordGeneratorcloseMain="closedialogMain"
                 :dialogcloseMain="dialogcloseMain"
+                @onCopy="onCopy"
+                @onError="onError"
         ></passwordGeneratorMain>
 
 
@@ -6279,8 +6281,16 @@
                   });                  
                 this.checkedArray=[];
                 console.log("crash");
-            }
+            },
 
+             // 复制成功
+				onCopy(e){
+				    this.$message.success("内容已复制到剪切板！")
+				},
+				// 复制失败
+				onError(e){
+				    this.$message.error("抱歉，复制失败！")
+				},
         },
 
         watch: { 
