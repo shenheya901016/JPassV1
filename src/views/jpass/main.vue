@@ -266,12 +266,16 @@
                     </div>
                     <span style="float: right;height:5.5vh;">
               <img
-                      v-if="project.modelsId.indexOf('scj') == -1"
+                      v-if="project.modelsId.indexOf('weakPwd') != -1"
+                      src="./img/gantanlist.svg"  
+              />          
+              <img
+                      v-if="project.modelsId.indexOf('scj') == -1 && project.modelsId.indexOf('weakPwd') == -1"
                       src="./img/start.svg"
                       @click="favorite(project)"
               />
               <img
-                      v-if="project.modelsId.indexOf('scj') != -1"
+                      v-if="project.modelsId.indexOf('scj') != -1 && project.modelsId.indexOf('weakPwd') == -1"
                       src="./img/start_sc.svg"
                       @click="unfavorite(project)"
               />
@@ -6412,9 +6416,8 @@
                      }
                 }
                 this.selectlabels = labels;
-           }
-
-
+           },
+           
       changeLockFlag(flag){
               if(flag){
                   this.$IpcRenderer.send("enableLock")//启用锁定快捷键
