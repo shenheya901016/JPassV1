@@ -406,14 +406,15 @@
                         <hr/>
                     </el-form-item>
                      <el-form-item
-                            v-else-if="data.type === 'webside'"
+                            v-else-if="data.type === 'website'"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             :key="data.tempkey"
                             style="margin-bottom:3px;"
                     >
-                        <input type="text" v-model="data.val" readonly/>
-                        <hr/>
+                    <input type="text" v-model="data.val" readonly /><a :href="data.val.indexOf('https://')==-1 && data.val.indexOf('http://')==-1?'https://'+data.val:data.val" target="_blank" ><i class="el-icon-info"></i></a>
+
+                  <hr/>
                     </el-form-item>
                      <el-form-item
                             v-else-if="data.type === 'login'"
@@ -890,7 +891,7 @@
                                     ></a>
                                 </el-form-item>
                                  <el-form-item
-                                        v-else-if="data.type === 'webside'"
+                                        v-else-if="data.type === 'website'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         :key="index"
@@ -1159,7 +1160,7 @@
                                     ></a>
                                 </el-form-item>
                                 <el-form-item
-                                        v-else-if="data.type === 'webside'"
+                                        v-else-if="data.type === 'website'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         :key="data.tempkey"
@@ -1391,7 +1392,7 @@
                                     ></a>
                                 </el-form-item>
                                 <el-form-item
-                                        v-else-if="data.type === 'webside'"
+                                        v-else-if="data.type === 'website'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         :key="data.tempkey"
@@ -1623,7 +1624,7 @@
                                     ></a>
                                 </el-form-item>
                                  <el-form-item
-                                        v-else-if="data.type === 'webside'"
+                                        v-else-if="data.type === 'website'"
                                         :label="data.tempkey"
                                         :prop="data.tempkey"
                                         :key="data.tempkey"
@@ -3562,7 +3563,7 @@
                 });
             }
 
-            this.initialize();
+            this.initialize1();
             this.unshow();
         },
 
@@ -3764,7 +3765,7 @@
                         }, {
                             "id": "fdbce196-fec4-11e9-bd32-854c67bf088b",
                             "key": "Website",
-                            "type": "text",
+                            "type": "website",
                             "val": "",
                             "tempkey": "Website"
                         }, {
@@ -3807,7 +3808,7 @@
                         }, {
                             "id": "fffce150-fec4-11e9-bd32-854c67bf088b",
                             "key": "Website",
-                            "type": "text",
+                            "type": "website",
                             "val": "",
                             "tempkey": "Website"
                         }, {
@@ -3836,7 +3837,7 @@
                         "datas": [{
                             "id": "fdbce150-fec4-20e9-bd32-854c67bf088b",
                             "key": "Website",
-                            "type": "text",
+                            "type": "website",
                             "val": "",
                             "tempkey": "Website"
                         },
@@ -3910,9 +3911,9 @@
                         {
                         "id": "fdbce150-fec4-11e9-bd32-854c67bf397b",
                         "key": this.$t('selects.webside'),
-                        "type": "webside",
+                        "type": "website",
                         "val": "",
-                        "tempkey": "Webside"
+                        "tempkey": "Website"
                         },
                     ]
                 },
@@ -4693,35 +4694,35 @@
                 projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
                 this.projects = projectArray;
             },
-            // async initialize1(){
-            //     console.log("11111");
-            //      let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
-            //     let address = loginObj.address;
-            //     let secret = loginObj.secret;
-            //     this.myInfoKey = address;
-            //     this.username = loginObj.name;
-            //     var db_name = "db_" + address;
-            //     this.db = await this.$Lowdb(db_name);
-            //     this.localdb = await this.$Lowdb(db_name + "_local");
-            //     //取ipfs数据
-            //     let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
-            //     ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
-            //     ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
-            //     this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
-            //      let profiles = {
-            //                 name: loginObj.name, address: address,
-            //             }
-            //       var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
-            //             await this.db.defaults(newdata).write();
-            //             let imgdata = {"img": []};
-            //             await this.localdb.defaults(imgdata).write();
-            //             this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
-            //             await this.db.set("templates", this.operateTemplates.templates).write();
-            //             await this.db.set('settings', this.settings).write();
-            //             await this.db.set('machineId', this.$Uuidv1()).write();
-            //             await this.db.set('version', 0).write();
-            //             this.getdirectory();
-            // },
+            async initialize1(){
+                console.log("11111");
+                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+                let address = loginObj.address;
+                let secret = loginObj.secret;
+                this.myInfoKey = address;
+                this.username = loginObj.name;
+                var db_name = "db_" + address;
+                this.db = await this.$Lowdb(db_name);
+                this.localdb = await this.$Lowdb(db_name + "_local");
+                //取ipfs数据
+                let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
+                ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
+                ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
+                this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+                 let profiles = {
+                            name: loginObj.name, address: address,
+                        }
+                  var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
+                        await this.db.defaults(newdata).write();
+                        let imgdata = {"img": []};
+                        await this.localdb.defaults(imgdata).write();
+                        this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+                        await this.db.set("templates", this.operateTemplates.templates).write();
+                        await this.db.set('settings', this.settings).write();
+                        await this.db.set('machineId', this.$Uuidv1()).write();
+                        await this.db.set('version', 0).write();
+                        this.getdirectory();
+            },
             //启动加载
             async initialize() {
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
