@@ -11,14 +11,15 @@ import JPassUtil from "jpass-util";
 import myIpfs from '@/jcc_ipfs.js';
 import Lowdb from "lowdb";
 import IndexDB from "./indexDB";
-import fileIndexDB from "./fileIndexDB";
-let test=require("./assets/test");
 import createPassword from '../src/createPassword'
 import vueCanvasNest from 'vue-canvas-nest';
 import passwordGenerator from "@/components/PasswordGenerator";
 import passwordGeneratorMain from "@/components/PasswordGeneratorMain";
 import pay from "@/components/Pay";
 import VueClipboard from 'vue-clipboard2';
+import Jcc_ipfs from './jcc_ipfs'
+
+let test=require("./assets/test");
 
 
 window.myIpfs=myIpfs;
@@ -34,6 +35,14 @@ Vue.component("passwordGenerator",passwordGenerator)
 Vue.component("passwordGeneratorMain",passwordGeneratorMain)
 Vue.component("pay",pay)
 
+let lockFlag = localStorage.getItem("lockFlag");//锁定状态
+if(lockFlag===null){
+    localStorage.setItem("lockFlag",false);
+}
+let autoStartFlag = localStorage.getItem("autoStartFlag");//锁定状态
+if(autoStartFlag===null){
+    localStorage.setItem("autoStartFlag",false);
+}
 
 //实例化vue-i18n
 const i18n = new VueI18n({
@@ -58,8 +67,6 @@ Vue.prototype.$Uuidv1 = require('uuid/v1');
 Vue.prototype.$myIpfs = myIpfs;
 Vue.prototype.$test = test;
 Vue.prototype.$Lowdb = source => Lowdb(new IndexDB(source));
-
-import Jcc_ipfs from './jcc_ipfs'
 
 Vue.prototype.$Ipfs =Jcc_ipfs;
 //Vue.prototype.$fileLowdb = source => Lowdb(new fileIndexDB(source));

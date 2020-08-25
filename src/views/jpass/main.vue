@@ -432,19 +432,19 @@
                         <hr/>
                     </el-form-item>
                 </template>
-            
-               
+
+
                 <template v-for="(data, index) in this.projectEvent.note">
-                     <el-form-item 
+                     <el-form-item
                              v-if="data!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             :key="data.tempkey"
                             style="margin-bottom:3px;">
                        <div id="textarea" ref="textarea" v-html="data.notes.replace(/\n|\r\n/g,'<br />')"  style="border:0;white-space: pre-wrap;" readonly ></div>
- 
+
                           <hr/>
-                     </el-form-item> 
+                     </el-form-item>
                 </template>
                 <el-button
                         v-if="this.projectEvent != '' && this.projectEvent.isDel != true"
@@ -1851,11 +1851,11 @@
                                 </legend>
                                 <div style="margin-left: 2vw">
                                     {{ $t("main.loginOpenJpass") }}<br/>
-                                    <el-switch v-model="showPassword" active-color="#13ce66"
-                                            inactive-color="#ff4949"></el-switch>
+                                    <el-switch v-model="autoStartFlag" active-color="#13ce66"
+                                            inactive-color="#ff4949" @change="changeAutoStartFlag"></el-switch>
                                 </div>
                             </fieldset>
-                        </el-form-item> 
+                        </el-form-item>
                         <el-form-item prop="">
                             <fieldset style="width: 80%;height: 14vh;margin: auto;border: 1px solid #6C6C6C">
                                 <legend style="margin-left: 1%">
@@ -1863,8 +1863,8 @@
                                 </legend>
                                 <div style="margin-left: 2vw">
                                     {{ $t("main.lockRadio") }}<br/>
-                                    <el-switch v-model="showPassword" active-color="#13ce66"
-                                            inactive-color="#ff4949"></el-switch>
+                                    <el-switch v-model="lockFlag" active-color="#13ce66"
+                                            inactive-color="#ff4949" @change="changeLockFlag"></el-switch>
                                 </div>
                             </fieldset>
                         </el-form-item>
@@ -1930,7 +1930,7 @@
                             </span>
                         </fieldset>
                     </el-form-item> -->
-                    
+
 
                 <!-- <el-form-item prop="">
                     <fieldset style="width: 80%;margin: auto;height: 15vh;border: 1px solid #6C6C6C">
@@ -3390,8 +3390,8 @@
             </el-tabs>
              <div style="margin-top:1vh;text-align: center">
                     <span style="float: left;line-height: 5vh;margin-right: 1vw;">选择分类</span>
-                   <el-select v-model="selectlabels" multiple 
-                   :placeholder="$t('main.pleaseChoose')" 
+                   <el-select v-model="selectlabels" multiple
+                   :placeholder="$t('main.pleaseChoose')"
                    style="float: left;width:75%">
                     <el-option
                             v-for="(item, index) in this.labels.labels"
@@ -3570,8 +3570,6 @@
 
         data() {
             return {
-                iswbj:false,//判断是否未标记
-                isWeakPwd:false,//是否弱密码
                 checkedArray:[],
                 isctrl:"",//是否按下ctrl
                 isshift:"",//是否按下shift
@@ -3597,6 +3595,8 @@
                 showPassword: "",//是否显示密码
                 savePassword: "",
                 savePasswords: [],
+                lockFlag:localStorage.getItem("lockFlag"),//锁定状态
+                autoStartFlag:localStorage.getItem("autoStartFlag"),//开机自启状态
                 locktimedisabled: "",
                 showpass: "", //弹出框
                 ImageBase64: "",
@@ -3944,7 +3944,7 @@
                 ruleFormTemplateEdit: {},
                 ruleFormAddNote: {
                     notes:"",
-                    name:"", 
+                    name:"",
                 },
                 ruleFormNoteEdit: {
                     notes:"",
@@ -3969,32 +3969,32 @@
             };
         },
         methods: {
-            keyevent() { 
-                var that =this; 
-                document.onkeydown = function(e) {        //按下键盘      
-                 switch (e.keyCode) {        
-                   case 16:           
-                 that.isshift = true;    
-                 console.log('按下shift'); 
-                   break;         
-                   case 17:          
-                 that.isctrl = true; 
-                  console.log('按下ctrl');        
-                    break;     
-                  }     
-                };    
-                 document.onkeyup = function(e) {        //放弃键盘   
-                    switch (e.keyCode) {      
-                    case 16:           
+            keyevent() {
+                var that =this;
+                document.onkeydown = function(e) {        //按下键盘
+                 switch (e.keyCode) {
+                   case 16:
+                 that.isshift = true;
+                 console.log('按下shift');
+                   break;
+                   case 17:
+                 that.isctrl = true;
+                  console.log('按下ctrl');
+                    break;
+                  }
+                };
+                 document.onkeyup = function(e) {        //放弃键盘
+                    switch (e.keyCode) {
+                    case 16:
                 that.isshift = false;
-                console.log('释放shift');       
-                    break;        
-                    case 17:         
-                that.isctrl = false;  
-                console.log('释放ctrl');          
-                    break;       
-                   }     
-               }; 
+                console.log('释放shift');
+                    break;
+                    case 17:
+                that.isctrl = false;
+                console.log('释放ctrl');
+                    break;
+                   }
+               };
     },
             online(){
                 this.network=true;
@@ -4181,7 +4181,7 @@
                         } else {
                             this.showTrash = false;//是否显示清空垃圾桶图标
                         }
-                    } 
+                    }
                     alldata[modelkey].count = count;
                 }
                 //分组
@@ -4303,7 +4303,7 @@
                 this.dialogVisible2 = false, this.getdirectory();
                 this.$refs[formName].resetFields();
             },
-            projectclick(note, event) {  
+            projectclick(note, event) {
                 this.clearChecked();
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
@@ -4316,7 +4316,7 @@
                 this.notesBytargeId(note);
                 this.searchTemp = "";//清空搜索框
             },
-             specialclick(note, event) {  
+             specialclick(note, event) {
                 this.clearChecked();
                 var target = event.currentTarget;
                 var index = Number(target.getAttribute("data-index"));
@@ -4356,7 +4356,7 @@
                 var index = Number(target.getAttribute("data-index"));
                 this.currentNote = index;
                 this.delobj = project;
-                this.isDisabled = false;         
+                this.isDisabled = false;
                 this.projectEvent = project;
                 if(this.isctrl==true){
                     let repetitive=false;//判断是否重复标识
@@ -4384,7 +4384,7 @@
 
             },
 
-   
+
             remove() {
                 let type = this.delobj.type;
                 let id = this.delobj.id;
@@ -4406,22 +4406,22 @@
                  //单选操作
                 if (type == "model" ) {
                   this.dialogVisibledDirectory = true;
-                } 
+                }
                  if (type == "project" && this.delobj.isDel!=true) {
                   this.dialogVisibledProject = true;
-                } 
-                 
+                }
+
                  if (type == "template" && this.delobj.isDel!=true) {
                   this.dialogVisibledTemplate = true;
                 }
                 if (this.delobj.isDel==true) {
                   this.dialogVisibledProjectDel = true;
-                } 
+                }
 
 
             }
-                
-                
+
+
             }, //删除数据
           async  removeData() {
                 var type = this.delobj.type;
@@ -4446,7 +4446,7 @@
                             this.db.get("templates").find({id: item.id}).set('isDel', true).write();
                         })
                     let now= await this.getTime();
-                    this.db.set('version',now ).write();    
+                    this.db.set('version',now ).write();
                     this.dialogVisibledTemplate = false;
                     this.projectEvent = "";
                     this.isDisabled = true;
@@ -4525,10 +4525,10 @@
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
                     this.currentNote = -1;
-                } 
+                }
              }
-            }, 
-            
+            },
+
              //垃圾桶直接删除
             async removeDataTrash(){
                  var type = this.delobj.type;
@@ -4542,7 +4542,7 @@
                             }
                             if(item.type=="template"){
                                 this.db.get("templates").remove({id: item.id}).write();
-                            } 
+                            }
                         })
                     this.dialogVisibledProjectDel = false;
                     this.projectEvent = "";
@@ -4568,7 +4568,7 @@
                 let now= await this.getTime();
                 this.db.set('version',now ).write();
              },
-            
+
             //点击目录生成projects列表
             async notesBytargeId(obj) {
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -4686,7 +4686,7 @@
                         }
                     }
                 }
-                projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
+                projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
                 this.projects = projectArray;
             },
             // async initialize1(){
@@ -5064,7 +5064,7 @@
                         this.dialogVisibleEdit = true;
                         this.operationType = "project_edit";
                     }else if(this.editobject.type == "project" && this.editobject.isnote==true){
-                        let modelsId = this.editobject.modelsId; 
+                        let modelsId = this.editobject.modelsId;
                         let models = [];
                          for (var index in modelsId) { //下拉框不显示sy,wbj
                             if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("weakPwd")==-1) {
@@ -5087,7 +5087,7 @@
                         this.dialogVisibleTemplateEdit = true;
                         this.operationType = "template_edit";
                     }
-            }, 
+            },
             //修改project
            async editDo() {
                if(!this.network){
@@ -5192,7 +5192,7 @@
                 }else{
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
-                //处理分类  
+                //处理分类
                 this.setlabels(this.selectlabels, this.tempTemplate);
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
@@ -5259,7 +5259,7 @@
                     this.selectlabels.push("mb");//必须增加模板分类
                    }
                 var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
-               
+
                 if (this.imgtype == "url") {
                     this.imgHash = "";
                     this.editobject.imgtype = "url";
@@ -5624,12 +5624,12 @@
                         })
                          this.clearChecked();
                 }else{
-                //单个恢复    
+                //单个恢复
                 if (this.projectEvent.type == "project") {
                     this.db.get("project").find({id: this.projectEvent.id}).set("isDel", false).write();
                 } else if (this.projectEvent.type == "template") {
                     this.db.get("templates").find({id: this.projectEvent.id}).set("isDel", false).write();
-                } 
+                }
               }
                 this.db.set('version',await this.getTime()).write();
                 this.dialogRecover = false;
@@ -6073,7 +6073,7 @@
                     this.percentage =0;
                     this.level="";
                      this.status="#E5E9F2"
-                    
+
                 }
 
             },
@@ -6107,13 +6107,13 @@
           rename(){
             this.ruleFormRename.pName=this.delobj.name;
             this.dialogVisibleRename = true;
-            
+
           },
           //增加文件夹
           async renameDo(formName) {
              let id = this.delobj.id;
              let directory = this.db.get("models").find({id: id}).value();
-             directory.name =this.ruleFormRename.pName; 
+             directory.name =this.ruleFormRename.pName;
              directory
              this.db.get("models").remove({id: id}).write();
              this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
@@ -6148,7 +6148,7 @@
                                  if(directorylist[index].top!=true){
                                      //增加置顶
                                      directorylist[index].top=true;
-                                     directorylist[index].index=0;    
+                                     directorylist[index].index=0;
                                      this.db.get("models").remove({id: id}).write();
                                      this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directorylist[index]))).write();
                                      let now= await this.getTime();
@@ -6169,8 +6169,8 @@
                                 let now= await this.getTime();
                                 this.db.set('version',now).write();
                              }
-                      }      
-                }  
+                      }
+                }
                 this.getdirectory();
           },
         //排序
@@ -6187,17 +6187,17 @@
                       topArray.push(data[index]);
                   }else{
                       indexArray.push(data[index])
-                  } 
+                  }
               }
-              topArray.sort((a, b) => a.index - b.index); //a~z 排序    
-              indexArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序    
+              topArray.sort((a, b) => a.index - b.index); //a~z 排序
+              indexArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
               topArray.push(...indexArray); //a.push(...b);
               this.DDirectory.directory=topArray;
 
               //项目排序
               let project =this.projects;
               console.log(project);
-              project.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
+              project.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
               this.projects=project;
           },
            // 增加笔记页面打开
@@ -6330,7 +6330,7 @@
 
                   this.checkedArray.forEach(item=>{
                       item.checked=false;
-                  });                  
+                  });
                 this.checkedArray=[];
                 console.log("crash");
             },
@@ -6350,7 +6350,7 @@
                 this.tempTemplate = [];
                 this.ruleFormAddNote.notes="";
             },
-            
+
            setlabels(labels,data){
                let hasLabels=false; //判断分类中是否存在自定义labels分组
                console.log(data);
@@ -6388,7 +6388,7 @@
                            return item != "weakPwd"
                        })
                 }
-              
+
               //判断labels 中是否有自定义label分类
                     let dirlist =  this.DDirectory.directory
                     for(let index in dirlist){
@@ -6412,10 +6412,21 @@
                      }
                 }
                 this.selectlabels = labels;
-           }                  
+           }
+
+
+      changeLockFlag(flag){
+              if(flag){
+                  this.$IpcRenderer.send("enableLock")//启用锁定快捷键
+              }else{
+                  this.$IpcRenderer.send("disableLock")//禁用锁定快捷键
+              }
+            },
+            changeAutoStartFlag(flag){
+                this.$IpcRenderer.send("setLoginItemSettings",flag);//是否启用开机自启
+            }
         },
-            
-        watch: { 
+        watch: {
             'ruleFormAddTemplate.name': function(){
                 if(this.ruleFormAddTemplate.name){
                     this.ruleFormAddTemplate.name=this.ruleFormAddTemplate.name.replace(/^\s+|\s+$/g,'');
@@ -6467,7 +6478,7 @@
                     this.templatedisable=true
                 }
             },
-        }
+            }
     }
 </script>
 <style lang="less"  scoped>
