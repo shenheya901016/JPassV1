@@ -122,11 +122,10 @@
                 >
             <span
             >{{ project.name }} <i>{{ project.count }}</i></span
-            >
-                </li>
+            ></li>
             </ul>
             <h3>{{ $t("main.folder") }}</h3>
-            <ul class="wjj"id="DirUL" style="display: flex;flex-direction: column;padding: 0 1.8vw 0 2.5vw;">
+            <ul class="wjj"  style="display: flex;flex-direction: column;padding: 0 1.8vw 0 2.5vw;">
                 <li style="height: 35px;line-height: 35px;border-radius: 7px;margin-bottom: 2%"
                         v-for="(project, index) in DDirectory.directory"
                         @click.left="directoryclick(project, $event)"
@@ -145,6 +144,20 @@
               }}<i style="float: right;color: #A8B1C6;width: 47px;height: 23px;text-align: center;border-radius: 11.5px;line-height: 23px; margin-top: 7px;position: absolute;right: 2vw;">{{ project.count }}</i></span
             >
                 </li>
+            </ul>
+            <h3>{{ $t("main.special") }}</h3>
+            <ul class="special" style="">
+                <li
+                        v-for="(project, index) in DSpecial.special"
+                        @click="specialclick(project, $event)"
+                        :data-index="index"
+                        :class="index == currentSpecial ? click : disclick"
+                        @contextmenu.prevent="openMenu_1(project, $event)"
+                        :key="index"
+                >
+            <span
+            >{{ project.name }} <i>{{ project.count }}</i></span
+            ></li>
             </ul>
         </nav>
         <ul id="menu_1" class="menu">
@@ -3557,6 +3570,8 @@
 
         data() {
             return {
+                iswbj:false,//判断是否未标记
+                isWeakPwd:false,//是否弱密码
                 checkedArray:[],
                 isctrl:"",//是否按下ctrl
                 isshift:"",//是否按下shift
@@ -3617,11 +3632,13 @@
                 password: '',
                 loginObj: this.$JSON5.parse(sessionStorage.getItem("userkeyObj")),
                 currentProject: -1,//大于li 总数量，如果初始为""，默认选择第0个元素
+                currentSpecial: -1,//大于li 总数量，如果初始为""，默认选择第0个元素
                 currentDirectory: -1,
                 currentNote: -1,
                 currentTemplate: -1,
                 DProject: '',
                 DDirectory: '',
+                DSpecial:'',
                 click: 'click',
                 disclick: 'disclick',
                 delobj: '',
@@ -4132,13 +4149,14 @@
                 saveAs(blob, "keystore");
             }, //获取目录
             async getdirectory() {
-               // this.clearChecked();
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 let secret = loginObj.secret;
-                var alldata = this.db.get("models").value();
+                var alldata = this.db.get("models").value();// 获取所有分类
                 var allProjects = this.db.get("project").value();
                 var projectstring = ""
                 var directoryString = ""
+                var specialString =""
+                var jsonSpecicalString=""
                 var jsonProjectstring = ""
                 var jsonDirectoryString = ""
                 var labelsString = ""
@@ -4159,23 +4177,27 @@
                     } else if (alldata[modelkey].id == "ljt") {
                         count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").filter({isDel: true}).size().value();
                         if (count > 0) {
-                            this.showTrash = true;
+                            this.showTrash = true;//是否显示清空垃圾桶图标
                         } else {
-                            this.showTrash = false;
+                            this.showTrash = false;//是否显示清空垃圾桶图标
                         }
-                    }
+                    } 
                     alldata[modelkey].count = count;
                 }
                 //分组
                 for (var key in alldata) {
                     var object = alldata[key];
                     if (object.modelsType == "project") {
-                        projectstring = projectstring + this.$JSON5.stringify(object) + ",";
+                        if(object.id=="sy" || object.id=="scj"){
+                             projectstring = projectstring + this.$JSON5.stringify(object) + ",";
+                        } else{
+                             specialString = specialString + this.$JSON5.stringify(object) + ",";
+                        }
                     }
                     if (object.modelsType == "directory") {
                         directoryString = directoryString + this.$JSON5.stringify(object) + ",";
                     }
-                    if (object.id != "sy" && object.id != "wbj" && object.id != "mb" && object.id != "ljt") {
+                    if (object.id != "sy" && object.id != "wbj" && object.id != "mb" && object.id != "ljt" && object.id != "scj" && object.id != "weakPwd") {
                         labelsString = labelsString + this.$JSON5.stringify(object) + ",";
                     }
                 }
@@ -4185,6 +4207,9 @@
                 jsonDirectoryString = "{directory:[" + directoryString + "]}";
                 labelsString = labelsString.substring(0, labelsString.length - 1);
                 jsonLabelsString = "{labels:[" + labelsString + "]}";
+                specialString = specialString.substring(0, specialString.length - 1);
+                jsonSpecicalString = "{special:[" + specialString + "]}";
+
                 //文件夹
                 this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
                 //分类下拉框国际化
@@ -4199,6 +4224,12 @@
                     jsonProjects[obj].name = this.international(jsonProjects[obj].name);
                 }
                 this.DProject = {project: jsonProjects};
+                //special 国际化
+                var jsonSpecial = this.$JSON5.parse(jsonSpecicalString).special;
+                 for (var obj in jsonSpecial) {
+                    jsonSpecial[obj].name = this.international(jsonSpecial[obj].name);
+                }
+                this.DSpecial = {special:jsonSpecial};
                 //类型名称
                 for (var index in allProjects) {
                     var newArray = new Array();
@@ -4278,6 +4309,20 @@
                 var index = Number(target.getAttribute("data-index"));
                 this.currentProject = index;
                 this.currentDirectory = -1;
+                this.currentSpecial = -1;
+                this.isDisabled = true;
+                this.delobj = note;
+                this.directoryClickId = note.id;
+                this.notesBytargeId(note);
+                this.searchTemp = "";//清空搜索框
+            },
+             specialclick(note, event) {  
+                this.clearChecked();
+                var target = event.currentTarget;
+                var index = Number(target.getAttribute("data-index"));
+                this.currentSpecial = index;
+                this.currentProject = -1;
+                this.currentDirectory = -1;
                 this.isDisabled = true;
                 this.delobj = note;
                 this.directoryClickId = note.id;
@@ -4290,6 +4335,7 @@
                 var index = Number(target.getAttribute("data-index"));
                 this.currentDirectory = index;
                 this.currentProject = -1;
+                this.currentSpecial = -1;
                 this.delobj = note;
                 this.isDisabled = false;
                 this.directoryClickId = note.id;
@@ -4643,6 +4689,35 @@
                 projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序  
                 this.projects = projectArray;
             },
+            // async initialize1(){
+            //     console.log("11111");
+            //      let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+            //     let address = loginObj.address;
+            //     let secret = loginObj.secret;
+            //     this.myInfoKey = address;
+            //     this.username = loginObj.name;
+            //     var db_name = "db_" + address;
+            //     this.db = await this.$Lowdb(db_name);
+            //     this.localdb = await this.$Lowdb(db_name + "_local");
+            //     //取ipfs数据
+            //     let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
+            //     ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
+            //     ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
+            //     this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+            //      let profiles = {
+            //                 name: loginObj.name, address: address,
+            //             }
+            //       var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
+            //             await this.db.defaults(newdata).write();
+            //             let imgdata = {"img": []};
+            //             await this.localdb.defaults(imgdata).write();
+            //             this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+            //             await this.db.set("templates", this.operateTemplates.templates).write();
+            //             await this.db.set('settings', this.settings).write();
+            //             await this.db.set('machineId', this.$Uuidv1()).write();
+            //             await this.db.set('version', 0).write();
+            //             this.getdirectory();
+            // },
             //启动加载
             async initialize() {
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -4664,7 +4739,7 @@
                         let profiles = {
                             name: loginObj.name, address: address,
                         }
-                        var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},]}');
+                        var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"weakpassword","modelsType":"project","type":"model"}]}');
                         await this.db.defaults(newdata).write();
                         let imgdata = {"img": []};
                         await this.localdb.defaults(imgdata).write();
@@ -4878,18 +4953,9 @@
                    let newProject = ""
                    let imgtype = ""
                    let img = formData.tempBase64;
-                   if (this.selectlabels.indexOf("sy") == -1) {
-                       this.selectlabels.push("sy");//所有项必须有
-                   }
-                   if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                       this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                   }
-                   if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                       //大于2项，包含所有项和为标记项时删除为标记项
-                       this.selectlabels = this.selectlabels.filter(function (item) {
-                           return item !== "wbj"
-                       })
-                   }
+                   //设置分类
+                   this.setlabels(this.selectlabels,formData.datas);
+                   console.log(this.selectlabels);
                    //图片
                    if (this.imgtype == "url") {
                        imgtype = "url";
@@ -4990,7 +5056,7 @@
                         let modelsId = this.editobject.modelsId;
                         let models = [];
                         for (var index in modelsId) { //下拉框不显示sy,wbj
-                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")) {
+                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("weakPwd")==-1) {
                                 models.push(modelsId[index]);
                             }
                         }
@@ -5001,7 +5067,7 @@
                         let modelsId = this.editobject.modelsId; 
                         let models = [];
                          for (var index in modelsId) { //下拉框不显示sy,wbj
-                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")) {
+                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("weakPwd")==-1) {
                                 models.push(modelsId[index]);
                             }
                         }
@@ -5013,7 +5079,7 @@
                         var modelsId = this.editobject.modelsId;
                         var models = [];
                         for (var index in modelsId) { //下拉框不显示mb
-                            if (modelsId[index].indexOf("mb") == -1) {
+                            if (modelsId[index].indexOf("mb") == -1 && modelsId[index].indexOf("weakPwd")==-1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("sy")==-1) {
                                 models.push(modelsId[index]);
                             }
                         }
@@ -5031,18 +5097,20 @@
                    try {
                        this.db.get("project").remove({id: this.editobject.id}).write();
                        var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
-                       if (this.selectlabels.indexOf("sy") == -1) {
-                           this.selectlabels.push("sy");//所有项必须有
-                       }
-                       if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                           this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                       }
-                       if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                           //大于2项，包含所有项和为标记项时删除为标记项
-                           this.selectlabels = this.selectlabels.filter(function (item) {
-                               return item !== "wbj"
-                           })
-                       }
+                       this.setlabels(this.selectlabels,this.editobject.datas);
+                       console.log(this.selectlabels);
+                    //    if (this.selectlabels.indexOf("sy") == -1) {
+                    //        this.selectlabels.push("sy");//所有项必须有
+                    //    }
+                    //    if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
+                    //        this.selectlabels.push("wbj");//只有所有项，增加未标记项
+                    //    }
+                    //    if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
+                    //        //大于2项，包含所有项和为标记项时删除为标记项
+                    //        this.selectlabels = this.selectlabels.filter(function (item) {
+                    //            return item !== "wbj"
+                    //        })
+                    //    }
                        this.editobject.modelsId = this.selectlabels;
                        //图片处理
                        if (this.imgtype == "url") {
@@ -5076,7 +5144,7 @@
                                this.uploadImg(this.editobject.tempBase64, this.editobject.type, this.editobject.id);
                            }
                        }
-                       //二次刷新
+                        //二次刷新
                        this.getdirectory();
                        this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                        this.editobject = "";
@@ -5124,7 +5192,8 @@
                 }else{
                 var loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
                 var address = loginObj.address;
-                //处理分类
+                //处理分类  
+                this.setlabels(this.selectlabels, this.tempTemplate);
                 if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
                 }
@@ -5184,10 +5253,13 @@
                   this.$message.error(this.$t('login.outline'));
                   return false;
               }else{
-                var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
-                if (this.selectlabels.indexOf("mb") == -1) {
+
+                    this.setlabels(this.selectlabels, this.editobject.datas);
+                  if (this.selectlabels.indexOf("mb") == -1) {
                     this.selectlabels.push("mb");//必须增加模板分类
-                }
+                   }
+                var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
+               
                 if (this.imgtype == "url") {
                     this.imgHash = "";
                     this.editobject.imgtype = "url";
@@ -5530,7 +5602,8 @@
                     "password": this.$t('main.password'),
                     "template": this.$t('main.template'),
                     "unmarked": this.$t('main.unmarked'),
-                    "trash": this.$t('main.trash')
+                    "trash": this.$t('main.trash'),
+                    "weakpassword": this.$t('main.weakpassword')
                 };
                 for (var index in directory) {
                     if (name == index) {
@@ -6139,21 +6212,10 @@
                    this.$message.error(this.$t('login.outline'));
                    return false;
                }else {
+                   this.setlabels(this.selectlabels,null);
                    let projectName = this.ruleFormAddNote.name;
                    let newProject = ""
                    let imgtype = ""
-                   if (this.selectlabels.indexOf("sy") == -1) {
-                       this.selectlabels.push("sy");//所有项必须有
-                   }
-                   if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                       this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                   }
-                   if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                       //大于2项，包含所有项和为标记项时删除为标记项
-                       this.selectlabels = this.selectlabels.filter(function (item) {
-                           return item !== "wbj"
-                       })
-                   }
                    //图片
                    if (this.imageBase64 == '') {
                     //默认图片
@@ -6209,18 +6271,8 @@
                   this.$message.error(this.$t('login.outline'));
                   return false;
               }else{
-                if (this.selectlabels.indexOf("sy") == -1) {
-                           this.selectlabels.push("sy");//所有项必须有
-                       }
-                       if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                           this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                       }
-                       if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                           //大于2项，包含所有项和为标记项时删除为标记项
-                           this.selectlabels = this.selectlabels.filter(function (item) {
-                               return item !== "wbj"
-                           })
-                   }
+                   console.log(this.selectlabels);
+                   this.setlabels(this.selectlabels,null);
                 var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                 if (this.imgtype == "url") {
                     this.imgHash = "";
@@ -6298,9 +6350,71 @@
                 this.tempTemplate = [];
                 this.ruleFormAddNote.notes="";
             },
+            
+           setlabels(labels,data){
+               let hasLabels=false; //判断分类中是否存在自定义labels分组
+               console.log(data);
+               //判断是否为弱密码
+               if(data!=null){//笔记类型，data = null
+                for (let index in data){
+                     if(data[index].type=="password" && data[index].val!=""){
+                         console.log(data[index].val);
+                        if(data[index].percentage<35){
+                            this.isWeakPwd=true;
+                            break;
+                        }else{
+                            this.isWeakPwd=false
+                        }
+                    }else if(data[index].type=="password" && data[index].val==""){
+                            this.isWeakPwd=false
+                    }
+                }
+              }
+
+                //所有项必须有
+                if (labels.indexOf("sy") == -1) {
+                      labels.push("sy");//所有项必须有
+                    }
+                //判断是否增加弱密码
+                if(this.isWeakPwd && labels.indexOf("weakPwd")==-1){
+                      labels.push("weakPwd");//所有项必须有
+                      console.log("add weakPwd");
+                }
+
+                //判断是否减去弱密码
+                 if(!this.isWeakPwd && labels.indexOf("weakPwd")!=-1){
+                      console.log("remove weakPwd");
+                       labels = labels.filter(function (item) {
+                           return item != "weakPwd"
+                       })
+                }
+              
+              //判断labels 中是否有自定义label分类
+                    let dirlist =  this.DDirectory.directory
+                    for(let index in dirlist){
+                          if(labels.indexOf(dirlist[index].id)!=-1){
+                            hasLabels=true;
+                            break;
+                        }
+                    }
+
+                 //判断是否增加wbj 分类
+                if(labels.indexOf("mm")==-1 && labels.indexOf("wbj")==-1 && labels.indexOf("mb")==-1 && !hasLabels){
+                      labels.push("wbj");
+                }
+
+                //判断是否删除wbj 分类
+                if(labels.indexOf("mm")>0 || labels.indexOf("mb")!=-1 ||hasLabels){
+                     if(labels.indexOf("wbj")!=-1){
+                          labels = labels.filter(function (item) {
+                           return item !== "wbj"
+                       })
+                     }
+                }
+                this.selectlabels = labels;
+           }                  
         },
             
-
         watch: { 
             'ruleFormAddTemplate.name': function(){
                 if(this.ruleFormAddTemplate.name){
@@ -6353,8 +6467,7 @@
                     this.templatedisable=true
                 }
             },
-
-            }
+        }
     }
 </script>
 <style lang="less"  scoped>

@@ -149,6 +149,13 @@
 	flex-direction: column;
 	padding:1vh 1.8vw 0 2.5vw;
 }
+
+.aside .nav ul.special{
+	display: flex;
+	flex-direction: column;
+	padding:1vh 1.8vw 0 2.5vw;
+}
+
 .aside .nav ul.dh li{
 	height: 35px;
 	line-height: 35px;
@@ -160,13 +167,46 @@
 	border-radius: 7px;
 	border: 1px solid white;
 }
+
+.aside .nav ul.special li{
+	height: 35px;
+	line-height: 35px;
+	padding-left: 30px;
+	cursor: pointer;
+	background: url(../img/aside_icon1.svg) no-repeat left center;
+	background-size: 23px 23px;
+	margin-top: 4px;
+	border-radius: 7px;
+	border: 1px solid white;
+}
+
 .aside .nav ul.dh li span{
 	float: left;
 	color: #333;
     text-align: left;
     width: 200px;
 }
+
+.aside .nav ul.special li span{
+	float: left;
+	color: #333;
+    text-align: left;
+    width: 200px;
+}
 .aside .nav ul.dh li i{
+	float: right;
+	color: #A8B1C6;
+	width: 47px;
+	height: 23px;
+	text-align: center;
+	border-radius: 11.5px;
+	line-height: 23px;
+    margin-top: 7px;
+    position: absolute;
+    right: 2vw;
+}
+
+.aside .nav ul.special li i{
 	float: right;
 	color: #A8B1C6;
 	width: 47px;
@@ -186,31 +226,33 @@
 	background: url(../img/aside_icon2.svg) no-repeat left center;
 	background-size: 23px 23px;
 }
-.aside ul.dh li:nth-child(3){
+.aside ul.special li:nth-child(1){
 	background: url(../img/aside_icon3.svg) no-repeat left center;
 	background-size: 23px 23px;
 }
-.aside ul.dh li:nth-child(4){
+.aside ul.special li:nth-child(2){
 	background: url(../img/aside_icon4.svg) no-repeat left center;
 	background-size: 23px 23px;
 }
-.aside ul.dh li:nth-child(5){
+.aside ul.special li:nth-child(3){
 	background: url(../img/aside_icon5.svg) no-repeat left center;
 	background-size: 23px 23px;
 }
-.aside ul.dh li:nth-child(6){
+.aside ul.special li:nth-child(4){
+	background: url(../img/aside_icon6.svg) no-repeat left center;
+	background-size: 23px 23px;
+}
+.aside ul.special li:nth-child(5){
 	background: url(../img/aside_icon6.svg) no-repeat left center;
 	background-size: 23px 23px;
 }
 .aside ul.dh li:hover:nth-child(1){
 	background-color:#DCEDFF;
-	/*background: url(../img/aside_icon1_s.svg) no-repeat left center;*/
 	background-size: 23px 23px;
 	border:1px solid #50A4FF !important;
 }
 .aside .nav ul.dh li:hover:nth-child(2){
 	background-color:#DCEDFF;
-	/*background: url(../img/aside_icon2_s.svg) no-repeat left center;*/
 	background-size: 23px 23px;
 	border:1px solid #50A4FF !important;
 }
@@ -222,30 +264,44 @@
 	color: #5F768B;
 	background: #DCEDFF;
 }
-.aside .nav ul.dh li:hover:nth-child(3){
-	/*background: url(../img/aside_icon3_s.svg) no-repeat left center;*/
+
+.aside .nav ul.special li:hover span{
+    width: 200px;
+	color: #046BDA;
+}
+.aside .nav ul.special li:hover i{
+	color: #5F768B;
+	background: #DCEDFF;
+}
+
+ .aside .nav ul.special li:hover:nth-child(1){
 	background-size: 23px 23px;
 	background-color:#DCEDFF;
 	border:1px solid #50A4FF !important;
 }
-.aside .nav ul.dh li:hover:nth-child(4){
-	/*background: url(../img/aside_icon4_s.svg) no-repeat left center;*/
+.aside .nav ul.special li:hover:nth-child(2){
 	background-size: 23px 23px;
 	background-color:#DCEDFF;
 	border:1px solid #50A4FF !important;
 }
-.aside .nav ul.dh li:hover:nth-child(5){
-	/*background: url(../img/aside_icon5_s.svg) no-repeat left center;*/
+.aside .nav ul.special li:hover:nth-child(3){
 	background-size: 23px 23px;
 	background-color:#DCEDFF;
 	border:1px solid #50A4FF !important;
 }
-.aside .nav ul.dh li:hover:nth-child(6){
-	/*background: url(../img/aside_icon6_s.svg) no-repeat left center;*/
+.aside .nav ul.special li:hover:nth-child(4){
 	background-size: 23px 23px;
 	background-color:#DCEDFF;
 	border:1px solid #50A4FF !important;
-}
+} 
+.aside .nav ul.special li:hover:nth-child(5){
+	background-size: 23px 23px;
+	background-color:#DCEDFF;
+	border:1px solid #50A4FF !important;
+} 
+
+
+
 .aside .nav h3{
 	padding-left: 2vw;
 	margin-top: 3vh;

@@ -76,6 +76,7 @@ export default {
         cancel: "取消",
     },
     main: {
+        special:"Special",
         lockRadio:"Ctrl +[Alt]+L 可锁定JPass",
         KeyboardShortcuts:"键盘快捷键",
         loginOpenJpass:"登录到windows时，自动启动Jpass",
@@ -148,6 +149,7 @@ export default {
         password: "密码",
         template: "模板",
         unmarked: "未标记",
+        weakpassword:"弱密码",
         trash: "垃圾桶",
         familyAccount: "家人账号",
         privateAccount: "私人账号",
