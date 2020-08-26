@@ -136,14 +136,14 @@
                         :key="index"
                 >
              <img style="height: 35px;width: 20px;float: left;text-align: left;margin-left: 2px" :src='`${publicPath}img/directory/${project.imgPath}`'  alt=""/>
-            <span :title="project.name" style="float: left;text-align: left;margin-left:3%;"
-            >{{
-                project.name.length > 10
-                  ? project.name.substring(0, 10) + "..."
+            <span :title="project.name" style="float: left;text-align: left;margin-left:3%;">
+                {{
+                   project.name.length > 5
+                  ? project.name.substring(0, 5) + "..."
                   : project.name
-              }}<i style="float: right;color: #A8B1C6;width: 47px;height: 23px;text-align: center;border-radius: 11.5px;line-height: 23px; margin-top: 7px;position: absolute;right: 2vw;">{{ project.count }}</i></span
-            >
-                </li>
+                }}</span>
+              <i style="float: right;color: #A8B1C6;width: 47px;height: 23px;text-align: center;border-radius: 11.5px;line-height: 23px; margin-top: 7px;position: absolute;right: 2vw;">{{ project.count }}</i>
+            </li>
             </ul>
             <h3>{{ $t("main.special") }}</h3>
             <ul class="special" style="">
@@ -198,7 +198,10 @@
                 />
               {{ $t("main.toTop") }}
             </li>
-
+             <li ref="addNote" :class="addNoteClasses" @click="addNote">
+                <img src="./img/aside_icon4.svg" alt=""/>
+                {{ $t("main.newNote") }}
+            </li>
             <li ref="addTemp" :class="addTemplateClasses" @click="addTemplate">
                 <img src="./img/moban.svg" alt=""/>
                 {{ $t("main.newTemplate") }}
@@ -208,11 +211,11 @@
                 {{ $t("main.newProject") }}
             </li>
             <li ref="delete" :class="deleteClasses" @click="remove">
-                <img style="margin-right: 0.6vw" src="./img/ICON-SC.svg" alt=""/>
+                <img  src="./img/ICON-SC.svg" alt=""/>
                 {{ $t("main.delete") }}
             </li>
             <li ref="recover" :class="recoverClass" @click="dialogRecover = true">
-                <img src="./img/recover.png" alt=""/>{{ $t("main.recover") }}
+                <img src="./img/recover.png" alt=""/>&nbsp;{{ $t("main.recover") }}
             </li>
             <li
                     ref="emptyTrash"
@@ -1359,7 +1362,7 @@
                                     />
                                     <a href="#" @click="changePass($event)"><i class="el-icon-view"></i></a>
                                     <a href="#" @click="passwordGenerator(data)"><i class="el-icon-key"></i></a>
-                                    <a href="#"><i class="el-icon-close" @click="addTemplageRemoveItem(data.id)"> </i></a>
+                                    <a href="#"><i class="el-icon-close" @click="addOtherItems(data.id)"> </i></a>
                                     <div style="width:21vw;display: inline-block;">
                                         <el-progress
                                                 id="process"
@@ -3366,7 +3369,7 @@
               <el-upload
                       action="https://jsonplaceholder.typicode.com/posts/"
                       :show-file-list="false"
-                      :on-success="handleAvatarSuccessAdd"
+                      :on-success="handleAvatarSuccessAddNote"
                       :before-upload="beforeAvatarUpload"
                       style="height:2.5vh;width:8vw;display: inline-block"
               >{{ $t("main.userResource") }}
@@ -3683,6 +3686,7 @@
                 show: "none",
                 operationType: "",//symbol 新建或修改对象类型
                 //menu 右击菜单
+                addNoteClasses:[],//新建笔记样式表
                 renameClasses:[],//rename
                 addDirClasses: [],//新建文件夹样式表
                 addProjectClasses: [],//新建项目样式表
@@ -5519,6 +5523,7 @@
             }, //图片处理（增加项目）
             handleAvatarSuccessAddPro(res, file) {
                 let temp = this;
+                console.log(temp);
                 var reader = new FileReader();
                 var base64 = "";
                 reader.readAsDataURL(file.raw);
@@ -5527,7 +5532,20 @@
                     temp.templateEvent.tempBase64 = this.result;
                 }
                 this.imgtype = "base64";
-            }, //图片大小验证
+            }, 
+              //图片处理（增加笔记）
+              handleAvatarSuccessAddNote(res, file) {
+                let temp = this;
+                console.log(temp);
+                var reader = new FileReader();
+                var base64 = "";
+                reader.readAsDataURL(file.raw);
+                reader.onload = async function (e) {
+                    temp.imageBase64 = this.result;
+                }
+                this.imgtype = "base64";
+            },
+            //图片大小验证
             beforeAvatarUpload(file) {
                 let types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png', 'image/svg'];
                 const isImage = types.includes(file.type);
@@ -5813,6 +5831,7 @@
                 this.addProjectClasses = [];
                 this.addTemplateClasses = [];
                 this.emptyTrashClasses = [];
+                this.addNoteClasses = [];
                 this.deleteClasses = [];
                 this.selectColorClasses=[];
                 this.recoverClass = ["unuse"];
@@ -5835,6 +5854,7 @@
                 this.renameClasses = [];
                 this.addProjectClasses = [];
                 this.addTemplateClasses = [];
+                this.addNoteClasses = [];
                 this.emptyTrashClasses = [];
                 this.deleteClasses = [];
                 this.selectColorClasses=[];
@@ -5844,10 +5864,12 @@
                     this.addProjectClasses.push("unuse");
                     this.addTemplateClasses.push("unuse");
                     this.emptyTrashClasses.push("unuse");
+                     this.addNoteClasses.push("unuse");
                 } else if (obj.modelsType == "project") {
                     this.emptyTrashClasses.push("unuse");
                     this.addProjectClasses.push("unuse");
                     this.addTemplateClasses.push("unuse");
+                    this.addNoteClasses.push("unuse");
                     this.emptyTrashClasses.push("unuse");
                     this.deleteClasses.push("unuse");
                     this.selectColorClasses.push("unuse");
@@ -6233,6 +6255,7 @@
                     } else if (this.imgtype == "base64") {
                         this.imgurl = ""
                     }
+
                    this.newProject = {
                        "id": this.$Uuidv1(),
                        "name": projectName,
@@ -6251,7 +6274,6 @@
                        "note":[{"notes":this.ruleFormAddNote.notes}],
                        "checked":false
                    };
-                   console.log(this.newProject);
                    //db project 追加数据
                    this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(this.newProject))).write();
                    this.db.set('version', await this.getTime(),).write();
@@ -6262,12 +6284,17 @@
                    this.ruleFormAddNote.notes="";
                    this.getdirectory();
                    this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
-                   if (imgtype == "base64") {
-                       this.uploadImg(img, this.newProject.type, this.newProject.id);
+                   if (this.imgtype == "base64") {
+                       console.log(this.imageBase64);
+                       this.uploadImg(this.imageBase64, this.newProject.type, this.newProject.id);
                    }
+
+                     console.log(this.newProject);
                    //二次刷新
                    this.getdirectory();
                    this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                   this.imageBase64 = "";
+                   this.newProject = "";
                }
             },
 

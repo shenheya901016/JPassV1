@@ -71,7 +71,7 @@
             <el-dialog
                     :title="$t('login.importmode')"
                     :visible.sync="dialogVisible"
-                    width="30%"
+                    width="40%"
             >
                 <el-button
                         type="primary"
