@@ -36,9 +36,6 @@
                               style="width:95%;float: left" show-password></el-input>
                     <img @click="passwordGenerator()" style="width: 5%;" src="./img/钥匙.svg" alt="">
                 </el-form-item>
-                <!--<el-form-item>-->
-                <!--<el-progress id="process" :stroke-width="5" :percentage="percentage" :show-text="false" :status="status" style="width:95%;"></el-progress>-->
-                <!--</el-form-item>-->
                 <el-form-item :label="$t('keystoreImport.passwordRepetition')" prop="repassword">
                     <el-input type="password" v-model="ruleForm.repassword" style="width:95%;float: left"
                               oncopy="return false" onpaste="return false" show-password></el-input>

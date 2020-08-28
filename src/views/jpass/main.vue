@@ -1912,50 +1912,7 @@
                     </el-tab-pane>
                     <el-tab-pane :label="$t('main.browser')"></el-tab-pane>
                     <el-tab-pane :label="$t('main.update')"></el-tab-pane>
-                    <!-- <el-tab-pane :label="$t('main.highLevel')"></el-tab-pane> -->
                 </el-tabs>
-                    <!-- <el-form-item prop="">
-                        <fieldset style="width: 80%;margin: auto;border: 1px solid #6C6C6C">
-                            <legend style="margin-left: 1%">
-                                {{ $t("main.locking") }}
-                            </legend>
-                            <span style="display:inline-block;width: 60vh;margin-left: 2vw">
-                                {{ $t("main.timedLock") }}
-                                <el-switch v-model="systemlock" active-color="#13ce66" inactive-color="#ff4949" @change="lockchange"></el-switch>
-                            </span>
-                            <span style="display:inline-block;width: 60vh;margin-left: 2vw">
-                                {{ $t("main.idleTime") }}
-                                <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
-                            </span>
-                        </fieldset>
-                    </el-form-item> -->
-
-
-                <!-- <el-form-item prop="">
-                    <fieldset style="width: 80%;margin: auto;height: 15vh;border: 1px solid #6C6C6C">
-                        <legend style="margin-left: 1%">
-                            {{ $t("main.language") }}
-                        </legend>
-                        <span style="margin-left: 2vw">
-                            <el-select v-model="language" :placeholder="$t('main.languageSelection')">
-                                <el-option v-for="item in this.languages" :key="item.value" :label="item.label"
-                                           :value="item.value"></el-option>
-                            </el-select>
-                        </span>
-                    </fieldset>
-                </el-form-item> -->
-                <!-- <el-form-item prop="">
-                    <fieldset style="width: 80%;height: 19vh;margin: auto;border: 1px solid #6C6C6C">
-                        <legend style="margin-left: 1%">
-                            {{ $t("main.passwordService") }}
-                        </legend>
-                        <div style="margin-left: 2vw">
-                            {{ $t("main.showPassword") }}
-                            <el-switch v-model="showPassword" active-color="#13ce66"
-                                       inactive-color="#ff4949"></el-switch>
-                        </div>
-                    </fieldset>
-                </el-form-item> -->
                 <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
                     <el-button type="primary" size="small" style="width:35%;" @click="savesettings">
                         {{ $t("main.save") }}
@@ -5125,19 +5082,6 @@
                        this.db.get("project").remove({id: this.editobject.id}).write();
                        var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                        this.setlabels(this.selectlabels,this.editobject.datas);
-                       console.log(this.selectlabels);
-                    //    if (this.selectlabels.indexOf("sy") == -1) {
-                    //        this.selectlabels.push("sy");//所有项必须有
-                    //    }
-                    //    if (this.selectlabels.length == 1 && this.selectlabels.indexOf("sy") != -1) {
-                    //        this.selectlabels.push("wbj");//只有所有项，增加未标记项
-                    //    }
-                    //    if (this.selectlabels.length > 2 && this.selectlabels.indexOf("sy") != -1 && this.selectlabels.indexOf("wbj") != -1) {
-                    //        //大于2项，包含所有项和为标记项时删除为标记项
-                    //        this.selectlabels = this.selectlabels.filter(function (item) {
-                    //            return item !== "wbj"
-                    //        })
-                    //    }
                        this.editobject.modelsId = this.selectlabels;
                        //图片处理
                        if (this.imgtype == "url") {
