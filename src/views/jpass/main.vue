@@ -501,6 +501,7 @@
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="false"
+                @open="auto_update_func"
         >
             <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;" @submit.native.prevent >
                 <el-form-item :label="$t('main.loginPassword')" prop="password">
@@ -1922,8 +1923,45 @@
                             </fieldset>
                            </el-form-item>
                     </el-tab-pane>
-                    <el-tab-pane :label="$t('main.browser')"></el-tab-pane>
-                    <el-tab-pane :label="$t('main.update')"></el-tab-pane>
+                    <el-tab-pane :label="$t('main.browser')">
+                        <el-form-item prop="">
+                            <fieldset style="width: 80%;height:10vh;margin: auto;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.extention") }}
+                                </legend>
+                                <div style="margin-left: 2vw">
+                                    <el-button type="primary" size="small" @click="chrome">
+                                        chrome
+                                    </el-button>
+                                </div>
+                            </fieldset>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane :label="$t('main.update')">
+                        <el-form-item prop="">
+                            <fieldset style="width: 80%;height:10vh;margin: auto;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.version") }}：{{package_version}}
+                                </legend>
+                                <div style="margin-left: 2vw">
+                                    <el-button type="primary" size="small" @click="update">
+                                        {{ $t("main.update") }}
+                                    </el-button>
+                                </div>
+                            </fieldset>
+                        </el-form-item>
+                        <el-form-item prop="">
+                            <fieldset style="width: 80%;height:14vh;margin: auto;border: 1px solid #6C6C6C">
+                                <legend style="margin-left: 1%">
+                                    {{ $t("main.auto_update") }}
+                                </legend>
+                                <div style="margin-left: 2vw">
+                                    {{ $t("main.auto_update_prompt") }}<br/>
+                                    <el-switch v-model="auto_update" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                                </div>
+                              </fieldset>
+                        </el-form-item>
+                    </el-tab-pane>
                 </el-tabs>
                 <el-form-item label="" prop="" style="margin-top:5%;text-align: center">
                     <el-button type="primary" size="small" style="width:35%;" @click="savesettings">
@@ -3507,12 +3545,13 @@
     </body>
 </template>
 <script type="es6">
+    import isElectron from 'is-electron'
     import low from 'lowdb';
     import LocalStorage from 'lowdb/adapters/LocalStorage';
     import password from '../../password.js';
     import ipfs from '@/jcc_ipfs.js'
     let FileSaver = require('file-saver');
-
+    import config from '../../../package.json'
     const util = require('util');
     let request = require("request");
     let timecurl = "http://api.m.taobao.com/";
@@ -3546,16 +3585,49 @@
 
             this.initialize();
             this.unshow();
+            let vm = this
+            if (isElectron()) {
+                vm.ipcRenderer = window.ipcRenderer
+                vm.ipcRenderer.on('message', (event, data) => {
+                    console.log('message', data.msg)
+                    if(data.status===2){
+                        this.$message({
+                            message: data.msg,
+                            type: 'success'
+                        });
+                    }
+                })
+                vm.ipcRenderer.on('downloadProgress', (event, progressObj) => {
+                    console.log('downloadProgress', progressObj)
+                    // 可自定义下载渲染效果
+                })
+                vm.ipcRenderer.on('isUpdateNow', (event, versionInfo) => {
+                    this.$confirm('检测到新版本' + versionInfo.version + ',是否立即升级？', '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消（程序关闭自动更新）',
+                      type: 'warning'
+                    }).then(() => {
+                      vm.ipcRenderer.send('updateNow');
+                    }).catch(() => {
+                      console.log("取消更新")
+                    });
+                })
+            }
         },
 
         //销毁监听事件
         beforeDestroy(){
             window.removeEventListener('online',   this.online);
             window.removeEventListener('offline',  this.outline);
+            // 移除ipcRenderer所有事件
+            if (isElectron()) {
+              this.ipcRenderer.removeAllListeners()
+            }
         },
 
         data() {
             return {
+                package_version:"0.0.0",
                 auto_update:false,
                 options: [{
                   value: 'jpassword',
@@ -3967,6 +4039,17 @@
             };
         },
         methods: {
+            chrome(){
+                window.ipcRenderer.send("https://chrome.google.com/webstore/category/extensions?h1=zh");
+            },
+            auto_update_func(){
+                if(this.auto_update){
+                    this.ipcRenderer.send('checkForUpdate'); // electron应用启动后主动触发检查更新函数
+                }
+            },
+            update(){
+                this.ipcRenderer.send('checkForUpdate'); // electron应用启动后主动触发检查更新函数
+            },
             importFile(res, file) {
               let _this = this;
               let reader = new FileReader();
@@ -5763,6 +5846,7 @@
             },
             openSetting() {
                 this.dialogVisibleSetting = true;
+                this.package_version=config.version;
             },
             addTemplate() {
                 this.selectlabels = [];
@@ -5957,6 +6041,7 @@
                 this.language = setting.language;//语言选择
                 this.showPassword = setting.showPassword;//是否显示密码
                 this.savePassword = setting.savePassword;
+                this.auto_update = setting.auto_update;
             },
             //保存设置
            async savesettings() {
@@ -5968,6 +6053,7 @@
                     this.db.get("settings").set("showPassword", this.showPassword).write();
                     this.db.get("settings").set("savePassword", this.savePassword).write();
                     this.db.get("settings").set("language", this.language).write();
+                    this.db.get("settings").set("auto_update", this.auto_update).write();
                     this.db.set('version', await this.getTime()).write();
                     this.$confirm(this.$t('main.settingSavedSuccessfully')+this.$t('main.re_login'), this.$t('main.suggest'), {
                         confirmButtonText: this.$t('main.login'),
@@ -7046,14 +7132,16 @@
            },
 
             changeLockFlag(flag){
+            debugger
               if(flag){
-                  this.$IpcRenderer.send("enableLock")//启用锁定快捷键
+                window.ipcRenderer.send("enableLock")//启用锁定快捷键
               }else{
-                  this.$IpcRenderer.send("disableLock")//禁用锁定快捷键
+                  window.ipcRenderer.send("disableLock")//禁用锁定快捷键
               }
             },
             changeAutoStartFlag(flag){
-                this.$IpcRenderer.send("setLoginItemSettings",flag);//是否启用开机自启
+              //window.ipcRenderer.send("setLoginItemSettings",flag);//是否启用开机自启
+              window.ipcRenderer.send("open","www:baidu.com");//是否启用开机自启
             },
 
              //单独刷新左侧菜单
