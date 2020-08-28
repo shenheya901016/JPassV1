@@ -131,6 +131,7 @@
             rules: {
                 name: [
                     {required: true, message: this.$t('register.ruleuser'), trigger: 'blur'},
+                    {min:6, max: 20, message: this.$t('register.ruleuserLength'), trigger: 'blur'},
                     {validator: validateName, trigger: 'blur'}
                 ],
                 password: [
