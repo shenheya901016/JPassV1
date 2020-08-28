@@ -93,6 +93,12 @@
                     ],
                     name: [
                         {required: true, message: this.$t('mnemonicimport.inputUserName'), trigger: 'blur'},
+                        {
+                            min: 6,
+                            max: 20,
+                            message: this.$t('mnemonicimport.lengthBetween3and20Characters'),
+                            trigger: 'blur'
+                        },
                         {validator: validateName, trigger: 'blur'}
                     ],
                     password: [
