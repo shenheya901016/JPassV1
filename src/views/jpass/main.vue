@@ -4525,7 +4525,7 @@
                     }
                     this.isDisabled = true;
                     this.dialogVisibledDirectory = false;
-                    this.getDirectoryLeft();
+                    this.getdirectory();
                     console.log(nextObj);
                     this.notesBytargeId(nextObj);//刷新列表页  
 
