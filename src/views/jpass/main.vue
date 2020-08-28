@@ -5848,7 +5848,8 @@
                 }
                 //二次刷新
                 this.getdirectory();
-                this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                // this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                this.afterChecked(this.newTemplate.id,this.newTemplate.type);
                 this.imageBase64 = "";
                 this.newTemplate = "";
                 }
@@ -6159,11 +6160,6 @@
                     return false;
                 }
                 obj.modelsId.push("scj");
-                if (obj.modelsId.indexOf("wbj") != -1) {//有未标记项，删除
-                    obj.modelsId = obj.modelsId.filter(function (item) {
-                        return item !== "wbj"
-                    })
-                }
                 if (obj.type == "project") {
                     this.db.get("project").remove({id: obj.id}).write();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
@@ -6183,9 +6179,6 @@
                 obj.modelsId = obj.modelsId.filter(function (item) {
                     return item !== "scj"
                 })
-                if (obj.modelsId.length == 1 && obj.modelsId.indexOf("sy") != -1) {
-                    obj.modelsId.push("wbj");//只有所有项，增加未标记项
-                }
                 if (obj.type == "project") {
                     this.db.get("project").remove({id: obj.id}).write();
                     this.db.get("project").push(this.$JSON5.parse(this.$JSON5.stringify(obj))).write();
@@ -6887,7 +6880,7 @@
                    this.color = "";
                    this.ruleFormAddNote.notes="";
                    this.getdirectory();
-                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                  this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
                    if (this.imgtype == "base64") {
                        console.log(this.imageBase64);
                        this.uploadImg(this.imageBase64, this.newProject.type, this.newProject.id);
@@ -6896,7 +6889,8 @@
                      console.log(this.newProject);
                    //二次刷新
                    this.getdirectory();
-                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                //    this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                   this.afterChecked(this.newProject.id,this.newProject.type);
                    this.imageBase64 = "";
                    this.newProject = "";
                }
@@ -7035,12 +7029,13 @@
                     }
 
                  //判断是否增加wbj 分类
-                if(labels.indexOf("mm")==-1 && labels.indexOf("wbj")==-1 && labels.indexOf("mb")==-1 && !hasLabels){
+                if(labels.indexOf("mm")==-1 && labels.indexOf("wbj")==-1 && !hasLabels){
                       labels.push("wbj");
                 }
 
                 //判断是否删除wbj 分类
-                if(labels.indexOf("mm")>0 || labels.indexOf("mb")!=-1 ||hasLabels){
+                // if(labels.indexOf("mm")>0 || labels.indexOf("mb")!=-1 ||hasLabels){
+                  if(labels.indexOf("mm")!=-1||hasLabels){
                      if(labels.indexOf("wbj")!=-1){
                           labels = labels.filter(function (item) {
                            return item !== "wbj"
@@ -7133,6 +7128,48 @@
                 this.DSpecial = {special:jsonSpecial};
                  //更新排序
                  this.sort();
+                },
+
+                //创建后checked 问题
+                afterChecked(objId,objType){
+                    let listproject ="";
+                   //增加项目，笔记
+                   if(objType=="project"){
+                         this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页}
+                         listproject =this.projects;
+                         this.currentProject=0;//目录check 指向sy
+                         this.currentSpecial=-1;
+                         this.currentDirectory=-1;
+                         for(let index in listproject){
+                             if(listproject[index].id == objId){
+                                 this.projectEvent = listproject[index];
+                                 this.currentNote = index;//项目列表指向当前
+                                  break;
+                             }
+                         }
+                   }
+                   if(objType=="template"){
+                       let specialList=this.DSpecial.special;
+                       console.log(specialList);
+                       this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                       listproject =this.projects;
+                       console.log(listproject);
+                       this.currentProject=-1;
+                       this.currentDirectory=-1;
+                       for(let index in listproject){
+                             if(listproject[index].id == objId){
+                                 this.projectEvent = listproject[index];
+                                 this.currentNote = index;//项目列表指向当前添加项
+                                 break;
+                             }
+                         }
+                         for(let index in specialList){
+                             if(specialList[index].id == "mb"){
+                                 this.currentSpecial =index;//目录指向模板
+                                 break;
+                             }
+                         } 
+                   } 
                 }
         },
 
