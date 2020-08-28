@@ -152,6 +152,9 @@ export default {
         toTop:"Pin to top",
         rename:"Label rename",
         newFolder: "New label",
+        import:"import",
+        export:"export",
+        cover: "cover",
         newTemplate: "New template",
         selectColorD:"Select color",
         newProject: "New card",
@@ -258,8 +261,8 @@ export default {
         day:"days",
         weeks:"weeks",
         month:"month",
-        years:"years", 
-        century:"century"  
+        years:"years",
+        century:"century"
     },
     myInfo: {
         name: "Name",
