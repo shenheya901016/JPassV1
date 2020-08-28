@@ -131,12 +131,11 @@
             rules: {
                 name: [
                     {required: true, message: this.$t('register.ruleuser'), trigger: 'blur'},
-                    {min:6, max: 20, message: this.$t('register.ruleuserLength'), trigger: 'blur'},
                     {validator: validateName, trigger: 'blur'}
                 ],
                 password: [
                     {required: true, message: this.$t('register.pleaseEnterUserPassword'), trigger: 'blur'},
-                    {min: 4,  message: this.$t('register.lengthCharacters'), trigger: 'blur'}
+                    {min: 6,  message: this.$t('register.lengthCharacters'), trigger: 'blur'}
                 ],
                 repassword: [
                     {required: true, message: this.$t('register.pleaseEnterUserPasswordAgain'), trigger: 'blur'},

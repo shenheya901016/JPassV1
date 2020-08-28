@@ -14,15 +14,6 @@
                     {{ $t("main.newFolder") }}
                 </el-button>
             </li>
-            <!-- <li>
-                <el-button @click="addTemplate" style="border:0;padding: 5px 5px;"
-                ><img
-                        style="top:-2px;height: 20px;width: 20px;"
-                        src="./img/moban.svg"
-                        alt=""
-                />{{ $t("main.newTemplate") }}
-                </el-button>
-            </li> -->
             <li>
                 <el-button @click="addNote" style="border:0;padding: 5px 5px;"
                 ><img
@@ -3566,7 +3557,7 @@
                 });
             }
 
-            this.initialize1();
+            this.initialize();
             this.unshow();
         },
 
@@ -4279,6 +4270,7 @@
                  //更新排序
                  this.sort();
             },
+
             addDirectoryOP() {
                 this.dialogVisible2 = true;
             }, //提交添加目录
@@ -4319,11 +4311,13 @@
                 this.currentProject = index;
                 this.currentDirectory = -1;
                 this.currentSpecial = -1;
+                this.currentNote = -1;
                 this.isDisabled = true;
                 this.delobj = note;
                 this.directoryClickId = note.id;
                 this.notesBytargeId(note);
                 this.searchTemp = "";//清空搜索框
+                this.projectEvent = "";
             },
              specialclick(note, event) {
                 this.clearChecked();
@@ -4332,11 +4326,13 @@
                 this.currentSpecial = index;
                 this.currentProject = -1;
                 this.currentDirectory = -1;
+                this.currentNote = -1;
                 this.isDisabled = true;
                 this.delobj = note;
                 this.directoryClickId = note.id;
                 this.notesBytargeId(note);
                 this.searchTemp = "";//清空搜索框
+                this.projectEvent = "";
             },
             directoryclick(note, event) {
                 this.clearChecked();
@@ -4345,12 +4341,15 @@
                 this.currentDirectory = index;
                 this.currentProject = -1;
                 this.currentSpecial = -1;
+                this.currentNote = -1;
                 this.delobj = note;
                 this.isDisabled = false;
                 this.directoryClickId = note.id;
                 this.searchTemp = "";//清空搜索框
+                this.projectEvent = "";
                 this.notesBytargeId(note);
-            }, noteslick(project, event) {
+            },
+             noteslick(project, event) {
                 //更新密码强度（中英文切换）
                 let items = project.datas
                 for(var item in items){
@@ -4435,6 +4434,7 @@
           async  removeData() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
+                let nextObj ="";
                 //批量删除
                 if(this.checkedArray.length>0){
                      console.log("批量删除");
@@ -4466,6 +4466,21 @@
                     //单独删除
                     console.log("单独删除");
                 if (type == "model") {
+                    let directorylist=this.DDirectory.directory;
+                    let last =directorylist.length-1;
+                    for(let i=0;i< directorylist.length;i++){
+                        //删除其他项
+                         if(directorylist[i].id ==id && directorylist.length-1!=i){
+                            this.currentDirectory=i;
+                            i++;
+                            nextObj=directorylist[i];   
+                            break;
+                         }else if(directorylist.length-1==i){
+                           //删除最后一项  
+                            nextObj=directorylist[0];
+                            this.currentDirectory=0
+                         }
+                    }
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
                     let now= await this.getTime();
@@ -4510,7 +4525,10 @@
                     }
                     this.isDisabled = true;
                     this.dialogVisibledDirectory = false;
-                    this.getdirectory();
+                    this.getDirectoryLeft();
+                    console.log(nextObj);
+                    this.notesBytargeId(nextObj);//刷新列表页  
+
                 } else if (type == "project") {
                     var projects = this.db.get("project").value();
                     this.db.get("project").find({id: this.delobj.id}).set('isDel', true).write();
@@ -4698,35 +4716,35 @@
                 projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
                 this.projects = projectArray;
             },
-            async initialize1(){
-                console.log("11111");
-                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
-                let address = loginObj.address;
-                let secret = loginObj.secret;
-                this.myInfoKey = address;
-                this.username = loginObj.name;
-                var db_name = "db_" + address;
-                this.db = await this.$Lowdb(db_name);
-                this.localdb = await this.$Lowdb(db_name + "_local");
-                //取ipfs数据
-                let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
-                ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
-                ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
-                this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
-                 let profiles = {
-                            name: loginObj.name, address: address,
-                        }
-                  var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
-                        await this.db.defaults(newdata).write();
-                        let imgdata = {"img": []};
-                        await this.localdb.defaults(imgdata).write();
-                        this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
-                        await this.db.set("templates", this.operateTemplates.templates).write();
-                        await this.db.set('settings', this.settings).write();
-                        await this.db.set('machineId', this.$Uuidv1()).write();
-                        await this.db.set('version', 0).write();
-                        this.getdirectory();
-            },
+            // async initialize1(){
+            //     console.log("11111");
+            //      let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+            //     let address = loginObj.address;
+            //     let secret = loginObj.secret;
+            //     this.myInfoKey = address;
+            //     this.username = loginObj.name;
+            //     var db_name = "db_" + address;
+            //     this.db = await this.$Lowdb(db_name);
+            //     this.localdb = await this.$Lowdb(db_name + "_local");
+            //     //取ipfs数据
+            //     let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
+            //     ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
+            //     ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
+            //     this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+            //      let profiles = {
+            //                 name: loginObj.name, address: address,
+            //             }
+            //       var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
+            //             await this.db.defaults(newdata).write();
+            //             let imgdata = {"img": []};
+            //             await this.localdb.defaults(imgdata).write();
+            //             this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+            //             await this.db.set("templates", this.operateTemplates.templates).write();
+            //             await this.db.set('settings', this.settings).write();
+            //             await this.db.set('machineId', this.$Uuidv1()).write();
+            //             await this.db.set('version', 0).write();
+            //             this.getdirectory();
+            // },
             //启动加载
             async initialize() {
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -5674,6 +5692,7 @@
                 this.dialogclearTrash = false;
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                this.projectEvent ="";
             },
             showIconMenu() {
                 var uils = document.getElementsByClassName("choosepic");
@@ -6198,7 +6217,14 @@
                              }
                       }
                 }
-                this.getdirectory();
+                this.getDirectoryLeft();
+                //重新排序后设置选中按钮位置
+                directorylist=this.DDirectory.directory;
+                for(let index in directorylist){
+                    if(directorylist[index].id ==this.delobj.id){
+                        this.currentDirectory=index;
+                    }
+                }
           },
         //排序
           sort(){
@@ -6446,7 +6472,7 @@
                 this.selectlabels = labels;
            },
            
-      changeLockFlag(flag){
+            changeLockFlag(flag){
               if(flag){
                   this.$IpcRenderer.send("enableLock")//启用锁定快捷键
               }else{
@@ -6455,8 +6481,84 @@
             },
             changeAutoStartFlag(flag){
                 this.$IpcRenderer.send("setLoginItemSettings",flag);//是否启用开机自启
-            }
+            },
+             
+             //单独刷新左侧菜单
+            getDirectoryLeft() {
+                let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+                let secret = loginObj.secret;
+                var alldata = this.db.get("models").value();// 获取所有分类
+                var allProjects = this.db.get("project").value();
+                var projectstring = ""
+                var directoryString = ""
+                var specialString =""
+                var jsonSpecicalString=""
+                var jsonProjectstring = ""
+                var jsonDirectoryString = ""
+                //设置每一项数量
+                for (var modelkey in alldata) {
+                    var count = 0
+                    if (alldata[modelkey].id != "mb" && alldata[modelkey].id != "ljt") {
+                        for (var projectkey in allProjects) {
+                            var project = allProjects[projectkey];
+                            var types = project.modelsId;
+                            if (types.indexOf(alldata[modelkey].id) != -1 && project.isDel != true) {
+                                count++;
+                            }
+                        }
+                    } else if (alldata[modelkey].id == "mb") {
+                        count = this.db.get("templates").filter({isDel: false}).size().value();
+                    } else if (alldata[modelkey].id == "ljt") {
+                        count = this.db.get("templates").filter({isDel: true}).size().value() + this.db.get("project").filter({isDel: true}).size().value();
+                        if (count > 0) {
+                            this.showTrash = true;//是否显示清空垃圾桶图标
+                        } else {
+                            this.showTrash = false;//是否显示清空垃圾桶图标
+                        }
+                    }
+                    alldata[modelkey].count = count;
+                }
+                //分组
+                for (var key in alldata) {
+                    var object = alldata[key];
+                    if (object.modelsType == "project") {
+                        if(object.id=="sy" || object.id=="scj"){
+                             projectstring = projectstring + this.$JSON5.stringify(object) + ",";
+                        } else{
+                             specialString = specialString + this.$JSON5.stringify(object) + ",";
+                        }
+                    }
+                    if (object.modelsType == "directory") {
+                        directoryString = directoryString + this.$JSON5.stringify(object) + ",";
+                    }
+                }
+                projectstring = projectstring.substring(0, projectstring.length - 1);
+                jsonProjectstring = "{project:[" + projectstring + "]}";
+                directoryString = directoryString.substring(0, directoryString.length - 1);
+                jsonDirectoryString = "{directory:[" + directoryString + "]}";
+                specialString = specialString.substring(0, specialString.length - 1);
+                jsonSpecicalString = "{special:[" + specialString + "]}";
+
+                //文件夹
+                this.DDirectory = this.$JSON5.parse(jsonDirectoryString);
+                //目录国际化
+                var jsonProjects = this.$JSON5.parse(jsonProjectstring).project;
+                for (var obj in jsonProjects) {
+                    jsonProjects[obj].name = this.international(jsonProjects[obj].name);
+                }
+                this.DProject = {project: jsonProjects};
+                //special 国际化
+                var jsonSpecial = this.$JSON5.parse(jsonSpecicalString).special;
+                 for (var obj in jsonSpecial) {
+                    jsonSpecial[obj].name = this.international(jsonSpecial[obj].name);
+                }
+                this.DSpecial = {special:jsonSpecial};
+                 //更新排序
+                 this.sort();
+                }
         },
+
+        
         watch: {
             'ruleFormAddTemplate.name': function(){
                 if(this.ruleFormAddTemplate.name){

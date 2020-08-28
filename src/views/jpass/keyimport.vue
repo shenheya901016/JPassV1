@@ -99,17 +99,11 @@
                     ],
                     name: [
                         {required: true, message: this.$t('keyImport.pleaseEnterAUserName'), trigger: 'blur'},
-                        {
-                            min: 6,
-                            max: 20,
-                            message: this.$t('keyImport.theLengthIsBetween3And20Characters'),
-                            trigger: 'blur'
-                        },
                         {validator: validateName, trigger: 'blur'}
                     ],
                     password: [
                         {required: true, message: this.$t('keyImport.pleaseEnterAUserPassword'), trigger: 'blur'},
-                        {min: 4, message: this.$t('keyImport.lengthIsBetween4And20Characters'), trigger: 'blur'}
+                        {min: 6, message: this.$t('keyImport.lengthIsBetween4And20Characters'), trigger: 'blur'}
                     ],
                     repassword: [
                         {

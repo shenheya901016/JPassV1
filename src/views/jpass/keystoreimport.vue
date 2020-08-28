@@ -110,12 +110,6 @@
                 rules: {
                     name: [
                         {required: true, message: this.$t('keystoreImport.pleaseEnterANewUsername'), trigger: 'blur'},
-                        {
-                            min: 6,
-                            max: 20,
-                            message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'),
-                            trigger: 'blur'
-                        },
                         {validator: validateName, trigger: 'blur'}
                     ],
                     oldPassword: [
@@ -125,7 +119,7 @@
                     password: [
                         {required: true, message: this.$t('keystoreImport.pleaseEnterAUserPassword'), trigger: 'blur'},
                         {
-                            min: 4,
+                            min:6,
                             max: 20,
                             message: this.$t('keystoreImport.theLengthIsBetween4And20Characters'),
                             trigger: 'blur'

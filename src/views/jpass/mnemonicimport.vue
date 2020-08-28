@@ -90,22 +90,15 @@
                 rules: {
                     mnemonic: [
                         {required: true, message: this.$t('mnemonicimport.PleaseEnter12Mnemonics'), trigger: 'blur'},
-                        // { min: 12, max:20, message: '长度在 12 到 24 个字符', trigger: 'blur' }
                     ],
                     name: [
                         {required: true, message: this.$t('mnemonicimport.inputUserName'), trigger: 'blur'},
-                        {
-                            min: 6,
-                            max: 20,
-                            message: this.$t('mnemonicimport.lengthBetween3and20Characters'),
-                            trigger: 'blur'
-                        },
                         {validator: validateName, trigger: 'blur'}
                     ],
                     password: [
                         {required: true, message: this.$t('mnemonicimport.inputPassword'), trigger: 'blur'},
                         {
-                            min: 4,
+                            min: 6,
                             max: 20,
                             message: this.$t('mnemonicimport.lengthBetween4and20Characters'),
                             trigger: 'blur'
