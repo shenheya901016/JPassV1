@@ -169,7 +169,7 @@
                 />
                 {{ $t("main.newFolder") }}
             </li>
-            <li ref="export" @click="exportFile">
+            <li ref="export" :class="exportClasses" @click="exportFile">
                 <img alt="" src="./img/edit.svg" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"/>
                 {{ $t("main.export") }}
             </li>
@@ -3634,6 +3634,7 @@
 
         data() {
             return {
+                exportClasses:[],
                 package_version:"0.0.0",
                 auto_update:false,
                 options: [{
@@ -4059,7 +4060,6 @@
             },
             importFile(res, file) {
               try{
-                console.log(this.delobj);
                 let _this = this;
                 let reader = new FileReader();
                 reader.readAsText(file.raw);
@@ -4465,10 +4465,7 @@
               if (!isImage) {
                 this.$message.error('上传文件只能是 xml 格式!');
               }
-              if (!isLt200K) {
-                this.$message.error('上传头像图片大小不能超过 20KB!');
-              }
-              return isImage && isLt200K;
+              return isImage;
             },
             exportFile() {
               let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
@@ -6530,6 +6527,7 @@
                 menu.style.display = "block";
                 menu.style.left = x + "px";
                 menu.style.top = y + "px"
+                this.exportClasses.push("unuse")
                 this.deleteClasses.push("unuse");
                 this.recoverClass.push("unuse");
                 this.addDirClasses.push("unuse");
@@ -6538,6 +6536,8 @@
             },
             //菜单变化
             menulistchange(obj) {
+                console.log(obj.type);
+                console.log(obj.count);
                 this.addDirClasses = [];
                 this.renameClasses = [];
                 this.addProjectClasses = [];
@@ -6547,12 +6547,16 @@
                 this.deleteClasses = [];
                 this.selectColorClasses=[];
                 this.recoverClass = ["unuse"];
+                this.exportClasses=["unuse"];
+                if((obj.type==="model"&&obj.count>0)||obj.type==="project"){
+                    this.exportClasses=[];
+                }
                 if (obj.modelsType == "directory") {
                     this.emptyTrashClasses.push("unuse");
                     this.addProjectClasses.push("unuse");
                     this.addTemplateClasses.push("unuse");
                     this.emptyTrashClasses.push("unuse");
-                     this.addNoteClasses.push("unuse");
+                    this.addNoteClasses.push("unuse");
                 } else if (obj.modelsType == "project") {
                     this.emptyTrashClasses.push("unuse");
                     this.addProjectClasses.push("unuse");
@@ -7144,7 +7148,6 @@
            },
 
             changeLockFlag(flag){
-            debugger
               if(flag){
                 window.ipcRenderer.send("enableLock")//启用锁定快捷键
               }else{
