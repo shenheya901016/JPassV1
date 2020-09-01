@@ -5111,37 +5111,90 @@
                 let nextObj ="";
                 //批量删除
                 if(this.checkedArray.length>0){
-                     console.log("批量删除");
-                    if(this.checkedArray[0].type=="project" && this.checkedArray[0].isDel!=true){
-                        this.checkedArray.forEach(item=>{
-                            this.db.get("project").find({id: item.id}).set('isDel', true).write();
-                        })
-                    let now= await this.getTime();
-                    this.db.set('version',now ).write();
-                    this.dialogVisibledProject = false;
-                    this.projectEvent = "";
-                    this.getdirectory();
-                    console.log(this.directoryClickId);
-                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                    if(this.checkedArray.length==1){
+                       console.log("单独删除");
+                    //单个删除后确定check为删除元素的下一个元素，check该元素
+                    let projectslist=this.projects;
+                    for(let i=0;i< projectslist.length;i++){
+                        //删除其他项
+                         if(projectslist[i].id ==id && projectslist.length-1!=i){
+                            this.currentNote=i;
+                            i++;
+                            nextObj=projectslist[i];
+                            break;
+                         }else if(projectslist.length-1==i){
+                           //删除最后一项
+                            nextObj=projectslist[0];
+                            this.currentNote=0
+                         }
                     }
-                    if(this.checkedArray[0].type=="template" && this.checkedArray[0].isDel!=true){
-                         this.checkedArray.forEach(item=>{
-                            this.db.get("templates").find({id: item.id}).set('isDel', true).write();
-                        })
-                    let now= await this.getTime();
-                    this.db.set('version',now ).write();
-                    this.dialogVisibledTemplate = false;
-                    this.projectEvent = "";
-                    this.isDisabled = true;
-                    this.getdirectory();
-                    this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
-                    }
+                        if(this.checkedArray[0].type=="project" && this.checkedArray[0].isDel!=true){
+                            this.checkedArray.forEach(item=>{
+                                this.db.get("project").find({id: item.id}).set('isDel', true).write();
+                            })
+                            let now= await this.getTime();
+                            this.db.set('version',now ).write();
+                            this.dialogVisibledProject = false;
+                            this.getdirectory();
+                            console.log(this.directoryClickId);
+                            this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                       }
+                        if(this.checkedArray[0].type=="template" && this.checkedArray[0].isDel!=true){
+                            this.checkedArray.forEach(item=>{
+                                this.db.get("templates").find({id: item.id}).set('isDel', true).write();
+                            })
+                            let now= await this.getTime();
+                            this.db.set('version',now ).write();
+                            this.dialogVisibledTemplate = false;
+                           
+                            this.getdirectory();
+                            this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
+                        }
+                        this.delobj=nextObj;
+                        //先清除checkedArray，再push 删除对象的下一个对象
+                        this.checkedArray=[];
+                        console.log(nextObj);
+                        if(this.projects.length>0){//判断当前目录是否删除空，删空的话清除明细，按钮置灰。
+                             this.checkedArray.push(nextObj);
+                             this.projectEvent = nextObj;
+                        }else{
+                             this.projectEvent="";
+                             this.isDisabled = true;
+                        }
+                        
+                    }else{
+                       console.log("批量删除");
+                        if(this.checkedArray[0].type=="project" && this.checkedArray[0].isDel!=true){
+                            this.checkedArray.forEach(item=>{
+                                this.db.get("project").find({id: item.id}).set('isDel', true).write();
+                            })
+                            let now= await this.getTime();
+                            this.db.set('version',now ).write();
+                            this.dialogVisibledProject = false;
+                            this.projectEvent = "";
+                            this.getdirectory();
+                            console.log(this.directoryClickId);
+                            this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+
+                      }
+                       if(this.checkedArray[0].type=="template" && this.checkedArray[0].isDel!=true){
+                            this.checkedArray.forEach(item=>{
+                                this.db.get("templates").find({id: item.id}).set('isDel', true).write();
+                            })
+                            let now= await this.getTime();
+                            this.db.set('version',now ).write();
+                            this.dialogVisibledTemplate = false;
+                            this.projectEvent = "";
+                            this.getdirectory();
+                            this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
+                        }
+                             this.currentNote=-1
+                             this.isDisabled = true;
+                    }   
                 }else{
-                    //单独删除
-                    console.log("单独删除");
+                    //删除labels
                 if (type == "model") {
                     let directorylist=this.DDirectory.directory;
-                    let last =directorylist.length-1;
                     for(let i=0;i< directorylist.length;i++){
                         //删除其他项
                          if(directorylist[i].id ==id && directorylist.length-1!=i){
@@ -5197,36 +5250,13 @@
                             this.db.get('templates').find({id: templates[template].id}).assign({modelsId: templates[template].modelsId}).write();
                         }
                     }
-                    this.isDisabled = true;
+                    // this.isDisabled = true;
                     this.dialogVisibledDirectory = false;
                     this.getdirectory();
                     console.log(nextObj);
+                    this.delobj=nextObj;
                     this.notesBytargeId(nextObj);//刷新列表页
-
-                } else if (type == "project") {
-                    var projects = this.db.get("project").value();
-                    this.db.get("project").find({id: this.delobj.id}).set('isDel', true).write();
-                    let now= await this.getTime();
-                    this.db.set('version',now ).write();
-                    this.currentNote = -1;
-                    this.isDisabled = true;
-                    this.dialogVisibledProject = false;
-                    this.projectEvent = "";
-                    this.getdirectory();
-                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
-                } else if (type == "template") {
-                    this.db.get("templates").find({id: this.delobj.id}).set('isDel', true).write();
-                    let now= await this.getTime();
-                    this.db.set('version',now ).write();
-                    //更新template 在project中显示
-                    this.projects = this.db.get("templates").value();
-                    this.dialogVisibledTemplate = false;
-                    this.projectEvent = "";
-                    this.isDisabled = true;
-                    this.getdirectory();
-                    this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
-                    this.currentNote = -1;
-                }
+                } 
              }
             },
 
@@ -5234,37 +5264,71 @@
             async removeDataTrash(){
                  var type = this.delobj.type;
                  var id = this.delobj.id;
+                 let nextObj ="";
                  if(this.checkedArray.length>0){
-                   //批量删除
-                   if(this.checkedArray[0].isDel==true){
-                        this.checkedArray.forEach(item=>{
-                            if(item.type=="project"){
-                                this.db.get("project").remove({id:item.id}).write();
+                   if(this.checkedArray.length==1){
+                       console.log("单独删除");
+                       //单个删除后确定check为删除元素的下一个元素，check该元素
+                        let projectslist=this.projects;
+                        for(let i=0;i< projectslist.length;i++){
+                            //删除其他项
+                            if(projectslist[i].id ==id && projectslist.length-1!=i){
+                                this.currentNote=i;
+                                i++;
+                                nextObj=projectslist[i];
+                                break;
+                            }else if(projectslist.length-1==i){
+                            //删除最后一项
+                                nextObj=projectslist[0];
+                                this.currentNote=0
                             }
-                            if(item.type=="template"){
-                                this.db.get("templates").remove({id: item.id}).write();
-                            }
-                        })
-                    this.dialogVisibledProjectDel = false;
-                    this.projectEvent = "";
-                    this.getdirectory();
-                    console.log(this.directoryClickId);
-                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
-                    }
-                 }else{
-                   //单个删除
-                   if (type == "project") {
-                      this.db.get("project").remove({id:this.delobj.id}).write();
-                    }
-                    if (type == "template") {
-                       this.db.get("templates").remove({id:this.delobj.id}).write();
-                    }
-                    this.currentNote = -1;
-                    this.isDisabled = true;
-                    this.dialogVisibledProjectDel = false;
-                    this.projectEvent = "";
-                    this.getdirectory();
-                    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                        }
+                           if(this.checkedArray[0].isDel==true){
+                                this.checkedArray.forEach(item=>{
+                                    if(item.type=="project"){
+                                        this.db.get("project").remove({id:item.id}).write();
+                                    }
+                                    if(item.type=="template"){
+                                        this.db.get("templates").remove({id: item.id}).write();
+                                    }
+                                })
+                            this.dialogVisibledProjectDel = false;
+                            this.projectEvent = "";
+                            this.getdirectory();
+                            console.log(this.directoryClickId);
+                            this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                         }
+                         this.delobj=nextObj;
+                        //先清除checkedArray，再push 删除对象的下一个对象
+                        this.checkedArray=[];
+                        if(this.projects.length>0){//判断当前目录是否删除空，删空的话清除明细，按钮置灰。
+                             this.checkedArray.push(nextObj);
+                             this.projectEvent = nextObj;
+                        }else{
+                             this.projectEvent="";
+                             this.isDisabled = true;
+                        }
+                       }
+                       else{
+                        //批量删除
+                        if(this.checkedArray[0].isDel==true){
+                                this.checkedArray.forEach(item=>{
+                                    if(item.type=="project"){
+                                        this.db.get("project").remove({id:item.id}).write();
+                                    }
+                                    if(item.type=="template"){
+                                        this.db.get("templates").remove({id: item.id}).write();
+                                    }
+                                })
+                            this.dialogVisibledProjectDel = false;
+                            this.projectEvent = "";
+                            this.getdirectory();
+                            console.log(this.directoryClickId);
+                            this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                         }
+                             this.currentNote=-1
+                             this.isDisabled = true;
+                       }
                  }
                 let now= await this.getTime();
                 this.db.set('version',now ).write();
@@ -5628,7 +5692,7 @@
                 let modelsId = temp.modelsId;
                 let models = [];
                 for (var idIndex in modelsId) { //下拉框不显示mb
-                    if (modelsId[idIndex].indexOf("mb") == -1) {
+                    if (modelsId[idIndex].indexOf("mb") == -1 && modelsId[idIndex].indexOf("sy") ==-1) {
                         models.push(modelsId[idIndex]);
                     }
                 }
@@ -5701,7 +5765,8 @@
                    }
                    //二次刷新
                    this.getdirectory();
-                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                //    this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                    this.afterChecked(this.newProject.id,this.newProject.type);
                    this.templateEvent = "";
                }
             }, //增加选中项
@@ -5747,6 +5812,17 @@
             //修改页面
             editProject() {
                     this.editobject = this.$JSON5.parse(this.$JSON5.stringify(this.projectEvent));
+                     if(this.editobject.name){
+                        this.editobject.name= this.editobject.name.replace(/^\s+|\s+$/g,'');
+                        let name=this.editobject.name;
+                        if(name.trim().length>0){
+                            this.templatedisable=false
+                        }else{
+                            this.templatedisable=true
+                        }
+                        }else{
+                            this.templatedisable=true
+                        }
                     let items = this.editobject.datas
                     for (var item in items) {
                         if (items[item].type == "password") {
@@ -5821,7 +5897,7 @@
                        this.selectlabels = "";
                        this.color = "";
                        this.getdirectory();
-                       this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                    //    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                        if (this.imgtype == "base64") {
                            if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
                                let imgBase64 = this.localdb.get("img").find({id: this.editobject.imgHash}).value();
@@ -5835,6 +5911,7 @@
                         //二次刷新
                        this.getdirectory();
                        this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                       this.afterEditchecked(this.editobject.id);
                        this.editobject = "";
                    } catch (e) {
                        this.$message.error(this.$t('main.failToEdit'));
@@ -5986,6 +6063,7 @@
                     //二次刷新
                     this.getdirectory();
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                    this.afterEditchecked(this.editobject.id);
                     this.editobject = "";
                 } catch (e) {
                     this.$message.error(this.$t('main.failToEdit'));
@@ -6472,8 +6550,15 @@
                 this.tempTemplate = [];
             },
             openMenu_1(project, obj) {
-                if (project.isDel != true) {
-                    this.isDisabled = false;//启用删除
+                if(project.type=="model") {
+                    if(project.modelsType=="directory"){
+                         this.isDisabled = false;//启用删除
+                    }else{
+                    this.isDisabled = true;
+                   }
+                }
+                if(project.type=="project"){
+                     this.isDisabled = false;//启用删除
                 }
                 this.delobj = project;//赋值删除对象
                 if (project.type != "model") {//indexof undefind 问题
@@ -7025,6 +7110,7 @@
                     }
                     //二次刷新
                     this.getdirectory();
+                    this.afterEditchecked(this.editobject.id);
                     this.editobject = "";
                 } catch (e) {
                     this.$message.error(this.$t('main.failToEdit'));
@@ -7223,6 +7309,7 @@
                     let listproject ="";
                    //增加项目，笔记
                    if(objType=="project"){
+                         this.directoryClickId="sy";
                          this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页}
                          listproject =this.projects;
                          this.currentProject=0;//目录check 指向sy
@@ -7239,6 +7326,7 @@
                    if(objType=="template"){
                        let specialList=this.DSpecial.special;
                        console.log(specialList);
+                       this.directoryClickId="mb";
                        this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                        listproject =this.projects;
                        console.log(listproject);
@@ -7258,7 +7346,21 @@
                              }
                          } 
                    } 
-                }
+                },
+
+                afterEditchecked(objId){
+                       let listproject ="";
+                       listproject =this.projects;
+                        for(let index in listproject){
+                             if(listproject[index].id == objId){
+                                 this.currentNote = index;//项目列表指向当前
+                                  break;
+                             }
+                         }
+                   }
+               
+
+
         },
 
 
