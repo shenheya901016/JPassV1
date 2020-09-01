@@ -502,7 +502,7 @@
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="false"
-                @open="auto_update_func"
+<!--                @open="auto_update_func"-->
         >
             <el-form label-width="9vw" class="demo-ruleForm" style="width:80%;" @submit.native.prevent >
                 <el-form-item :label="$t('main.loginPassword')" prop="password">
@@ -1945,7 +1945,7 @@
                                     {{ $t("main.version") }}：{{package_version}}
                                 </legend>
                                 <div style="margin-left: 2vw">
-                                    <el-button type="primary" size="small" @click="update">
+                                    <el-button type="primary" size="small" @click="checkForUpdates">
                                         {{ $t("main.update") }}
                                     </el-button>
                                 </div>
@@ -3542,6 +3542,13 @@
                 </el-upload>
             </span>
         </el-dialog>
+        <el-dialog :title="$t('main.update')" :visible.sync="updateDialog" width="30%">
+            <span>若有新版本，是否更新？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" @click="updateDialog = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="update">确 定</el-button>
+            </span>
+        </el-dialog>
     </aside>
     </body>
 </template>
@@ -3591,16 +3598,16 @@
                 vm.ipcRenderer = window.ipcRenderer
                 vm.ipcRenderer.on('message', (event, data) => {
                     console.log('message', data.msg)
-                    if(data.status===2){
-                        this.$message({
-                            message: data.msg,
-                            type: 'success'
-                        });
-                    }
                     if(data.status===-1){
                         this.$message({
                             message: data.msg,
                             type: 'error'
+                        });
+                    }
+                    if(data.status===2){
+                        this.$message({
+                            message: data.msg,
+                            type: 'success'
                         });
                     }
                 })
@@ -3610,14 +3617,18 @@
                 })
                 vm.ipcRenderer.on('isUpdateNow', (event, versionInfo) => {
                     this.$confirm('检测到新版本' + versionInfo.version + ',是否立即升级？', '提示', {
-                      confirmButtonText: '确定',
-                      cancelButtonText: '取消（程序关闭自动更新）',
-                      type: 'warning'
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
                     }).then(() => {
-                      vm.ipcRenderer.send('updateNow');
+                        console.log("更新")
+                        vm.ipcRenderer.send('updateTest');
                     }).catch(() => {
-                      console.log("取消更新")
+                        console.log("取消更新")
                     });
+                })
+                vm.ipcRenderer.on('version',(event, versionInfo) => {
+                    console.log(versionInfo.version)
                 })
             }
         },
@@ -3634,15 +3645,19 @@
 
         data() {
             return {
+                updateDialog:false,
                 exportClasses:[],
                 package_version:"0.0.0",
                 auto_update:false,
                 options: [{
-                  value: 'jpassword',
-                  label: 'jpassword'
+                    value: 'jpassword',
+                    label: 'jpassword'
                 }, {
-                  value: 'safeincloud',
-                  label: 'safeincloud'
+                    value: 'safeincloud',
+                    label: 'safeincloud'
+                }, {
+                    value: '1password',
+                    label: '1password'
                 }],
                 importFileDialog: false,
                 import_file_type: "jpassword",
@@ -4047,415 +4062,433 @@
             };
         },
         methods: {
+            update(){},
             chrome(){
                 window.ipcRenderer.send("open","https://chrome.google.com/webstore/category/extensions?h1=zh");
             },
             auto_update_func(){
-                if(this.auto_update){
-                    this.ipcRenderer.send('checkForUpdate'); // electron应用启动后主动触发检查更新函数
-                }
+                /*if(this.auto_update){
+                    this.$confirm('若有新版本，是否更新？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.ipcRenderer.send('checkForUpdate'); // electron应用启动后主动触发检查更新函数
+                    }).catch(() => {
+                        console.log("取消更新")
+                    });
+                }*/
             },
-            update(){
-                this.ipcRenderer.send('checkForUpdate'); // electron应用启动后主动触发检查更新函数
+            checkForUpdates(){
+                this.ipcRenderer.send('checkForUpdate');
             },
             importFile(res, file) {
-              try{
-                let _this = this;
-                let reader = new FileReader();
-                reader.readAsText(file.raw);
-                reader.onload = async function (res) {
-                  let parser = new DOMParser();
-                  let xmlDoc = parser.parseFromString(res.target.result, "text/xml");
-                  let card = xmlDoc.getElementsByTagName("card");
-                  let label = xmlDoc.getElementsByTagName("label");
-                  let card_length = card.length;
-                  let label_length = label.length;
-                  let import_type = _this.import_file_type;
-                  if (import_type === "jpassword") {
-                    for (let n = 0; n < card_length; n++) {
-                      let id = card[n].getAttribute("id");
-                      let name = card[n].getAttribute("name");
-                      let datas = [];
-                      let db_name = "";
-                      let note = [];
-                      let type = ""
-                      if (card[n].getAttribute("isTemplates") === "false") {
-                        db_name = "project";
-                        type = "project";
-                      } else {
-                        db_name = "templates";
-                        note = "";
-                        type = "template";
-                      }
-                      let project = _this.db.get(db_name).find({id: id}).value();
-                      if (project === undefined) {
-                        if (card[n].getAttribute("isnote") === "true") {
-                          let import_notes = card[n].getElementsByTagName("notes");
-                          let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
-                          note.push(notes)
-                        } else {
-                          let field = card[n].getElementsByTagName("field");
-                          let val="";
-                          try{
-                            val=field[i].childNodes[0].nodeValue;
-                          }catch (e){
-                            val="";
-                          }
-                          for (let i = 0; i < field.length; i++) {
-                            let data = {
-                              "id": field[i].getAttribute("id"),
-                              "key": field[i].getAttribute("key"),
-                              "type": field[i].getAttribute("type"),
-                              "val": val,
-                              "tempkey": field[i].getAttribute("tempkey")
-                            };
-                            datas.push(data);
-                          }
-                        }
-                        let label_id = card[n].getElementsByTagName("label_id");
-                        let modelsId = [];
-                        for (let i = 0; i < label_id.length; i++) {
-                          modelsId.push(label_id[i].childNodes[0].nodeValue)
-                        }
-                        let isDel = card[n].getAttribute("isDel") === "true";
-                        _this.newProject = {
-                          "id": id,
-                          "name": name,
-                          "modelsId": modelsId, // "modelsName":newArray.toString(),
-                          "isDel": isDel,
-                          "type": type,
-                          "datas": datas,
-                          "dateTime": await _this.getTime(),
-                          "tempBase64": card[n].getAttribute("tempBase64"),
-                          "imgHash": card[n].getAttribute("imgHash"),
-                          "imgtype": card[n].getAttribute("imgtype"),
-                          "imgurl": card[n].getAttribute("imgurl"),
-                          "bgcolor": card[n].getAttribute("bgcolor"),
-                          "isnote": card[n].getAttribute("isnote") === "true",//笔记类型
-                          "hasnote": card[n].getAttribute("hasnote") === "true",
-                          "note": note,
-                          "checked": card[n].getAttribute("checked") === "true",
-                          "modelsName": ""
-                        };
-                        //db project 追加数据
-                        _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
-                        _this.db.set('version', await _this.getTime(),).write();
-                        _this.selectlabels = "";
-                        _this.dialogVisibleAddProject = false;
-                        _this.ruleFormAddProject.name = "";
-                        _this.color = "";
-                        _this.getdirectory();
-                        _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                        if (card[n].getAttribute("imgtype") === "base64") {
-                          _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
-                        }
-                        //二次刷新
-                        _this.getdirectory();
-                        _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                        _this.templateEvent = "";
-                      } else {
-                        if (_this.isCover) {
-                          _this.db.get(db_name).remove({id: id}).write();
-                          _this.db.set('version', await _this.getTime(),).write();
-                          console.log(_this.db.value())
-                          if (card[n].getAttribute("isnote") === "true") {
-                            let import_notes = card[n].getElementsByTagName("notes");
-                            let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
-                            note.push(notes)
-                          } else {
-                            let field = card[n].getElementsByTagName("field");
-                            let val="";
-                            try{
-                              val=field[i].childNodes[0].nodeValue;
-                            }catch (e){
-                              val="";
-                            }
-                            for (let i = 0; i < field.length; i++) {
-                              let data = {
-                                "id": field[i].getAttribute("id"),
-                                "key": field[i].getAttribute("key"),
-                                "type": field[i].getAttribute("type"),
-                                "val": val,
-                                "tempkey": field[i].getAttribute("tempkey")
-                              };
-                              datas.push(data);
-                            }
-                          }
-                          let label_id = card[n].getElementsByTagName("label_id");
-                          let modelsId = [];
-                          for (let i = 0; i < label_id.length; i++) {
-                            modelsId.push(label_id[i].childNodes[0].nodeValue)
-                          }
-                          let isDel = card[n].getAttribute("isDel") === "true";
-                          _this.newProject = {
-                            "id": id,
-                            "name": name,
-                            "modelsId": modelsId, // "modelsName":newArray.toString(),
-                            "isDel": isDel,
-                            "type": type,
-                            "datas": datas,
-                            "dateTime": await _this.getTime(),
-                            "tempBase64": card[n].getAttribute("tempBase64"),
-                            "imgHash": card[n].getAttribute("imgHash"),
-                            "imgtype": card[n].getAttribute("imgtype"),
-                            "imgurl": card[n].getAttribute("imgurl"),
-                            "bgcolor": card[n].getAttribute("bgcolor"),
-                            "isnote": card[n].getAttribute("isnote") === "true",//笔记类型
-                            "hasnote": card[n].getAttribute("hasnote") === "true",
-                            "note": note,
-                            "checked": card[n].getAttribute("checked") === "true",
-                            "modelsName": ""
-                          };
-                          //db project 追加数据
-                          _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
-                          _this.db.set('version', await _this.getTime(),).write();
-                          _this.selectlabels = "";
-                          _this.dialogVisibleAddProject = false;
-                          _this.ruleFormAddProject.name = "";
-                          _this.color = "";
-                          // _this.getdirectory();
-                          // _this.notesBytargeId(_this.db.get("models").find({id: "sy"}).value());//刷新列表页
-                          if (card[n].getAttribute("imgtype") === "base64") {
-                            _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
-                          }
-                          //二次刷新
-                          // _this.getdirectory();
-                          // _this.notesBytargeId(_this.db.get("models").find({id: "sy"}).value());//刷新列表页
-                          _this.templateEvent = "";
-                        }
-
-                        console.log("数据存在!");
-                      }
-                    }
-                    for (let n = 0; n < label_length; n++) {
-                      let id = label[n].getAttribute("id");
-                      let name = label[n].getAttribute("name");
-                      let models = _this.db.get("models").find({id: id}).value();
-                      if (models === undefined) {
-                        let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,"top":false,"index":""}';
-                        _this.db.get("models").push(_this.$JSON5.parse(newModel)).write();
-                        let now = await _this.getTime();
-                        _this.db.set('version', now).write();
-                        _this.dialogVisible2 = false, _this.getdirectory();
-                      } else {
-                        console.log("数据存在!");
-                      }
-                    }
-                  } else if (import_type === "safeincloud") {
-                    for (let n = 0; n < card_length; n++) {
-                      let id = card[n].getAttribute("id");
-                      let name = card[n].getAttribute("title");
-                      let datas = [];
-                      let db_name = "";
-                      let note = [];
-                      let type = ""
-                      let istemplate = "";
-                      istemplate = card[n].getAttribute("template");
-                      if (istemplate === "false" || istemplate === null) {
-                        db_name = "project";
-                        type = "project";
-                      } else {
-                        db_name = "templates";
-                        note = "";
-                        type = "template";
-                      }
-                      let project = _this.db.get(db_name).find({id: id}).value();
-                      if (project === undefined) {
-                        if (card[n].getAttribute("type") === "note") {
-                          let import_notes = card[n].getElementsByTagName("notes");
-                          let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
-                          note.push(notes)
-                        } else {
-                          let field = card[n].getElementsByTagName("field");
-                          for (let i = 0; i < field.length; i++) {
-                            let field_type = field[i].getAttribute("type");
-                            if (field_type === "website") {
-                              field_type = "webside";
-                            } else if (field_type === "password") {
-                              field_type = "password";
-                            } else if (field_type === "date") {
-                              field_type = "date";
-                            } else {
-                              field_type = "text";
-                            }
-                            let val = "";
-                            if (istemplate === "false" || istemplate === null) {
-                              val = field[i].childNodes[0].nodeValue;
-                            }
-                            let data = {
-                              "id": _this.$Uuidv1(),
-                              "key": field[i].getAttribute("name"),
-                              "type": field_type,
-                              "val": val,
-                              "tempkey": field[i].getAttribute("name")
-                            };
-                            datas.push(data);
-                          }
-                        }
-                        let label_id = card[n].getElementsByTagName("label_id");
-                        let modelsId = [];
-                        for (let i = 0; i < label_id.length; i++) {
-                          modelsId.push(label_id[i].childNodes[0].nodeValue)
-                        }
-                        if (istemplate === "false" || istemplate === null) {
-                          modelsId.push("sy");
-                        } else {
-                          modelsId.push("mb");
-                        }
-                        let isDel = "";
-                        try {
-                          isDel = card[n].getAttribute("deleted") === "true";
-                        } catch (e) {
-                          isDel = false;
-                        }
-                        _this.newProject = {
-                          "id": id,
-                          "name": name,
-                          "modelsId": modelsId, // "modelsName":newArray.toString(),
-                          "isDel": isDel,
-                          "type": type,
-                          "datas": datas,
-                          "dateTime": await _this.getTime(),
-                          "tempBase64": "",
-                          "imgHash": "",
-                          "imgtype": "url",
-                          "imgurl": "/img/misc/lock.svg",
-                          "bgcolor": card[n].getAttribute("color"),
-                          "isnote": card[n].getAttribute("type") === "note",//笔记类型
-                          "hasnote": card[n].getAttribute("type") === "note",
-                          "note": note,
-                          "checked": false,
-                          "modelsName": ""
-                        };
-                        //db project 追加数据
-                        _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
-                        _this.db.set('version', await _this.getTime(),).write();
-                        _this.selectlabels = "";
-                        _this.dialogVisibleAddProject = false;
-                        _this.ruleFormAddProject.name = "";
-                        _this.color = "";
-                        _this.getdirectory();
-                        _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                        if (card[n].getAttribute("imgtype") === "base64") {
-                          _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
-                        }
-                        //二次刷新
-                        _this.getdirectory();
-                        _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                        _this.templateEvent = "";
-                      } else {
-                        console.log(_this.isCover)
-                        if (_this.isCover) {//覆盖
-                          _this.db.get(db_name).remove({id: id}).write();
-                          _this.db.set('version', await _this.getTime(),).write();
-                          console.log(_this.db.value())
-                          if (card[n].getAttribute("type") === "note") {
-                            let import_notes = card[n].getElementsByTagName("notes");
-                            let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
-                            note.push(notes)
-                          } else {
-                            let field = card[n].getElementsByTagName("field");
-                            for (let i = 0; i < field.length; i++) {
-                              let field_type = field[i].getAttribute("type");
-                              if (field_type === "website") {
-                                field_type = "webside";
-                              } else if (field_type === "password") {
-                                field_type = "password";
-                              } else if (field_type === "date") {
-                                field_type = "date";
+                try{
+                    let _this = this;
+                    let reader = new FileReader();
+                    reader.readAsText(file.raw);
+                    reader.onload = async function (res) {
+                        let parser = new DOMParser();
+                        let xmlDoc = parser.parseFromString(res.target.result, "text/xml");
+                        let card = xmlDoc.getElementsByTagName("card");
+                        let label = xmlDoc.getElementsByTagName("label");
+                        let card_length = card.length;
+                        let label_length = label.length;
+                        let import_type = _this.import_file_type;
+                        if (import_type === "jpassword") {
+                            for (let n = 0; n < card_length; n++) {
+                              let id = card[n].getAttribute("id");
+                              let name = card[n].getAttribute("name");
+                              let datas = [];
+                              let db_name = "";
+                              let note = [];
+                              let type = ""
+                              if (card[n].getAttribute("isTemplates") === "false") {
+                                db_name = "project";
+                                type = "project";
                               } else {
-                                field_type = "text";
+                                db_name = "templates";
+                                note = "";
+                                type = "template";
                               }
-                              let val = "";
-                              if (istemplate === "false" || istemplate === null) {
-                                val = field[i].childNodes[0].nodeValue;
+                              let project = _this.db.get(db_name).find({id: id}).value();
+                              if (project === undefined) {
+                                if (card[n].getAttribute("isnote") === "true") {
+                                  let import_notes = card[n].getElementsByTagName("notes");
+                                  let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
+                                  note.push(notes)
+                                } else {
+                                  let field = card[n].getElementsByTagName("field");
+                                  let val="";
+
+                                  for (let i = 0; i < field.length; i++) {
+                                      try{
+                                          val=field[i].childNodes[0].nodeValue;
+                                      }catch (e){
+                                          val="";
+                                      }
+                                    let data = {
+                                      "id": field[i].getAttribute("id"),
+                                      "key": field[i].getAttribute("key"),
+                                      "type": field[i].getAttribute("type"),
+                                      "val": val,
+                                      "tempkey": field[i].getAttribute("tempkey")
+                                    };
+                                    datas.push(data);
+                                  }
+                                }
+                                let label_id = card[n].getElementsByTagName("label_id");
+                                let modelsId = [];
+                                for (let i = 0; i < label_id.length; i++) {
+                                  modelsId.push(label_id[i].childNodes[0].nodeValue)
+                                }
+                                let isDel = card[n].getAttribute("isDel") === "true";
+                                _this.newProject = {
+                                  "id": id,
+                                  "name": name,
+                                  "modelsId": modelsId, // "modelsName":newArray.toString(),
+                                  "isDel": isDel,
+                                  "type": type,
+                                  "datas": datas,
+                                  "dateTime": await _this.getTime(),
+                                  "tempBase64": card[n].getAttribute("tempBase64"),
+                                  "imgHash": card[n].getAttribute("imgHash"),
+                                  "imgtype": card[n].getAttribute("imgtype"),
+                                  "imgurl": card[n].getAttribute("imgurl"),
+                                  "bgcolor": card[n].getAttribute("bgcolor"),
+                                  "isnote": card[n].getAttribute("isnote") === "true",//笔记类型
+                                  "hasnote": card[n].getAttribute("hasnote") === "true",
+                                  "note": note,
+                                  "checked": card[n].getAttribute("checked") === "true",
+                                  "modelsName": ""
+                                };
+                                //db project 追加数据
+                                _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
+                                _this.db.set('version', await _this.getTime(),).write();
+                                _this.selectlabels = "";
+                                _this.dialogVisibleAddProject = false;
+                                _this.ruleFormAddProject.name = "";
+                                _this.color = "";
+                                _this.getdirectory();
+                                _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                if (card[n].getAttribute("imgtype") === "base64") {
+                                  _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
+                                }
+                                //二次刷新
+                                _this.getdirectory();
+                                _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                _this.templateEvent = "";
+                              } else {
+                                if (_this.isCover) {
+                                  _this.db.get(db_name).remove({id: id}).write();
+                                  _this.db.set('version', await _this.getTime(),).write();
+                                  if (card[n].getAttribute("isnote") === "true") {
+                                    let import_notes = card[n].getElementsByTagName("notes");
+                                    let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
+                                    note.push(notes)
+                                  } else {
+                                    let field = card[n].getElementsByTagName("field");
+                                    let val="";
+
+                                    for (let i = 0; i < field.length; i++) {
+                                        try{
+                                            val=field[i].childNodes[0].nodeValue;
+                                        }catch (e){
+                                            val="";
+                                        }
+                                      let data = {
+                                        "id": field[i].getAttribute("id"),
+                                        "key": field[i].getAttribute("key"),
+                                        "type": field[i].getAttribute("type"),
+                                        "val": val,
+                                        "tempkey": field[i].getAttribute("tempkey")
+                                      };
+                                      datas.push(data);
+                                    }
+                                  }
+                                  let label_id = card[n].getElementsByTagName("label_id");
+                                  let modelsId = [];
+                                  for (let i = 0; i < label_id.length; i++) {
+                                    modelsId.push(label_id[i].childNodes[0].nodeValue)
+                                  }
+
+                                  let isDel = card[n].getAttribute("isDel") === "true";
+                                    console.log(isDel)
+                                  _this.newProject = {
+                                    "id": id,
+                                    "name": name,
+                                    "modelsId": modelsId, // "modelsName":newArray.toString(),
+                                    "isDel": isDel,
+                                    "type": type,
+                                    "datas": datas,
+                                    "dateTime": await _this.getTime(),
+                                    "tempBase64": card[n].getAttribute("tempBase64"),
+                                    "imgHash": card[n].getAttribute("imgHash"),
+                                    "imgtype": card[n].getAttribute("imgtype"),
+                                    "imgurl": card[n].getAttribute("imgurl"),
+                                    "bgcolor": card[n].getAttribute("bgcolor"),
+                                    "isnote": card[n].getAttribute("isnote") === "true",//笔记类型
+                                    "hasnote": card[n].getAttribute("hasnote") === "true",
+                                    "note": note,
+                                    "checked": card[n].getAttribute("checked") === "true",
+                                    "modelsName": ""
+                                  };
+                                  //db project 追加数据
+                                  _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
+                                  _this.db.set('version', await _this.getTime(),).write();
+                                  _this.selectlabels = "";
+                                  _this.dialogVisibleAddProject = false;
+                                  _this.ruleFormAddProject.name = "";
+                                  _this.color = "";
+                                   _this.getdirectory();
+                                   _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                    if(_this.projectEvent.id===_this.newProject.id){
+                                        _this.projectEvent=_this.newProject
+                                    }
+                                  if (card[n].getAttribute("imgtype") === "base64") {
+                                    _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
+                                  }
+                                  //二次刷新
+                                   _this.getdirectory();
+                                   _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                  _this.templateEvent = "";
+
+                                }
                               }
-                              let data = {
-                                "id": _this.$Uuidv1(),
-                                "key": field[i].getAttribute("name"),
-                                "type": field_type,
-                                "val": val,
-                                "tempkey": field[i].getAttribute("name")
-                              };
-                              datas.push(data);
                             }
-                          }
-                          let label_id = card[n].getElementsByTagName("label_id");
-                          let modelsId = [];
-                          for (let i = 0; i < label_id.length; i++) {
-                            modelsId.push(label_id[i].childNodes[0].nodeValue)
-                          }
-                          if (istemplate === "false" || istemplate === null) {
-                            modelsId.push("sy");
-                          } else {
-                            modelsId.push("mb");
-                          }
-                          let isDel = "";
-                          try {
-                            isDel = card[n].getAttribute("deleted") === "true";
-                          } catch (e) {
-                            isDel = false;
-                          }
-                          _this.newProject = {
-                            "id": id,
-                            "name": name,
-                            "modelsId": modelsId, // "modelsName":newArray.toString(),
-                            "isDel": isDel,
-                            "type": type,
-                            "datas": datas,
-                            "dateTime": await _this.getTime(),
-                            "tempBase64": "",
-                            "imgHash": "",
-                            "imgtype": "url",
-                            "imgurl": "/img/misc/lock.svg",
-                            "bgcolor": card[n].getAttribute("color"),
-                            "isnote": card[n].getAttribute("type") === "note",//笔记类型
-                            "hasnote": card[n].getAttribute("type") === "note",
-                            "note": note,
-                            "checked": false,
-                            "modelsName": ""
-                          };
-                          //db project 追加数据
-                          _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
-                          _this.db.set('version', await _this.getTime(),).write();
-                          _this.selectlabels = "";
-                          _this.dialogVisibleAddProject = false;
-                          _this.ruleFormAddProject.name = "";
-                          _this.color = "";
-                          _this.getdirectory();
-                          _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                          if (card[n].getAttribute("imgtype") === "base64") {
-                            _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
-                          }
-                          //二次刷新
-                          _this.getdirectory();
-                          _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                          _this.templateEvent = "";
-                        } else {
-                          console.log("111111111111")
+                            for (let n = 0; n < label_length; n++) {
+                              let id = label[n].getAttribute("id");
+                              let name = label[n].getAttribute("name");
+                              let models = _this.db.get("models").find({id: id}).value();
+                              if (models === undefined) {
+                                let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,"top":false,"index":""}';
+                                _this.db.get("models").push(_this.$JSON5.parse(newModel)).write();
+                                let now = await _this.getTime();
+                                _this.db.set('version', now).write();
+                                _this.dialogVisible2 = false, _this.getdirectory();
+                              } else {
+                                console.log("数据存在!");
+                              }
+                            }
+                          } else if (import_type === "safeincloud") {
+                            for (let n = 0; n < card_length; n++) {
+                              let id = card[n].getAttribute("id");
+                              let name = card[n].getAttribute("title");
+                              let datas = [];
+                              let db_name = "";
+                              let note = [];
+                              let type = ""
+                              let istemplate = "";
+                              istemplate = card[n].getAttribute("template");
+                              if (istemplate === "false" || istemplate === null) {
+                                db_name = "project";
+                                type = "project";
+                              } else {
+                                db_name = "templates";
+                                note = "";
+                                type = "template";
+                              }
+                              let project = _this.db.get(db_name).find({id: id}).value();
+                              if (project === undefined) {
+                                if (card[n].getAttribute("type") === "note") {
+                                  let import_notes = card[n].getElementsByTagName("notes");
+                                  let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
+                                  note.push(notes)
+                                } else {
+                                  let field = card[n].getElementsByTagName("field");
+                                  for (let i = 0; i < field.length; i++) {
+                                    let field_type = field[i].getAttribute("type");
+                                    if (field_type === "website") {
+                                      field_type = "webside";
+                                    } else if (field_type === "password") {
+                                      field_type = "password";
+                                    } else if (field_type === "date") {
+                                      field_type = "date";
+                                    } else {
+                                      field_type = "text";
+                                    }
+                                    let val = "";
+                                    if (istemplate === "false" || istemplate === null) {
+                                      val = field[i].childNodes[0].nodeValue;
+                                    }
+                                    let data = {
+                                      "id": _this.$Uuidv1(),
+                                      "key": field[i].getAttribute("name"),
+                                      "type": field_type,
+                                      "val": val,
+                                      "tempkey": field[i].getAttribute("name")
+                                    };
+                                    datas.push(data);
+                                  }
+                                }
+                                let label_id = card[n].getElementsByTagName("label_id");
+                                let modelsId = [];
+                                for (let i = 0; i < label_id.length; i++) {
+                                  modelsId.push(label_id[i].childNodes[0].nodeValue)
+                                }
+                                if (istemplate === "false" || istemplate === null) {
+                                  modelsId.push("sy");
+                                } else {
+                                  modelsId.push("mb");
+                                }
+                                let isDel = "";
+                                try {
+                                  isDel = card[n].getAttribute("deleted") === "true";
+                                } catch (e) {
+                                  isDel = false;
+                                }
+                                _this.newProject = {
+                                  "id": id,
+                                  "name": name,
+                                  "modelsId": modelsId, // "modelsName":newArray.toString(),
+                                  "isDel": isDel,
+                                  "type": type,
+                                  "datas": datas,
+                                  "dateTime": await _this.getTime(),
+                                  "tempBase64": "",
+                                  "imgHash": "",
+                                  "imgtype": "url",
+                                  "imgurl": "/img/misc/lock.svg",
+                                  "bgcolor": card[n].getAttribute("color"),
+                                  "isnote": card[n].getAttribute("type") === "note",//笔记类型
+                                  "hasnote": card[n].getAttribute("type") === "note",
+                                  "note": note,
+                                  "checked": false,
+                                  "modelsName": ""
+                                };
+                                //db project 追加数据
+                                _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
+                                _this.db.set('version', await _this.getTime(),).write();
+                                _this.selectlabels = "";
+                                _this.dialogVisibleAddProject = false;
+                                _this.ruleFormAddProject.name = "";
+                                _this.color = "";
+                                _this.getdirectory();
+                                _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                if (card[n].getAttribute("imgtype") === "base64") {
+                                  _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
+                                }
+                                //二次刷新
+                                _this.getdirectory();
+                                _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                _this.templateEvent = "";
+                              } else {
+                                console.log(_this.isCover)
+                                if (_this.isCover) {//覆盖
+                                  _this.db.get(db_name).remove({id: id}).write();
+                                  _this.db.set('version', await _this.getTime(),).write();
+                                  console.log(_this.db.value())
+                                  if (card[n].getAttribute("type") === "note") {
+                                    let import_notes = card[n].getElementsByTagName("notes");
+                                    let notes = {"notes": import_notes[0].childNodes[0].nodeValue};
+                                    note.push(notes)
+                                  } else {
+                                    let field = card[n].getElementsByTagName("field");
+                                    for (let i = 0; i < field.length; i++) {
+                                      let field_type = field[i].getAttribute("type");
+                                      if (field_type === "website") {
+                                        field_type = "webside";
+                                      } else if (field_type === "password") {
+                                        field_type = "password";
+                                      } else if (field_type === "date") {
+                                        field_type = "date";
+                                      } else {
+                                        field_type = "text";
+                                      }
+                                      let val = "";
+                                      if (istemplate === "false" || istemplate === null) {
+                                        val = field[i].childNodes[0].nodeValue;
+                                      }
+                                      let data = {
+                                        "id": _this.$Uuidv1(),
+                                        "key": field[i].getAttribute("name"),
+                                        "type": field_type,
+                                        "val": val,
+                                        "tempkey": field[i].getAttribute("name")
+                                      };
+                                      datas.push(data);
+                                    }
+                                  }
+                                  let label_id = card[n].getElementsByTagName("label_id");
+                                  let modelsId = [];
+                                  for (let i = 0; i < label_id.length; i++) {
+                                    modelsId.push(label_id[i].childNodes[0].nodeValue)
+                                  }
+                                  if (istemplate === "false" || istemplate === null) {
+                                    modelsId.push("sy");
+                                  } else {
+                                    modelsId.push("mb");
+                                  }
+                                  let isDel = "";
+                                  try {
+                                    isDel = card[n].getAttribute("deleted") === "true";
+                                  } catch (e) {
+                                    isDel = false;
+                                  }
+                                  _this.newProject = {
+                                    "id": id,
+                                    "name": name,
+                                    "modelsId": modelsId, // "modelsName":newArray.toString(),
+                                    "isDel": isDel,
+                                    "type": type,
+                                    "datas": datas,
+                                    "dateTime": await _this.getTime(),
+                                    "tempBase64": "",
+                                    "imgHash": "",
+                                    "imgtype": "url",
+                                    "imgurl": "/img/misc/lock.svg",
+                                    "bgcolor": card[n].getAttribute("color"),
+                                    "isnote": card[n].getAttribute("type") === "note",//笔记类型
+                                    "hasnote": card[n].getAttribute("type") === "note",
+                                    "note": note,
+                                    "checked": false,
+                                    "modelsName": ""
+                                  };
+                                  //db project 追加数据
+                                  _this.db.get(db_name).push(_this.$JSON5.parse(_this.$JSON5.stringify(_this.newProject))).write();
+                                  _this.db.set('version', await _this.getTime(),).write();
+                                  _this.selectlabels = "";
+                                  _this.dialogVisibleAddProject = false;
+                                  _this.ruleFormAddProject.name = "";
+                                  _this.color = "";
+                                  _this.getdirectory();
+                                  _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                  if (card[n].getAttribute("imgtype") === "base64") {
+                                    _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
+                                  }
+                                  //二次刷新
+                                  _this.getdirectory();
+                                  _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                  _this.templateEvent = "";
+                                    if(_this.projectEvent.id===_this.newProject.id){
+                                        _this.projectEvent=_this.newProject
+                                    }
+                                } else {
+                                  console.log("111111111111")
+                                }
+                              }
+                              for (let n = 0; n < label_length; n++) {
+                                let id = label[n].getAttribute("id");
+                                let name = label[n].getAttribute("name");
+                                let models = _this.db.get("models").find({id: id}).value();
+                                if (models === undefined) {
+                                  let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,"top":false,"index":""}';
+                                  _this.db.get("models").push(_this.$JSON5.parse(newModel)).write();
+                                  let now = await _this.getTime();
+                                  _this.db.set('version', now).write();
+                                  _this.dialogVisible2 = false, _this.getdirectory();
+                                } else {
+                                  console.log("数据存在!");
+                                }
+                              }
+                            }
+                        }else if(import_type === "1password"){
                         }
-                      }
-                      for (let n = 0; n < label_length; n++) {
-                        let id = label[n].getAttribute("id");
-                        let name = label[n].getAttribute("name");
-                        let models = _this.db.get("models").find({id: id}).value();
-                        if (models === undefined) {
-                          let newModel = '{"id":"' + id + '" ,"name" :"' + name + '","modelsType":"directory","imgPath":"aside_999999.svg","type":"model","isDel":false,"top":false,"index":""}';
-                          _this.db.get("models").push(_this.$JSON5.parse(newModel)).write();
-                          let now = await _this.getTime();
-                          _this.db.set('version', now).write();
-                          _this.dialogVisible2 = false, _this.getdirectory();
-                        } else {
-                          console.log("数据存在!");
-                        }
-                      }
+                        _this.isCover = false;
                     }
-                  }
+                }catch (e) {
+                    this.$message.error('解析失败!');
                 }
-              }catch (e) {
-                this.$message.error('解析失败!');
-              }
-              this.isCover = false;
               this.importFileDialog = false;
             }, //图片大小验证
             importFileValid(file) {
@@ -6633,7 +6666,7 @@
                 this.selectColorClasses=[];
                 this.recoverClass = ["unuse"];
                 this.exportClasses=["unuse"];
-                if((obj.type==="model"&&obj.count>0)||obj.type==="project"){
+                if((obj.type==="model"&&obj.count>0)||obj.type==="project"||obj.type==="template"){
                     this.exportClasses=[];
                 }
                 if (obj.modelsType == "directory") {
@@ -7358,8 +7391,8 @@
                                  this.currentSpecial =index;//目录指向模板
                                  break;
                              }
-                         } 
-                   } 
+                         }
+                   }
                 },
 
                 afterEditchecked(objId){
