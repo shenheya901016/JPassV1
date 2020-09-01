@@ -5337,7 +5337,6 @@
                             this.dialogVisibledProjectDel = false;
                             this.projectEvent = "";
                             this.getdirectory();
-                            console.log(this.directoryClickId);
                             this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                          }
                          this.delobj=nextObj;
@@ -5365,7 +5364,6 @@
                             this.dialogVisibledProjectDel = false;
                             this.projectEvent = "";
                             this.getdirectory();
-                            console.log(this.directoryClickId);
                             this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                          }
                              this.currentNote=-1
@@ -5952,7 +5950,7 @@
                        }
                         //二次刷新
                        this.getdirectory();
-                       this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                    //    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                        this.afterEditchecked(this.editobject.id);
                        this.editobject = "";
                    } catch (e) {
@@ -6104,7 +6102,7 @@
                     }
                     //二次刷新
                     this.getdirectory();
-                    this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                    // this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                     this.afterEditchecked(this.editobject.id);
                     this.editobject = "";
                 } catch (e) {
@@ -7404,6 +7402,7 @@
                                   break;
                              }
                          }
+                       this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                    }
 
 
