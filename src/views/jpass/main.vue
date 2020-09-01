@@ -5155,7 +5155,6 @@
                             let now= await this.getTime();
                             this.db.set('version',now ).write();
                             this.dialogVisibledTemplate = false;
-
                             this.getdirectory();
                             this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
                         }
@@ -5202,6 +5201,7 @@
                     }
                 }else{
                     //删除labels
+                    console.log("删除labels")
                 if (type == "model") {
                     let directorylist=this.DDirectory.directory;
                     for(let i=0;i< directorylist.length;i++){
@@ -5219,8 +5219,6 @@
                     }
                     var projects = this.db.get("project").value();
                     this.db.get("models").remove({id: id}).write();
-                    let now= await this.getTime();
-                    this.db.set('version',now ).write();
                     if (projects.length > 0) {
                         for (var project in projects) {
                             var index = projects[project].modelsId.indexOf(id);
@@ -5242,11 +5240,11 @@
                                     })
                                 }
                                 projects[project].modelsId = this.$JSON5.parse(this.$JSON5.stringify(this.selectlabels));
-                            }
-                        }
-                        //更新project中的类别
-                        this.db.get('project').find({id: projects[project].id}).assign({modelsId: this.selectlabels}).write();
-                        this.selectlabels = "";
+                                    //更新project中的类别
+                                this.db.get('project').find({id: projects[project].id}).assign({modelsId: this.selectlabels}).write();
+                                this.selectlabels = "";
+                            } 
+                        }   
                     }
                     //更新template中的类别
                     var templates = this.db.get("templates").value();
@@ -5255,11 +5253,13 @@
                             var index = templates[template].modelsId.indexOf(id);
                             if (index > -1) {
                                 templates[template].modelsId.splice(index, 1);
+                                this.db.get('templates').find({id: templates[template].id}).assign({modelsId: templates[template].modelsId}).write();
                             }
-                            this.db.get('templates').find({id: templates[template].id}).assign({modelsId: templates[template].modelsId}).write();
+                           
                         }
                     }
-                    // this.isDisabled = true;
+                    let now= await this.getTime();
+                    this.db.set('version',now ).write();
                     this.dialogVisibledDirectory = false;
                     this.getdirectory();
                     console.log(nextObj);
@@ -6621,8 +6621,8 @@
             },
             //菜单变化
             menulistchange(obj) {
-                console.log(obj.type);
-                console.log(obj.count);
+                // console.log(obj.type);
+                // console.log(obj.count);
                 this.addDirClasses = [];
                 this.renameClasses = [];
                 this.addProjectClasses = [];
@@ -7150,7 +7150,7 @@
                       item.checked=false;
                   });
                 this.checkedArray=[];
-                console.log("crash");
+                // console.log("crash");
             },
 
              // 复制成功
