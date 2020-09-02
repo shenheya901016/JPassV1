@@ -18,6 +18,9 @@ import passwordGeneratorMain from "@/components/PasswordGeneratorMain";
 import pay from "@/components/Pay";
 import VueClipboard from 'vue-clipboard2';
 import Jcc_ipfs from './jcc_ipfs'
+// import setting from "@/components/Setting";
+
+
 
 let test=require("./assets/test");
 
@@ -34,6 +37,7 @@ Vue.component("vueCanvasNest",vueCanvasNest)
 Vue.component("passwordGenerator",passwordGenerator)
 Vue.component("passwordGeneratorMain",passwordGeneratorMain)
 Vue.component("pay",pay)
+// Vue.component("setting",setting)
 
 let lockFlag = localStorage.getItem("lockFlag");//锁定状态
 if(lockFlag===null){
