@@ -7347,10 +7347,13 @@
             },
 
            setlabels(labels,data){
+               this.isWeakPwd=false; //重置默认状态
                let hasLabels=false; //判断分类中是否存在自定义labels分组
+               console.log(labels);
                console.log(data);
                //判断是否为弱密码
                if(data!=null){//笔记类型，data = null
+               console.log("判断是否弱密码");
                 for (let index in data){
                      if(data[index].type=="password" && data[index].val!=""){
                          console.log(data[index].val);
