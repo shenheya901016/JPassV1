@@ -3623,7 +3623,7 @@
                 })
                 vm.ipcRenderer.on('downloadProgress', (event, progressObj) => {
                     console.log('downloadProgress', progressObj)
-                    vm.progress=progressObj.percent;
+                    vm.progress=progressObj.percent.toFixed(0);
                     // 可自定义下载渲染效果
 
                 })
@@ -3659,7 +3659,7 @@
         data() {
             return {
                 progressDialog:false,
-                progress:54.4548421,
+                progress:0,
                 //setting
                 dialogVisibleSetting: false,//设置弹出框
 
