@@ -131,7 +131,7 @@ export default {
         submit: "提交",
         systemSettings: "系统设置",
         timedLock: "定时锁定",
-        idleTime: "闲置时间",
+        idleTime: "闲置时间 (分钟)",
         language: "语言",
         languageSelection: "语言选择",
         passwordService: "密码服务",

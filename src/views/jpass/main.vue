@@ -1919,7 +1919,7 @@
                                 </span>
                                 <span style="display:inline-block;width: 60vh;margin-left: 2vw">
                                     {{ $t("main.idleTime") }}
-                                    <el-slider v-model="locktime" :disabled="locktimedisabled"></el-slider>
+                                    <el-slider v-model="locktime" :disabled="locktimedisabled" :min="1"></el-slider>
                                 </span>
                             </fieldset>
                            </el-form-item>
@@ -4766,20 +4766,20 @@
                 this.mouse2 = x + ',' + y;
             },
             CheckTime() {
-                let timeout = this.locktime * 60 * 1000;//设定超时时间，单位毫秒
-                if (this.mouse1 == this.mouse2) {
-                    this.currentSecond = this.currentSecond + 1000;
-                    if (this.currentSecond > timeout) {
-                        clearInterval(this.eventID);
-                        this.dialogVisible = true;
-                        this.loginObj.lock = true;
-                        sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
+                    let timeout = this.locktime * 60 * 1000;//设定超时时间，单位毫秒
+                    if (this.mouse1 == this.mouse2) {
+                        this.currentSecond = this.currentSecond + 1000;
+                        if (this.currentSecond > timeout) {
+                            clearInterval(this.eventID);
+                            this.dialogVisible = true;
+                            this.loginObj.lock = true;
+                            sessionStorage.setItem("userkeyObj", this.$JSON5.stringify(this.loginObj));
+                            this.currentSecond = 0;
+                        }
+                    } else {
                         this.currentSecond = 0;
-                    }
-                } else {
-                    this.currentSecond = 0;
-                    this.mouse1 = this.mouse2;
-                }
+                        this.mouse1 = this.mouse2;
+                    }         
             },
             async unlock() {
                 let secret = "";

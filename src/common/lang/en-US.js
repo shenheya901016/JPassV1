@@ -191,7 +191,7 @@ export default {
         submit: "Submit",
         systemSettings: "System setting",
         timedLock: "Timing lock",
-        idleTime: "Standby time",
+        idleTime: "Standby time (minutes)",
         language: "Language",
         languageSelection: "Language selection",
         passwordService: "Password service",
