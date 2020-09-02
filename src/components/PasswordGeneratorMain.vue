@@ -11,7 +11,7 @@
 			<el-radio :label="3">{{$t("main.completelyRandom")}}</el-radio>
 			<el-radio :label="4">{{$t("main.numberOnly")}}</el-radio>
 		</el-radio-group>
-        <el-slider :step="1" :max="20" show-stops v-model="value2"></el-slider>
+        <el-slider :step="1" :min="8" :max="20" show-stops v-model="value2"></el-slider>
 		<el-button  type="primary" size="medium"
             v-clipboard:copy="crypt"
             v-clipboard:success="onCopy"
