@@ -3606,7 +3606,6 @@
             if (isElectron()) {
                 vm.ipcRenderer = window.ipcRenderer
                 vm.ipcRenderer.on('message', (event, data) => {
-                    console.log('message', data.msg)
                     if(data.status===-1){
                         this.$message({
                             message: data.msg,
@@ -3622,7 +3621,6 @@
                     }
                 })
                 vm.ipcRenderer.on('downloadProgress', (event, progressObj) => {
-                    console.log('downloadProgress', progressObj)
                     vm.progress=progressObj.percent.toFixed(0);
                     // 可自定义下载渲染效果
 
@@ -3633,11 +3631,9 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        console.log("更新")
                         vm.progressDialog=true;
                         vm.ipcRenderer.send('updateTest');
                     }).catch(() => {
-                        console.log("取消更新")
                     });
                 })
                 vm.ipcRenderer.on('version',(event, versionInfo) => {
@@ -4101,7 +4097,6 @@
                     try{
                         if(_this.import_file_type === "1password"){
                             let passworddata=JSON.parse(res.target.result.split("***")[0]);
-                            console.log(passworddata);
                             let id = passworddata.uuid;
                             let name = passworddata.title;
                             let project = _this.db.get("project").find({id: id}).value();
@@ -4182,7 +4177,6 @@
                                                 "tempkey": ""
                                             };
                                             if(passworddata.secureContents.sections[n].fields[j].t!==""){
-                                                console.log(passworddata.secureContents.sections[n].fields[j].t)
                                                 data.id=_this.$Uuidv1();
                                                 data.key=passworddata.secureContents.sections[n].fields[j].t;
                                                 if(passworddata.secureContents.sections[n].fields[j].k==="concealed"){
@@ -4368,7 +4362,6 @@
                                                 modelsId.push(label_id[i].childNodes[0].nodeValue)
                                             }
                                             let isDel = card[n].getAttribute("isDel") === "true";
-                                            console.log(isDel)
                                             _this.newProject = {
                                                 "id": id,
                                                 "name": name,
@@ -7249,8 +7242,6 @@
                        console.log(this.imageBase64);
                        this.uploadImg(this.imageBase64, this.newProject.type, this.newProject.id);
                    }
-
-                     console.log(this.newProject);
                    //二次刷新
                    this.getdirectory();
                 //    this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
@@ -7265,7 +7256,6 @@
                   this.$message.error(this.$t('login.outline'));
                   return false;
               }else{
-                   console.log(this.selectlabels);
                    this.setlabels(this.selectlabels,null);
                 var img = this.$JSON5.parse(this.$JSON5.stringify(this.editobject.tempBase64));
                 if (this.imgtype == "url") {
@@ -7327,7 +7317,6 @@
                       item.checked=false;
                   });
                 this.checkedArray=[];
-                // console.log("crash");
             },
 
              // 复制成功
@@ -7349,14 +7338,10 @@
            setlabels(labels,data){
                this.isWeakPwd=false; //重置默认状态
                let hasLabels=false; //判断分类中是否存在自定义labels分组
-               console.log(labels);
-               console.log(data);
                //判断是否为弱密码
                if(data!=null){//笔记类型，data = null
-               console.log("判断是否弱密码");
                 for (let index in data){
                      if(data[index].type=="password" && data[index].val!=""){
-                         console.log(data[index].val);
                         if(data[index].percentage<35){
                             this.isWeakPwd=true;
                             break;
@@ -7376,12 +7361,10 @@
                 //判断是否增加弱密码
                 if(this.isWeakPwd && labels.indexOf("weakPwd")==-1){
                       labels.push("weakPwd");//所有项必须有
-                      console.log("add weakPwd");
                 }
 
                 //判断是否减去弱密码
                  if(!this.isWeakPwd && labels.indexOf("weakPwd")!=-1){
-                      console.log("remove weakPwd");
                        labels = labels.filter(function (item) {
                            return item != "weakPwd"
                        })
