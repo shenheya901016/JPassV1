@@ -3579,9 +3579,23 @@
     export default {
         created() {this.keyevent();},
         mounted: function () {
-              window['lock'] = () => {
+            this.lockFlag = localStorage.getItem("lockFlag") === "true";//锁定状态
+            this.autoStartFlag = localStorage.getItem("autoStartFlag") === "true";//锁定状态
+            if (this.lockFlag) {
+                window.ipcRenderer.send("disableLock")//启用锁定快捷键
+                if(window.ipcRenderer.sendSync("isRegistered")){
+                    this.autoStartFlag = false;
+                    alert("锁定快捷键,已被其他应用占用");
+                    return;
+                }
+                window.ipcRenderer.send("enableLock")//启用锁定快捷键
+            }
+            if (this.autoStartFlag) {
+                window.ipcRenderer.send("setLoginItemSettings", autoStartFlag);//是否启用开机自启
+            }
+            window['lock'] = () => {
                     this.lock();
-            },
+            };
             //网络检查
             window.addEventListener('online',  this.online);
             window.addEventListener('offline', this.outline);
@@ -3589,16 +3603,16 @@
             window.oncontextmenu = function () {
                 return false;
             }
-            if (window.IpcRenderer) {
-                window.IpcRenderer.removeAllListeners("closeEditorWarning");
-                window.IpcRenderer.on("closeEditorWarning", event => {
-                    if (confirm("还未同步,是否同步")) {
-                        alert("同步中....");
-                    } else {
-                        window.IpcRenderer.send("app.exit");
-                    }
-                });
-            }
+            // if (window.IpcRenderer) {
+            //     window.IpcRenderer.removeAllListeners("closeEditorWarning");
+            //     window.IpcRenderer.on("closeEditorWarning", event => {
+            //         if (confirm("还未同步,是否同步")) {
+            //             alert("同步中....");
+            //         } else {
+            //             window.IpcRenderer.send("app.exit");
+            //         }
+            //     });
+            // }
 
             this.initialize();
             this.unshow();
@@ -7402,7 +7416,12 @@
 
             changeLockFlag(flag){
               if(flag){
-                window.ipcRenderer.send("enableLock")//启用锁定快捷键
+                  if(window.ipcRenderer.sendSync("isRegistered")){
+                      this.autoStartFlag = false;
+                      alert("锁定快捷键,已被其他应用占用");
+                      return;
+                  }
+                  window.ipcRenderer.send("enableLock")//启用锁定快捷键
               }else{
                   window.ipcRenderer.send("disableLock")//禁用锁定快捷键
               }
