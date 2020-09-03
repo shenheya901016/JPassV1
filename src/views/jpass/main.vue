@@ -3704,8 +3704,8 @@
                 showPassword: "",//是否显示密码
                 savePassword: "",
                 savePasswords: [],
-                lockFlag:localStorage.getItem("lockFlag"),//锁定状态
-                autoStartFlag:localStorage.getItem("autoStartFlag"),//开机自启状态
+                lockFlag:true,//锁定状态
+                autoStartFlag:true,//开机自启状态
                 locktimedisabled: "",
                 showpass: "", //弹出框
                 ImageBase64: "",
@@ -5289,9 +5289,10 @@
           async  removeData() {
                 var type = this.delobj.type;
                 var id = this.delobj.id;
+                console.log(this.delobj.name);
                 let nextObj ="";
                 //批量删除
-                if(this.checkedArray.length>0){
+                if(this.checkedArray.length>0 ){
                     if(this.checkedArray.length==1){
                        console.log("单独删除");
                     //单个删除后确定check为删除元素的下一个元素，check该元素
@@ -5335,7 +5336,7 @@
                         this.checkedArray=[];
                         console.log(nextObj);
                         if(this.projects.length>0){//判断当前目录是否删除空，删空的话清除明细，按钮置灰。
-                             this.checkedArray.push(nextObj);
+                            //  this.checkedArray.push(nextObj);
                              this.projectEvent = nextObj;
                         }else{
                              this.projectEvent="";
@@ -5368,13 +5369,58 @@
                             this.getdirectory();
                             this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
                         }
+                             this.checkedArray=[];                       
                              this.currentNote=-1
                              this.isDisabled = true;
                     }
-                }else{
-                    //删除labels
-                    console.log("删除labels")
+                }else if(type != "model"){
+                    console.log("右击单独删除");
+                     //单个删除后确定check为删除元素的下一个元素，check该元素
+                    let projectslist=this.projects;
+                    for(let i=0;i< projectslist.length;i++){
+                        //删除其他项
+                         if(projectslist[i].id ==id && projectslist.length-1!=i){
+                            this.currentNote=i;
+                            i++;
+                            nextObj=projectslist[i];
+                            break;
+                         }else if(projectslist.length-1==i){
+                           //删除最后一项
+                            nextObj=projectslist[0];
+                            this.currentNote=0
+                         }
+                    }
+                        if(type=="project" && this.delobj.isDel!=true){
+
+                            this.db.get("project").find({id: id}).set('isDel', true).write();
+                            let now= await this.getTime();
+                            this.db.set('version',now ).write();
+                            this.dialogVisibledProject = false;
+                            this.getdirectory();
+                            console.log(this.directoryClickId);
+                            this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                       }
+                        if(type=="template" && this.delobj.isDel!=true){
+                            this.db.get("templates").find({id:id}).set('isDel', true).write();
+                            let now= await this.getTime();
+                            this.db.set('version',now ).write();
+                            this.dialogVisibledTemplate = false;
+                            this.getdirectory();
+                            this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
+                        }
+                        this.delobj=nextObj;
+                        if(this.projects.length>0){//判断当前目录是否删除空，删空的话清除明细，按钮置灰。
+                            //  this.checkedArray.push(nextObj);
+                             this.projectEvent = nextObj;
+                        }else{
+                             this.projectEvent="";
+                             this.isDisabled = true;
+                        }
+                }
+                   
                 if (type == "model") {
+                     //删除labels
+                    console.log("删除labels")
                     let directorylist=this.DDirectory.directory;
                     for(let i=0;i< directorylist.length;i++){
                         //删除其他项
@@ -5438,7 +5484,6 @@
                     this.delobj=nextObj;
                     this.notesBytargeId(nextObj);//刷新列表页
                 }
-             }
             },
 
              //垃圾桶直接删除
@@ -5482,7 +5527,7 @@
                         //先清除checkedArray，再push 删除对象的下一个对象
                         this.checkedArray=[];
                         if(this.projects.length>0){//判断当前目录是否删除空，删空的话清除明细，按钮置灰。
-                             this.checkedArray.push(nextObj);
+                            //  this.checkedArray.push(nextObj);
                              this.projectEvent = nextObj;
                         }else{
                              this.projectEvent="";
@@ -5505,9 +5550,47 @@
                             this.getdirectory();
                             this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                          }
+                             this.checkedArray=[];                       
                              this.currentNote=-1
                              this.isDisabled = true;
                        }
+                 }else{
+                     console.log("右击单独删除");
+                      //单个删除后确定check为删除元素的下一个元素，check该元素
+                        let projectslist=this.projects;
+                        for(let i=0;i< projectslist.length;i++){
+                            //删除其他项
+                            if(projectslist[i].id ==id && projectslist.length-1!=i){
+                                this.currentNote=i;
+                                i++;
+                                nextObj=projectslist[i];
+                                break;
+                            }else if(projectslist.length-1==i){
+                            //删除最后一项
+                                nextObj=projectslist[0];
+                                this.currentNote=0
+                            }
+                        }
+                           if(this.delobj.isDel==true){
+                                if(type=="project"){
+                                    this.db.get("project").remove({id:id}).write();
+                                }
+                                if(type=="template"){
+                                    this.db.get("templates").remove({id:id}).write();
+                                }
+                                this.dialogVisibledProjectDel = false;
+                                this.projectEvent = "";
+                                this.getdirectory();
+                                this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                         }
+                         this.delobj=nextObj;
+                        if(this.projects.length>0){//判断当前目录是否删除空，删空的话清除明细，按钮置灰。
+                            //  this.checkedArray.push(nextObj);
+                             this.projectEvent = nextObj;
+                        }else{
+                             this.projectEvent="";
+                             this.isDisabled = true;
+                        }
                  }
                 let now= await this.getTime();
                 this.db.set('version',now ).write();
@@ -5633,35 +5716,35 @@
                 projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
                 this.projects = projectArray;
             },
-            // async initialize1(){
-            //     console.log("11111");
-            //      let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
-            //     let address = loginObj.address;
-            //     let secret = loginObj.secret;
-            //     this.myInfoKey = address;
-            //     this.username = loginObj.name;
-            //     var db_name = "db_" + address;
-            //     this.db = await this.$Lowdb(db_name);
-            //     this.localdb = await this.$Lowdb(db_name + "_local");
-            //     //取ipfs数据
-            //     let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
-            //     ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
-            //     ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
-            //     this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
-            //      let profiles = {
-            //                 name: loginObj.name, address: address,
-            //             }
-            //       var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
-            //             await this.db.defaults(newdata).write();
-            //             let imgdata = {"img": []};
-            //             await this.localdb.defaults(imgdata).write();
-            //             this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
-            //             await this.db.set("templates", this.operateTemplates.templates).write();
-            //             await this.db.set('settings', this.settings).write();
-            //             await this.db.set('machineId', this.$Uuidv1()).write();
-            //             await this.db.set('version', 0).write();
-            //             this.getdirectory();
-            // },
+            async initialize1(){
+                console.log("11111");
+                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+                let address = loginObj.address;
+                let secret = loginObj.secret;
+                this.myInfoKey = address;
+                this.username = loginObj.name;
+                var db_name = "db_" + address;
+                this.db = await this.$Lowdb(db_name);
+                this.localdb = await this.$Lowdb(db_name + "_local");
+                //取ipfs数据
+                let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
+                ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
+                ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
+                this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+                 let profiles = {
+                            name: loginObj.name, address: address,
+                        }
+                  var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
+                        await this.db.defaults(newdata).write();
+                        let imgdata = {"img": []};
+                        await this.localdb.defaults(imgdata).write();
+                        this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+                        await this.db.set("templates", this.operateTemplates.templates).write();
+                        await this.db.set('settings', this.settings).write();
+                        await this.db.set('machineId', this.$Uuidv1()).write();
+                        await this.db.set('version', 0).write();
+                        this.getdirectory();
+            },
             //启动加载
             async initialize() {
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -6299,6 +6382,11 @@
                 this.showPassword = setting.showPassword;//是否显示密码
                 this.savePassword = setting.savePassword;
                 this.auto_update = setting.auto_update;
+                this.lockFlag=localStorage.getItem("lockFlag");//锁定状态
+                console.log(this.lockFlag);
+
+                this.autoStartFlag=localStorage.getItem("autoStartFlag");//开机自启状态
+                console.log(this.autoStartFlag);
             },
             //保存设置
            async savesettings() {
@@ -6729,6 +6817,7 @@
                 this.tempTemplate = [];
             },
             openMenu_1(project, obj) {
+                console.log(this.delobj);
                 if(project.type=="model") {
                     if(project.modelsType=="directory"){
                          this.isDisabled = false;//启用删除
@@ -7399,12 +7488,15 @@
             changeLockFlag(flag){
               if(flag){
                 window.ipcRenderer.send("enableLock")//启用锁定快捷键
+                localStorage.setItem("lockFlag", flag);
               }else{
                   window.ipcRenderer.send("disableLock")//禁用锁定快捷键
+                localStorage.setItem("lockFlag", flag);
               }
             },
             changeAutoStartFlag(flag){
               window.ipcRenderer.send("setLoginItemSettings",flag);//是否启用开机自启
+              localStorage.setItem("autoStartFlag", flag);
             },
 
              //单独刷新左侧菜单
