@@ -88,7 +88,7 @@
                   <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.export") }}
                 </el-button>
             </li>
-            <li ref="" @click="importFileDialog = true">
+            <li ref="" @click="importFileDialog=true">
                 <el-button style="border:0;padding: 5px 5px;">
                   <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.import") }}
                 </el-button>
@@ -1942,7 +1942,7 @@
                         <el-form-item prop="">
                             <fieldset style="width: 80%;height:10vh;margin: auto;border: 1px solid #6C6C6C">
                                 <legend style="margin-left: 1%">
-                                    {{ $t("main.version") }}：{{package_version}}
+                                    {{ $t("main.version") }}：v{{package_version}}
                                 </legend>
                                 <div style="margin-left: 2vw">
                                     <el-button type="primary" size="small" @click="checkForUpdates">
@@ -3591,7 +3591,7 @@
                 window.ipcRenderer.send("enableLock")//启用锁定快捷键
             }
             if (this.autoStartFlag) {
-                window.ipcRenderer.send("setLoginItemSettings", autoStartFlag);//是否启用开机自启
+                window.ipcRenderer.send("setLoginItemSettings", this.autoStartFlag);//是否启用开机自启
             }
             window['lock'] = () => {
                     this.lock();
@@ -3672,10 +3672,6 @@
                 progress:0,
                 //setting
                 dialogVisibleSetting: false,//设置弹出框
-
-
-
-
                 updateDialog:false,
                 exportClasses:[],
                 package_version:"0.0.0",
@@ -3739,7 +3735,6 @@
                 dialogVisibleAddProject: false, //增加项目弹出框
                 dialogVisibleItems: false,//增加Items 弹出框
                 dialogVisibleEdit: false, //修改项目弹出框
-
                 dialogVisibleAddTemplate: false,//增加模板
                 dialogVisibleAddTempItems: false,//增加模板项弹出框
                 dialogVisibleTemplateEdit: false,//修改模板弹出框
@@ -4103,6 +4098,23 @@
             checkForUpdates(){
                 this.ipcRenderer.send('checkForUpdate');
             },
+            async importClick(){
+                let isVip=true;
+                let user=this.$JSON5.parse(localStorage.getItem("userkeyObj"));
+                const getPromise = util.promisify(request.get);
+                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + user.address + "&t=0";
+                let result = await getPromise(url);
+                let msg = this.$JSON5.parse(result.body);
+                if(msg.data.list.length>0&&msg.data.list[0].plan!=="A"){
+
+                    this.importFileDialog=true;
+                }else{
+                    isVip=false;
+                    if (!isVip) {
+                        this.$message.error('体验客户无法使用导入！');
+                    }
+                }
+            },
             importFile(res, file) {
                 let _this = this;
                 let reader = new FileReader();
@@ -4238,7 +4250,6 @@
                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                             _this.templateEvent = "";
                         } else {
-                            debugger
                             let parser = new DOMParser();
                             let xmlDoc = parser.parseFromString(res.target.result, "text/xml");
                             if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
@@ -4251,6 +4262,10 @@
                             let label_length = label.length;
                             let import_type = _this.import_file_type;
                             if (import_type === "jpassword") {
+                                if(xmlDoc.getElementsByTagName("jpassdatabase").length < 1){
+                                    _this.$message.error('解析失败!');
+                                    return;
+                                }
                                 for (let n = 0; n < label_length; n++) {
                                     let id = label[n].getAttribute("id");
                                     let name = label[n].getAttribute("name");
@@ -4408,8 +4423,15 @@
                                             _this.color = "";
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                            if(_this.newProject.tempBase64===""){
+                                                _this.newProject.tempBase64="/img/misc/lock.svg";
+                                            }
                                             if (_this.projectEvent.id === _this.newProject.id) {
-                                                _this.projectEvent = _this.newProject
+                                                if(_this.projectEvent.isDel!==_this.newProject.isDel){
+                                                    _this.projectEvent ="";
+                                                }else {
+                                                    _this.projectEvent = _this.newProject
+                                                }
                                             }
                                             if (card[n].getAttribute("imgtype") === "base64") {
                                                 _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
@@ -4422,6 +4444,10 @@
                                     }
                                 }
                             } else if (import_type === "safeincloud") {
+                                if(xmlDoc.getElementsByTagName("database").length < 1){
+                                    _this.$message.error('解析失败!');
+                                    return;
+                                }
                                 for (let n = 0; n < label_length; n++) {
                                     let id = label[n].getAttribute("id");
                                     let name = label[n].getAttribute("name");
@@ -4485,6 +4511,28 @@
                                                 };
                                                 datas.push(data);
                                             }
+                                            try{
+                                                let notes = card[n].getElementsByTagName("notes");
+                                                for (let i = 0; i < notes.length; i++) {
+                                                    let val = "";
+                                                    try{
+                                                        val = notes[i].childNodes[0].nodeValue;
+                                                    }catch (e) {
+                                                        val = "";
+                                                    }
+                                                    let data = {
+                                                        "id": _this.$Uuidv1(),
+                                                        "key": "笔记",
+                                                        "type": "text",
+                                                        "val": val,
+                                                        "tempkey": "笔记"
+                                                    };
+                                                    datas.push(data);
+                                                }
+                                            }catch (e) {
+
+                                            }
+
                                         }
                                         let label_id = card[n].getElementsByTagName("label_id");
                                         let modelsId = [];
@@ -4618,6 +4666,16 @@
                                             _this.color = "";
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                            if(_this.newProject.tempBase64===""){
+                                                _this.newProject.tempBase64="/img/misc/lock.svg";
+                                            }
+                                            if (_this.projectEvent.id === _this.newProject.id) {
+                                                if(_this.projectEvent.isDel!==_this.newProject.isDel){
+                                                    _this.projectEvent ="";
+                                                }else {
+                                                    _this.projectEvent = _this.newProject
+                                                }
+                                            }
                                             if (card[n].getAttribute("imgtype") === "base64") {
                                                 _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
                                             }
@@ -4625,9 +4683,6 @@
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                                             _this.templateEvent = "";
-                                            if (_this.projectEvent.id === _this.newProject.id) {
-                                                _this.projectEvent = _this.newProject
-                                            }
                                         } else {
                                             console.log("111111111111")
                                         }
@@ -4645,7 +4700,6 @@
                 }
             }, //图片大小验证
             importFileValid(file) {
-                console.log(file)
                 let types = ['text/xml',''];
                 const isImage = types.includes(file.type);
                 if (!isImage) {
@@ -4655,7 +4709,7 @@
             },
             exportFile() {
                 let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
-                xml += "<database>\n";
+                xml += "<jpassdatabase>\n";
                 let label_id = "";
                 let data_all = this.db.value();
                 //获取右击数据
@@ -4765,7 +4819,7 @@
                         }
                     }
                 }
-                xml += "</database>";
+                xml += "</jpassdatabase>";
                 const blob = new Blob([xml], {
                     type: "text/plain;charset=utf-8"
                 });
@@ -4773,7 +4827,7 @@
             },
             exportFileAll() {
                 let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
-                xml += "<database>\n";
+                xml += "<jpassdatabase>\n";
                 let label_id = "";
                 let data = this.db.value();
                 for (let n in data.project) {
@@ -4836,7 +4890,7 @@
                         }
                     }
                 }
-                xml += "</database>";
+                xml += "</jpassdatabase>";
                 const blob = new Blob([xml], {
                     type: "text/plain;charset=utf-8"
                 });
