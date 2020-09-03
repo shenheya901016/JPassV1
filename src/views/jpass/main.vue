@@ -4094,115 +4094,114 @@
                 let reader = new FileReader();
                 reader.readAsText(file.raw);
                 reader.onload = async function (res) {
-                    try{
-                        if(_this.import_file_type === "1password"){
-                            let passworddata=JSON.parse(res.target.result.split("***")[0]);
+                    try {
+                        if (_this.import_file_type === "1password") {
+                            let passworddata = JSON.parse(res.target.result.split("***")[0]);
                             let id = passworddata.uuid;
                             let name = passworddata.title;
                             let project = _this.db.get("project").find({id: id}).value();
-                            let datas=[];
-                            try{
-                                if(passworddata.secureContents.URLs!==undefined){
-                                    let data={
+                            let datas = [];
+                            try {
+                                if (passworddata.secureContents.URLs !== undefined) {
+                                    let data = {
                                         "id": "",
                                         "key": "",
                                         "type": "",
                                         "val": "",
                                         "tempkey": ""
                                     };
-                                    data.id=_this.$Uuidv1();
-                                    data.key="网址";
-                                    data.type="website";
-                                    data.val=passworddata.secureContents.URLs[0].url;
-                                    data.tempkey="网址";
+                                    data.id = _this.$Uuidv1();
+                                    data.key = "网址";
+                                    data.type = "website";
+                                    data.val = passworddata.secureContents.URLs[0].url;
+                                    data.tempkey = "网址";
                                     datas.push(data);
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.URLs");
                             }
-                            try{
-                                if(passworddata.secureContents.notesPlain!==undefined){
-                                    let data={
+                            try {
+                                if (passworddata.secureContents.notesPlain !== undefined) {
+                                    let data = {
                                         "id": "",
                                         "key": "",
                                         "type": "",
                                         "val": "",
                                         "tempkey": ""
                                     };
-                                    data.id=_this.$Uuidv1();
-                                    data.key="笔记";
-                                    data.type="text";
-                                    data.val=passworddata.secureContents.notesPlain;
-                                    data.tempkey="笔记";
+                                    data.id = _this.$Uuidv1();
+                                    data.key = "笔记";
+                                    data.type = "text";
+                                    data.val = passworddata.secureContents.notesPlain;
+                                    data.tempkey = "笔记";
                                     datas.push(data);
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.notesPlain");
                             }
-                            try{
-                                if(passworddata.secureContents.fields!==undefined){
-                                    for(let n in passworddata.secureContents.fields){
-                                        let data={
+                            try {
+                                if (passworddata.secureContents.fields !== undefined) {
+                                    for (let n in passworddata.secureContents.fields) {
+                                        let data = {
                                             "id": "",
                                             "key": "",
                                             "type": "",
                                             "val": "",
                                             "tempkey": ""
                                         };
-                                        data.id=_this.$Uuidv1();
-                                        data.key=passworddata.secureContents.fields[n].name;
-                                        if(passworddata.secureContents.fields[n].type==="P"){
-                                            data.type="password";
-                                        }else {
-                                            data.type="text";
+                                        data.id = _this.$Uuidv1();
+                                        data.key = passworddata.secureContents.fields[n].name;
+                                        if (passworddata.secureContents.fields[n].type === "P") {
+                                            data.type = "password";
+                                        } else {
+                                            data.type = "text";
                                         }
-                                        data.val=passworddata.secureContents.fields[n].value;
-                                        data.tempkey=passworddata.secureContents.fields[n].name;
+                                        data.val = passworddata.secureContents.fields[n].value;
+                                        data.tempkey = passworddata.secureContents.fields[n].name;
                                         datas.push(data);
                                     }
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.fields");
                             }
-                            try{
-                                if(passworddata.secureContents.sections!==undefined){
-                                    for(let n in passworddata.secureContents.sections){
-                                        console.log(n)
-                                        for(let j in passworddata.secureContents.sections[n].fields){
-                                            let data={
+                            try {
+                                if (passworddata.secureContents.sections !== undefined) {
+                                    for (let n in passworddata.secureContents.sections) {
+                                        for (let j in passworddata.secureContents.sections[n].fields) {
+                                            let data = {
                                                 "id": "",
                                                 "key": "",
                                                 "type": "",
                                                 "val": "",
                                                 "tempkey": ""
                                             };
-                                            if(passworddata.secureContents.sections[n].fields[j].t!==""){
-                                                data.id=_this.$Uuidv1();
-                                                data.key=passworddata.secureContents.sections[n].fields[j].t;
-                                                if(passworddata.secureContents.sections[n].fields[j].k==="concealed"){
-                                                    data.type="password";
-                                                }else {
-                                                    data.type="text";
+                                            if (passworddata.secureContents.sections[n].fields[j].t !== "") {
+                                                data.id = _this.$Uuidv1();
+                                                data.key = passworddata.secureContents.sections[n].fields[j].t;
+                                                if (passworddata.secureContents.sections[n].fields[j].k === "concealed") {
+                                                    data.type = "password";
+                                                } else {
+                                                    data.type = "text";
                                                 }
-                                                data.val=passworddata.secureContents.sections[n].fields[j].v;
-                                                data.tempkey=passworddata.secureContents.sections[n].fields[j].t;
+                                                data.val = passworddata.secureContents.sections[n].fields[j].v;
+                                                data.tempkey = passworddata.secureContents.sections[n].fields[j].t;
                                                 datas.push(data);
                                             }
                                         }
                                     }
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.sections");
                             }
                             _this.newProject = {
                                 "id": id,
                                 "name": name,
-                                "modelsId": ['wbj','sy'], // "modelsName":newArray.toString(),
+                                "modelsId": ['wbj', 'sy'], // "modelsName":newArray.toString(),
                                 "isDel": false,
                                 "type": "project",
                                 "datas": datas,
                                 "dateTime": await _this.getTime(),
-                                "tempBase64": "",
+                                "tempBase64": "/img/misc/lock.svg",
                                 "imgHash": "",
                                 "imgtype": "url",
                                 "imgurl": "/img/misc/lock.svg",
@@ -4224,9 +4223,14 @@
                             _this.getdirectory();
                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                             _this.templateEvent = "";
-                        }else{
+                        } else {
+                            debugger
                             let parser = new DOMParser();
                             let xmlDoc = parser.parseFromString(res.target.result, "text/xml");
+                            if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                                _this.$message.error('解析失败!');
+                                return;
+                            }
                             let card = xmlDoc.getElementsByTagName("card");
                             let label = xmlDoc.getElementsByTagName("label");
                             let card_length = card.length;
@@ -4270,13 +4274,13 @@
                                             note.push(notes)
                                         } else {
                                             let field = card[n].getElementsByTagName("field");
-                                            let val="";
+                                            let val = "";
 
                                             for (let i = 0; i < field.length; i++) {
-                                                try{
-                                                    val=field[i].childNodes[0].nodeValue;
-                                                }catch (e){
-                                                    val="";
+                                                try {
+                                                    val = field[i].childNodes[0].nodeValue;
+                                                } catch (e) {
+                                                    val = "";
                                                 }
                                                 let data = {
                                                     "id": field[i].getAttribute("id"),
@@ -4339,12 +4343,12 @@
                                                 note.push(notes)
                                             } else {
                                                 let field = card[n].getElementsByTagName("field");
-                                                let val="";
+                                                let val = "";
                                                 for (let i = 0; i < field.length; i++) {
-                                                    try{
-                                                        val=field[i].childNodes[0].nodeValue;
-                                                    }catch (e){
-                                                        val="";
+                                                    try {
+                                                        val = field[i].childNodes[0].nodeValue;
+                                                    } catch (e) {
+                                                        val = "";
                                                     }
                                                     let data = {
                                                         "id": field[i].getAttribute("id"),
@@ -4390,8 +4394,8 @@
                                             _this.color = "";
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                                            if(_this.projectEvent.id===_this.newProject.id){
-                                                _this.projectEvent=_this.newProject
+                                            if (_this.projectEvent.id === _this.newProject.id) {
+                                                _this.projectEvent = _this.newProject
                                             }
                                             if (card[n].getAttribute("imgtype") === "base64") {
                                                 _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
@@ -4492,7 +4496,7 @@
                                             "type": type,
                                             "datas": datas,
                                             "dateTime": await _this.getTime(),
-                                            "tempBase64": "",
+                                            "tempBase64": "/img/misc/lock.svg",
                                             "imgHash": "",
                                             "imgtype": "url",
                                             "imgurl": "/img/misc/lock.svg",
@@ -4580,7 +4584,7 @@
                                                 "type": type,
                                                 "datas": datas,
                                                 "dateTime": await _this.getTime(),
-                                                "tempBase64": "",
+                                                "tempBase64": "/img/misc/lock.svg",
                                                 "imgHash": "",
                                                 "imgtype": "url",
                                                 "imgurl": "/img/misc/lock.svg",
@@ -4607,8 +4611,8 @@
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                                             _this.templateEvent = "";
-                                            if(_this.projectEvent.id===_this.newProject.id){
-                                                _this.projectEvent=_this.newProject
+                                            if (_this.projectEvent.id === _this.newProject.id) {
+                                                _this.projectEvent = _this.newProject
                                             }
                                         } else {
                                             console.log("111111111111")
@@ -4620,20 +4624,20 @@
                         }
                         _this.isCover = false;
                         _this.import_file_type = "jpassword";
-                    }catch (e) {
+                    } catch (e) {
                         _this.$message.error('解析失败!');
                     }
                     _this.importFileDialog = false;
                 }
             }, //图片大小验证
             importFileValid(file) {
-              /*let types = ['text/xml'];
-              const isImage = types.includes(file.type);
-              const isLt200K = file.size / 1024 < 20;
-              if (!isImage) {
-                this.$message.error('上传文件只能是 xml 格式!');
-              }
-              return isImage;*/
+                console.log(file)
+                let types = ['text/xml',''];
+                const isImage = types.includes(file.type);
+                if (!isImage) {
+                    this.$message.error('上传文件只能是 xml、1pif 格式!');
+                }
+                return isImage;
             },
             exportFile() {
                 let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
