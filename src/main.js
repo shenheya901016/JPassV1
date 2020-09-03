@@ -21,11 +21,10 @@ import Jcc_ipfs from './jcc_ipfs'
 // import setting from "@/components/Setting";
 
 
+let test = require("./assets/test");
 
-let test=require("./assets/test");
 
-
-window.myIpfs=myIpfs;
+window.myIpfs = myIpfs;
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
 //https://element.eleme.cn/#/zh-CN/component/quickstart
@@ -33,19 +32,19 @@ Vue.use(ElementUI);
 Vue.use(VueClipboard);
 
 //components
-Vue.component("vueCanvasNest",vueCanvasNest)
-Vue.component("passwordGenerator",passwordGenerator)
-Vue.component("passwordGeneratorMain",passwordGeneratorMain)
-Vue.component("pay",pay)
+Vue.component("vueCanvasNest", vueCanvasNest)
+Vue.component("passwordGenerator", passwordGenerator)
+Vue.component("passwordGeneratorMain", passwordGeneratorMain)
+Vue.component("pay", pay)
 // Vue.component("setting",setting)
 
 let lockFlag = localStorage.getItem("lockFlag");//锁定状态
-if(lockFlag===null){
-    localStorage.setItem("lockFlag",false);
+if (lockFlag === null) {
+    localStorage.setItem("lockFlag", "false");
 }
 let autoStartFlag = localStorage.getItem("autoStartFlag");//锁定状态
-if(autoStartFlag===null){
-    localStorage.setItem("autoStartFlag",false);
+if (autoStartFlag === null) {
+    localStorage.setItem("autoStartFlag", "false");
 }
 
 //实例化vue-i18n
@@ -61,7 +60,7 @@ const i18n = new VueI18n({
 
 
 ElementLocale.i18n((key, value) => i18n.t(key, value));
-Vue.prototype.$createPassword=createPassword;
+Vue.prototype.$createPassword = createPassword;
 Vue.prototype.$JPassUtil = JPassUtil;
 Vue.prototype.$JCCWallet = require('jcc_wallet');
 Vue.prototype.$JINGCHUANGWallet = require('jcc_wallet').JingchangWallet;
@@ -72,11 +71,19 @@ Vue.prototype.$myIpfs = myIpfs;
 Vue.prototype.$test = test;
 Vue.prototype.$Lowdb = source => Lowdb(new IndexDB(source));
 
-Vue.prototype.$Ipfs =Jcc_ipfs;
+Vue.prototype.$Ipfs = Jcc_ipfs;
 //Vue.prototype.$fileLowdb = source => Lowdb(new fileIndexDB(source));
 if (typeof window.require === 'function') {
     window.IpcRenderer = window.require('electron').ipcRenderer;
     Vue.prototype.$IpcRenderer = window.IpcRenderer;
+    // let lockFlag = localStorage.getItem("lockFlag") === "true";//锁定状态
+    // if (lockFlag) {
+    //     window.ipcRenderer.send("enableLock")//启用锁定快捷键
+    // }
+    // let autoStartFlag = localStorage.getItem("autoStartFlag") === "true";
+    // if (autoStartFlag) {
+    //     window.ipcRenderer.send("setLoginItemSettings", autoStartFlag);//是否启用开机自启
+    // }
 }
 
 new Vue({

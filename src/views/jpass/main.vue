@@ -88,7 +88,7 @@
                   <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.export") }}
                 </el-button>
             </li>
-            <li ref="" @click="importFileDialog = true">
+            <li ref="" @click="importFileDialog=true">
                 <el-button style="border:0;padding: 5px 5px;">
                   <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.import") }}
                 </el-button>
@@ -1942,7 +1942,7 @@
                         <el-form-item prop="">
                             <fieldset style="width: 80%;height:10vh;margin: auto;border: 1px solid #6C6C6C">
                                 <legend style="margin-left: 1%">
-                                    {{ $t("main.version") }}：{{package_version}}
+                                    {{ $t("main.version") }}：v{{package_version}}
                                 </legend>
                                 <div style="margin-left: 2vw">
                                     <el-button type="primary" size="small" @click="checkForUpdates">
@@ -3579,9 +3579,23 @@
     export default {
         created() {this.keyevent();},
         mounted: function () {
-              window['lock'] = () => {
+            this.lockFlag = localStorage.getItem("lockFlag") === "true";//锁定状态
+            this.autoStartFlag = localStorage.getItem("autoStartFlag") === "true";//锁定状态
+            if (this.lockFlag) {
+                window.ipcRenderer.send("disableLock")//启用锁定快捷键
+                if(window.ipcRenderer.sendSync("isRegistered")){
+                    this.autoStartFlag = false;
+                    alert("锁定快捷键,已被其他应用占用");
+                    return;
+                }
+                window.ipcRenderer.send("enableLock")//启用锁定快捷键
+            }
+            if (this.autoStartFlag) {
+                window.ipcRenderer.send("setLoginItemSettings", this.autoStartFlag);//是否启用开机自启
+            }
+            window['lock'] = () => {
                     this.lock();
-            },
+            };
             //网络检查
             window.addEventListener('online',  this.online);
             window.addEventListener('offline', this.outline);
@@ -3589,16 +3603,16 @@
             window.oncontextmenu = function () {
                 return false;
             }
-            if (window.IpcRenderer) {
-                window.IpcRenderer.removeAllListeners("closeEditorWarning");
-                window.IpcRenderer.on("closeEditorWarning", event => {
-                    if (confirm("还未同步,是否同步")) {
-                        alert("同步中....");
-                    } else {
-                        window.IpcRenderer.send("app.exit");
-                    }
-                });
-            }
+            // if (window.IpcRenderer) {
+            //     window.IpcRenderer.removeAllListeners("closeEditorWarning");
+            //     window.IpcRenderer.on("closeEditorWarning", event => {
+            //         if (confirm("还未同步,是否同步")) {
+            //             alert("同步中....");
+            //         } else {
+            //             window.IpcRenderer.send("app.exit");
+            //         }
+            //     });
+            // }
 
             this.initialize();
             this.unshow();
@@ -3658,10 +3672,6 @@
                 progress:0,
                 //setting
                 dialogVisibleSetting: false,//设置弹出框
-
-
-
-
                 updateDialog:false,
                 exportClasses:[],
                 package_version:"0.0.0",
@@ -3704,8 +3714,8 @@
                 showPassword: "",//是否显示密码
                 savePassword: "",
                 savePasswords: [],
-                lockFlag:true,//锁定状态
-                autoStartFlag:true,//开机自启状态
+                lockFlag:localStorage.getItem("lockFlag"),//锁定状态
+                autoStartFlag:localStorage.getItem("autoStartFlag"),//开机自启状态
                 locktimedisabled: "",
                 showpass: "", //弹出框
                 ImageBase64: "",
@@ -3725,7 +3735,6 @@
                 dialogVisibleAddProject: false, //增加项目弹出框
                 dialogVisibleItems: false,//增加Items 弹出框
                 dialogVisibleEdit: false, //修改项目弹出框
-
                 dialogVisibleAddTemplate: false,//增加模板
                 dialogVisibleAddTempItems: false,//增加模板项弹出框
                 dialogVisibleTemplateEdit: false,//修改模板弹出框
@@ -4089,120 +4098,136 @@
             checkForUpdates(){
                 this.ipcRenderer.send('checkForUpdate');
             },
+            async importClick(){
+                let isVip=true;
+                let user=this.$JSON5.parse(localStorage.getItem("userkeyObj"));
+                const getPromise = util.promisify(request.get);
+                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + user.address + "&t=0";
+                let result = await getPromise(url);
+                let msg = this.$JSON5.parse(result.body);
+                if(msg.data.list.length>0&&msg.data.list[0].plan!=="A"){
+
+                    this.importFileDialog=true;
+                }else{
+                    isVip=false;
+                    if (!isVip) {
+                        this.$message.error('体验客户无法使用导入！');
+                    }
+                }
+            },
             importFile(res, file) {
                 let _this = this;
                 let reader = new FileReader();
                 reader.readAsText(file.raw);
                 reader.onload = async function (res) {
-                    try{
-                        if(_this.import_file_type === "1password"){
-                            let passworddata=JSON.parse(res.target.result.split("***")[0]);
+                    try {
+                        if (_this.import_file_type === "1password") {
+                            let passworddata = JSON.parse(res.target.result.split("***")[0]);
                             let id = passworddata.uuid;
                             let name = passworddata.title;
                             let project = _this.db.get("project").find({id: id}).value();
-                            let datas=[];
-                            try{
-                                if(passworddata.secureContents.URLs!==undefined){
-                                    let data={
+                            let datas = [];
+                            try {
+                                if (passworddata.secureContents.URLs !== undefined) {
+                                    let data = {
                                         "id": "",
                                         "key": "",
                                         "type": "",
                                         "val": "",
                                         "tempkey": ""
                                     };
-                                    data.id=_this.$Uuidv1();
-                                    data.key="网址";
-                                    data.type="website";
-                                    data.val=passworddata.secureContents.URLs[0].url;
-                                    data.tempkey="网址";
+                                    data.id = _this.$Uuidv1();
+                                    data.key = "网址";
+                                    data.type = "website";
+                                    data.val = passworddata.secureContents.URLs[0].url;
+                                    data.tempkey = "网址";
                                     datas.push(data);
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.URLs");
                             }
-                            try{
-                                if(passworddata.secureContents.notesPlain!==undefined){
-                                    let data={
+                            try {
+                                if (passworddata.secureContents.notesPlain !== undefined) {
+                                    let data = {
                                         "id": "",
                                         "key": "",
                                         "type": "",
                                         "val": "",
                                         "tempkey": ""
                                     };
-                                    data.id=_this.$Uuidv1();
-                                    data.key="笔记";
-                                    data.type="text";
-                                    data.val=passworddata.secureContents.notesPlain;
-                                    data.tempkey="笔记";
+                                    data.id = _this.$Uuidv1();
+                                    data.key = "笔记";
+                                    data.type = "text";
+                                    data.val = passworddata.secureContents.notesPlain;
+                                    data.tempkey = "笔记";
                                     datas.push(data);
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.notesPlain");
                             }
-                            try{
-                                if(passworddata.secureContents.fields!==undefined){
-                                    for(let n in passworddata.secureContents.fields){
-                                        let data={
+                            try {
+                                if (passworddata.secureContents.fields !== undefined) {
+                                    for (let n in passworddata.secureContents.fields) {
+                                        let data = {
                                             "id": "",
                                             "key": "",
                                             "type": "",
                                             "val": "",
                                             "tempkey": ""
                                         };
-                                        data.id=_this.$Uuidv1();
-                                        data.key=passworddata.secureContents.fields[n].name;
-                                        if(passworddata.secureContents.fields[n].type==="P"){
-                                            data.type="password";
-                                        }else {
-                                            data.type="text";
+                                        data.id = _this.$Uuidv1();
+                                        data.key = passworddata.secureContents.fields[n].name;
+                                        if (passworddata.secureContents.fields[n].type === "P") {
+                                            data.type = "password";
+                                        } else {
+                                            data.type = "text";
                                         }
-                                        data.val=passworddata.secureContents.fields[n].value;
-                                        data.tempkey=passworddata.secureContents.fields[n].name;
+                                        data.val = passworddata.secureContents.fields[n].value;
+                                        data.tempkey = passworddata.secureContents.fields[n].name;
                                         datas.push(data);
                                     }
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.fields");
                             }
-                            try{
-                                if(passworddata.secureContents.sections!==undefined){
-                                    for(let n in passworddata.secureContents.sections){
-                                        console.log(n)
-                                        for(let j in passworddata.secureContents.sections[n].fields){
-                                            let data={
+                            try {
+                                if (passworddata.secureContents.sections !== undefined) {
+                                    for (let n in passworddata.secureContents.sections) {
+                                        for (let j in passworddata.secureContents.sections[n].fields) {
+                                            let data = {
                                                 "id": "",
                                                 "key": "",
                                                 "type": "",
                                                 "val": "",
                                                 "tempkey": ""
                                             };
-                                            if(passworddata.secureContents.sections[n].fields[j].t!==""){
-                                                data.id=_this.$Uuidv1();
-                                                data.key=passworddata.secureContents.sections[n].fields[j].t;
-                                                if(passworddata.secureContents.sections[n].fields[j].k==="concealed"){
-                                                    data.type="password";
-                                                }else {
-                                                    data.type="text";
+                                            if (passworddata.secureContents.sections[n].fields[j].t !== "") {
+                                                data.id = _this.$Uuidv1();
+                                                data.key = passworddata.secureContents.sections[n].fields[j].t;
+                                                if (passworddata.secureContents.sections[n].fields[j].k === "concealed") {
+                                                    data.type = "password";
+                                                } else {
+                                                    data.type = "text";
                                                 }
-                                                data.val=passworddata.secureContents.sections[n].fields[j].v;
-                                                data.tempkey=passworddata.secureContents.sections[n].fields[j].t;
+                                                data.val = passworddata.secureContents.sections[n].fields[j].v;
+                                                data.tempkey = passworddata.secureContents.sections[n].fields[j].t;
                                                 datas.push(data);
                                             }
                                         }
                                     }
                                 }
-                            }catch (e){
+                            } catch (e) {
                                 console.log("data.secureContents.sections");
                             }
                             _this.newProject = {
                                 "id": id,
                                 "name": name,
-                                "modelsId": ['wbj','sy'], // "modelsName":newArray.toString(),
+                                "modelsId": ['wbj', 'sy'], // "modelsName":newArray.toString(),
                                 "isDel": false,
                                 "type": "project",
                                 "datas": datas,
                                 "dateTime": await _this.getTime(),
-                                "tempBase64": "",
+                                "tempBase64": "/img/misc/lock.svg",
                                 "imgHash": "",
                                 "imgtype": "url",
                                 "imgurl": "/img/misc/lock.svg",
@@ -4224,15 +4249,23 @@
                             _this.getdirectory();
                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                             _this.templateEvent = "";
-                        }else{
+                        } else {
                             let parser = new DOMParser();
                             let xmlDoc = parser.parseFromString(res.target.result, "text/xml");
+                            if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                                _this.$message.error('解析失败!');
+                                return;
+                            }
                             let card = xmlDoc.getElementsByTagName("card");
                             let label = xmlDoc.getElementsByTagName("label");
                             let card_length = card.length;
                             let label_length = label.length;
                             let import_type = _this.import_file_type;
                             if (import_type === "jpassword") {
+                                if(xmlDoc.getElementsByTagName("jpassdatabase").length < 1){
+                                    _this.$message.error('解析失败!');
+                                    return;
+                                }
                                 for (let n = 0; n < label_length; n++) {
                                     let id = label[n].getAttribute("id");
                                     let name = label[n].getAttribute("name");
@@ -4270,13 +4303,13 @@
                                             note.push(notes)
                                         } else {
                                             let field = card[n].getElementsByTagName("field");
-                                            let val="";
+                                            let val = "";
 
                                             for (let i = 0; i < field.length; i++) {
-                                                try{
-                                                    val=field[i].childNodes[0].nodeValue;
-                                                }catch (e){
-                                                    val="";
+                                                try {
+                                                    val = field[i].childNodes[0].nodeValue;
+                                                } catch (e) {
+                                                    val = "";
                                                 }
                                                 let data = {
                                                     "id": field[i].getAttribute("id"),
@@ -4339,12 +4372,12 @@
                                                 note.push(notes)
                                             } else {
                                                 let field = card[n].getElementsByTagName("field");
-                                                let val="";
+                                                let val = "";
                                                 for (let i = 0; i < field.length; i++) {
-                                                    try{
-                                                        val=field[i].childNodes[0].nodeValue;
-                                                    }catch (e){
-                                                        val="";
+                                                    try {
+                                                        val = field[i].childNodes[0].nodeValue;
+                                                    } catch (e) {
+                                                        val = "";
                                                     }
                                                     let data = {
                                                         "id": field[i].getAttribute("id"),
@@ -4390,8 +4423,15 @@
                                             _this.color = "";
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
-                                            if(_this.projectEvent.id===_this.newProject.id){
-                                                _this.projectEvent=_this.newProject
+                                            if(_this.newProject.tempBase64===""){
+                                                _this.newProject.tempBase64="/img/misc/lock.svg";
+                                            }
+                                            if (_this.projectEvent.id === _this.newProject.id) {
+                                                if(_this.projectEvent.isDel!==_this.newProject.isDel){
+                                                    _this.projectEvent ="";
+                                                }else {
+                                                    _this.projectEvent = _this.newProject
+                                                }
                                             }
                                             if (card[n].getAttribute("imgtype") === "base64") {
                                                 _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
@@ -4404,6 +4444,10 @@
                                     }
                                 }
                             } else if (import_type === "safeincloud") {
+                                if(xmlDoc.getElementsByTagName("database").length < 1){
+                                    _this.$message.error('解析失败!');
+                                    return;
+                                }
                                 for (let n = 0; n < label_length; n++) {
                                     let id = label[n].getAttribute("id");
                                     let name = label[n].getAttribute("name");
@@ -4467,6 +4511,28 @@
                                                 };
                                                 datas.push(data);
                                             }
+                                            try{
+                                                let notes = card[n].getElementsByTagName("notes");
+                                                for (let i = 0; i < notes.length; i++) {
+                                                    let val = "";
+                                                    try{
+                                                        val = notes[i].childNodes[0].nodeValue;
+                                                    }catch (e) {
+                                                        val = "";
+                                                    }
+                                                    let data = {
+                                                        "id": _this.$Uuidv1(),
+                                                        "key": "笔记",
+                                                        "type": "text",
+                                                        "val": val,
+                                                        "tempkey": "笔记"
+                                                    };
+                                                    datas.push(data);
+                                                }
+                                            }catch (e) {
+
+                                            }
+
                                         }
                                         let label_id = card[n].getElementsByTagName("label_id");
                                         let modelsId = [];
@@ -4492,7 +4558,7 @@
                                             "type": type,
                                             "datas": datas,
                                             "dateTime": await _this.getTime(),
-                                            "tempBase64": "",
+                                            "tempBase64": "/img/misc/lock.svg",
                                             "imgHash": "",
                                             "imgtype": "url",
                                             "imgurl": "/img/misc/lock.svg",
@@ -4580,7 +4646,7 @@
                                                 "type": type,
                                                 "datas": datas,
                                                 "dateTime": await _this.getTime(),
-                                                "tempBase64": "",
+                                                "tempBase64": "/img/misc/lock.svg",
                                                 "imgHash": "",
                                                 "imgtype": "url",
                                                 "imgurl": "/img/misc/lock.svg",
@@ -4600,6 +4666,16 @@
                                             _this.color = "";
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
+                                            if(_this.newProject.tempBase64===""){
+                                                _this.newProject.tempBase64="/img/misc/lock.svg";
+                                            }
+                                            if (_this.projectEvent.id === _this.newProject.id) {
+                                                if(_this.projectEvent.isDel!==_this.newProject.isDel){
+                                                    _this.projectEvent ="";
+                                                }else {
+                                                    _this.projectEvent = _this.newProject
+                                                }
+                                            }
                                             if (card[n].getAttribute("imgtype") === "base64") {
                                                 _this.uploadImg(card[n].getAttribute("tempBase64"), _this.newProject.type, _this.newProject.id);
                                             }
@@ -4607,9 +4683,6 @@
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                                             _this.templateEvent = "";
-                                            if(_this.projectEvent.id===_this.newProject.id){
-                                                _this.projectEvent=_this.newProject
-                                            }
                                         } else {
                                             console.log("111111111111")
                                         }
@@ -4620,24 +4693,23 @@
                         }
                         _this.isCover = false;
                         _this.import_file_type = "jpassword";
-                    }catch (e) {
+                    } catch (e) {
                         _this.$message.error('解析失败!');
                     }
                     _this.importFileDialog = false;
                 }
             }, //图片大小验证
             importFileValid(file) {
-              /*let types = ['text/xml'];
-              const isImage = types.includes(file.type);
-              const isLt200K = file.size / 1024 < 20;
-              if (!isImage) {
-                this.$message.error('上传文件只能是 xml 格式!');
-              }
-              return isImage;*/
+                let types = ['text/xml',''];
+                const isImage = types.includes(file.type);
+                if (!isImage) {
+                    this.$message.error('上传文件只能是 xml、1pif 格式!');
+                }
+                return isImage;
             },
             exportFile() {
                 let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
-                xml += "<database>\n";
+                xml += "<jpassdatabase>\n";
                 let label_id = "";
                 let data_all = this.db.value();
                 //获取右击数据
@@ -4747,7 +4819,7 @@
                         }
                     }
                 }
-                xml += "</database>";
+                xml += "</jpassdatabase>";
                 const blob = new Blob([xml], {
                     type: "text/plain;charset=utf-8"
                 });
@@ -4755,7 +4827,7 @@
             },
             exportFileAll() {
                 let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
-                xml += "<database>\n";
+                xml += "<jpassdatabase>\n";
                 let label_id = "";
                 let data = this.db.value();
                 for (let n in data.project) {
@@ -4818,7 +4890,7 @@
                         }
                     }
                 }
-                xml += "</database>";
+                xml += "</jpassdatabase>";
                 const blob = new Blob([xml], {
                     type: "text/plain;charset=utf-8"
                 });
@@ -5369,7 +5441,7 @@
                             this.getdirectory();
                             this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());
                         }
-                             this.checkedArray=[];                       
+                             this.checkedArray=[];
                              this.currentNote=-1
                              this.isDisabled = true;
                     }
@@ -5417,7 +5489,7 @@
                              this.isDisabled = true;
                         }
                 }
-                   
+
                 if (type == "model") {
                      //删除labels
                     console.log("删除labels")
@@ -5550,7 +5622,7 @@
                             this.getdirectory();
                             this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                          }
-                             this.checkedArray=[];                       
+                             this.checkedArray=[];
                              this.currentNote=-1
                              this.isDisabled = true;
                        }
@@ -5716,35 +5788,35 @@
                 projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
                 this.projects = projectArray;
             },
-            async initialize1(){
-                console.log("11111");
-                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
-                let address = loginObj.address;
-                let secret = loginObj.secret;
-                this.myInfoKey = address;
-                this.username = loginObj.name;
-                var db_name = "db_" + address;
-                this.db = await this.$Lowdb(db_name);
-                this.localdb = await this.$Lowdb(db_name + "_local");
-                //取ipfs数据
-                let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
-                ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
-                ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
-                this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
-                 let profiles = {
-                            name: loginObj.name, address: address,
-                        }
-                  var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
-                        await this.db.defaults(newdata).write();
-                        let imgdata = {"img": []};
-                        await this.localdb.defaults(imgdata).write();
-                        this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
-                        await this.db.set("templates", this.operateTemplates.templates).write();
-                        await this.db.set('settings', this.settings).write();
-                        await this.db.set('machineId', this.$Uuidv1()).write();
-                        await this.db.set('version', 0).write();
-                        this.getdirectory();
-            },
+            // async initialize1(){
+            //     console.log("11111");
+            //      let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
+            //     let address = loginObj.address;
+            //     let secret = loginObj.secret;
+            //     this.myInfoKey = address;
+            //     this.username = loginObj.name;
+            //     var db_name = "db_" + address;
+            //     this.db = await this.$Lowdb(db_name);
+            //     this.localdb = await this.$Lowdb(db_name + "_local");
+            //     //取ipfs数据
+            //     let ipfsData = await this.$myIpfs.Ipfs.read(secret,"/main", address);
+            //     ipfsData = this.$JSON5.parse(ipfsData)//ipfs转成对象
+            //     ipfsData = this.$JSON5.parse(this.$JSON5.stringify(ipfsData));//序列化新对象
+            //     this.templateItemsTemp = this.$JSON5.parse(this.$JSON5.stringify(this.templateItems));//初始化模板添加选项
+            //      let profiles = {
+            //                 name: loginObj.name, address: address,
+            //             }
+            //       var newdata = this.$JSON5.parse('{"profiles":"' + this.$JSON5.stringify(profiles) + '","project":[],"models":[{"id":"sy","name":"allProjects","modelsType":"project","type":"model"}, {"id":"scj","name":"favorites","modelsType":"project","type":"model"}, {"id":"mm","name":"password","modelsType":"project","type":"model"}, {"id":"mb","name":"template","modelsType":"project","type":"model"}, {"id":"wbj","name":"unmarked","modelsType":"project","type":"model"},{"id":"ljt","name":"trash","modelsType":"project","type":"model"},{"id":"weakPwd","name":"弱密码","modelsType":"project","type":"model"}]}');
+            //             await this.db.defaults(newdata).write();
+            //             let imgdata = {"img": []};
+            //             await this.localdb.defaults(imgdata).write();
+            //             this.operateTemplates = this.$JSON5.parse(this.$JSON5.stringify(this.templates));
+            //             await this.db.set("templates", this.operateTemplates.templates).write();
+            //             await this.db.set('settings', this.settings).write();
+            //             await this.db.set('machineId', this.$Uuidv1()).write();
+            //             await this.db.set('version', 0).write();
+            //             this.getdirectory();
+            // },
             //启动加载
             async initialize() {
                 let loginObj = this.$JSON5.parse(sessionStorage.getItem("userkeyObj"));
@@ -6382,11 +6454,6 @@
                 this.showPassword = setting.showPassword;//是否显示密码
                 this.savePassword = setting.savePassword;
                 this.auto_update = setting.auto_update;
-                this.lockFlag=localStorage.getItem("lockFlag");//锁定状态
-                console.log(this.lockFlag);
-
-                this.autoStartFlag=localStorage.getItem("autoStartFlag");//开机自启状态
-                console.log(this.autoStartFlag);
             },
             //保存设置
            async savesettings() {
@@ -7487,16 +7554,18 @@
 
             changeLockFlag(flag){
               if(flag){
-                window.ipcRenderer.send("enableLock")//启用锁定快捷键
-                localStorage.setItem("lockFlag", flag);
+                  if(window.ipcRenderer.sendSync("isRegistered")){
+                      this.autoStartFlag = false;
+                      alert("锁定快捷键,已被其他应用占用");
+                      return;
+                  }
+                  window.ipcRenderer.send("enableLock")//启用锁定快捷键
               }else{
                   window.ipcRenderer.send("disableLock")//禁用锁定快捷键
-                localStorage.setItem("lockFlag", flag);
               }
             },
             changeAutoStartFlag(flag){
               window.ipcRenderer.send("setLoginItemSettings",flag);//是否启用开机自启
-              localStorage.setItem("autoStartFlag", flag);
             },
 
              //单独刷新左侧菜单

@@ -7,7 +7,7 @@
             </a>
             <el-main class="main">
                 <ul>
-                    <li v-for="(paytemplate, index) in paytemplate.paytemplateItems"
+                    <li v-for="(paytemplate, index) in data"
                         :data-index="index"
                         :key="index"
                         @click="boxclick(paytemplate, $event)"
@@ -38,6 +38,7 @@
 </template>
 <script>
     const request = require("request");
+    const util = require('util');
     let baserpcurl = "http://47.103.65.5:9527/";
     //判断是否为开发者模式
     if (process.env.NODE_ENV === "development") {
@@ -52,34 +53,44 @@
                 content: '',
                 pay: 0,//默认支付
                 ispay:true,//支付按钮默认为disabled
-                paytemplate: {
-                    "paytemplateItems": [{
+                data:[
+                    {
                         "key": "fdbce150-fec4-11e9-bd33-854c67bf088b",
-                        "name": "月卡",
-                        "pay": "0.01",
-                        "day": "31",
-                        "content": "月卡 30天"
+                        "name": "体验卡",
+                        "pay": 0,
+                        "day": "15",
+                        "content": "体验15天"
                     }, {
                         "key": "fdbce150-fec4-11e9-bd35-854c67bf388b",
                         "name": "季卡",
-                        "pay": "0.02",
+                        "pay": 0.01,
                         "day": "90",
                         "content": "季卡 90天"
                     }, {
                         "key": "fdbce150-fec4-11e9-bd38-854c67bf388b",
                         "name": "年卡",
-                        "pay": "0.03",
+                        "pay": 0.02,
                         "day": "365",
                         "content": "年卡 365天"
-                    }]
-                },
+                    }
+                ]
+            }
+        },
+        async mounted() {
+            let user=this.$JSON5.parse(localStorage.getItem("userkeyObj"));
+            const getPromise = util.promisify(request.get);
+            let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + user.address + "&t=0";
+            let result = await getPromise(url);
+            let msg = this.$JSON5.parse(result.body);
+            if(msg.data.list.length>0&&msg.data.list[0].plan!=="A"){
+                this.data.splice(0,1);
             }
         },
         methods: {
             //关闭支付框触发
             clearPay() {
                 this.$emit("dialogPayGeneratorclose", false);
-                this.ispay=true;
+                this.ispay = true;
             },
             boxclick(paytemplate, event) {
                 let target = event.currentTarget;
@@ -102,17 +113,25 @@
                 let out_trade_no;
                 let _this = this;
                 request.post(options, function (error, response, body) {
-                    let form = response.body.split("#")[0];
-                    out_trade_no = response.body.split("#")[1];
-                    const target = "target='_blank' ";
-                    let newFrom = form.slice(0, 6) + target + form.slice(6)
-                    const div = document.createElement('div')
-                    div.id = 'alipay'
-                    div.innerHTML = newFrom
-                    document.body.appendChild(div)
-                    document.querySelector('#alipay').children[0].submit()
-                    document.body.removeChild(div);
-                    _this.query(out_trade_no)
+                    if(_this.pay===0){
+                        if(response.body==="TRADE_SUCCESS"){
+                            _this.$router.push("/jpass/main");
+                        }else {
+                            _this.$message.error("充值失败！")
+                        }
+                    }else{
+                        let form = response.body.split("#")[0];
+                        out_trade_no = response.body.split("#")[1];
+                        const target = "target='_blank' ";
+                        let newFrom = form.slice(0, 6) + target + form.slice(6)
+                        const div = document.createElement('div')
+                        div.id = 'alipay'
+                        div.innerHTML = newFrom
+                        document.body.appendChild(div)
+                        document.querySelector('#alipay').children[0].submit()
+                        document.body.removeChild(div);
+                        _this.query(out_trade_no)
+                    }
                 });
             },
             query(out_trade_no) {
