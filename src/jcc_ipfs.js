@@ -58,7 +58,6 @@ let jcc_ipfs = {
                 }
             });  //req.body);
             // 可以加入 try catch 捕获异常  也可以加 .catch()
-            console.log("result" , result.body);
             return result.body
         },
         /**
@@ -83,7 +82,6 @@ let jcc_ipfs = {
                 }
             });
             // 可以加入 try catch 捕获异常  也可以加 .catch()
-            console.log("result", result.body);
         },
         /**
          * 读取文件
@@ -101,7 +99,6 @@ let jcc_ipfs = {
             if (msg.indexOf("error")!=-1) {
                 return msg;
             } else {
-                console.log(JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, json5.parse(msg)));
                 return JPassUtil.ECCCrypto.decryptWithPrivateKey(privateKey, json5.parse(msg));
             }
         },
@@ -120,7 +117,6 @@ let jcc_ipfs = {
                     path: path
                 }
             });
-            console.log("result", result.body);
         },
     }
 }

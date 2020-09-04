@@ -79,10 +79,11 @@
         async mounted() {
             let user=this.$JSON5.parse(localStorage.getItem("userkeyObj"));
             const getPromise = util.promisify(request.get);
-            let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + user.address + "&t=0";
+            let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + user.address + "&t=1";
             let result = await getPromise(url);
             let msg = this.$JSON5.parse(result.body);
-            if(msg.data.list.length>0&&msg.data.list[0].plan!=="A"){
+            console.log(msg.data)
+            if(msg.data.list.length>0){
                 this.data.splice(0,1);
             }
         },
