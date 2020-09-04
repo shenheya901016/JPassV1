@@ -4082,6 +4082,28 @@
             };
         },
         methods: {
+            //计算字符串字节
+            strlen(str) {
+                let len = 0;
+                for (let i = 0; i < str.length; i++) {
+                    // 取出单个字符
+                    let c = str.charCodeAt(i);
+                    //单字节加1 ，0~9，a~z
+                    if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
+                        len++;
+                    } else {
+                        len += 2;
+                    }
+                }
+                return len;
+            },
+            //计算上传文件大小
+            calculation(){
+                let localdata = this.$JSON5.stringify(this.db.__wrapped__);
+                let localimgdata=this.$JSON5.stringify(this.localdb.__wrapped__);;
+                let len= this.strlen(localdata)+this.strlen(localimgdata);
+                return len/1024<500;
+            },
             importClose(){
                 this.isCover = false;
                 this.import_file_type = "jpassword";
@@ -4227,10 +4249,10 @@
                                 "type": "project",
                                 "datas": datas,
                                 "dateTime": await _this.getTime(),
-                                "tempBase64": "/img/misc/lock.svg",
+                                "tempBase64": `${process.env.BASE_URL}img/misc/lock.svg`,
                                 "imgHash": "",
                                 "imgtype": "url",
-                                "imgurl": "/img/misc/lock.svg",
+                                "imgurl": `${process.env.BASE_URL}img/misc/lock.svg`,
                                 "bgcolor": "#999999",
                                 "isnote": false,//笔记类型
                                 "hasnote": false,
@@ -4424,7 +4446,7 @@
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                                             if(_this.newProject.tempBase64===""){
-                                                _this.newProject.tempBase64="/img/misc/lock.svg";
+                                                _this.newProject.tempBase64=`${process.env.BASE_URL}img/misc/lock.svg`;
                                             }
                                             if (_this.projectEvent.id === _this.newProject.id) {
                                                 if(_this.projectEvent.isDel!==_this.newProject.isDel){
@@ -4558,10 +4580,10 @@
                                             "type": type,
                                             "datas": datas,
                                             "dateTime": await _this.getTime(),
-                                            "tempBase64": "/img/misc/lock.svg",
+                                            "tempBase64": `${process.env.BASE_URL}img/misc/lock.svg`,
                                             "imgHash": "",
                                             "imgtype": "url",
-                                            "imgurl": "/img/misc/lock.svg",
+                                            "imgurl": `${process.env.BASE_URL}img/misc/lock.svg`,
                                             "bgcolor": card[n].getAttribute("color"),
                                             "isnote": card[n].getAttribute("type") === "note",//笔记类型
                                             "hasnote": card[n].getAttribute("type") === "note",
@@ -4646,10 +4668,10 @@
                                                 "type": type,
                                                 "datas": datas,
                                                 "dateTime": await _this.getTime(),
-                                                "tempBase64": "/img/misc/lock.svg",
+                                                "tempBase64":`${process.env.BASE_URL}img/misc/lock.svg`,
                                                 "imgHash": "",
                                                 "imgtype": "url",
-                                                "imgurl": "/img/misc/lock.svg",
+                                                "imgurl": `${process.env.BASE_URL}img/misc/lock.svg`,
                                                 "bgcolor": card[n].getAttribute("color"),
                                                 "isnote": card[n].getAttribute("type") === "note",//笔记类型
                                                 "hasnote": card[n].getAttribute("type") === "note",
@@ -4667,7 +4689,7 @@
                                             _this.getdirectory();
                                             _this.notesBytargeId(_this.db.get("models").find({id: _this.directoryClickId}).value());//刷新列表页
                                             if(_this.newProject.tempBase64===""){
-                                                _this.newProject.tempBase64="/img/misc/lock.svg";
+                                                _this.newProject.tempBase64=`${process.env.BASE_URL}img/misc/lock.svg`;
                                             }
                                             if (_this.projectEvent.id === _this.newProject.id) {
                                                 if(_this.projectEvent.isDel!==_this.newProject.isDel){
