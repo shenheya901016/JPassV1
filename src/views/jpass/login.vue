@@ -14,6 +14,7 @@
                 {{ $t("login.title") }}
             </div>
             <el-form
+                    v-loading="loading"
                     :model="ruleForm"
                     :rules="rules"
                     ref="ruleForm"
@@ -122,6 +123,7 @@
         },
         data() {
             return {
+                loading: false,
                 dialogVisible: false,
                 names: [],
                 network:true,
@@ -204,6 +206,7 @@
                 return timeobj.data['t'];
             },
             async login() {
+                this.loading=true;
                 if(!this.network){
                     this.$message.error(this.$t('login.outline'));
                     return false;
@@ -250,6 +253,7 @@
                         this.$message.error(this.$t("login.loginerror"));
                     }
               }
+               this.loading=false;
             },
         }
     };
