@@ -5098,6 +5098,7 @@
                 let secret = loginObj.secret;
                 var alldata = this.db.get("models").value();// 获取所有分类
                 var allProjects = this.db.get("project").value();
+                let templates = this.db.get("templates").value();
                 var projectstring = ""
                 var directoryString = ""
                 var specialString =""
@@ -5175,7 +5176,7 @@
                     jsonSpecial[obj].name = this.international(jsonSpecial[obj].name);
                 }
                 this.DSpecial = {special:jsonSpecial};
-                //类型名称
+                //类型名称国际化
                 for (var index in allProjects) {
                     var newArray = new Array();
                     for (var indexMode in allProjects[index].modelsId) {
@@ -5186,9 +5187,23 @@
                         }
                     }
                     allProjects[index].modelsName = newArray.toString();
-                }
+                }      
                 var projectArray = this.db.get("project").filter({isDel: false}).value();
                 projectArray = this.$JSON5.parse(this.$JSON5.stringify(projectArray));
+
+                 for (let index in templates) {
+                        let newArray = new Array();
+                        //插入类别名称
+                        for (let indexMode in templates[index].modelsId) {
+                            let modelId = templates[index].modelsId[indexMode];
+                            let model = this.db.get("models").find({id: modelId}).value();
+                            if (model.id != "sy") {
+                                newArray.push(this.international(model.name));
+                            }
+                        }
+                        templates[index].modelsName = newArray.toString();
+                    }
+
                 //图片载入
                 for (var index in projectArray) {
                     if (projectArray[index].imgtype == "url") {
@@ -6217,11 +6232,9 @@
                        this.dialogVisibleEdit = false
                        this.editobject.tempBase64 = img;
                        this.$message.success(this.$t('main.successfullyModified'));
-                       this.projectEvent = this.editobject;
                        this.selectlabels = "";
                        this.color = "";
                        this.getdirectory();
-                    //    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                        if (this.imgtype == "base64") {
                            if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
                                let imgBase64 = this.localdb.get("img").find({id: this.editobject.imgHash}).value();
@@ -6234,7 +6247,7 @@
                        }
                         //二次刷新
                        this.getdirectory();
-                    //    this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+                       this.projectEvent=this.db.get("project").find({id: this.editobject.id}).value();
                        this.afterEditchecked(this.editobject.id);
                        this.editobject = "";
                    } catch (e) {
@@ -6369,7 +6382,6 @@
                     this.dialogVisibleTemplateEdit = false
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.editobject.tempBase64 = img;
-                    this.projectEvent = this.editobject;
                     this.selectlabels = "";
                     this.getdirectory();
                     this.color = "";
@@ -6386,7 +6398,7 @@
                     }
                     //二次刷新
                     this.getdirectory();
-                    // this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
+                    this.projectEvent =  this.db.get("templates").find({id: this.editobject.id}).value();
                     this.afterEditchecked(this.editobject.id);
                     this.editobject = "";
                 } catch (e) {
@@ -6736,6 +6748,7 @@
                 this.getdirectory();
                 this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                 this.currentNote = -1;
+                this.projectEvent="";
             },
             //清空垃圾箱
             async  clearTrash() {
@@ -7242,6 +7255,7 @@
              this.dialogVisibleRename = false,
              this.getdirectory();
              this.$refs[formName].resetFields();
+             this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
           },
           /**
            * 文件夹重命名
@@ -7383,7 +7397,7 @@
                    this.color = "";
                    this.ruleFormAddNote.notes="";
                    this.getdirectory();
-                  this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
+                   this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
                    if (this.imgtype == "base64") {
                        console.log(this.imageBase64);
                        this.uploadImg(this.imageBase64, this.newProject.type, this.newProject.id);
@@ -7423,7 +7437,6 @@
                     this.dialogVisibleNoteEdit = false
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.editobject.tempBase64 = img;
-                    this.projectEvent = this.editobject;
                     this.selectlabels = "";
                     this.getdirectory();
                     this.color = "";
@@ -7439,6 +7452,7 @@
                     }
                     //二次刷新
                     this.getdirectory();
+                    this.projectEvent = this.db.get("project").find({id: this.editobject.id}).value();
                     this.afterEditchecked(this.editobject.id);
                     this.editobject = "";
                 } catch (e) {
