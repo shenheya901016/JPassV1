@@ -305,7 +305,7 @@
                         style="margin-bottom: 5vh;margin-top: 5vh;"
                         prop="name"
                 >
-                    <div style="display: inline-block;width:80%;height:8vh; ">
+                    <div style="display: inline-block;width:80%;height:8vh;">
                         <img
                                 v-if="projectEvent.bgcolor != ''"
                                 :src="projectEvent.tempBase64"
@@ -351,7 +351,7 @@
                 </el-form-item>
                 <template v-for="(data, index) in this.projectEvent.datas">
                     <el-form-item
-                            v-if="data.type === 'password' && !showPassword"
+                            v-if="data.type === 'password' && !showPassword && data.val!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             style="margin-bottom:3px;"
@@ -379,7 +379,7 @@
                         <hr/>
                     </el-form-item>
                     <el-form-item
-                            v-else-if="data.type === 'password' && showPassword"
+                            v-else-if="data.type === 'password' && showPassword && data.val!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             style="margin-bottom:3px;"
@@ -403,7 +403,7 @@
                         <hr/>
                     </el-form-item>
                     <el-form-item
-                            v-else-if="data.type === 'text'"
+                            v-else-if="data.type === 'text' && data.val!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             :key="data.tempkey"
@@ -413,7 +413,7 @@
                         <hr/>
                     </el-form-item>
                      <el-form-item
-                            v-else-if="data.type === 'website'"
+                            v-else-if="data.type === 'website' && data.val!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             :key="data.tempkey"
@@ -424,7 +424,7 @@
                   <hr/>
                     </el-form-item>
                      <el-form-item
-                            v-else-if="data.type === 'login'"
+                            v-else-if="data.type === 'login' && data.val!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             :key="data.tempkey"
@@ -434,7 +434,7 @@
                         <hr/>
                     </el-form-item>
                     <el-form-item
-                            v-else-if="data.type === 'date'"
+                            v-else-if="data.type === 'date' && data.val!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             :key="data.tempkey"
@@ -448,7 +448,7 @@
 
                 <template v-for="(data, index) in this.projectEvent.note">
                      <el-form-item
-                             v-if="data!=''"
+                             v-if="data.notes!=''"
                             :label="data.tempkey"
                             :prop="data.tempkey"
                             :key="data.tempkey"
