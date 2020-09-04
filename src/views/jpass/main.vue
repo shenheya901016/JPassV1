@@ -88,7 +88,7 @@
                   <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.export") }}
                 </el-button>
             </li>
-            <li ref="" @click="importFileDialog=true">
+            <li ref="" @click="importClick">
                 <el-button style="border:0;padding: 5px 5px;">
                   <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.import") }}
                 </el-button>
@@ -4121,20 +4121,16 @@
                 this.ipcRenderer.send('checkForUpdate');
             },
             async importClick(){
-                let isVip=true;
                 let user=this.$JSON5.parse(localStorage.getItem("userkeyObj"));
                 const getPromise = util.promisify(request.get);
-                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + user.address + "&t=0";
+                let url = "https://stats.jccdex.cn/sum/jpassword/get_charge_list/:uuid?w=" + user.address + "&t=1";
                 let result = await getPromise(url);
                 let msg = this.$JSON5.parse(result.body);
+                console.log(msg.data)
                 if(msg.data.list.length>0&&msg.data.list[0].plan!=="A"){
-
                     this.importFileDialog=true;
                 }else{
-                    isVip=false;
-                    if (!isVip) {
-                        this.$message.error('体验客户无法使用导入！');
-                    }
+                    this.$message.error('体验客户无法使用导入！');
                 }
             },
             importFile(res, file) {
