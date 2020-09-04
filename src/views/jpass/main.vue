@@ -4163,6 +4163,7 @@
                                 }
                             } catch (e) {
                                 console.log("data.secureContents.URLs");
+                                return;
                             }
                             try {
                                 if (passworddata.secureContents.notesPlain !== undefined) {
@@ -4182,6 +4183,7 @@
                                 }
                             } catch (e) {
                                 console.log("data.secureContents.notesPlain");
+                                return;
                             }
                             try {
                                 if (passworddata.secureContents.fields !== undefined) {
@@ -4207,6 +4209,7 @@
                                 }
                             } catch (e) {
                                 console.log("data.secureContents.fields");
+                                return;
                             }
                             try {
                                 if (passworddata.secureContents.sections !== undefined) {
@@ -4236,6 +4239,7 @@
                                 }
                             } catch (e) {
                                 console.log("data.secureContents.sections");
+                                return;
                             }
                             _this.newProject = {
                                 "id": id,
@@ -4713,6 +4717,7 @@
                         _this.import_file_type = "jpassword";
                     } catch (e) {
                         _this.$message.error('解析失败!');
+                        return;
                     }
                     _this.importFileDialog = false;
                 }
