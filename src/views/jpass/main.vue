@@ -1855,8 +1855,8 @@
                 {{ $t("main.systemSettings") }}
             </div>
             <el-form>
-                <el-tabs type="border-card" style="height:55vh">
-                    <el-tab-pane :label="$t('main.generic')">
+                <el-tabs v-model="activeName" type="border-card" style="height:55vh">
+                    <el-tab-pane :label="$t('main.generic')" name="generic">
                         <el-form-item prop="">
                             <fieldset style="width: 80%;height:14vh;margin: auto;border: 1px solid #6C6C6C">
                                 <legend style="margin-left: 1%">
@@ -3668,6 +3668,7 @@
 
         data() {
             return {
+                activeName:"generic",
                 progressDialog:false,
                 progress:0,
                 //setting
@@ -6264,6 +6265,7 @@
                 this.templateEvent = ""
             },
             openSetting() {
+                this.activeName="generic";
                 this.dialogVisibleSetting = true;
                 this.package_version=config.version;
             },
