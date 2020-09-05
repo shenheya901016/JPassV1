@@ -3668,7 +3668,8 @@
 
         data() {
             return {
-                activeName:"generic",
+                isScj:false,
+                activeName:"generic",//设置框tab控制
                 progressDialog:false,
                 progress:0,
                 //setting
@@ -6035,9 +6036,14 @@
                 }
                 this.templateEvent = this.$JSON5.parse(this.$JSON5.stringify(temp));
                 let modelsId = temp.modelsId;
+                 if(modelsId.indexOf("scj")!=-1){
+                            this.isScj=true;
+                        }else{
+                            this.isScj=false;
+                  }
                 let models = [];
                 for (var idIndex in modelsId) { //下拉框不显示mb
-                    if (modelsId[idIndex].indexOf("mb") == -1 && modelsId[idIndex].indexOf("sy") ==-1 && modelsId[idIndex].indexOf("weakPwd") ==-1 && modelsId[idIndex].indexOf("wbj")==-1) {
+                    if (modelsId[idIndex].indexOf("mb") == -1 && modelsId[idIndex].indexOf("sy") ==-1 && modelsId[idIndex].indexOf("weakPwd") ==-1 && modelsId[idIndex].indexOf("wbj")==-1 && modelsId[idIndex].indexOf("scj")==-1) {
                         models.push(modelsId[idIndex]);
                     }
                 }
@@ -6103,6 +6109,7 @@
                    this.dialogVisibleAddProject = false;
                    this.ruleFormAddProject.name = "";
                    this.color = "";
+                   this.isScj=false;
                    this.getdirectory();
                    this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
                    if (imgtype == "base64") {
@@ -6176,9 +6183,14 @@
                     }
                     if (this.editobject.type == "project" && this.editobject.isnote!=true) {
                         let modelsId = this.editobject.modelsId;
+                        if(modelsId.indexOf("scj")!=-1){
+                            this.isScj=true;
+                        }else{
+                            this.isScj=false;
+                        }
                         let models = [];
                         for (var index in modelsId) { //下拉框不显示sy,wbj
-                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("weakPwd")==-1) {
+                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("weakPwd")==-1 && modelsId[index].indexOf("scj")==-1) {
                                 models.push(modelsId[index]);
                             }
                         }
@@ -6187,9 +6199,14 @@
                         this.operationType = "project_edit";
                     }else if(this.editobject.type == "project" && this.editobject.isnote==true){
                         let modelsId = this.editobject.modelsId;
+                        if(modelsId.indexOf("scj")!=-1){
+                            this.isScj=true;
+                        }else{
+                            this.isScj=false;
+                        }
                         let models = [];
                          for (var index in modelsId) { //下拉框不显示sy,wbj
-                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("weakPwd")==-1) {
+                            if (modelsId[index].indexOf("sy") == -1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("weakPwd")==-1 && modelsId[index].indexOf("scj")==-1) {
                                 models.push(modelsId[index]);
                             }
                         }
@@ -6199,9 +6216,14 @@
                         this.ruleFormNoteEdit.notes=this.editobject.note[0].notes;
                     }else if (this.editobject.type == "template") {
                         var modelsId = this.editobject.modelsId;
+                        if(modelsId.indexOf("scj")!=-1){
+                            this.isScj=true;
+                        }else{
+                            this.isScj=false;
+                        }
                         var models = [];
                         for (var index in modelsId) { //下拉框不显示mb
-                            if (modelsId[index].indexOf("mb") == -1 && modelsId[index].indexOf("weakPwd")==-1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("sy")==-1) {
+                            if (modelsId[index].indexOf("mb") == -1 && modelsId[index].indexOf("weakPwd")==-1 && modelsId[index].indexOf("wbj")==-1 && modelsId[index].indexOf("sy")==-1 && modelsId[index].indexOf("scj")==-1) {
                                 models.push(modelsId[index]);
                             }
                         }
@@ -6240,6 +6262,7 @@
                        this.$message.success(this.$t('main.successfullyModified'));
                        this.selectlabels = "";
                        this.color = "";
+                       this.isScj=false;
                        this.getdirectory();
                        if (this.imgtype == "base64") {
                            if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
@@ -6392,6 +6415,7 @@
                     this.selectlabels = "";
                     this.getdirectory();
                     this.color = "";
+                    this.isScj=false;
                     this.notesBytargeId(this.db.get("models").find({id: "mb"}).value());//刷新列表页
                     if (this.imgtype == "base64") {
                         if (this.editobject.imgHash != "") {//判断原来对象与新对象中的imgbase64 是否相同，不同的话，重新上传数据
@@ -7357,6 +7381,7 @@
                     this.$message.success(this.$t('main.successfullyModified'));
                     this.editobject.tempBase64 = img;
                     this.selectlabels = "";
+                    this.isScj=false;
                     this.getdirectory();
                     this.color = "";
                     if (this.imgtype == "base64") {
@@ -7432,6 +7457,9 @@
                     }
                 }
               }
+                 if(labels.indexOf("scj") == -1 && this.isScj){
+                    labels.push("scj");//所有项必须有 
+                 }
 
                 //所有项必须有
                 if (labels.indexOf("sy") == -1) {
