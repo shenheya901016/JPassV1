@@ -85,12 +85,12 @@
             </li>
             <li>
                 <el-button style="border:0;padding: 5px 5px;" @click="exportFileAll()">
-                  <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.export") }}
+                  <img alt="" src="./img/download.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.export") }}
                 </el-button>
             </li>
             <li ref="" @click="importClick">
                 <el-button style="border:0;padding: 5px 5px;">
-                  <img alt="" src="./img/钥匙.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.import") }}
+                  <img alt="" src="./img/upload.svg" style="top:-2px;height: 25px;width: 25px;"/>{{ $t("main.import") }}
                 </el-button>
             </li>
         </ul>
@@ -170,7 +170,7 @@
                 {{ $t("main.newFolder") }}
             </li>
             <li ref="export" :class="exportClasses" @click="exportFile">
-                <img alt="" src="./img/edit.svg" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"/>
+                <img alt="" src="./img/download.svg" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;"/>
                 {{ $t("main.export") }}
             </li>
              <li ref="" :class="renameClasses" @click="rename">
@@ -5194,7 +5194,7 @@
                         }
                     }
                     allProjects[index].modelsName = newArray.toString();
-                }      
+                }
                 var projectArray = this.db.get("project").filter({isDel: false}).value();
                 projectArray = this.$JSON5.parse(this.$JSON5.stringify(projectArray));
 
@@ -6528,9 +6528,9 @@
               //搜索框
             async search(temp) {
               if(this.directoryClickId !=""){
-                this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页  
+                this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
               }else{
-                this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页    
+                this.notesBytargeId(this.db.get("models").find({id: "sy"}).value());//刷新列表页
               }
                let projectArray = [];
                let listProject =this.projects;
@@ -6538,10 +6538,10 @@
                         if (listProject[projectIndex].name.indexOf(temp) != -1) {
                             projectArray.push(listProject[projectIndex]);
                         }
-                    }    
+                    }
                 this.projects=projectArray;
             },
-            
+
             //图片处理(增加模板)
             handleAvatarSuccessAdd(res, file) {
                 let temp = this;
@@ -7474,7 +7474,7 @@
                 }
               }
                  if(labels.indexOf("scj") == -1 && this.isScj){
-                    labels.push("scj");//所有项必须有 
+                    labels.push("scj");//所有项必须有
                  }
 
                 //所有项必须有
