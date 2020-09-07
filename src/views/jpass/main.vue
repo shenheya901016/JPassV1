@@ -5827,6 +5827,9 @@
                 }
                 projectArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
                 this.projects = projectArray;
+                if(this.projects.length==0){
+                    this.projectEvent = "";
+                }
             },
 
             //启动加载
@@ -7652,14 +7655,18 @@
 
                 afterEditchecked(objId){
                        let listproject ="";
+                       this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                        listproject =this.projects;
                         for(let index in listproject){
                              if(listproject[index].id == objId){
                                  this.currentNote = index;//项目列表指向当前
+                                 this.projectEvent=listproject[index];
                                   break;
+                             }else{
+                                 this.currentNote = 0;//项目列表指向当前
+                                 this.projectEvent=listproject[0];
                              }
                          }
-                       this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
                    },
 
                 //设置重构
