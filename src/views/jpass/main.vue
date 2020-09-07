@@ -7189,16 +7189,28 @@
           async renameDo(formName) {
              let id = this.delobj.id;
              let directory = this.db.get("models").find({id: id}).value();
-             directory.name =this.ruleFormRename.pName;
-             directory
-             this.db.get("models").remove({id: id}).write();
-             this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
-             let now= await this.getTime();
-             this.db.set('version',now).write();
+             if(directory.name!=this.ruleFormRename.pName){
+                directory.name =this.ruleFormRename.pName;
+                this.db.get("models").remove({id: id}).write();
+                this.db.get("models").push(this.$JSON5.parse(this.$JSON5.stringify(directory))).write();
+                let now= await this.getTime();
+                this.db.set('version',now).write();
+             }
              this.dialogVisibleRename = false,
              this.getdirectory();
+             //check
+             let listproject =this.DDirectory.directory
+                for(let index in listproject){
+                        if(listproject[index].id == this.directoryClickId){
+                            this.currentDirectory = index;
+                            this.currentProject=-1;//目录check 指向sy
+                            this.currentSpecial=-1;
+                            break;
+                        }
+                    }
              this.$refs[formName].resetFields();
              this.notesBytargeId(this.db.get("models").find({id: this.directoryClickId}).value());//刷新列表页
+
           },
           /**
            * 文件夹重命名
@@ -7274,14 +7286,15 @@
                   }
               }
               topArray.sort((a, b) => a.index - b.index); //a~z 排序
-              indexArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
+            //   indexArray.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
+              indexArray.sort((a, b) => a.name.localeCompare(b.name)); //a~z 排序
               topArray.push(...indexArray); //a.push(...b);
               this.DDirectory.directory=topArray;
 
               //项目排序
               let project =this.projects;
               console.log(project);
-              project.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)); //a~z 排序
+              project.sort((a, b) => a.name.localeCompare(b.name)); //a~z 排序
               this.projects=project;
           },
            // 增加笔记页面打开
