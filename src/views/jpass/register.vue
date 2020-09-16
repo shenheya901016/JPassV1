@@ -36,12 +36,12 @@
             onpaste="return false"
             show-password
           ></el-input>
-          <a href="#"> 
-          <img
-            @click="passwordGenerator()"
-            style="width:5%;"
-            src="./img/钥匙.svg"
-            alt=""
+          <a href="#">
+            <img
+              @click="passwordGenerator()"
+              style="width:5%;"
+              src="./img/钥匙.svg"
+              alt=""
           /></a>
         </el-form-item>
         <!--<el-form-item>-->
@@ -60,7 +60,7 @@
             show-password
           ></el-input>
         </el-form-item>
-        <el-form-item label="" >
+        <el-form-item label="">
           <el-button
             type="primary"
             size="small"

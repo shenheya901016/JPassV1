@@ -13,74 +13,72 @@ import LockJpass from "./views/jpass/lock.vue";
 import Main from "./views/jpass/main.vue";
 import Pay from "./views/jpass/pay.vue";
 
-
 Vue.use(Router);
 
 export default new Router({
-    routes: [
-        { path: '/', redirect: '/jpass/login' }, // 默认就跳转此页面
-        {
-            path: "/index",
-            name: "index",
-            component: Index
-        },
-        {
-            path: "/",
-            name: "home",
-            component: Home
-        },
-        {
-            path: "/from",
-            name: "from",
-            component: From
-        },
-        {
-            path: "/jpass/register",
-            name: "register",
-            component: Register1
-        },
+  routes: [
+    { path: "/", redirect: "/jpass/login" }, // 默认就跳转此页面
+    {
+      path: "/index",
+      name: "index",
+      component: Index
+    },
+    {
+      path: "/",
+      name: "home",
+      component: Home
+    },
+    {
+      path: "/from",
+      name: "from",
+      component: From
+    },
+    {
+      path: "/jpass/register",
+      name: "register",
+      component: Register1
+    },
 
-        {
-            path: "/jpass/keystoreimport",
-            name: "keystoreimport",
-            component: Keystoreimport
-        },
-        {
-            path: "/jpass/login",
-            name: "login",
-            component: Login
-        },
-        {
-            path: "/jpass/mnemonicimport",
-            name: "mnemonicimport",
-            component: Mnemonicimport
-        },
-        {
-            path: "/jpass/keyimport",
-            name: "keyimport",
-            component: Keyimport
-        },
+    {
+      path: "/jpass/keystoreimport",
+      name: "keystoreimport",
+      component: Keystoreimport
+    },
+    {
+      path: "/jpass/login",
+      name: "login",
+      component: Login
+    },
+    {
+      path: "/jpass/mnemonicimport",
+      name: "mnemonicimport",
+      component: Mnemonicimport
+    },
+    {
+      path: "/jpass/keyimport",
+      name: "keyimport",
+      component: Keyimport
+    },
 
-        {
-            path: "/jpass/registersuccess",
-            name: "registersuccess",
-            component: Registersuccess
-        },
-        {
-            path: "/jpass/lock",
-            name: "lock",
-            component: LockJpass
-        },
-        {
-            path: "/jpass/main",
-            name: "main",
-            component: Main
-        },
-        {
-            path: "/jpass/pay",
-            name: "pay",
-            component: Pay
-        },
-
-    ]
+    {
+      path: "/jpass/registersuccess",
+      name: "registersuccess",
+      component: Registersuccess
+    },
+    {
+      path: "/jpass/lock",
+      name: "lock",
+      component: LockJpass
+    },
+    {
+      path: "/jpass/main",
+      name: "main",
+      component: Main
+    },
+    {
+      path: "/jpass/pay",
+      name: "pay",
+      component: Pay
+    }
+  ]
 });
