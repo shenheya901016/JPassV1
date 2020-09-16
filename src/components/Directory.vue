@@ -63,6 +63,10 @@ export default {
     }
   },
   methods: {
+    openRename () {
+      this.ruleFormRename.pName = this.$store.state.mainPage.delobj.name;
+      this.dialogVisibleRename = true;
+    },
     closeDialogVisible2 () {
       this.dialogVisible2 = false;
       this.$emit('closeDialogVisible2', false); // 关闭弹框的传值

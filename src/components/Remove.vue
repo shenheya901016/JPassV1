@@ -75,6 +75,14 @@ export default {
     };
   },
   methods: {
+    remove () {
+      this.$emit('remove'); // 文件夹重命名
+    },
+
+    openDialogclearTrash () {
+      this.$emit('openDialogclearTrash', true); // 文件夹重命名
+    },
+
     //删除数据
     async removeData () {
       var type = this.$store.state.mainPage.delobj.type;
@@ -423,7 +431,6 @@ export default {
 
     //清空垃圾箱
     async clearTrash () {
-      console.log(11111);
       let delTemplate = this.$store.state.mainPage.db.get("templates").filter({ isDel: true }).value();
       for (var index in delTemplate) {
         this.$store.state.mainPage.db.get("templates").remove({ id: delTemplate[index].id }).write();

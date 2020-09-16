@@ -16,9 +16,9 @@
       <img src="@/views/jpass/img/tsp.png" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" alt />
       {{ $t("main.selectColorD") }}
     </li>
-    <li v-if="delobj.modelsType == 'directory'" :class="toTop" @click="toTop">
-      <img v-if="delobj.top == true" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" src="@/views/jpass/img/bottom.svg" />
-      <img v-if="delobj.top == false" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" src="@/views/jpass/img/top.svg" />
+    <li v-if="this.$store.state.mainPage.delobj.modelsType == 'directory'" :class="toTop" @click="toTop">
+      <img v-if="this.$store.state.mainPage.delobj.top == true" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" src="@/views/jpass/img/bottom.svg" />
+      <img v-if="this.$store.state.mainPage.delobj.top == false" style="width: 2vw;margin-left: 0.5vw;margin-right: 0.1vw;" src="@/views/jpass/img/top.svg" />
       {{ $t("main.toTop") }}
     </li>
     <li ref="addNote" :class="addNoteClasses" @click="addNote">
@@ -68,18 +68,18 @@ export default {
   },
   methods: {
     addDirectoryOP () {
-
+      this.$emit('addDirectoryOP'); // 新建文件夹
     },
 
     rename () {
-
+      this.$emit('rename'); // 文件夹重命名
     },
 
     selectColor () {
 
     },
     toTop () {
-
+      this.$parent.$refs.directory.toTop();
     },
     addNote () {
 
@@ -92,32 +92,31 @@ export default {
     },
 
     remove () {
-
+      this.$parent.$refs.remove.remove();
     },
     recover () {
 
     },
 
     clearTrash () {
-
+      this.$parent.$refs.remove.openDialogclearTrash();
     },
 
     openMenu_1 (project, obj) {
-      console.log(this.delobj);
       if (project.type == "model") {
         if (project.modelsType == "directory") {
-          this.isDisabled = false; //启用删除
+          this.$store.state.mainPage.isDisabled = false; //启用删除
         } else {
-          this.isDisabled = true;
+          this.$store.state.mainPage.isDisabled = true;
         }
       }
       if (project.type == "project") {
-        this.isDisabled = false; //启用删除
+        this.$store.state.mainPage.isDisabled = false; //启用删除
       }
-      this.delobj = project; //赋值删除对象
+      this.$store.state.mainPage.delobj = project; //赋值删除对象
       if (project.type != "model") {
         //indexof undefind 问题
-        this.projectEvent = project;
+        this.$store.state.mainPage.projectEvent = project;
       }
       var menu = document.getElementById("menu_1");
       var position = obj.target.getBoundingClientRect(); //获取点击元素的位置
@@ -142,7 +141,7 @@ export default {
       }
     },
     //点击空白地区显示菜单
-    openMenu_empty (obj) {
+    openMenu_empty () {
       this.addDirClasses = [];
       this.renameClasses = [];
       this.addProjectClasses = [];

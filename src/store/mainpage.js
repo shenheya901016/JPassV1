@@ -329,12 +329,12 @@ const mainPage = {
             //目录国际化
             let jsonProjects = JSON5.parse(jsonProjectstring).project;
             for (let obj in jsonProjects) {
-                context.commit('international', jsonlebals[obj].name);
+                context.commit('international', jsonProjects[obj].name);
                 jsonProjects[obj].name = context.state.Dname;
             }
             this.DProject = { project: jsonProjects };
             //special 国际化
-            let jsonSpecial = this.$JSON5.parse(jsonSpecicalString).special;
+            let jsonSpecial = JSON5.parse(jsonSpecicalString).special;
             for (let obj in jsonSpecial) {
                 context.commit('international', jsonSpecial[obj].name);
                 jsonSpecial[obj].name = context.state.Dname;

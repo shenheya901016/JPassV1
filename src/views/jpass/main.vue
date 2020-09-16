@@ -36,7 +36,7 @@
           </el-button>
         </li>
         <li>
-          <el-button v-if="this.$store.state.mainPage.showTrash == true" style="border:0;padding: 5px 5px;" @click="dialogclearTrash = true">
+          <el-button v-if="this.$store.state.mainPage.showTrash == true" style="border:0;padding: 5px 5px;" @click="openDialogclearTrash(true)">
             <img style="top:-2px;height: 25px;width: 25px;" src="./img/trash.svg" alt />
             {{ $t("main.cleartrash") }}
           </el-button>
@@ -122,7 +122,7 @@
       </nav>
 
       <!-- 副导航栏 -->
-      <article class="article" @click.right="openMenu_empty($event)">
+      <article class="article" @click.right="openMenuEmpty">
         <input class="ss" type="text" v-model="searchTemp" :placeholder="$t('main.pleaseEnterWhatYouWantToSearch')" @input="search(searchTemp)" />
         <ul class="list">
           <li v-for="(project, index) in this.$store.state.mainPage.projects" @click.left="noteslick(project, $event)" :data-index="index" :class="index == currentNoteTemp || project.checked ? click : disclick" style="margin-top: 5px;" @contextmenu.prevent="openMenu_1(project, $event)" :key="index">
@@ -176,12 +176,12 @@
       <!--设置-->
       <setting v-model="dialogVisibleSetting" @closeSetting="closeSetting" @locksystem="locksystem"></setting>
       <!--删除，清空垃圾桶自检-->
-      <remove :dialogVisibledDataM="dialogVisibledData" @closeDialogVisibledData="closeDialogVisibledData" :dialogVisibledProjectDelM="dialogVisibledProjectDel" @closeDialogVisibledProjectDel="closeDialogVisibledProjectDel" :dialogclearTrashM="dialogclearTrash"
-        @closeDialogclearTrash="closeDialogclearTrash" :dialogVisibledDirectoryM="dialogVisibledDirectory" @closeDialogVisibledDirectory="closeDialogVisibledDirectory"></remove>
+      <remove ref="remove" :dialogVisibledDataM="dialogVisibledData" @closeDialogVisibledData="closeDialogVisibledData" :dialogVisibledProjectDelM="dialogVisibledProjectDel" @closeDialogVisibledProjectDel="closeDialogVisibledProjectDel" :dialogclearTrashM="dialogclearTrash"
+        @closeDialogclearTrash="closeDialogclearTrash" @openDialogclearTrash="openDialogclearTrash" :dialogVisibledDirectoryM="dialogVisibledDirectory" @closeDialogVisibledDirectory="closeDialogVisibledDirectory" @remove="remove"></remove>
       <!--新建标签-->
-      <directory :dialogVisible2M="dialogVisible2" @closeDialogVisible2="closeDialogVisible2" :dialogVisibleRenameM="dialogVisibleRename" @closeDialogVisibleRename=closeDialogVisibleRename></directory>
+      <directory ref="directory" :dialogVisible2M="dialogVisible2" @closeDialogVisible2="closeDialogVisible2" :dialogVisibleRenameM="dialogVisibleRename" @closeDialogVisibleRename=closeDialogVisibleRename></directory>
       <!--右击菜单-->
-      <menu_1></menu_1>
+      <menu_1 ref="menu" @addDirectoryOP="addDirectoryOP" @rename="rename"></menu_1>
     </aside>
 
   </body>
@@ -748,6 +748,9 @@ export default {
     closeDialogclearTrash (data) {
       this.dialogclearTrash = data;
     },
+    openDialogclearTrash (data) {
+      this.dialogclearTrash = data;
+    },
 
     closeDialogVisibledDirectory (data) {
       this.dialogVisibledDirectory = data;
@@ -759,6 +762,13 @@ export default {
 
     closeDialogVisibleRename (data) {
       this.dialogVisibleRename = data;
+    },
+
+    openMenuEmpty () {
+      this.$refs.menu.openMenu_empty();
+    },
+    openMenu_1 (project, obj) {
+      this.$refs.menu.openMenu_1(project, obj);
     },
 
     GetXYPosition () {
@@ -935,6 +945,7 @@ export default {
     },
 
     remove () {
+      console.log(9999);
       let type = this.$store.state.mainPage.delobj.type;
       console.log(type);
       console.log(this.$store.state.mainPage.checkedArray.length);
@@ -974,6 +985,13 @@ export default {
           this.dialogVisibledProjectDel = true;
         }
       }
+    },
+
+    /**
+     * 文件夹重命名
+     */
+    rename () {
+      this.$refs.directory.openRename();
     },
 
 
@@ -2266,13 +2284,7 @@ export default {
       this.getdirectory();
       this.dialogDirlcolor = false;
     },
-    /**
-     * 文件夹重命名
-     */
-    rename () {
-      this.ruleFormRename.pName = this.delobj.name;
-      this.dialogVisibleRename = true;
-    },
+
 
     // 增加笔记页面打开
     addNote () {
